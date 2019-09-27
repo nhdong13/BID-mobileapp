@@ -61,15 +61,3 @@ Instructions are shown in the terminal. You can select to open it in:
 - An emulator (either iOS or Android) (iOS thi dung Xcode, android thi dung Android studio nha)
 - Your mobile device with the [Expo app](https://expo.io/). It will reload if you save edits to your files and you will see build errors and logs in the terminal.
 
-#### 2.2. Run the _Web_ App
-
-```bash
-# Starts are local live-reload server at:
-# http://localhost:3001
-yarn run web
-```
-
-Via webpack, starts a localhost server on port 3001 [http://localhost:3001](http://localhost:3001).
-
-- Save code and it auto refreshes
-- Install [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) into Chrome to see the state of Redux
