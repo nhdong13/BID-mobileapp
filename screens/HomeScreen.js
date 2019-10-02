@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { MonoText } from '../components/StyledText';
+import { MuliText } from '../components/StyledText';
 
 export default function HomeScreen() {
   return (
@@ -36,7 +36,7 @@ export default function HomeScreen() {
 
           <View
             style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
+            <MuliText>screens/HomeScreen.js</MuliText>
           </View>
 
           <Text style={styles.getStartedText}>
@@ -60,9 +60,9 @@ export default function HomeScreen() {
 
         <View
           style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
+          <MuliText style={styles.codeHighlightText}>
             navigation/MainTabNavigator.js
-          </MonoText>
+          </MuliText>
         </View>
       </View>
     </View>
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
     textAlign: 'center',
+    fontFamily: 'muli',
   },
   tabBarInfoContainer: {
     position: 'absolute',
