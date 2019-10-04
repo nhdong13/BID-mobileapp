@@ -15,8 +15,9 @@ export default function LinksScreen() {
 }
 
 LinksScreen.navigationOptions = {
-  title: 'Links',
+  header: null,
 };
+
 
 const styles = StyleSheet.create({
   container: {
