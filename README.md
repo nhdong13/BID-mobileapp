@@ -43,7 +43,7 @@ _*It's recommended that you install [React Native Debugger](https://github.com/j
 
 ```bash
 # Clone the repo
-git clone https://github.com/mcnamee/react-native-starter-kit.git
+git clone https://git.babysitinde.live/capstone-project/react-native-boilerplate.git
 
 # Install dependencies
 yarn install
