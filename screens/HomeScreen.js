@@ -1,112 +1,103 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Button,
   View,
 } from 'react-native';
 
 import { MuliText } from '../components/StyledText';
+import { Agenda } from 'react-native-calendars';
+import RequestItem from '../components/RequestItem';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
+class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: '',
+      requests: {
+
+      },
+    }
+  }
+
+  render() {
+    const { show, date, mode } = this.state;
+    return (
+      <View style={styles.container}>
+        <View style={styles.scheduleContainer}>
+          <MuliText style={{ fontSize: 20, color: '#707070' }}>When would you need a babysitter ?</MuliText>
         </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MuliText>screens/HomeScreen.js</MuliText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MuliText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MuliText>
-        </View>
+        <Agenda
+          items={{
+            '2019-10-04': [
+              {
+                date: '2019-10-03',
+                price: '30',
+                startTime: '12:00 AM',
+                endTime: '3:00 AM',
+                address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
+                status: 'pending'
+              },
+              {
+                date: '2019-10-03',
+                price: '89',
+                startTime: '6:00 AM',
+                endTime: '9:00 AM',
+                address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
+                status: 'pending'
+              },
+            ],
+          }}
+          // Max amount of months allowed to scroll to the past. Default = 50
+          pastScrollRange={50}
+          // Max amount of months allowed to scroll to the future. Default = 50
+          futureScrollRange={50}
+          // specify how each item should be rendered in agenda
+          renderItem={(item) => {
+            return (
+              <TouchableOpacity>
+                <View style={styles.requestItem}>
+                  <View style={styles.leftInformation}>
+                    <MuliText>{item.date}</MuliText>
+                    <MuliText>{item.startTime}</MuliText>
+                    <MuliText>{item.endTime}</MuliText>
+                  </View>
+                  <View style={styles.rightInformation}>
+                    <MuliText>{item.price}</MuliText>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )
+          }}
+          rowHasChanged={(r1, r2) => { return r1.text !== r2.text }}
+          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
+          renderDay={(day, item) => { return (<View />); }}
+          // specify how empty date content with no items should be rendered
+          renderEmptyDate={() => { return (<View />); }}
+          // specify what should be rendered instead of ActivityIndicator
+          renderEmptyData={() => { return (<MuliText>cha co gi de show ca</MuliText>); }}
+          // Hide knob button. Default = false
+          hideKnob={false}
+          theme={{
+          }}
+          style={{}}
+        />
       </View>
-    </View>
-  );
-}
-
-HomeScreen.navigationOptions = {
-  header: null,
-};
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
     );
   }
 }
 
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
+export default HomeScreen;
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
+HomeScreen.navigationOptions = {
+  header: null,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -127,6 +118,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
+    width: 360,
+    height: 250,
+  },
+  requestItem: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'yellow',
+    height: 120,
+    marginHorizontal: 30,
+    alignItems: 'center',
+    marginTop: 20,
+    borderRadius: 15,
+  },
+  leftInformation: {
+    backgroundColor: 'blue',
+    margin: 15,
+    paddingHorizontal: 5,
+    flex: 1,
+  },
+  rightInformation: {
+    backgroundColor: 'green',
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingRight: 20,
+  },
+  scheduleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
+    paddingTop: 20,
+    marginBottom: 20,
+    flex: 0.2,
   },
   welcomeImage: {
     width: 100,
