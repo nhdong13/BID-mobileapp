@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
+import { login } from '../api/login';
 import {
   Image,
   Platform,
@@ -19,14 +20,24 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      phoneNumber: '',
       password: '',
       tokenCode: '',
     };
 
     // this.onChange = this.onChange.bind(this);
     // this.onSubmit = this.onSubmit.bind(this);
+    this.onLogin = this.onLogin.bind(this);
   }
+
+  onLogin() {
+    const { phoneNumber, password } = this.state;
+    login(phoneNumber, password)
+      .then(res => {
+        // console.log(res.token);
+      })
+  }
+
 
   render() {
     return (
@@ -54,10 +65,10 @@ class LoginScreen extends Component {
         <View style={styles.textContainer}>
           <TextInput
             style={styles.textInput}
-            onChangeText={text => this.setState({ username: text })}
+            onChangeText={text => this.setState({ phoneNumber: text })}
             placeholder='Username'
             disableFullscreenUI={false}
-            value={this.state.username}
+            value={this.state.phoneNumber}
             textContentType='username'
           />
         </View>
@@ -72,7 +83,7 @@ class LoginScreen extends Component {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.submitButton}>
+          <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
             <MuliText style={{ color: 'white', fontSize: 16 }}>Login</MuliText>
           </TouchableOpacity>
         </View>
