@@ -40,6 +40,8 @@ async function loadResourcesAsync() {
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
       'muli': require('./assets/fonts/Muli-Regular.ttf'),
+      'muli-bold': require('./assets/fonts/Muli-Bold.ttf'),
+      'muli-semibold': require('./assets/fonts/Muli-SemiBold.ttf'),
     }),
   ]);
 }

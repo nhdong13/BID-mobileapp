@@ -21,7 +21,6 @@ class HomeScreen extends Component {
     this.state = {
       items: '',
       requests: {
-
       },
     }
   }
@@ -35,7 +34,7 @@ class HomeScreen extends Component {
         </View>
         <Agenda
           items={{
-            '2019-10-04': [
+            '2019-10-05': [
               {
                 date: '2019-10-03',
                 price: '30',
@@ -62,14 +61,29 @@ class HomeScreen extends Component {
           renderItem={(item) => {
             return (
               <TouchableOpacity>
+
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
-                    <MuliText>{item.date}</MuliText>
-                    <MuliText>{item.startTime}</MuliText>
-                    <MuliText>{item.endTime}</MuliText>
+                    <MuliText style={styles.date}>{item.date}</MuliText>
+                    <MuliText>{item.startTime} - {item.endTime}</MuliText>
+                    <MuliText>{item.address}</MuliText>
                   </View>
                   <View style={styles.rightInformation}>
-                    <MuliText>{item.price}</MuliText>
+                    {item.status == 'pending' ?
+                      (
+                        <View style={styles.statusBoxPending}>
+                          <MuliText style={{ fontWeight: '800', color: 'gray' }}>{item.status}</MuliText>
+                        </View>
+
+                      )
+                      :
+                      (
+                        <View style={styles.statusBoxConfirm}>
+                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{item.status}</MuliText>
+                        </View>
+                      )
+                    }
+                    <MuliText>${item.price}</MuliText>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -114,6 +128,22 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
+  statusBoxPending: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'green',
+    width: 90,
+    height: 40,
+    padding: 10,
+  },
+  statusBoxConfirm: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'green',
+    width: 90,
+    height: 40,
+    padding: 10,
+  },
   welcomeContainer: {
     alignItems: 'center',
     marginTop: 10,
@@ -124,7 +154,7 @@ const styles = StyleSheet.create({
   requestItem: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'yellow',
+    backgroundColor: 'white',
     height: 120,
     marginHorizontal: 30,
     alignItems: 'center',
@@ -132,13 +162,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   leftInformation: {
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
     margin: 15,
     paddingHorizontal: 5,
     flex: 1,
   },
   rightInformation: {
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     flex: 1,
     alignItems: 'flex-end',
     paddingRight: 20,
