@@ -21,7 +21,8 @@ export async function login(phoneNumber, password) {
     let response = await axios(options)
         .then(res => {
             saveToken(res.data.token);
+            return res;
         });
-
+    return response;
 }
 

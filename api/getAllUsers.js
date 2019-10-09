@@ -1,12 +1,9 @@
 import axios from 'axios';
-import qs from 'qs';
+import { retrieveToken } from './handleToken';
 
 const url = 'http://192.168.0.102:3000/api/v1/users/';
 
 export async function getAllUsers(token) {
-    const data = {
-        token: token
-    }
     const options = {
         method: 'GET',
         url: url,
@@ -15,10 +12,7 @@ export async function getAllUsers(token) {
         },
     };
 
-    let response = await axios(options)
-        .then(res => {
-            res.send({ res })
-        });
-
+    let response = await axios(options);
+    return response;
 }
 

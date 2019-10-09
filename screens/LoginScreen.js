@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header } from 'react-navigation';
 import { login } from '../api/login';
 import { retrieveToken } from '../api/handleToken';
+import Modal from 'react-native-modal';
 import {
   Image,
   Platform,
@@ -9,7 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
   View,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import { MuliText } from '../components/StyledText';
@@ -18,25 +19,40 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '0903322351',
+      phoneNumber: '0978199199',
       password: '12341234',
-      tokenCode: '',
-      title: 'lallalala'
+      title: 'lallalala',
+      OTP: '',
+      isModalVisible: false,
+      roleId: null,
     };
 
     this.onLogin = this.onLogin.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
-  onLogin() {
+  onLogin = async () => {
     const { phoneNumber, password } = this.state;
     login(phoneNumber, password)
-      .then(() => {
-        
+      .then((res) => {
+        console.log(res.data.roleId)
+        if (res.data.roleId && res.data.roleId == 3) {
+          this.setState({ isModalVisible: true })
+        }
       })
   }
 
+  onSubmitOTP = async () => {
 
+  }
 
+  toggleModal = () => {
+    if (this.state.roleId && this.state.roleId == 3) {
+      this.setState({ isModalVisible: !this.state.isModalVisible });
+    } else {
+      this.setState({ isModalVisible: false });
+    }
+  };
 
   render() {
     return (
@@ -86,6 +102,41 @@ class LoginScreen extends Component {
             <MuliText style={{ color: 'white', fontSize: 16 }}>Login</MuliText>
           </TouchableOpacity>
         </View>
+        {this.state.isModalVisible ?
+          (
+            <Modal
+              isVisible={this.state.isModalVisible}
+              hasBackdrop={true} backdropOpacity={0.9}
+              onBackdropPress={this.toggleModal}
+              backdropColor='white'
+              onBackButtonPress={this.toggleModal}
+            >
+              <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
+                <MuliText style={{ color: '#707070', fontSize: 16 }}>Please input your Authentication Code</MuliText>
+                <View style={styles.textContainer}>
+                  <TextInput
+                    style={styles.textInput}
+                    onChangeText={text => this.setState({ OTP: text })}
+                    placeholder='Authentication code'
+                    disableFullscreenUI={false}
+                    value={this.state.OTP}
+                    keyboardType='number-pad'
+                  />
+                </View>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onSubmitOTP}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Submit</MuliText>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          )
+          :
+          (
+            <View></View>
+          )
+        }
+
         <View style={styles.welcomeContainer}>
           <MuliText>copyrights claim shity thing that you don't want to read</MuliText>
         </View>
