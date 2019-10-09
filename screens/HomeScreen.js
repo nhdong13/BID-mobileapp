@@ -1,5 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
+import { retrieveToken } from '../api/handleToken';
+import Modal from 'react-native-modal';
 import {
   Image,
   Platform,
@@ -12,7 +14,7 @@ import {
 
 import { MuliText } from '../components/StyledText';
 import { Agenda } from 'react-native-calendars';
-import RequestItem from '../components/RequestItem';
+import { getAllUsers } from '../api/getAllUsers';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class HomeScreen extends Component {
@@ -23,6 +25,22 @@ class HomeScreen extends Component {
       requests: {
       },
     }
+    // this.getAllUser();
+  }
+
+  getAllUser = async () => {
+    retrieveToken().then((res, err) => {
+      if (err) {
+        console.log(err);
+      }
+      const userToken = res;
+      getAllUsers(userToken).then(res => {
+        console.log(res.data);
+      });
+
+    });
+
+
   }
 
   render() {
@@ -31,12 +49,16 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.scheduleContainer}>
           <MuliText style={{ fontSize: 20, color: '#707070' }}>When would you need a babysitter ?</MuliText>
+          <TouchableOpacity onPress={this.getAllUser}>
+            <MuliText>Test button to assign anything</MuliText>
+          </TouchableOpacity>
+          
         </View>
         <Agenda
           items={{
-            '2019-10-05': [
+            '2019-10-10': [
               {
-                date: '2019-10-03',
+                date: '2019-10-10',
                 price: '30',
                 startTime: '12:00 AM',
                 endTime: '3:00 AM',
@@ -44,7 +66,7 @@ class HomeScreen extends Component {
                 status: 'pending'
               },
               {
-                date: '2019-10-03',
+                date: '2019-10-10',
                 price: '89',
                 startTime: '6:00 AM',
                 endTime: '9:00 AM',
@@ -60,8 +82,7 @@ class HomeScreen extends Component {
           // specify how each item should be rendered in agenda
           renderItem={(item) => {
             return (
-              <TouchableOpacity>
-
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{item.date}</MuliText>
@@ -131,7 +152,7 @@ const styles = StyleSheet.create({
   statusBoxPending: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     width: 90,
     height: 40,
     padding: 10,
@@ -139,7 +160,7 @@ const styles = StyleSheet.create({
   statusBoxConfirm: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     width: 90,
     height: 40,
     padding: 10,
