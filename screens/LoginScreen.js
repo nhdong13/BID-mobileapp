@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
 import { login } from '../api/login';
+import { retrieveToken } from '../api/handleToken';
 import {
   Image,
   Platform,
-  ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TextInput,
   View,
   KeyboardAvoidingView
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { MuliText } from '../components/StyledText';
 
@@ -20,23 +18,24 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '',
-      password: '',
+      phoneNumber: '0903322351',
+      password: '12341234',
       tokenCode: '',
+      title: 'lallalala'
     };
 
-    // this.onChange = this.onChange.bind(this);
-    // this.onSubmit = this.onSubmit.bind(this);
     this.onLogin = this.onLogin.bind(this);
   }
 
   onLogin() {
     const { phoneNumber, password } = this.state;
     login(phoneNumber, password)
-      .then(res => {
-        // console.log(res.token);
+      .then(() => {
+        
       })
   }
+
+
 
 
   render() {
