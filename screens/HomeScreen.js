@@ -61,7 +61,7 @@ class HomeScreen extends Component {
           // specify how each item should be rendered in agenda
           renderItem={(item) => {
             return (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText>{item.date}</MuliText>

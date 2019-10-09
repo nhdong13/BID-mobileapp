@@ -3,17 +3,19 @@ import { Platform } from 'react-native';
 
 import { createStackNavigator } from 'react-navigation';
 
-import LoginScreen from '../screens/LoginScreen';
+import ParentDetails from '../screens/ParentDetail';
+
+
+
 const config = Platform.select({
     default: {},
 });
 
-const AuthStack = createStackNavigator(
+const Details = createStackNavigator(
     {
-        Login: LoginScreen,
-
+        Detail: ParentDetails,
     },
     config
 );
 
-export default AuthStack;
+export default Details;
