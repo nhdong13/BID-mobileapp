@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "../components/StyledText";
 import moment from 'moment';
@@ -13,10 +13,10 @@ export default class ParentDetail extends Component {
       startTime: '12:00 AM',
       endTime: '3:00 AM',
       address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
-      price: '30/h',
-      myChildren: require("../assets/images/Baby-6.png"),
+      price: '30/H',
+      detailPictureChildren: require("../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
-      mySitter: require("../assets/images/Phuc.png"),
+      detailPictureSitter: require("../assets/images/Phuc.png"),
       nameSitter: 'Phuc'
     }
   }
@@ -26,77 +26,142 @@ export default class ParentDetail extends Component {
     return (
 
       <ScrollView>
-        <View style={styles.centerContainer}>
+        <View style={styles.detailInformationContainer}>
+          <View style={styles.textAndDayContainer}>
+            <View style={styles.informationText}>
+              <Ionicons
+                name='ios-calendar'
+                size={26}
+                style={{ marginBottom: -3 }}
+                color='#555555'
+              />
+              <MuliText style={styles.contentInformation}>{moment(this.state.date).format('dddd Do MMMM')}</MuliText>
+            </View>
+            <View style={styles.priceText}>
+              <Ionicons
+                name='ios-cash'
+                size={26}
+                style={{ marginBottom: -3 }}
+                color='#555555'
+              />
+              <MuliText style={styles.contentInformation}>{this.state.price}</MuliText>
+            </View>
+
+          </View>
           <View style={styles.informationText}>
             <Ionicons
-              name='ios-calendar'
+              name='ios-timer'
               size={26}
               style={{ marginBottom: -3 }}
               color='#555555'
             />
-            <MuliText style={styles.contentInformation}>{moment(this.state.date).format('dddd Do MMMM')}</MuliText>
+            <MuliText style={styles.contentInformation}>{this.state.startTime} - {this.state.endTime}</MuliText>
+          </View>
+          <View style={styles.informationText}>
+            <Ionicons
+              name='ios-home'
+              size={26}
+              style={{ marginBottom: -3 }}
+              color='#555555'
+            />
+            <MuliText style={styles.contentInformation}>{this.state.address}</MuliText>
           </View>
         </View>
-        <View style={styles.Body}>
-          <View
-            style={[
-              styles.stack,
-              {
-                marginTop: 50,
-                marginLeft: 71,
-                height: 100,
-                width: 300
-              }
-            ]}
-          >
-            <Text style={styles.Babysitting}>Babysitting </Text>
-            <Text style={styles.Detail}>Detail </Text>
-          </View>
-          <Text style={styles.Date}>Date: {this.state.date}</Text>
-          <Text style={styles.StartTime}>Start time: {this.state.startTime}</Text>
-          <Text style={styles.EndTime}>End time: {this.state.endTime}</Text>
-          <View
-            style={[
-              styles.stack,
-              {
-                marginTop: 17,
-                marginLeft: 72,
-                height: 71,
-                width: 293
-              }
-            ]}
-          >
-            <Text style={styles.Address}>
-              Address: {"\n"} {this.state.address}
-            </Text>
-            <Text style={styles.Price}>
-              Price: {this.state.price}
-            </Text>
-            <Text style={styles.MyChildren}>My Children</Text>
-          </View>
-          <Image
-            source={this.state.myChildren}
-            resizeMode="stretch"
-            style={styles.ChildrenPicture}
-          />
-          <Text style={styles.NameChildren}>{this.state.nameChildren}</Text>
-          <Text style={styles.MySitter}>My Sitter</Text>
-          <Image
-            source={this.state.mySitter}
-            resizeMode="stretch"
-            style={styles.SitterPicture}
-          />
-          <Text style={styles.NameSitter}>{this.state.nameSitter}</Text>
-          <View style={styles.container}>
-            <View style={styles.buttonContainer}>
-              <Button title="Cancel" />
+        <View style={styles.detailContainer}>
+          <MuliText style={styles.detailText}>CHILDREN</MuliText>
+          <View style={styles.detailPictureContainer}>
+            <View >
+              <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
+              <View style={styles.name}>
+                <MuliText >{this.state.nameChildren}</MuliText>
+              </View>
             </View>
-            <View style={styles.buttonContainer}>
-              <Button title="Confirm" />
+            <View >
+              <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
+              <View style={styles.name}>
+                <MuliText >{this.state.nameChildren}</MuliText>
+              </View>
+            </View>
+            <View >
+              <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
+              <View style={styles.name}>
+                <MuliText >{this.state.nameChildren}</MuliText>
+              </View>
             </View>
           </View>
         </View>
-
+        <View style={styles.detailOptionsContainer}>
+          <MuliText style={styles.optionsText}>OPTIONS</MuliText>
+          <View style={styles.optionText}>
+            <Ionicons
+              name='ios-cash'
+              size={35}
+              style={{ marginBottom: -3 }}
+              color='#555555'
+            />
+            <View>
+              <MuliText style={styles.optionInformation}>Payment by Credit card</MuliText>
+              <MuliText style={styles.grayOptionInformation}>Card payment depends on sitter</MuliText>
+            </View>
+          </View>
+          <View style={styles.optionText}>
+            <Ionicons
+              name='ios-car'
+              size={35}
+              style={{ marginBottom: -3 }}
+              color='#555555'
+            />
+            <View>
+              <MuliText style={styles.optionInformation}>The Sitter does not have a car</MuliText>
+              <MuliText style={styles.grayOptionInformation}>I will take the Sitter home</MuliText>
+            </View>
+          </View>
+          <View style={styles.optionText}>
+            <Ionicons
+              name='ios-text'
+              size={35}
+              style={{ marginBottom: -3 }}
+              color='#555555'
+            />
+            <View>
+              <MuliText style={styles.optionInformation}>VietNamese</MuliText>
+              <MuliText style={styles.grayOptionInformation}>I want the Sitter to speak one of these languages natively</MuliText>
+            </View>
+          </View>
+          <View style={styles.optionText}>
+            <Ionicons
+              name='ios-man'
+              size={35}
+              style={{ marginBottom: -3 }}
+              color='#555555'
+            />
+            <View>
+              <MuliText style={styles.optionInformation}>Complementary insurance</MuliText>
+              <MuliText style={styles.grayOptionInformation}>You didn't take the complementary insurance</MuliText>
+            </View>
+          </View>
+        </View>
+        <View style={styles.detailContainer}>
+          <MuliText style={styles.detailText}>MY SITTER</MuliText>
+          <View style={styles.detailPictureContainer}>
+            <View>
+              <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
+              <View style={styles.name}>
+                <MuliText >{this.state.nameSitter}</MuliText>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Press me"
+            color="#f194ff"
+          />
+          <Button
+            title="Press me"
+            color="#f194ff"
+          />
+        </View>
       </ScrollView>
     );
   }
@@ -106,125 +171,89 @@ ParentDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  centerContainer: {
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginLeft: 200,
+    marginRight: 200,
+    marginBottom: 50
+  },
+  detailPictureContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  name: {
+    alignItems: "center",
+  },
+  detailText: {
+    fontSize: 25,
+    color: "gray",
+    marginBottom: 10,
+    fontWeight: 'bold'
+  },
+  optionsText: {
+    fontSize: 25,
+    color: "gray",
+    fontWeight: 'bold',
+    marginLeft: 40,
+  },
+  profileImg: {
+    marginTop: 20,
+    width: 100,
+    height: 100,
+    borderRadius: 100 / 2,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "black"
+  },
+  detailContainer: {
+    margin: 30,
+    //  backgroundColor: 'red',
+  },
+  textAndDayContainer: {
+    flexDirection: 'row'
+  },
+  priceText: {
+    fontSize: 20,
+    marginLeft: 150,
+    marginTop: 30,
+    flexDirection: 'row',
+  },
+  detailInformationContainer: {
     flex: 1,
     marginTop: 40,
   },
+  detailOptionsContainer: {
+    flex: 1,
+    marginTop: 20,
+  },
   informationText: {
-    marginLeft: 30,
-    marginTop: 15,
+    fontSize: 20,
+    marginLeft: 50,
+    marginTop: 30,
     flexDirection: 'row',
     // backgroundColor: 'red',
   },
+  optionText: {
+    fontSize: 20,
+    marginLeft: 50,
+    marginTop: 30,
+    flexDirection: 'row',
+  },
   contentInformation: {
+    fontSize: 20,
     paddingLeft: 20,
   },
-  Body: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  Babysitting: {
-    top: 0,
-    left: -38,
-    color: "#121212",
-    fontSize: 50,
-    fontFamily: "muli",
-    fontWeight: 'bold',
-  },
-  Detail: {
-    left: -36,
-    color: "#121212",
-    fontSize: 30,
-    fontFamily: "muli",
-    fontWeight: 'bold',
-  },
-  Date: {
-    color: "#121212",
+  optionInformation: {
+    marginTop: 7,
     fontSize: 20,
-    fontFamily: "muli",
-    marginTop: 15,
-    marginLeft: 35
+    paddingLeft: 20,
   },
-  StartTime: {
-    color: "#121212",
+  grayOptionInformation: {
+    color: 'gray',
     fontSize: 20,
-    fontFamily: "muli",
-    marginTop: 14,
-    marginLeft: 35
+    paddingLeft: 20,
   },
-  EndTime: {
-    color: "#121212",
-    fontSize: 20,
-    fontFamily: "muli",
-    marginTop: 14,
-    marginLeft: 35
-  },
-  Address: {
-    top: 0,
-    left: -37,
-    color: "#121212",
-
-    fontSize: 20,
-    fontFamily: "muli"
-  },
-  Price: {
-    top: 0,
-    left: -37,
-    color: "#121212",
-
-    fontSize: 20,
-    fontFamily: "muli"
-  },
-  MyChildren: {
-    top: 20,
-    left: -38,
-    color: "#121212",
-    fontSize: 30,
-    fontFamily: "muli",
-    fontWeight: "bold"
-  },
-  ChildrenPicture: {
-    width: 90,
-    height: 82,
-    borderRadius: 100,
-    marginTop: 120,
-    marginLeft: 42
-  },
-  NameChildren: {
-    color: "#121212",
-    fontSize: 14,
-    fontFamily: "muli",
-    marginTop: 12,
-    marginLeft: 72
-  },
-  MySitter: {
-    color: "#121212",
-    fontSize: 30,
-    fontFamily: "muli",
-    marginTop: 17,
-    marginLeft: 35,
-    fontWeight: "bold"
-  },
-  SitterPicture: {
-    width: 90,
-    height: 82,
-    borderRadius: 100,
-    marginTop: 22,
-    marginLeft: 44
-  },
-  NameSitter: {
-    color: "#121212",
-    fontSize: 14,
-    fontFamily: "muli",
-    marginTop: 14,
-    marginLeft: 75
-  },
-  container: {
-    flex: 1,
-  },
-  buttonContainer: {
-    width: '40%',
-    height: 50,
-    fontFamily: 'muli',
-  }
 });
