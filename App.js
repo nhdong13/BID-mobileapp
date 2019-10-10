@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Sentry from 'sentry-expo';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -28,6 +29,12 @@ export default function App(props) {
   }
 }
 
+Sentry.init({
+  dsn: 'https://df80ec59ae0c4234929ab6f08e09cfeb@sentry.io/1774701',
+  enableInExpoDevelopment: true,
+  debug: true
+});
+
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
@@ -40,6 +47,8 @@ async function loadResourcesAsync() {
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
       'muli': require('./assets/fonts/Muli-Regular.ttf'),
+      'muli-bold': require('./assets/fonts/Muli-Bold.ttf'),
+      'muli-semibold': require('./assets/fonts/Muli-SemiBold.ttf'),
     }),
   ]);
 }

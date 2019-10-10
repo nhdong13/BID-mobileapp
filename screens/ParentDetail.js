@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button } from "react-native";
+import { StyleSheet, View, Text, Image, Button, ScrollView } from "react-native";
+import { Ionicons } from '@expo/vector-icons/';
+import { MuliText } from "../components/StyledText";
+import moment from 'moment';
+
 
 export default class ParentDetail extends Component {
   constructor(props) {
@@ -16,11 +20,23 @@ export default class ParentDetail extends Component {
       nameSitter: 'Phuc'
     }
   }
-  render() {
 
+
+  render() {
     return (
 
-      <View style={styles.root}>
+      <ScrollView>
+        <View style={styles.centerContainer}>
+          <View style={styles.informationText}>
+            <Ionicons
+              name='ios-calendar'
+              size={26}
+              style={{ marginBottom: -3 }}
+              color='#555555'
+            />
+            <MuliText style={styles.contentInformation}>{moment(this.state.date).format('dddd Do MMMM')}</MuliText>
+          </View>
+        </View>
         <View style={styles.Body}>
           <View
             style={[
@@ -81,7 +97,7 @@ export default class ParentDetail extends Component {
           </View>
         </View>
 
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -90,8 +106,18 @@ ParentDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  root: {
+  centerContainer: {
     flex: 1,
+    marginTop: 40,
+  },
+  informationText: {
+    marginLeft: 30,
+    marginTop: 15,
+    flexDirection: 'row',
+    // backgroundColor: 'red',
+  },
+  contentInformation: {
+    paddingLeft: 20,
   },
   Body: {
     flex: 1,
@@ -195,11 +221,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginLeft: 150,
-    marginRight: 150
   },
   buttonContainer: {
     width: '40%',

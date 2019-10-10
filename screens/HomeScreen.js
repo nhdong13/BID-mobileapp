@@ -1,5 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
+import { retrieveToken } from '../api/handleToken';
+import Modal from 'react-native-modal';
 import {
   Image,
   Platform,
@@ -12,7 +14,7 @@ import {
 
 import { MuliText } from '../components/StyledText';
 import { Agenda } from 'react-native-calendars';
-import RequestItem from '../components/RequestItem';
+import { getAllUsers } from '../api/getAllUsers';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class HomeScreen extends Component {
@@ -21,9 +23,24 @@ class HomeScreen extends Component {
     this.state = {
       items: '',
       requests: {
-
       },
     }
+    // this.getAllUser();
+  }
+
+  getAllUser = async () => {
+    retrieveToken().then((res, err) => {
+      if (err) {
+        console.log(err);
+      }
+      const userToken = res;
+      getAllUsers(userToken).then(res => {
+        console.log(res.data);
+      });
+
+    });
+
+
   }
 
   render() {
@@ -32,12 +49,16 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.scheduleContainer}>
           <MuliText style={{ fontSize: 20, color: '#707070' }}>When would you need a babysitter ?</MuliText>
+          <TouchableOpacity onPress={this.getAllUser}>
+            <MuliText>Test button to assign anything</MuliText>
+          </TouchableOpacity>
+          
         </View>
         <Agenda
           items={{
-            '2019-10-04': [
+            '2019-10-10': [
               {
-                date: '2019-10-03',
+                date: '2019-10-10',
                 price: '30',
                 startTime: '12:00 AM',
                 endTime: '3:00 AM',
@@ -45,7 +66,7 @@ class HomeScreen extends Component {
                 status: 'pending'
               },
               {
-                date: '2019-10-03',
+                date: '2019-10-10',
                 price: '89',
                 startTime: '6:00 AM',
                 endTime: '9:00 AM',
@@ -64,12 +85,26 @@ class HomeScreen extends Component {
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
-                    <MuliText>{item.date}</MuliText>
-                    <MuliText>{item.startTime}</MuliText>
-                    <MuliText>{item.endTime}</MuliText>
+                    <MuliText style={styles.date}>{item.date}</MuliText>
+                    <MuliText>{item.startTime} - {item.endTime}</MuliText>
+                    <MuliText>{item.address}</MuliText>
                   </View>
                   <View style={styles.rightInformation}>
-                    <MuliText>{item.price}</MuliText>
+                    {item.status == 'pending' ?
+                      (
+                        <View style={styles.statusBoxPending}>
+                          <MuliText style={{ fontWeight: '800', color: 'gray' }}>{item.status}</MuliText>
+                        </View>
+
+                      )
+                      :
+                      (
+                        <View style={styles.statusBoxConfirm}>
+                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{item.status}</MuliText>
+                        </View>
+                      )
+                    }
+                    <MuliText>${item.price}</MuliText>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -114,6 +149,22 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
+  statusBoxPending: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'green',
+    width: 90,
+    height: 40,
+    padding: 10,
+  },
+  statusBoxConfirm: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'green',
+    width: 90,
+    height: 40,
+    padding: 10,
+  },
   welcomeContainer: {
     alignItems: 'center',
     marginTop: 10,
@@ -124,7 +175,7 @@ const styles = StyleSheet.create({
   requestItem: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'yellow',
+    backgroundColor: 'white',
     height: 120,
     marginHorizontal: 30,
     alignItems: 'center',
@@ -132,13 +183,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   leftInformation: {
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
     margin: 15,
     paddingHorizontal: 5,
     flex: 1,
   },
   rightInformation: {
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     flex: 1,
     alignItems: 'flex-end',
     paddingRight: 20,
