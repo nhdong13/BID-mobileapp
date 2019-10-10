@@ -13,7 +13,6 @@ const config = Platform.select({
 const AuthStack = createStackNavigator(
     {
         Login: LoginScreen,
-        NewRequest: CreateRequestScreen,
     },
     config
 );

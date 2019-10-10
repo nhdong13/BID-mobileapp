@@ -19,7 +19,7 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '0978199199',
+      phoneNumber: '',
       password: '12341234',
       title: 'lallalala',
       OTP: '',
@@ -138,7 +138,7 @@ class LoginScreen extends Component {
         }
 
         <View style={styles.welcomeContainer}>
-          <MuliText>copyrights claim shity thing that you don't want to read</MuliText>
+          <MuliText>copyrights claim thing that you don't want to read</MuliText>
         </View>
       </KeyboardAvoidingView>
     );
