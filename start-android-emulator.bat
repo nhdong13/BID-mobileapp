@@ -1,6 +1,6 @@
 @echo off
 
-if exist %ANDROID_HOME% goto :EVNotFound
+if not exist %ANDROID_HOME% goto :EVNotFound
 if exist %ANDROID_HOME% goto :StartAndroid
 
 :EVNotFound
