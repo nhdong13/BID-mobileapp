@@ -56,7 +56,7 @@ class HomeScreen extends Component {
         </View>
         <Agenda
           items={{
-            '2019-10-10': [
+            '2019-10-11': [
               {
                 date: '2019-10-10',
                 price: '30',
