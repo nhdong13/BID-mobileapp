@@ -5,7 +5,7 @@ import { MuliText } from "../components/StyledText";
 import moment from 'moment';
 
 
-export default class ParentDetail extends Component {
+export default class InvitationDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +16,7 @@ export default class ParentDetail extends Component {
       price: '30/H',
       detailPictureChildren: require("../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
-      detailPictureSitter: require("../assets/images/Phuc.png"),
+      detailPictureParent: require("../assets/images/Phuc.png"),
       nameSitter: 'Phuc'
     }
   }
@@ -132,7 +132,7 @@ export default class ParentDetail extends Component {
             </View>
 
             <View style={styles.informationText}>
-              <Ionicons
+              <Ioniconsyarn
                 name='ios-man'
                 size={27}
                 style={{ marginBottom: -5, marginHorizontal: 10}}
@@ -146,10 +146,10 @@ export default class ParentDetail extends Component {
 
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>SITTER</MuliText>
+            <MuliText style={styles.headerTitle}>PARENT</MuliText>
             <View style={styles.detailPictureContainer}>
               <View>
-                <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
+                <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
                   <MuliText >{this.state.nameSitter}</MuliText>
                 </View>
@@ -169,7 +169,7 @@ export default class ParentDetail extends Component {
     );
   }
 }
-ParentDetail.navigationOptions = {
+InvitationDetail.navigationOptions = {
   header: null,
 };
 
