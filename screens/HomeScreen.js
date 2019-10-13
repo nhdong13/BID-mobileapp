@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { retrieveToken } from '../api/handleToken';
 import {
-  Platform,
+  Button,
   StyleSheet,
   View,
+  Image
 } from 'react-native';
 
 import { MuliText } from '../components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getAllUsers } from '../api/getAllUsers';
+import { getRequests } from '../api/getRequests';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
 
@@ -17,8 +19,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       items: '',
-      requests: {
-      },
+      requests: null,
     }
   }
 
@@ -33,19 +34,20 @@ class HomeScreen extends Component {
       });
 
     });
+  }
 
-
+  getRequests = async () => {
+    getRequests(1);
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.scheduleContainer}>
-          <MuliText style={{ fontSize: 20, color: '#707070' }}>When would you need a babysitter ?</MuliText>
-          <TouchableOpacity onPress={this.getAllUser}>
+          <MuliText style={{ fontSize: 20, color: '#315f61', fontWeight: 'bold', lineHeight: 20 }}>When would you need a babysitter ?</MuliText>
+          <TouchableOpacity onPress={this.getRequests}>
             <MuliText>Test button to assign anything</MuliText>
           </TouchableOpacity>
-          
         </View>
         <Agenda
           items={{
@@ -108,15 +110,40 @@ class HomeScreen extends Component {
           // specify how each date should be rendered. day can be undefined if the item is not first in that day.
           renderDay={(day, item) => { return (<View />); }}
           // specify how empty date content with no items should be rendered
-          renderEmptyDate={() => { return (<View />); }}
+          renderEmptyDate={() => (<View />)}
           // specify what should be rendered instead of ActivityIndicator
-          renderEmptyData={() => { return (<MuliText>cha co gi de show ca</MuliText>); }}
+          renderEmptyData={() =>
+            (
+              <View style={styles.noRequest}>
+                <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
+                <MuliText>Tap to create one</MuliText>
+                <Image
+                  source={
+                    require('../assets/images/no-request.jpg')
+                  }
+                  style={styles.noRequestImage}
+                />
+              </View>
+            )
+          }
           // Hide knob button. Default = false
           hideKnob={false}
           theme={{
+            // selectedDayBackgroundColor: '#78ddb6',
+            // agendaKnobColor: '#78ddb6',
+            // todayTextColor: '#78ddb6',
+            // dotColor: '#78ddb6',
+            textDayFontFamily: 'muli',
+            textDayHeaderFontFamily: 'muli',
+            textDayHeaderFontSize: 11,
+            // dayTextColor: '#315f61'
           }}
-          style={{}}
+          style={{
+
+          }}
         />
+        <Button style={styles.createRequest} title="+" onPress={() => this.props.navigation.navigate('CreateRequest')}>
+        </Button>
       </View>
     );
   }
@@ -143,6 +170,16 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
+  createRequest: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#ee6e73',
+    position: 'absolute',
+    opacity: 0.9,
+    bottom: 10,
+    right: 10,
+  },
   statusBoxPending: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -165,6 +202,27 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: 360,
     height: 250,
+  },
+  noRequest: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingHorizontal: 20,
+    paddingTop: 30,
+  },
+  noRequestText: {
+    marginVertical: 10,
+    marginHorizontal: 30,
+    paddingTop: 20,
+    fontSize: 18,
+    color: '#315f61',
+    fontWeight: 'bold',
+  },
+  noRequestImage: {
+    width: 261,
+    height: 236,
+    marginVertical: 20
   },
   requestItem: {
     flex: 1,
@@ -194,74 +252,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingTop: 20,
     marginBottom: 20,
-    flex: 0.2,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-    fontFamily: 'muli',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+    flex: 0.1,
   },
 });

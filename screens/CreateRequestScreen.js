@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { login } from '../api/login';
 import {
   Platform,
   StyleSheet,
