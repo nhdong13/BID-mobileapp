@@ -1,14 +1,8 @@
-import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import { retrieveToken } from '../api/handleToken';
-import Modal from 'react-native-modal';
 import {
-  Image,
   Platform,
-  ScrollView,
   StyleSheet,
-  Text,
-  Button,
   View,
 } from 'react-native';
 
@@ -16,6 +10,7 @@ import { MuliText } from '../components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getAllUsers } from '../api/getAllUsers';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import moment from 'moment';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -25,7 +20,6 @@ class HomeScreen extends Component {
       requests: {
       },
     }
-    // this.getAllUser();
   }
 
   getAllUser = async () => {
@@ -44,7 +38,6 @@ class HomeScreen extends Component {
   }
 
   render() {
-    const { show, date, mode } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.scheduleContainer}>
@@ -56,9 +49,9 @@ class HomeScreen extends Component {
         </View>
         <Agenda
           items={{
-            '2019-10-11': [
+            '2019-10-14': [
               {
-                date: '2019-10-10',
+                date: '2019-10-16',
                 price: '30',
                 startTime: '12:00 AM',
                 endTime: '3:00 AM',
@@ -66,7 +59,7 @@ class HomeScreen extends Component {
                 status: 'pending'
               },
               {
-                date: '2019-10-10',
+                date: '2019-10-16',
                 price: '89',
                 startTime: '6:00 AM',
                 endTime: '9:00 AM',
@@ -75,6 +68,7 @@ class HomeScreen extends Component {
               },
             ],
           }}
+          selected={new moment().format("YYYY-MM-DD")}
           // Max amount of months allowed to scroll to the past. Default = 50
           pastScrollRange={50}
           // Max amount of months allowed to scroll to the future. Default = 50
