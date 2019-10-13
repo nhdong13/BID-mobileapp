@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   TextInput,
   View,
+  Image,
   KeyboardAvoidingView
 } from 'react-native';
 
 import { MuliText } from '../components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 class CreateRequestScreen extends Component {
@@ -24,6 +26,10 @@ class CreateRequestScreen extends Component {
       startTime: moment().format('hh:mm:ss'),
       endTime: moment().format('hh:mm:ss'),
       sittingAddress: 'somewhere only we know',
+      detailPictureSitter: require("../assets/images/Phuc.png"),
+      detailPictureChildren: require("../assets/images/Baby-6.png"),
+      nameChildren: 'Nam',
+      price: '100'
     };
 
     this.onCreateRequest = this.onCreateRequest.bind(this);
@@ -39,73 +45,105 @@ class CreateRequestScreen extends Component {
     };
 
     console.log(request);
-
-
   }
-
 
   render() {
     return (
-      <KeyboardAvoidingView
-        style={{ flex: 1, justifyContent: 'center' }}
-        keyboardVerticalOffset={60}
-        behavior={Platform.OS === "ios" ? 'padding' : 'height'}
-      >
-        <View style={styles.welcomeContainer}>
-          <MuliText>Let's do something new</MuliText>
-          <DatePicker
-            style={styles.pickedDate}
-            date={this.state.sittingDate}
-            mode="date"
-            placeholder="select date"
-            format="YYYY-MM-DD"
-            minDate="2019-10-01"
-            maxDate="2019-12-01"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={(date) => { this.setState({ sittingDate: date }); console.log(this.state.sittingDate) }}
-          />
-        </View>
-        <View style={styles.welcomeContainer}>
-          <DatePicker
-            style={styles.pickedTime}
-            date={this.state.startTime}
-            mode="time"
-            placeholder="select date"
-            format="hh:mm:ss"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
-          />
-        </View>
-        <View style={styles.welcomeContainer}>
-          <DatePicker
-            style={styles.pickedTime}
-            date={this.state.endTime}
-            mode="time"
-            placeholder="select end time"
-            format="hh:mm:ss"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
-          />
-        </View>
-        <View>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.inputRequest}>
+            <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Babysitting</MuliText>
+            <View style={{ marginTop: 30 }}>
+              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Date</MuliText>
+              <DatePicker
+                style={styles.pickedDate}
+                date={this.state.sittingDate}
+                mode="date"
+                placeholder="select date"
+                format="YYYY-MM-DD"
+                minDate="2019-10-01"
+                maxDate="2019-12-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                onDateChange={(date) => { this.setState({ sittingDate: date }); console.log(this.state.sittingDate) }}
+                showIcon={false}
+              />
+            </View>
+            <View style={{ marginTop: 30 }}>
+              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Start time</MuliText>
+              <DatePicker
+                style={styles.pickedTime}
+                date={this.state.startTime}
+                mode="time"
+                placeholder="select date"
+                format="hh:mm:ss"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
+                showIcon={false}
+              />
+              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>EndTime</MuliText>
+              <DatePicker
+                style={styles.pickedTime}
+                date={this.state.endTime}
+                mode="time"
+                placeholder="select end time"
+                format="hh:mm:ss"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
+                showIcon={false}
+              />
+            </View>
+            <View style={styles.inputRequest}>
+              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Address</MuliText>
+              <View style={styles.textContainer}>
 
-        </View>
-        <View style={styles.welcomeContainer}>
-          <View style={styles.textContainer}>
-            <Ionicons name='ios-home' size={18} style={styles.icon}></Ionicons>
-            <MuliText>{this.state.sittingAddress}</MuliText>
+                <Ionicons name='ios-home' size={18} style={styles.icon}></Ionicons>
+                <MuliText>{this.state.sittingAddress}</MuliText>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.inputRequest}>
+            <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Children</MuliText>
+            <View style={styles.detailPictureContainer}>
+              <View >
+                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
+                <View style={styles.name}>
+                  <MuliText >{this.state.nameChildren}</MuliText>
+                </View>
+              </View>
+              <View >
+                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
+                <View style={styles.name}>
+                  <MuliText >{this.state.nameChildren}</MuliText>
+                </View>
+              </View>
+              <View >
+                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
+                <View style={styles.name}>
+                  <MuliText >{this.state.nameChildren}</MuliText>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.inputRequest}>
+            <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Payment</MuliText>
+            <View>
+              <MuliText>Proposed Price</MuliText>
+              <MuliText>{this.state.price}</MuliText>
+            </View>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
+              <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
+            </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
-            <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
@@ -114,32 +152,43 @@ export default CreateRequestScreen;
 
 CreateRequestScreen.navigationOptions = {
   title: 'Create new sitting',
-  headerStyle: {
-    backgroundColor: 'purple',
-  },
-  headerTintColor: '#fff',
-  headerTitleStyle: {
-    fontWeight: '100',
-  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: 30,
+    alignItems: 'center'
   },
   pickedTime: {
-    
-  },
-  pickedDate: {
-    backgroundColor: 'red',
-    borderWidth: 0,
     width: 300,
     height: 40,
+    marginTop: 5,
+  },
+  pickedDate: {
+    width: 300,
+    height: 40,
+    marginTop: 5,
+  },
+  detailPictureContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  profileImg: {
+    marginTop: 20,
+    width: 70,
+    height: 70,
+    borderRadius: 100 / 2,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "black"
+  },
+  name: {
+    alignItems: "center",
   },
   icon: {
     margin: 15,
-    color: 'green',
   },
   textInput: {
     borderColor: '#EEEEEE',
@@ -166,64 +215,20 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: 'center',
   },
+  inputRequest: {
+
+  },
+  timePickerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    flex: 1,
   },
   textContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
-  logoImage: {
-    width: 80,
-    height: 36,
-    resizeMode: 'contain',
-    marginTop: 40,
-    marginLeft: -10,
-  },
-  familyImage: {
-    resizeMode: 'contain',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  tabBarInfoContainer: {
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 10,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 5,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+
 });
