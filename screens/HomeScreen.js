@@ -21,8 +21,8 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       requests: null,
-      userId: this.props.navigation.getParam('userId', 1),
-      roleId: this.props.navigation.getParam('roleId', 3),
+      userId: 0,
+      roleId: 0,
       refreshing: false,
     }
   }
@@ -37,6 +37,12 @@ class HomeScreen extends Component {
   }
 
   getRequests = async () => {
+    await retrieveToken().then((res) => {
+      const { userId, roleId } = res;
+      console.log('userId ' + userId);
+      console.log('roleid ' + roleId);
+      this.setState({ userId: userId, roleId: roleId })
+    })
     await getRequests(this.state.userId).then(res => {
       this.setState({ requests: res })
     }).catch(error => console.log('On get request error ' + error))
@@ -50,6 +56,7 @@ class HomeScreen extends Component {
   }
 
   componentWillMount() {
+
     this.getRequests();
   }
 

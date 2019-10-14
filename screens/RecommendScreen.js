@@ -146,7 +146,7 @@ export default class RecommendScreen extends Component {
 }
 
 RecommendScreen.navigationOptions = {
-    header: null,
+    title: 'Recommend babysitter'
 };
 
 const styles = StyleSheet.create({
