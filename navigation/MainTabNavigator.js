@@ -6,7 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ParentDetails from '../screens/ParentDetail';
+import ParentDetails from '../screens/RequestDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
 import CreateRequest from "../screens/CreateRequestScreen";
 
@@ -65,7 +65,7 @@ HomeStack.path = '';
 
 const LinksStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Links: ParentDetails,
   },
   config
 );
