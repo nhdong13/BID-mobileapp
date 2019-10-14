@@ -41,6 +41,7 @@ class Api {
         console.log({ request: params, headers: options.headers });
         const { token } = await retrieveToken();
         const trimpedToken = token.replace(/['"]+/g, '');
+        console.log(trimpedToken)
         if (token) {
             options.headers['Authorization'] = `Bearer ${trimpedToken}`;
         }

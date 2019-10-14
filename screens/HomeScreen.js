@@ -19,8 +19,8 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       requests: null,
-      userId: this.props.navigation.getParam('userId', 1) || 1,
-      roleId: this.props.navigation.getParam('roleId', 3) || 3,
+      userId: this.props.navigation.getParam('userId', 1),
+      roleId: this.props.navigation.getParam('roleId', 3),
     }
   }
 
