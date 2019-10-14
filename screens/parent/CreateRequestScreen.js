@@ -38,8 +38,8 @@ class CreateRequestScreen extends Component {
   }
 
   async componentDidMount() {
-    Api.get('users/' + this.state.createdUser.toString() ).then(res => {
-      this.setState({ loggedUser: res, sittingAddress: res.address});
+    Api.get('users/' + this.state.createdUser.toString()).then(res => {
+      this.setState({ loggedUser: res, sittingAddress: res.address });
     });
   }
 
