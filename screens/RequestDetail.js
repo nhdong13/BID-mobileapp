@@ -84,6 +84,15 @@ export default class RequestDetail extends Component {
               />
               <MuliText style={styles.contentInformation}>{this.state.address}</MuliText>
             </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name='ios-home'
+                size={22}
+                style={{ marginBottom: -5 }}
+                color='#bdc3c7'
+              />
+              <MuliText style={styles.contentInformation}>{this.state.status}</MuliText>
+            </View>
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
@@ -199,6 +208,23 @@ export default class RequestDetail extends Component {
                 <MuliText style={{ color: 'white', fontSize: 16 }}>Confirm job is finished</MuliText>
               </TouchableOpacity>}  
 
+            {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED' )?
+              (
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                  </TouchableOpacity>
+                </View>
+              )
+              :
+              (
+                <View></View>
+              )
+            }
+            
           </View>
 
           {/* end */}

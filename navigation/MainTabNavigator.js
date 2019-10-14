@@ -5,9 +5,10 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ParentDetails from '../screens/RequestDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
-import RecommendBabysitter from '../screens/RecommendScreen';
+import CreateRequest from '../screens/parent/CreateRequestScreen';
+import RequestDetail from '../screens/InvitationDetail';
+import RecommeandBabysitter from '../screens/RecommendScreen';
 
 const config = Platform.select({
   default: {},
