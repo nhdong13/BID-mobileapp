@@ -102,9 +102,6 @@ class LoginScreen extends Component {
             <MuliText style={{ color: 'white', fontSize: 16 }}>Login</MuliText>
           </TouchableOpacity>
         </View>
-
-
-        
         {this.state.isModalVisible ?
           (
             <Modal
