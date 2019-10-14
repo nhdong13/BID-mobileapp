@@ -50,6 +50,25 @@ class CreateRequestScreen extends Component {
   render() {
     return (
       <ScrollView>
+      <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Babysitting</MuliText>
+        <View style={styles.container}>        
+          <View>
+            <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Date</MuliText>
+            <DatePicker
+                style={styles.pickedDate}
+                date={this.state.sittingDate}
+                mode="date"
+                placeholder="select date"
+                format="YYYY-MM-DD"
+                minDate="2019-10-01"
+                maxDate="2019-12-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                onDateChange={(date) => { this.setState({ sittingDate: date }); console.log(this.state.sittingDate) }}
+                showIcon={false}
+              />
+          </View>
+        </View>
         <View style={styles.container}>
           <View style={styles.inputRequest}>
             <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Babysitting</MuliText>

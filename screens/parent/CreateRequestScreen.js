@@ -56,15 +56,17 @@ class CreateRequestScreen extends Component {
     Api.post('sittingRequests', request);
   }
 
-
   render() {
     return (
       <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.inputRequest}>
-            <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Babysitting</MuliText>
-            <View style={{ marginTop: 30 }}>
-              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Date</MuliText>
+
+        <View style={styles.containerInformationRequest}>
+          <MuliText style={styles.headerTitle}>BABYSITTING</MuliText>
+          <View style={styles.containerDetailInformationRequest}>
+            <View>
+              <MuliText style={styles.headerText}>Date</MuliText>
+            </View>
+            <View>
               <DatePicker
                 style={styles.pickedDate}
                 date={this.state.sittingDate}
@@ -79,44 +81,46 @@ class CreateRequestScreen extends Component {
                 showIcon={false}
               />
             </View>
-            <View style={{ marginTop: 30 }}>
-              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Start time</MuliText>
-              <DatePicker
-                style={styles.pickedTime}
-                date={this.state.startTime}
-                mode="time"
-                placeholder="select date"
-                format="hh:mm"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
-                showIcon={false}
-              />
-              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>EndTime</MuliText>
-              <DatePicker
-                style={styles.pickedTime}
-                date={this.state.endTime}
-                mode="time"
-                placeholder="select end time"
-                format="hh:mm"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
-                showIcon={false}
-              />
-            </View>
-            <View style={styles.inputRequest}>
-              <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>Address</MuliText>
-              <View style={styles.textContainer}>
-
-                <Ionicons name='ios-home' size={18} style={styles.icon}></Ionicons>
-                <MuliText>{this.state.sittingAddress}</MuliText>
-              </View>
-            </View>
           </View>
-
-          <View style={styles.inputRequest}>
-            <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Children</MuliText>
+          <View style={styles.containerDetailInformationRequest}>
+            <MuliText style={styles.headerText}>Start time</MuliText>
+            <DatePicker
+              style={styles.pickedTime}
+              date={this.state.startTime}
+              mode="time"
+              placeholder="select date"
+              format="hh:mm"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
+              showIcon={false}
+            />
+          </View>
+          <View style={styles.containerDetailInformationRequest}>
+            <MuliText style={styles.headerText}>EndTime</MuliText>
+            <DatePicker
+              style={styles.pickedTime}
+              date={this.state.endTime}
+              mode="time"
+              placeholder="select end time"
+              format="hh:mm"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
+              showIcon={false}
+            />
+          </View>
+          <View style={styles.informationText}>
+            <Ionicons
+              name='ios-home'
+              size={22}
+              style={{ marginBottom: -5 }}
+              color='#bdc3c7'
+            />
+            <MuliText style={styles.contentInformation}>Address: {this.state.sittingAddress}</MuliText>
+          </View>
+          <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
+          <View style={{ marginHorizontal: 15 }}>
             <View style={styles.detailPictureContainer}>
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
@@ -138,21 +142,19 @@ class CreateRequestScreen extends Component {
               </View>
             </View>
           </View>
-
-          <View style={styles.inputRequest}>
-            <MuliText style={{ fontSize: 18, fontWeight: 'bold', color: '#315f61' }}>Payment</MuliText>
-            <View>
-              <MuliText>Proposed Price</MuliText>
-              <MuliText>{this.state.price}</MuliText>
-            </View>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
-            </TouchableOpacity>
+          <View>
+            <MuliText style={styles.headerTitle}>Payment</MuliText>
+            <MuliText style={styles.contentInformation}>Propose price: {this.state.price}/h</MuliText>
           </View>
         </View>
+
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
+            <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
+          </TouchableOpacity>
+        </View>
+
       </ScrollView>
     );
   }
@@ -161,23 +163,50 @@ class CreateRequestScreen extends Component {
 export default CreateRequestScreen;
 
 CreateRequestScreen.navigationOptions = {
-  title: 'Create new sitting',
+  header: null,
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+  contentInformation: {
+    fontSize: 15,
+    paddingLeft: 15,
+    color: '#315F61',
+  },
+  informationText: {
+    marginHorizontal: 10,
+    fontSize: 18,
     marginTop: 30,
-    alignItems: 'center'
+    flexDirection: 'row',
+    color: '#bdc3c7'
+    // backgroundColor: 'red',
+  },
+  headerText: {
+    fontSize: 15,
+    fontWeight: '200',
+    color: '#707070'
+  },
+  containerInformationRequest: {
+    flex: 1,
+    marginHorizontal: 15,
+  },
+  containerDetailInformationRequest: {
+    margin: 10,
+  },
+  headerTitle: {
+    marginLeft: 10,
+    marginTop: 30,
+    fontSize: 30,
+    color: '#315F61',
+    marginBottom: 10,
+    fontWeight: '800'
   },
   pickedTime: {
-    width: 300,
+    width: 250,
     height: 40,
     marginTop: 5,
   },
   pickedDate: {
-    width: 300,
+    width: 250,
     height: 40,
     marginTop: 5,
   },
@@ -197,18 +226,6 @@ const styles = StyleSheet.create({
   name: {
     alignItems: "center",
   },
-  icon: {
-    margin: 15,
-  },
-  textInput: {
-    borderColor: '#EEEEEE',
-    width: 300,
-    height: 60,
-    borderWidth: 2,
-    borderRadius: 30,
-    padding: 10,
-    fontFamily: 'muli',
-  },
   submitButton: {
     width: 300,
     height: 60,
@@ -218,27 +235,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  contentContainer: {
-    paddingTop: 30,
-  },
+  
   buttonContainer: {
     paddingTop: 30,
     alignItems: 'center',
-  },
-  inputRequest: {
-
-  },
-  timePickerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  welcomeContainer: {
-    flex: 1,
-  },
-  textContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
   },
 
 });

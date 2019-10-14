@@ -7,7 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
-import CreateRequest from "../screens/CreateRequestScreen";
+import CreateRequest from '../screens/parent/CreateRequestScreen';
 import RequestDetail from '../screens/InvitationDetail';
 
 const config = Platform.select({
