@@ -24,10 +24,7 @@ class HomeScreen extends Component {
   }
 
   getAllUser = async () => {
-    retrieveToken().then((res, err) => {
-      if (err) {
-        console.log(err);
-      }
+    retrieveToken().then((res) => {
       const userToken = res;
       getAllUsers(userToken).then(res => {
         console.log(res.data);
@@ -37,15 +34,13 @@ class HomeScreen extends Component {
   }
 
   getRequests = async () => {
-    console.log('it run ...')
-    getRequests(1).then(res => {
-      console.log(res)
-      this.setState({ request: res })
+    await getRequests(1).then(res => {
+      console.log('taking the function ' + res)
+      this.setState({ requests: res })
     }).catch(error => console.log(error))
   }
   componentWillMount() {
-    this.getRequests
-    console.log(this.getRequests)
+    this.getRequests();
   }
 
   render() {
@@ -70,9 +65,9 @@ class HomeScreen extends Component {
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
-                    <MuliText style={styles.date}>{item.date}</MuliText>
+                    <MuliText style={styles.date}>{item.sittingDate}</MuliText>
                     <MuliText>{item.startTime} - {item.endTime}</MuliText>
-                    <MuliText>{item.address}</MuliText>
+                    <MuliText>{item.sittingAddress}</MuliText>
                   </View>
                   <View style={styles.rightInformation}>
                     {item.status == 'pending' ?
@@ -80,7 +75,6 @@ class HomeScreen extends Component {
                         <View style={styles.statusBoxPending}>
                           <MuliText style={{ fontWeight: '800', color: 'gray' }}>{item.status}</MuliText>
                         </View>
-
                       )
                       :
                       (
@@ -89,7 +83,7 @@ class HomeScreen extends Component {
                         </View>
                       )
                     }
-                    <MuliText>${item.price}</MuliText>
+                    <MuliText>$100</MuliText>
                   </View>
                 </View>
               </TouchableOpacity>
