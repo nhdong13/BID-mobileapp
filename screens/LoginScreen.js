@@ -19,7 +19,7 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '',
+      phoneNumber: '0978199199',
       password: '12341234',
       title: 'lallalala',
       OTP: '',
@@ -27,23 +27,22 @@ class LoginScreen extends Component {
       roleId: null,
     };
 
-    this.onLogin = this.onLogin.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
   }
 
   onLogin = async () => {
     const { phoneNumber, password } = this.state;
     login(phoneNumber, password)
       .then((res) => {
-        console.log(res.data.roleId)
         if (res.data.roleId && res.data.roleId == 3) {
           this.setState({ isModalVisible: true })
+        } else {
+          this.props.navigation.navigate('Main');
         }
-      })
+      }).catch(error => console.log(error));
   }
 
   onSubmitOTP = async () => {
-
+    this.state.OTP.length === 7 ? this.props.navigation.navigate('Main') : console.log('wrong OTP code, please try again');
   }
 
   toggleModal = () => {

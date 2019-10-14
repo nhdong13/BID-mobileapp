@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "../components/StyledText";
-import moment from 'moment';
-import { bold } from "ansi-colors";
+import logout from '../api/logout';
 export default class SettingsScreen extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +10,13 @@ export default class SettingsScreen extends Component {
       detailPicture: require("../assets/images/Phuc.png"),
       name: 'Phuc'
     }
+  }
+
+  onLogout = async () => {
+    logout().then((res) => {
+      console.log(res);
+      if (res) this.props.navigation.navigate('Auth');
+    }).catch(error => console.log(error));
   }
 
 
@@ -146,7 +152,7 @@ export default class SettingsScreen extends Component {
           </View>
 
         </View>
-        <View style={{ marginHorizontal: 25, marginTop: 20}}>
+        <View style={{ marginHorizontal: 25, marginTop: 20 }}>
           <MuliText style={styles.headerTitle}>SETTINGS</MuliText>
           <View>
             <TouchableOpacity style={styles.detailInformationContainer}>
@@ -187,7 +193,7 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity style={styles.detailInformationContainer} onPress={this.onLogout}>
               <View style={styles.informationText}>
                 <Ionicons
                   name='ios-log-out'
@@ -201,7 +207,7 @@ export default class SettingsScreen extends Component {
                 <Ionicons
                   name='ios-arrow-forward'
                   size={22}
-                  style={{ marginBottom: -5}}
+                  style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
               </View>
