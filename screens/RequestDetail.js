@@ -3,12 +3,14 @@ import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } f
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "../components/StyledText";
 import moment from 'moment';
+import { apisAreAvailable } from "expo";
+import Api from '../api/api_helper';
 
-
-export default class ParentDetail extends Component {
+export default class RequestDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sittingRequestsID: 1,
       date: '2019-10-03',
       startTime: '12:00 AM',
       endTime: '3:00 AM',
@@ -20,7 +22,11 @@ export default class ParentDetail extends Component {
       nameSitter: 'Phuc'
     }
   }
-
+  componentDidMount() {
+    Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(resp => {
+      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress })
+    })
+  }
 
   render() {
     return (
@@ -135,7 +141,7 @@ export default class ParentDetail extends Component {
               <Ionicons
                 name='ios-man'
                 size={27}
-                style={{ marginBottom: -5, marginHorizontal: 10}}
+                style={{ marginBottom: -5, marginHorizontal: 10 }}
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
@@ -169,7 +175,7 @@ export default class ParentDetail extends Component {
     );
   }
 }
-ParentDetail.navigationOptions = {
+RequestDetail.navigationOptions = {
   header: null,
 };
 
