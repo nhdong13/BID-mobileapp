@@ -20,7 +20,7 @@ export default class InvitationDetail extends Component {
       nameChildren: 'Nam',
       detailPictureParent: require("../assets/images/Phuc.png"),
       nameSitter: 'Phuc',
-      status: null,
+      status: "",
       isModalVisible: false,
     }
   }
@@ -29,8 +29,8 @@ export default class InvitationDetail extends Component {
       this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, status: resp.status })
     })
   }
-  onLogin =  () => {
-          this.setState({ isModalVisible: true })
+  onLogin = () => {
+    this.setState({ isModalVisible: true })
   }
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -165,10 +165,23 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-            </TouchableOpacity>
-            {this.state.isModalVisible ?
+            {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED') ?
+              (
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                  </TouchableOpacity>
+                </View>
+              )
+              :
+              (
+                <View></View>
+              )
+            }
+            {(this.state.isModalVisible) ?
               (
                 <Modal
                   isVisible={this.state.isModalVisible}
@@ -202,10 +215,6 @@ export default class InvitationDetail extends Component {
                 <View></View>
               )
             }
-
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
