@@ -39,9 +39,10 @@ class Api {
         let options = Object.assign({ method: verb }, params ? { body: JSON.stringify(params) } : null);
         options.headers = Api.headers();
         console.log({ request: params, headers: options.headers });
-        const token = await retrieveToken();
+        const { token } = await retrieveToken();
+        const trimpedToken = token.replace(/['"]+/g, '');
         if (token) {
-            options.headers['Authorization'] = `Bearer ${token}`;
+            options.headers['Authorization'] = `Bearer ${trimpedToken}`;
         }
         // return Promise
         return fetch(url, options).then(resp => {
