@@ -3,7 +3,7 @@ import { retrieveToken } from "./handleToken";
 import qs from "qs";
 import moment from 'moment';
 
-const url = 'http://192.168.0.102:3000/api/v1/sittingRequests/listParent';
+const url = 'http://192.168.1.4:3000/api/v1/sittingRequests/listParent';
 
 export async function getRequests(userId) {
     const data = {

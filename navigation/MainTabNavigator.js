@@ -16,6 +16,7 @@ const config = Platform.select({
 const CreateRequestStack = createStackNavigator(
   {
     CreateRequest: CreateRequestScreen,
+    HomeScreen: HomeScreen,
   },
   config
 );
