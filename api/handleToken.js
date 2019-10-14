@@ -2,7 +2,6 @@ import { AsyncStorage } from 'react-native';
 
 export const saveToken = async (token, userId, roleId) => {
     try {
-        console.log('inside saveToken ' + token + ' ' + JSON.stringify(userId) + ' ' + JSON.stringify(roleId));
         await AsyncStorage.multiSet([['@jwt_token', token], ['@userId', JSON.stringify(userId)], ['@roleId', JSON.stringify(roleId)]]);
     } catch (error) {
         console.log(error);
