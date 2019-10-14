@@ -6,9 +6,9 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ParentDetails from '../screens/RequestDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
 import CreateRequest from "../screens/CreateRequestScreen";
+import RequestDetail from '../screens/InvitationDetail';
 
 const config = Platform.select({
   default: {},
@@ -41,7 +41,7 @@ const HomeStack = createStackNavigator(
   {
    
     Home: HomeScreen,
-    Detail: ParentDetails,
+    Detail: RequestDetail,
     CreateRequest: CreateRequest,
   },
   config
@@ -65,7 +65,7 @@ HomeStack.path = '';
 
 const LinksStack = createStackNavigator(
   {
-    Links: ParentDetails,
+    Links: LinksScreen,
   },
   config
 );

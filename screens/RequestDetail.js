@@ -19,12 +19,13 @@ export default class RequestDetail extends Component {
       detailPictureChildren: require("../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       detailPictureSitter: require("../assets/images/Phuc.png"),
-      nameSitter: 'Phuc'
+      nameSitter: 'Phuc',
+      status: null
     }
   }
   componentDidMount() {
     Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(resp => {
-      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress })
+      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, status: resp.status })
     })
   }
 
@@ -71,6 +72,15 @@ export default class RequestDetail extends Component {
                 color='#bdc3c7'
               />
               <MuliText style={styles.contentInformation}>{this.state.address}</MuliText>
+            </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name='ios-home'
+                size={22}
+                style={{ marginBottom: -5 }}
+                color='#bdc3c7'
+              />
+              <MuliText style={styles.contentInformation}>{this.state.status}</MuliText>
             </View>
           </View>
           <View style={styles.detailContainer}>
@@ -163,12 +173,23 @@ export default class RequestDetail extends Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-            </TouchableOpacity>
+            {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED' )?
+              (
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                  </TouchableOpacity>
+                </View>
+              )
+              :
+              (
+                <View></View>
+              )
+            }
+            
           </View>
         </View>
       </ScrollView>
