@@ -5,7 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ParentDetails from '../screens/ParentDetail';
+import ParentDetails from '../screens/RequestDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
 import RecommendBabysitter from '../screens/RecommendScreen';
 
@@ -63,6 +63,25 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
+<<<<<<< HEAD
+=======
+const LinksStack = createStackNavigator(
+  {
+    Links: ParentDetails,
+  },
+  config
+);
+
+LinksStack.navigationOptions = {
+  tabBarLabel: 'Links',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+LinksStack.path = '';
+
+>>>>>>> f948f7a63dbe196526b402f45dd887b506ca75b6
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
