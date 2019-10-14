@@ -54,11 +54,8 @@ class HomeScreen extends Component {
         <Agenda
           items={this.state.requests}
           selected={new moment().format("YYYY-MM-DD")}
-          // Max amount of months allowed to scroll to the past. Default = 50
           pastScrollRange={50}
-          // Max amount of months allowed to scroll to the future. Default = 50
           futureScrollRange={50}
-          // specify how each request should be rendered in agenda
           renderItem={(request) => {
             return (
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
