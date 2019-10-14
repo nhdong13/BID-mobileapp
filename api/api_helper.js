@@ -2,11 +2,7 @@ import { retrieveToken } from '../api/handleToken';
 
 //refactor one day 
 export const apiConfig = {
-<<<<<<< HEAD
   host: 'http://192.168.0.106:3000/api/v1/',
-=======
-    host: 'http://192.168.0.102:3000/api/v1/',
->>>>>>> 9d4ff3add9c1d89cd1e082d87fd78103c62a9921
 }
 
 export const apiEndPoint = {
