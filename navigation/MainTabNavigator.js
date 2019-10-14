@@ -65,7 +65,7 @@ HomeStack.path = '';
 
 const LinksStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Links: ParentDetails,
   },
   config
 );

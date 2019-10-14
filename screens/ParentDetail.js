@@ -3,7 +3,8 @@ import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } f
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "../components/StyledText";
 import moment from 'moment';
-
+import { apisAreAvailable } from "expo";
+import Api from '../api/api_helper';
 
 export default class ParentDetail extends Component {
   constructor(props) {
@@ -20,7 +21,11 @@ export default class ParentDetail extends Component {
       nameSitter: 'Phuc'
     }
   }
-
+  componentDidMount() {
+    Api.get('sittingRequests/1').then(resp => {
+      console.log(resp + 'aaaa');
+    }) 
+  }
 
   render() {
     return (
@@ -135,7 +140,7 @@ export default class ParentDetail extends Component {
               <Ionicons
                 name='ios-man'
                 size={27}
-                style={{ marginBottom: -5, marginHorizontal: 10}}
+                style={{ marginBottom: -5, marginHorizontal: 10 }}
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>

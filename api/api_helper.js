@@ -3,7 +3,7 @@
  * @type {Object}
  */
 export const apiConfig = {
-  host: 'http://192.168.0.108:3000/api/v1/',
+  host: 'http://192.168.0.106:3000/api/v1/',
 }
 
 /**
