@@ -85,7 +85,7 @@ class HomeScreen extends Component {
           futureScrollRange={50}
           renderItem={(request) => {
             return (
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('RequestDetail')}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{request.sittingDate}</MuliText>
@@ -158,7 +158,7 @@ class HomeScreen extends Component {
             <View style={{ alignItems: 'center' }}>
               {invitations != '' && invitations ?
                 <ScrollView>
-                  <TouchableOpacity style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}>
+                  <TouchableOpacity style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }} onPress={() => this.props.navigation.navigate('InvitationDetail')}>
                     <View style={{ height: 135 }}>
                       <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
                       </View>

@@ -8,6 +8,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import ParentDetails from '../screens/RequestDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
 import RecommendBabysitter from '../screens/RecommendScreen';
+import InvitationDetails from '../screens/InvitationDetail';
 
 const config = Platform.select({
   default: {},
@@ -41,9 +42,10 @@ const HomeStack = createStackNavigator(
   {
 
     Home: HomeScreen,
-    Detail: ParentDetails,
+    RequestDetail: ParentDetails,
     CreateRequest: CreateRequestScreen,
     Recommend: RecommendBabysitter,
+    InvitationDetail: InvitationDetails
   },
   config
 );
