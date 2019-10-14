@@ -7,11 +7,35 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ParentDetails from '../screens/ParentDetail';
+import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
 import CreateRequest from "../screens/CreateRequestScreen";
 
 const config = Platform.select({
   default: {},
 });
+
+const CreateRequestStack= createStackNavigator (
+  {
+    CreateRequest: CreateRequestScreen,
+  },
+  config
+);
+
+CreateRequestStack.navigationOptions = {
+  tabBarLabel: 'New Sitting',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? 'ios-add'
+          : 'md-add'
+      }
+    />
+  ),
+};
+
+CreateRequestStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
@@ -73,6 +97,7 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
+  CreateRequestStack,
   LinksStack,
   SettingsStack,
 });
