@@ -31,7 +31,9 @@ class CreateRequestScreen extends Component {
       detailPictureSitter: require("../../assets/images/Phuc.png"),
       detailPictureChildren: require("../../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
-      price: '100'
+      price: '100',
+      childrenNumber: 1,
+      minAgeOfChildren: 1,
     };
 
     this.onCreateRequest = this.onCreateRequest.bind(this);
@@ -50,6 +52,8 @@ class CreateRequestScreen extends Component {
       startTime: this.state.startTime,
       endTime: this.state.endTime,
       sittingAddress: this.state.sittingAddress,
+      childrenNumber: this.state.childrenNumber,
+      minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
     };
     console.log(request);
