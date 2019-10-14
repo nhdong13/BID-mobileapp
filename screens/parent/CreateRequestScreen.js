@@ -172,8 +172,8 @@ CreateRequestScreen.navigationOptions = {
 
 const styles = StyleSheet.create({
   contentInformation: {
+    marginHorizontal:15,
     fontSize: 15,
-    paddingLeft: 15,
     color: '#315F61',
   },
   informationText: {
