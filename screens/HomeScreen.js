@@ -13,6 +13,7 @@ import { MuliText } from '../components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getAllUsers } from '../api/getAllUsers';
 import { getRequests } from '../api/getRequests';
+import { getInvitations } from '../api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
 
@@ -21,6 +22,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       requests: null,
+      invitations: null,
       userId: 0,
       roleId: 0,
       refreshing: false,
@@ -36,40 +38,47 @@ class HomeScreen extends Component {
     });
   }
 
-  getRequests = async () => {
+  // for user role of Parent - roleId == 2
+  getDataAccordingToRole = async () => {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
-      console.log('userId ' + userId);
-      console.log('roleid ' + roleId);
       this.setState({ userId: userId, roleId: roleId })
     })
-    await getRequests(this.state.userId).then(res => {
-      this.setState({ requests: res })
-    }).catch(error => console.log('On get request error ' + error))
+
+    if (this.state.roleId == 2) {
+      await getRequests(this.state.userId).then(res => {
+        this.setState({ requests: res })
+      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
+    } else {
+      await getInvitations(this.state.userId).then(res => {
+        this.setState({ invitations: res })
+      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
+    }
+
   }
 
   _onRefresh = () => {
     this.setState({ refreshing: true });
-    this.getRequests().then(() => {
+    this.getDataAccordingToRole().then(() => {
       this.setState({ refreshing: false });
     });
   }
 
   componentWillMount() {
-
-    this.getRequests();
+    this.getDataAccordingToRole();
   }
 
   render() {
+    const { roleId, requests, invitations } = this.state;
     return (
       <View style={styles.container}>
-        <View style={styles.scheduleContainer}>
-          <MuliText style={{ fontSize: 20, color: '#315f61', fontWeight: 'bold', lineHeight: 20 }}>When would you need a babysitter ?</MuliText>
+        <View style={roleId == 2 ? styles.scheduleContainer : styles.scheduleContainerBsitter}>
+          <MuliText style={roleId == 2 ? styles.textHeaderParent : styles.textHeaderBsitter}>{roleId && roleId == 2 ? 'When would you need a babysitter ?' : `Hi Sitter`}</MuliText>
           <TouchableOpacity>
-            <MuliText>Test button to assign anything</MuliText>
+            <MuliText>Welcome to bid :)</MuliText>
           </TouchableOpacity>
         </View>
-        <Agenda
+        {roleId && roleId == 2 ? (<Agenda
           items={this.state.requests}
           selected={new moment().format("YYYY-MM-DD")}
           pastScrollRange={50}
@@ -145,8 +154,38 @@ class HomeScreen extends Component {
           }}
           refreshing={this.state.refreshing}
         />
-        <Button style={styles.createRequest} title="+" onPress={() => this.props.navigation.navigate('CreateRequest')}>
-        </Button>
+        ) : (
+            <View style={{ alignItems: 'center' }}>
+              {invitations != '' && invitations ?
+                <ScrollView>
+                  <TouchableOpacity style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}>
+                    <View style={{ height: 135 }}>
+                      <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+                      </View>
+                      <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
+                        <View style={styles.leftInformation}>
+                          <MuliText style={styles.date}>2019-10-15</MuliText>
+                          <MuliText>03:00 PM - 05:00 PM</MuliText>
+                          <MuliText>529 Lê Đức Thọ, Phường 16, Gò Vấp, Hồ Chí Minh, Vietnam</MuliText>
+                        </View>
+                        <View style={{ alignItems: 'center' }}>
+                          <View style={styles.statusBoxConfirm}>
+                            <MuliText style={{ fontWeight: '100', color: 'red' }}>DONE</MuliText>
+                          </View>
+                          <MuliText>$100</MuliText>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </ScrollView> : <MuliText>lele ko co gi het</MuliText>}
+
+            </View>
+          )
+        }
+
+        {
+          roleId == 2 ? (<Button style={styles.createRequest} title="+" onPress={() => this.props.navigation.navigate('CreateRequest')} />) : (<View></View>)
+        }
       </View>
     );
   }
@@ -158,10 +197,11 @@ HomeScreen.navigationOptions = {
   header: null,
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#dfe6e9',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -182,6 +222,19 @@ const styles = StyleSheet.create({
     opacity: 0.9,
     bottom: 10,
     right: 10,
+  },
+  textHeaderParent: {
+    fontSize: 20,
+    color: '#315f61',
+    fontWeight: 'bold',
+    lineHeight: 20
+  },
+  textHeaderBsitter: {
+    fontSize: 20,
+    color: '#315f61',
+    fontWeight: 'bold',
+    lineHeight: 20,
+    alignItems: 'flex-start'
   },
   statusBoxPending: {
     justifyContent: 'center',
@@ -256,5 +309,19 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginBottom: 20,
     flex: 0.1,
+  },
+  scheduleContainerBsitter: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginTop: 30,
+    paddingTop: 20,
+    paddingLeft: 30,
+    flex: 0.25,
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#315f61',
+    // borderBottomRightRadius: 50,
+    // borderBottomLeftRadius: 50,
+    backgroundColor: '#fff'
+
   },
 });
