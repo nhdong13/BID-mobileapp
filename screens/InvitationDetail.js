@@ -4,11 +4,13 @@ import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "../components/StyledText";
 import moment from 'moment';
 import Modal from 'react-native-modal';
+import Api from '../api/api_helper';
 
 export default class InvitationDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      invitationID: 1,
       date: '2019-10-03',
       startTime: '12:00 AM',
       endTime: '3:00 AM',
@@ -18,8 +20,14 @@ export default class InvitationDetail extends Component {
       nameChildren: 'Nam',
       detailPictureParent: require("../assets/images/Phuc.png"),
       nameSitter: 'Phuc',
+      status: null,
       isModalVisible: false,
     }
+  }
+  componentDidMount() {
+    Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
+      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, status: resp.status })
+    })
   }
   onLogin =  () => {
           this.setState({ isModalVisible: true })
@@ -71,6 +79,15 @@ export default class InvitationDetail extends Component {
               />
               <MuliText style={styles.contentInformation}>{this.state.address}</MuliText>
             </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name='ios-home'
+                size={22}
+                style={{ marginBottom: -5 }}
+                color='#bdc3c7'
+              />
+              <MuliText style={styles.contentInformation}>{this.state.status}</MuliText>
+            </View>
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
@@ -78,19 +95,19 @@ export default class InvitationDetail extends Component {
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}</MuliText>
+                  <MuliText >{this.state.nameChildren}  {"\n"} Age:2 year old</MuliText>
                 </View>
               </View>
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}</MuliText>
+                  <MuliText >{this.state.nameChildren} {"\n"} Age:1 year old</MuliText>
                 </View>
               </View>
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}</MuliText>
+                  <MuliText >{this.state.nameChildren} {"\n"} Age:3 year old</MuliText>
                 </View>
               </View>
             </View>
@@ -105,8 +122,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Payment by Credit card</MuliText>
-                <MuliText style={styles.grayOptionInformation}>Card payment depends on sitter</MuliText>
+                <MuliText style={styles.optionInformation}>In-app payment </MuliText>
+                <MuliText style={styles.grayOptionInformation}>The parent pay via online payment</MuliText>
               </View>
             </View>
 
@@ -118,8 +135,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>The Sitter does not have a car</MuliText>
-                <MuliText style={styles.grayOptionInformation}>I will take the Sitter home</MuliText>
+                <MuliText style={styles.optionInformation}>Lift</MuliText>
+                <MuliText style={styles.grayOptionInformation}>The parent will take me home</MuliText>
               </View>
             </View>
 
@@ -132,23 +149,9 @@ export default class InvitationDetail extends Component {
               />
               <View style={styles.textOption}>
                 <MuliText style={styles.optionInformation}>VietNamese</MuliText>
-                <MuliText style={styles.grayOptionInformation}>I want the Sitter to speak one of these languages natively</MuliText>
+                <MuliText style={styles.grayOptionInformation}>You need to speak at least one of these language</MuliText>
               </View>
             </View>
-
-            <View style={styles.informationText}>
-              <Ionicons
-                name='ios-man'
-                size={27}
-                style={{ marginBottom: -5, marginHorizontal: 10 }}
-                color='#bdc3c7'
-              />
-              <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Complementary insurance</MuliText>
-                <MuliText style={styles.grayOptionInformation}>You didn't take the complementary insurance</MuliText>
-              </View>
-            </View>
-
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>PARENT</MuliText>
@@ -230,7 +233,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   name: {
-    alignItems: "center",
+    alignItems: "center"
   },
   submitButton: {
     width: 100,
