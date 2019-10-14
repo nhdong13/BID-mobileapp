@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
-import { saveToken, retrieveToken } from './handleToken';
+import { saveToken } from './handleToken';
 
 const url = 'http://192.168.0.102:3000/api/v1/auth/login';
 

@@ -11,16 +11,16 @@ export default class RequestDetail extends Component {
     super(props);
     this.state = {
       sittingRequestsID: 1,
-      date: '2019-10-03',
-      startTime: '12:00 AM',
-      endTime: '3:00 AM',
-      address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
+      date: null,
+      startTime: null,
+      endTime: null,
+      address: null,
       price: '30/H',
       detailPictureChildren: require("../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       detailPictureSitter: require("../assets/images/Phuc.png"),
       nameSitter: 'Phuc',
-      status: null
+      status: null,
     }
   }
   componentDidMount() {
