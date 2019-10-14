@@ -4,17 +4,16 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ParentDetails from '../screens/ParentDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
-import CreateRequest from "../screens/CreateRequestScreen";
+import RecommendBabysitter from '../screens/RecommendScreen';
 
 const config = Platform.select({
   default: {},
 });
 
-const CreateRequestStack= createStackNavigator (
+const CreateRequestStack = createStackNavigator(
   {
     CreateRequest: CreateRequestScreen,
   },
@@ -39,10 +38,11 @@ CreateRequestStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
-   
+
     Home: HomeScreen,
     Detail: ParentDetails,
-    CreateRequest: CreateRequest,
+    CreateRequest: CreateRequestScreen,
+    Recommend: RecommendBabysitter
   },
   config
 );
@@ -63,22 +63,6 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen,
-  },
-  config
-);
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
-
-LinksStack.path = '';
-
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -98,7 +82,6 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   CreateRequestStack,
-  LinksStack,
   SettingsStack,
 });
 
