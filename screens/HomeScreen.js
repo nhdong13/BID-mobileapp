@@ -18,8 +18,9 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: '',
       requests: null,
+      userId: this.props.navigation.getParam('userId', 1) || 1,
+      roleId: this.props.navigation.getParam('roleId', 3) || 3,
     }
   }
 
@@ -27,17 +28,15 @@ class HomeScreen extends Component {
     retrieveToken().then((res) => {
       const userToken = res;
       getAllUsers(userToken).then(res => {
-        console.log(res.data);
-      });
+      }).catch(error => console.log('on Home screen error ' + error));
 
     });
   }
 
   getRequests = async () => {
-    await getRequests(1).then(res => {
-      console.log('taking the function ' + res)
+    await getRequests(this.state.userId).then(res => {
       this.setState({ requests: res })
-    }).catch(error => console.log(error))
+    }).catch(error => console.log('On get request error ' + error))
   }
   componentWillMount() {
     this.getRequests();
@@ -59,27 +58,27 @@ class HomeScreen extends Component {
           pastScrollRange={50}
           // Max amount of months allowed to scroll to the future. Default = 50
           futureScrollRange={50}
-          // specify how each item should be rendered in agenda
-          renderItem={(item) => {
+          // specify how each request should be rendered in agenda
+          renderItem={(request) => {
             return (
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail')}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
-                    <MuliText style={styles.date}>{item.sittingDate}</MuliText>
-                    <MuliText>{item.startTime} - {item.endTime}</MuliText>
-                    <MuliText>{item.sittingAddress}</MuliText>
+                    <MuliText style={styles.date}>{request.sittingDate}</MuliText>
+                    <MuliText>{request.startTime} - {request.endTime}</MuliText>
+                    <MuliText>{request.sittingAddress}</MuliText>
                   </View>
                   <View style={styles.rightInformation}>
-                    {item.status == 'pending' ?
+                    {request.status == 'pending' ?
                       (
                         <View style={styles.statusBoxPending}>
-                          <MuliText style={{ fontWeight: '800', color: 'gray' }}>{item.status}</MuliText>
+                          <MuliText style={{ fontWeight: '800', color: 'gray' }}>{request.status}</MuliText>
                         </View>
                       )
                       :
                       (
                         <View style={styles.statusBoxConfirm}>
-                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{item.status}</MuliText>
+                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{request.status}</MuliText>
                         </View>
                       )
                     }
@@ -91,7 +90,7 @@ class HomeScreen extends Component {
           }}
           rowHasChanged={(r1, r2) => { return r1.text !== r2.text }}
           // specify how each date should be rendered. day can be undefined if the item is not first in that day.
-          renderDay={(day, item) => { return (<View />); }}
+          renderDay={(day, request) => { return (<View />); }}
           // specify how empty date content with no items should be rendered
           renderEmptyDate={() => (<View />)}
           // specify what should be rendered instead of ActivityIndicator

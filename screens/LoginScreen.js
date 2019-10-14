@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
 import { login } from '../api/login';
-import { retrieveToken } from '../api/handleToken';
+import { destroyToken } from '../api/handleToken';
 import Modal from 'react-native-modal';
 import {
   Image,
@@ -33,12 +33,13 @@ class LoginScreen extends Component {
     const { phoneNumber, password } = this.state;
     login(phoneNumber, password)
       .then((res) => {
+        console.log(res.data)
         if (res.data.roleId && res.data.roleId == 3) {
           this.setState({ isModalVisible: true })
         } else {
-          this.props.navigation.navigate('Main');
+          this.props.navigation.navigate('Main', { roleId: roleId, userId: userId });
         }
-      }).catch(error => console.log(error));
+      }).catch(error => console.log('onLogin error' + error));
   }
 
   onSubmitOTP = async () => {
