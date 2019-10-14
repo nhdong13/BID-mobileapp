@@ -37,7 +37,15 @@ class HomeScreen extends Component {
   }
 
   getRequests = async () => {
-    getRequests(1);
+    console.log('it run ...')
+    getRequests(1).then(res => {
+      console.log(res)
+      this.setState({ request: res })
+    }).catch(error => console.log(error))
+  }
+  componentWillMount() {
+    this.getRequests
+    console.log(this.getRequests)
   }
 
   render() {
@@ -45,31 +53,12 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.scheduleContainer}>
           <MuliText style={{ fontSize: 20, color: '#315f61', fontWeight: 'bold', lineHeight: 20 }}>When would you need a babysitter ?</MuliText>
-          <TouchableOpacity onPress={this.getRequests}>
+          <TouchableOpacity>
             <MuliText>Test button to assign anything</MuliText>
           </TouchableOpacity>
         </View>
         <Agenda
-          items={{
-            '2019-10-14': [
-              {
-                date: '2019-10-16',
-                price: '30',
-                startTime: '12:00 AM',
-                endTime: '3:00 AM',
-                address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
-                status: 'pending'
-              },
-              {
-                date: '2019-10-16',
-                price: '89',
-                startTime: '6:00 AM',
-                endTime: '9:00 AM',
-                address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
-                status: 'pending'
-              },
-            ],
-          }}
+          items={this.state.requests}
           selected={new moment().format("YYYY-MM-DD")}
           // Max amount of months allowed to scroll to the past. Default = 50
           pastScrollRange={50}
