@@ -42,7 +42,7 @@ const HomeStack = createStackNavigator(
     Home: HomeScreen,
     Detail: ParentDetails,
     CreateRequest: CreateRequestScreen,
-    Recommend: RecommendBabysitter
+    Recommend: RecommendBabysitter,
   },
   config
 );

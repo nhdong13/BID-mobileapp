@@ -4,7 +4,9 @@ import {
   Button,
   StyleSheet,
   View,
-  Image
+  Image,
+  RefreshControl,
+  ScrollView
 } from 'react-native';
 
 import { MuliText } from '../components/StyledText';
@@ -21,6 +23,7 @@ class HomeScreen extends Component {
       requests: null,
       userId: this.props.navigation.getParam('userId', 1),
       roleId: this.props.navigation.getParam('roleId', 3),
+      refreshing: false,
     }
   }
 
@@ -38,6 +41,14 @@ class HomeScreen extends Component {
       this.setState({ requests: res })
     }).catch(error => console.log('On get request error ' + error))
   }
+
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.getRequests().then(() => {
+      this.setState({ refreshing: false });
+    });
+  }
+
   componentWillMount() {
     this.getRequests();
   }
@@ -86,40 +97,46 @@ class HomeScreen extends Component {
             )
           }}
           rowHasChanged={(r1, r2) => { return r1.text !== r2.text }}
-          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
           renderDay={(day, request) => { return (<View />); }}
-          // specify how empty date content with no items should be rendered
           renderEmptyDate={() => (<View />)}
-          // specify what should be rendered instead of ActivityIndicator
           renderEmptyData={() =>
             (
-              <View style={styles.noRequest}>
-                <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
-                <MuliText>Tap to create one</MuliText>
-                <Image
-                  source={
-                    require('../assets/images/no-request.jpg')
-                  }
-                  style={styles.noRequestImage}
-                />
-              </View>
+              <ScrollView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh}
+                  />
+                }>
+                <View style={styles.noRequest}>
+                  <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
+                  <MuliText>Tap to create one</MuliText>
+                  <Image
+                    source={
+                      require('../assets/images/no-request.jpg')
+                    }
+                    style={styles.noRequestImage}
+                  />
+                </View>
+              </ScrollView>
             )
           }
-          // Hide knob button. Default = false
           hideKnob={false}
           theme={{
-            // selectedDayBackgroundColor: '#78ddb6',
-            // agendaKnobColor: '#78ddb6',
-            // todayTextColor: '#78ddb6',
-            // dotColor: '#78ddb6',
             textDayFontFamily: 'muli',
             textDayHeaderFontFamily: 'muli',
             textDayHeaderFontSize: 11,
-            // dayTextColor: '#315f61'
           }}
           style={{
 
           }}
+          onRefresh={() => {
+            this.setState({ refreshing: true });
+            this.getRequests().then(() => {
+              this.setState({ refreshing: false });
+            });
+          }}
+          refreshing={this.state.refreshing}
         />
         <Button style={styles.createRequest} title="+" onPress={() => this.props.navigation.navigate('CreateRequest')}>
         </Button>
