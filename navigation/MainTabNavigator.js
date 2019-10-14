@@ -5,10 +5,15 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ParentDetails from '../screens/RequestDetail';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
+<<<<<<< HEAD
 import RecommendBabysitter from '../screens/RecommendScreen';
 import InvitationDetails from '../screens/InvitationDetail';
+=======
+import CreateRequest from '../screens/parent/CreateRequestScreen';
+import RequestDetail from '../screens/InvitationDetail';
+import RecommeandBabysitter from '../screens/RecommendScreen';
+>>>>>>> 7c51ee38a59c4df457ad471e8b12d8528b6f5550
 
 const config = Platform.select({
   default: {},
