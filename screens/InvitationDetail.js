@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "../components/StyledText";
 import moment from 'moment';
-
+import Modal from 'react-native-modal';
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -17,11 +17,16 @@ export default class InvitationDetail extends Component {
       detailPictureChildren: require("../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       detailPictureParent: require("../assets/images/Phuc.png"),
-      nameSitter: 'Phuc'
+      nameSitter: 'Phuc',
+      isModalVisible: false,
     }
   }
-
-
+  onLogin =  () => {
+          this.setState({ isModalVisible: true })
+  }
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
   render() {
     return (
 
@@ -132,10 +137,10 @@ export default class InvitationDetail extends Component {
             </View>
 
             <View style={styles.informationText}>
-              <Ioniconsyarn
+              <Ionicons
                 name='ios-man'
                 size={27}
-                style={{ marginBottom: -5, marginHorizontal: 10}}
+                style={{ marginBottom: -5, marginHorizontal: 10 }}
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
@@ -160,6 +165,41 @@ export default class InvitationDetail extends Component {
             <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
               <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
             </TouchableOpacity>
+            {this.state.isModalVisible ?
+              (
+                <Modal
+                  isVisible={this.state.isModalVisible}
+                  hasBackdrop={true} backdropOpacity={0.9}
+                  onBackdropPress={this.toggleModal}
+                  backdropColor='white'
+                  onBackButtonPress={this.toggleModal}
+                >
+                  <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
+                    <MuliText style={{ color: '#707070', fontSize: 16 }}>Please input your Authentication Code</MuliText>
+                    <View style={styles.textContainer}>
+                      <TextInput
+                        style={styles.textInput}
+                        onChangeText={text => this.setState({ OTP: text })}
+                        placeholder='Authentication code'
+                        disableFullscreenUI={false}
+                        value={this.state.OTP}
+                        keyboardType='number-pad'
+                      />
+                    </View>
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity style={styles.submitButton} onPress={this.onSubmitOTP}>
+                        <MuliText style={{ color: 'white', fontSize: 16 }}>Submit</MuliText>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal>
+              )
+              :
+              (
+                <View></View>
+              )
+            }
+
             <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
               <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
             </TouchableOpacity>
