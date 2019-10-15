@@ -1,40 +1,45 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
-import { MuliText } from "../components/StyledText";
+import { MuliText } from "components/StyledText";
 import moment from 'moment';
-import Modal from 'react-native-modal';
-import Api from '../api/api_helper';
+import { apisAreAvailable } from "expo";
+import Api from 'api/api_helper';
 
-export default class InvitationDetail extends Component {
+export default class RequestDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invitationID: 1,
-      date: '2019-10-03',
-      startTime: '12:00 AM',
-      endTime: '3:00 AM',
-      address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
+      sittingRequestsID: this.props.navigation.state.params.requestId,
+      date: null,
+      startTime: null,
+      endTime: null,
+      address: null,
       price: '30/H',
-      detailPictureChildren: require("../assets/images/Baby-6.png"),
+      detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
-      detailPictureParent: require("../assets/images/Phuc.png"),
-      nameSitter: 'Phuc',
+      detailPictureSitter: require("assets/images/Phuc.png"),
+      nameSitter: null,
+      bsitter: null,
       status: null,
-      isModalVisible: false,
     }
   }
   componentDidMount() {
-    Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
-      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, status: resp.status })
+    Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(resp => {
+      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, bsitter: resp.bsitter, status: resp.status })
     })
   }
-  onLogin =  () => {
-          this.setState({ isModalVisible: true })
+
+  onButtonClick(targetStatus){
+    const rqBody = {
+      status: targetStatus,
+    };
+    // console.log(rqBody); console.log(this.state.sittingRequestsID);
+    Api.put('sittingRequests/'+ this.state.sittingRequestsID.toString(), rqBody).then(resp => {
+      // this.props.navigation.navigate.goBack();
+    })
   }
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
+
   render() {
     return (
 
@@ -95,19 +100,19 @@ export default class InvitationDetail extends Component {
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}  {"\n"} Age:2 year old</MuliText>
+                  <MuliText >{this.state.nameChildren}</MuliText>
                 </View>
               </View>
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren} {"\n"} Age:1 year old</MuliText>
+                  <MuliText >{this.state.nameChildren}</MuliText>
                 </View>
               </View>
               <View >
                 <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren} {"\n"} Age:3 year old</MuliText>
+                  <MuliText >{this.state.nameChildren}</MuliText>
                 </View>
               </View>
             </View>
@@ -122,8 +127,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>In-app payment </MuliText>
-                <MuliText style={styles.grayOptionInformation}>The parent pay via online payment</MuliText>
+                <MuliText style={styles.optionInformation}>Payment by Credit card</MuliText>
+                <MuliText style={styles.grayOptionInformation}>Card payment depends on sitter</MuliText>
               </View>
             </View>
 
@@ -135,8 +140,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Lift</MuliText>
-                <MuliText style={styles.grayOptionInformation}>The parent will take me home</MuliText>
+                <MuliText style={styles.optionInformation}>The Sitter does not have a car</MuliText>
+                <MuliText style={styles.grayOptionInformation}>I will take the Sitter home</MuliText>
               </View>
             </View>
 
@@ -149,70 +154,86 @@ export default class InvitationDetail extends Component {
               />
               <View style={styles.textOption}>
                 <MuliText style={styles.optionInformation}>VietNamese</MuliText>
-                <MuliText style={styles.grayOptionInformation}>You need to speak at least one of these language</MuliText>
+                <MuliText style={styles.grayOptionInformation}>I want the Sitter to speak one of these languages natively</MuliText>
               </View>
             </View>
+
+            <View style={styles.informationText}>
+              <Ionicons
+                name='ios-man'
+                size={27}
+                style={{ marginBottom: -5, marginHorizontal: 10 }}
+                color='#bdc3c7'
+              />
+              <View style={styles.textOption}>
+                <MuliText style={styles.optionInformation}>Complementary insurance</MuliText>
+                <MuliText style={styles.grayOptionInformation}>You didn't take the complementary insurance</MuliText>
+              </View>
+            </View>
+
           </View>
+
+          {/* render babysitter if exist */}
+          { this.state.bsitter ?
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>PARENT</MuliText>
+            <MuliText style={styles.headerTitle}>SITTER</MuliText>
             <View style={styles.detailPictureContainer}>
               <View>
-                <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
+                <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
                   <MuliText >{this.state.nameSitter}</MuliText>
                 </View>
               </View>
             </View>
           </View>
+          : <View style={styles.detailContainer}></View> }
+          {/* end */}
+
+
+          {/* render button according status */}
+          
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-            </TouchableOpacity>
-            {this.state.isModalVisible ?
+            {this.state.status == 'PENDING' && 
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'CANCELED')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Cancel</MuliText>
+              </TouchableOpacity>}
+
+            {this.state.status == 'CONFIRMED' && 
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ONGOING')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Babysitter Check-in</MuliText>
+              </TouchableOpacity>}
+
+            {this.state.status == 'BS_FINISH' && 
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DONE')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Confirm job is finished</MuliText>
+              </TouchableOpacity>}  
+
+            {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED' )?
               (
-                <Modal
-                  isVisible={this.state.isModalVisible}
-                  hasBackdrop={true} backdropOpacity={0.9}
-                  onBackdropPress={this.toggleModal}
-                  backdropColor='white'
-                  onBackButtonPress={this.toggleModal}
-                >
-                  <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-                    <MuliText style={{ color: '#707070', fontSize: 16 }}>Please input your Authentication Code</MuliText>
-                    <View style={styles.textContainer}>
-                      <TextInput
-                        style={styles.textInput}
-                        onChangeText={text => this.setState({ OTP: text })}
-                        placeholder='Authentication code'
-                        disableFullscreenUI={false}
-                        value={this.state.OTP}
-                        keyboardType='number-pad'
-                      />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity style={styles.submitButton} onPress={this.onSubmitOTP}>
-                        <MuliText style={{ color: 'white', fontSize: 16 }}>Submit</MuliText>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </Modal>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                  </TouchableOpacity>
+                </View>
               )
               :
               (
                 <View></View>
               )
             }
-
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-            </TouchableOpacity>
+            
           </View>
+
+          {/* end */}
         </View>
       </ScrollView>
     );
   }
 }
-InvitationDetail.navigationOptions = {
+RequestDetail.navigationOptions = {
   header: null,
 };
 
@@ -233,10 +254,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   name: {
-    alignItems: "center"
+    alignItems: "center",
   },
   submitButton: {
-    width: 100,
+    width: 250,
     height: 50,
     padding: 10,
     backgroundColor: '#315F61',

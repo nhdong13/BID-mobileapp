@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
-import { login } from '../api/login';
-import { destroyToken } from '../api/handleToken';
+import { login } from 'api/login';
+import { destroyToken } from 'api/handleToken';
 import Modal from 'react-native-modal';
 import {
     Image,
@@ -13,12 +13,13 @@ import {
     KeyboardAvoidingView,
 } from 'react-native';
 
-import { MuliText } from '../components/StyledText';
+import { MuliText } from 'components/StyledText';
 
 export default class RecommendScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            nickname: 'Dong',
 
         };
 
@@ -27,10 +28,20 @@ export default class RecommendScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{}}>
+                <View style={{ flex: 2 }}>
                     <MuliText style={{}}>Recommend Babysitter </MuliText>
                     <TouchableOpacity>
+                        <Image
+                            source={
+                                require('assets/images/logo.png')
+                            }
+                            style={styles.logoImage}
+                        />
                     </TouchableOpacity>
+                    
+                </View>
+                <View style={{ flex: 3, backgroundColor: 'gray' }}>
+
                 </View>
             </View>
         );

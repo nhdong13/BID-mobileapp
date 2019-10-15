@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
-import { MuliText } from "../components/StyledText";
-import logout from '../api/logout';
+import { MuliText } from "components/StyledText";
+import logout from 'api/logout';
 export default class SettingsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      detailPicture: require("../assets/images/Phuc.png"),
+      detailPicture: require("assets/images/Phuc.png"),
       name: 'Phuc'
     }
   }

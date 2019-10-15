@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
-import { login } from '../api/login';
-import { destroyToken } from '../api/handleToken';
+import { login } from 'api/login';
+import { destroyToken } from 'api/handleToken';
 import Modal from 'react-native-modal';
 import {
   Image,
@@ -13,13 +13,13 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
-import { MuliText } from '../components/StyledText';
+import { MuliText } from 'components/StyledText';
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '0926261325',
+      phoneNumber: '0326261307',
       password: '12341234',
       title: 'lallalala',
       OTP: '',
@@ -66,14 +66,14 @@ class LoginScreen extends Component {
         <View style={styles.welcomeContainer}>
           <Image
             source={
-              require('../assets/images/logo.png')
+              require('assets/images/logo.png')
             }
             style={styles.logoImage}
           />
         </View>
         <View style={styles.welcomeContainer}>
           <Image source={
-            require('../assets/images/login-family.png')
+            require('assets/images/login-family.png')
           }
             style={styles.familyImage}
           />

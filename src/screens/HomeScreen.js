@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { retrieveToken } from '../api/handleToken';
+import { retrieveToken } from 'api/handleToken';
 import {
   Button,
   StyleSheet,
@@ -9,11 +9,11 @@ import {
   ScrollView
 } from 'react-native';
 
-import { MuliText } from '../components/StyledText';
+import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
-import { getAllUsers } from '../api/getAllUsers';
-import { getRequests } from '../api/getRequests';
-import { getInvitations } from '../api/getInvitations';
+import { getAllUsers } from 'api/getAllUsers';
+import { getRequests } from 'api/getRequests';
+import { getInvitations } from 'api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
 
@@ -27,15 +27,6 @@ class HomeScreen extends Component {
       roleId: 0,
       refreshing: false,
     }
-  }
-
-  getAllUser = async () => {
-    retrieveToken().then((res) => {
-      const userToken = res;
-      getAllUsers(userToken).then(res => {
-      }).catch(error => console.log('on Home screen error ' + error));
-
-    });
   }
 
   // for user role of Parent - roleId == 2
@@ -85,7 +76,7 @@ class HomeScreen extends Component {
           futureScrollRange={50}
           renderItem={(request) => {
             return (
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail', { requestId: request.id })}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('RequestDetail', { requestId: request.id })}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{request.sittingDate}</MuliText>
@@ -129,7 +120,7 @@ class HomeScreen extends Component {
                   <MuliText>Tap to create one</MuliText>
                   <Image
                     source={
-                      require('../assets/images/no-request.jpg')
+                      require('assets/images/no-request.jpg')
                     }
                     style={styles.noRequestImage}
                   />
@@ -158,7 +149,7 @@ class HomeScreen extends Component {
             <View style={{ alignItems: 'center' }}>
               {invitations != '' && invitations ?
                 <ScrollView>
-                  <TouchableOpacity style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}>
+                  <TouchableOpacity style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }} onPress={() => this.props.navigation.navigate('InvitationDetail')}>
                     <View style={{ height: 135 }}>
                       <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
                       </View>

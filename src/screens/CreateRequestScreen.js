@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 
-import { MuliText } from '../components/StyledText';
+import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -26,8 +26,8 @@ class CreateRequestScreen extends Component {
       startTime: moment().format('hh:mm:ss'),
       endTime: moment().format('hh:mm:ss'),
       sittingAddress: 'somewhere only we know',
-      detailPictureSitter: require("../assets/images/Phuc.png"),
-      detailPictureChildren: require("../assets/images/Baby-6.png"),
+      detailPictureSitter: require("assets/images/Phuc.png"),
+      detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       price: '100'
     };
