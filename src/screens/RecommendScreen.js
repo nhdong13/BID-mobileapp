@@ -19,6 +19,7 @@ export default class RecommendScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            nickname: 'Dong',
 
         };
 
@@ -27,12 +28,19 @@ export default class RecommendScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{flex: 2}}>
+                <View style={{ flex: 2 }}>
                     <MuliText style={{}}>Recommend Babysitter </MuliText>
                     <TouchableOpacity>
+                        <Image
+                            source={
+                                require('../assets/images/logo.png')
+                            }
+                            style={styles.logoImage}
+                        />
                     </TouchableOpacity>
+                    
                 </View>
-                <View style={{flex: 3, backgroundColor: 'gray' }}>
+                <View style={{ flex: 3, backgroundColor: 'gray' }}>
 
                 </View>
             </View>

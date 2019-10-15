@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { saveToken } from './handleToken';
 
-const url = 'http://192.168.43.185:3000/api/v1/auth/login';
+const url = 'http://192.168.0.102:3000/api/v1/auth/login';
 
 export async function login(phoneNumber, password) {
     const data = {

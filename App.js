@@ -4,9 +4,8 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as Sentry from 'sentry-expo';
 
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -22,18 +21,12 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        {Platform.OS === 'ios' && <StatusBars barStyle="default" />}
         <AppNavigator />
       </View>
     );
   }
 }
-
-Sentry.init({
-  dsn: 'https://df80ec59ae0c4234929ab6f08e09cfeb@sentry.io/1774701',
-  enableInExpoDevelopment: true,
-  debug: true
-});
 
 async function loadResourcesAsync() {
   await Promise.all([

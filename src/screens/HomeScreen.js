@@ -29,15 +29,6 @@ class HomeScreen extends Component {
     }
   }
 
-  getAllUser = async () => {
-    retrieveToken().then((res) => {
-      const userToken = res;
-      getAllUsers(userToken).then(res => {
-      }).catch(error => console.log('on Home screen error ' + error));
-
-    });
-  }
-
   // for user role of Parent - roleId == 2
   getDataAccordingToRole = async () => {
     await retrieveToken().then((res) => {
