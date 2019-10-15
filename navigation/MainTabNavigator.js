@@ -6,14 +6,9 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
-<<<<<<< HEAD
+import RequestDetail from '../screens/RequestDetail';
+import InvitationDetail from '../screens/InvitationDetail';
 import RecommendBabysitter from '../screens/RecommendScreen';
-import InvitationDetails from '../screens/InvitationDetail';
-=======
-import CreateRequest from '../screens/parent/CreateRequestScreen';
-import RequestDetail from '../screens/InvitationDetail';
-import RecommeandBabysitter from '../screens/RecommendScreen';
->>>>>>> 7c51ee38a59c4df457ad471e8b12d8528b6f5550
 
 const config = Platform.select({
   default: {},
@@ -47,10 +42,10 @@ const HomeStack = createStackNavigator(
   {
 
     Home: HomeScreen,
-    RequestDetail: ParentDetails,
+    RequestDetail: RequestDetail,
     CreateRequest: CreateRequestScreen,
     Recommend: RecommendBabysitter,
-    InvitationDetail: InvitationDetails
+    InvitationDetail: InvitationDetail
   },
   config
 );

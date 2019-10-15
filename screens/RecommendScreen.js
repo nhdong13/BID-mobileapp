@@ -27,10 +27,13 @@ export default class RecommendScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{}}>
+                <View style={{flex: 2}}>
                     <MuliText style={{}}>Recommend Babysitter </MuliText>
                     <TouchableOpacity>
                     </TouchableOpacity>
+                </View>
+                <View style={{flex: 3, backgroundColor: 'gray' }}>
+
                 </View>
             </View>
         );

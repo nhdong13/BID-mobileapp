@@ -85,11 +85,7 @@ class HomeScreen extends Component {
           futureScrollRange={50}
           renderItem={(request) => {
             return (
-<<<<<<< HEAD
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('RequestDetail')}>
-=======
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Detail', { requestId: request.id })}>
->>>>>>> 7c51ee38a59c4df457ad471e8b12d8528b6f5550
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('RequestDetail', { requestId: request.id })}>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{request.sittingDate}</MuliText>
