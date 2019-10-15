@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { retrieveToken } from '../api/handleToken';
+import { retrieveToken } from 'api/handleToken';
 import {
   Button,
   StyleSheet,
@@ -9,11 +9,11 @@ import {
   ScrollView
 } from 'react-native';
 
-import { MuliText } from '../components/StyledText';
+import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
-import { getAllUsers } from '../api/getAllUsers';
-import { getRequests } from '../api/getRequests';
-import { getInvitations } from '../api/getInvitations';
+import { getAllUsers } from 'api/getAllUsers';
+import { getRequests } from 'api/getRequests';
+import { getInvitations } from 'api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
 
@@ -120,7 +120,7 @@ class HomeScreen extends Component {
                   <MuliText>Tap to create one</MuliText>
                   <Image
                     source={
-                      require('../assets/images/no-request.jpg')
+                      require('assets/images/no-request.jpg')
                     }
                     style={styles.noRequestImage}
                   />

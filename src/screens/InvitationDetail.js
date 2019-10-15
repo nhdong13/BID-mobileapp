@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
-import { MuliText } from "../components/StyledText";
+import { MuliText } from "components/StyledText";
 import moment from 'moment';
 import Modal from 'react-native-modal';
-import Api from '../api/api_helper';
+import Api from 'api/api_helper';
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -16,9 +16,9 @@ export default class InvitationDetail extends Component {
       endTime: '3:00 AM',
       address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
       price: '30/H',
-      detailPictureChildren: require("../assets/images/Baby-6.png"),
+      detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
-      detailPictureParent: require("../assets/images/Phuc.png"),
+      detailPictureParent: require("assets/images/Phuc.png"),
       nameSitter: 'Phuc',
       status: null,
       isModalVisible: false,

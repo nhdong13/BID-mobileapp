@@ -5,7 +5,7 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import { retrieveToken } from '../api/handleToken';
+import { retrieveToken } from 'api/handleToken';
 
 export default class AuthLoadingScreen extends React.Component {
     constructor() {

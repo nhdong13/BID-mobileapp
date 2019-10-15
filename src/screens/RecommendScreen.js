@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
-import { login } from '../api/login';
-import { destroyToken } from '../api/handleToken';
+import { login } from 'api/login';
+import { destroyToken } from 'api/handleToken';
 import Modal from 'react-native-modal';
 import {
     Image,
@@ -13,7 +13,7 @@ import {
     KeyboardAvoidingView,
 } from 'react-native';
 
-import { MuliText } from '../components/StyledText';
+import { MuliText } from 'components/StyledText';
 
 export default class RecommendScreen extends Component {
     constructor(props) {
@@ -33,7 +33,7 @@ export default class RecommendScreen extends Component {
                     <TouchableOpacity>
                         <Image
                             source={
-                                require('../assets/images/logo.png')
+                                require('assets/images/logo.png')
                             }
                             style={styles.logoImage}
                         />

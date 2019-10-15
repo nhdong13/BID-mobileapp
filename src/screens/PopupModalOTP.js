@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Text, View } from "react-native";
 import Modal from "react-native-modal";
-import { MuliText } from "../components/StyledText";
+import { MuliText } from "components/StyledText";
 
 export default class ModalTester extends Component {
     state = {

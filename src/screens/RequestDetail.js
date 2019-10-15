@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons/';
-import { MuliText } from "../components/StyledText";
+import { MuliText } from "components/StyledText";
 import moment from 'moment';
 import { apisAreAvailable } from "expo";
-import Api from '../api/api_helper';
+import Api from 'api/api_helper';
 
 export default class RequestDetail extends Component {
   constructor(props) {
@@ -16,9 +16,9 @@ export default class RequestDetail extends Component {
       endTime: null,
       address: null,
       price: '30/H',
-      detailPictureChildren: require("../assets/images/Baby-6.png"),
+      detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
-      detailPictureSitter: require("../assets/images/Phuc.png"),
+      detailPictureSitter: require("assets/images/Phuc.png"),
       nameSitter: null,
       bsitter: null,
       status: null,
