@@ -139,7 +139,7 @@ class HomeScreen extends Component {
           }}
           onRefresh={() => {
             this.setState({ refreshing: true });
-            this.getRequests().then(() => {
+            this.getDataAccordingToRole().then(() => {
               this.setState({ refreshing: false });
             });
           }}
