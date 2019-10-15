@@ -40,11 +40,10 @@ CreateRequestStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
-
     Home: HomeScreen,
     RequestDetail: RequestDetail,
-    CreateRequest: CreateRequestScreen,
     Recommend: RecommendBabysitter,
+    CreateRequest: CreateRequestScreen,
     InvitationDetail: InvitationDetail
   },
   config

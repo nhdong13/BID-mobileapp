@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } f
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "components/StyledText";
 import moment from 'moment';
-import { apisAreAvailable } from "expo";
 import Api from 'api/api_helper';
 
 export default class RequestDetail extends Component {
@@ -30,12 +29,12 @@ export default class RequestDetail extends Component {
     })
   }
 
-  onButtonClick(targetStatus){
+  onButtonClick(targetStatus) {
     const rqBody = {
       status: targetStatus,
     };
     // console.log(rqBody); console.log(this.state.sittingRequestsID);
-    Api.put('sittingRequests/'+ this.state.sittingRequestsID.toString(), rqBody).then(resp => {
+    Api.put('sittingRequests/' + this.state.sittingRequestsID.toString(), rqBody).then(resp => {
       // this.props.navigation.navigate.goBack();
     })
   }
@@ -174,58 +173,62 @@ export default class RequestDetail extends Component {
           </View>
 
           {/* render babysitter if exist */}
-          { this.state.bsitter ?
-          <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>SITTER</MuliText>
-            <View style={styles.detailPictureContainer}>
-              <View>
-                <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameSitter}</MuliText>
+          {this.state.bsitter ?
+            <View style={styles.detailContainer}>
+              <MuliText style={styles.headerTitle}>SITTER</MuliText>
+              <View style={styles.detailPictureContainer}>
+                <View>
+                  <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
+                  <View style={styles.name}>
+                    <MuliText >{this.state.nameSitter}</MuliText>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-          : <View style={styles.detailContainer}></View> }
+            : <View style={styles.detailContainer}></View>}
           {/* end */}
 
 
           {/* render button according status */}
-          
+
           <View style={styles.buttonContainer}>
-            {this.state.status == 'PENDING' && 
+            {this.state.status == 'PENDING' &&
               <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'CANCELED')}>
                 <MuliText style={{ color: 'white', fontSize: 16 }}>Cancel</MuliText>
               </TouchableOpacity>}
 
-            {this.state.status == 'CONFIRMED' && 
+            {this.state.status == 'CONFIRMED' &&
               <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ONGOING')}>
                 <MuliText style={{ color: 'white', fontSize: 16 }}>Babysitter Check-in</MuliText>
               </TouchableOpacity>}
 
-            {this.state.status == 'BS_FINISH' && 
+            {this.state.status == 'BS_FINISH' &&
               <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DONE')}>
                 <MuliText style={{ color: 'white', fontSize: 16 }}>Confirm job is finished</MuliText>
-              </TouchableOpacity>}  
-
-            {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED' )?
-              (
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-                    <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-                    <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-                  </TouchableOpacity>
-                </View>
-              )
-              :
-              (
-                <View></View>
-              )
-            }
-            
+              </TouchableOpacity>}
           </View>
+          {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED') ?
+            (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.answerButton}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.answerButton}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                </TouchableOpacity>
+              </View>
+            )
+            :
+            (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => { this.props.navigation.navigate('Recommend', { userId: 1 }) }}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Create Request</MuliText>
+                </TouchableOpacity>
+              </View>
+            )
+          }
+
+
 
           {/* end */}
         </View>
@@ -264,6 +267,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  answerButton: {
+    width: 150,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: -15,
+    marginHorizontal: 10,
+    backgroundColor: '#315F61',
+    borderRadius: 10,
   },
   headerTitle: {
     fontSize: 20,
