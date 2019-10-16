@@ -26,8 +26,8 @@ class CreateRequestScreen extends Component {
       createdUser: null,
       loggedUser: null,
       sittingDate: moment().format('YYYY-MM-DD'),
-      startTime: moment().format('hh:mm:ss'),
-      endTime: moment().format('hh:mm:ss'),
+      startTime: moment().format('HH:mm:ss'),
+      endTime: moment().format('HH:mm:ss'),
       sittingAddress: null,
       detailPictureSitter: require("assets/images/Phuc.png"),
       detailPictureChildren: require("assets/images/Baby-6.png"),
@@ -103,12 +103,14 @@ class CreateRequestScreen extends Component {
               style={styles.pickedTime}
               date={this.state.startTime}
               mode="time"
+              androidMode="default"
               placeholder="select date"
-              format="hh:mm"
+              format="HH:mm:ss"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
-              onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
               showIcon={false}
+              is24Hour
+              onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
             />
           </View>
           <View style={styles.containerDetailInformationRequest}>
@@ -118,11 +120,12 @@ class CreateRequestScreen extends Component {
               date={this.state.endTime}
               mode="time"
               placeholder="select end time"
-              format="hh:mm"
+              format="HH:mm:ss"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
-              onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
               showIcon={false}
+              is24Hour
+              onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
             />
           </View>
           <View style={styles.informationText}>
@@ -250,7 +253,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   buttonContainer: {
     paddingTop: 30,
     alignItems: 'center',
