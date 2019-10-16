@@ -85,10 +85,10 @@ class CreateRequestScreen extends Component {
             <View style={styles.inputDay}>
               <Ionicons
                 name='ios-calendar'
-                size={25}
+                size={20}
                 color='#7edeb9'
                 style={{
-                  marginTop: 8,
+                  marginTop: 10,
                 }}
               />
               <DatePicker
@@ -106,12 +106,12 @@ class CreateRequestScreen extends Component {
                     borderWidth: 0,
                   },
                   placeholderText: {
-                    fontSize: 20,
+                    fontSize: 15,
                     color: "#C7C7C7",
                     marginRight: 70,
                   },
                   dateText: {
-                    fontSize: 20,
+                    fontSize: 15,
                     color: "#7edeb9",
                   }
                 }}
@@ -125,10 +125,10 @@ class CreateRequestScreen extends Component {
               <View style={styles.input}>
                 <Ionicons
                   name='ios-timer'
-                  size={25}
+                  size={20}
                   color='#bdc3c7'
                   style={{
-                    marginTop: 8,
+                    marginTop: 10,
                   }}
                 />
 
@@ -145,12 +145,12 @@ class CreateRequestScreen extends Component {
                       borderWidth: 0,
                     },
                     placeholderText: {
-                      fontSize: 20,
+                      fontSize: 15,
                       color: "#C7C7C7",
                       marginRight: 30,
                     },
                     dateText: {
-                      fontSize: 20,
+                      fontSize: 15,
                       color: "black",
                     }
                   }}
@@ -164,10 +164,10 @@ class CreateRequestScreen extends Component {
               <View style={styles.input}>
                 <Ionicons
                   name='ios-time'
-                  size={25}
+                  size={20}
                   color='#bdc3c7'
                   style={{
-                    marginTop: 8,
+                    marginTop: 10,
                   }}
                 />
                 <DatePicker
@@ -183,12 +183,12 @@ class CreateRequestScreen extends Component {
                       borderWidth: 0,
                     },
                     placeholderText: {
-                      fontSize: 20,
+                      fontSize: 15,
                       color: "#C7C7C7",
                       marginRight: 30,
                     },
                     dateText: {
-                      fontSize: 20,
+                      fontSize: 15,
                       color: "black",
                     }
                   }}
@@ -202,7 +202,7 @@ class CreateRequestScreen extends Component {
           <View style={styles.input}>
             <Ionicons
               name='ios-home'
-              size={25}
+              size={20}
               color='#bdc3c7'
               style={{
                 marginBottom: 5,
@@ -215,18 +215,18 @@ class CreateRequestScreen extends Component {
             <View style={styles.input}>
               <Ionicons
                 name='ios-happy'
-                size={25}
+                size={20}
                 color='#bdc3c7'
                 style={{
                   marginBottom: 5,
                 }}
               />
-              <MuliText style={styles.contentInformation}>We have {this.state.childrenNumber} chilren</MuliText>
+              <MuliText style={styles.contentInformation}>Number of children: {this.state.childrenNumber} </MuliText>
             </View>
             <View style={styles.input}>
               <Ionicons
                 name='ios-heart-empty'
-                size={25}
+                size={20}
                 color='#bdc3c7'
                 style={{
                   marginBottom: 5,
@@ -244,11 +244,11 @@ class CreateRequestScreen extends Component {
             </View>
 
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
-            <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
+              <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
+            </TouchableOpacity>
+          </View>
         </View>
 
       </ScrollView>
@@ -264,7 +264,7 @@ CreateRequestScreen.navigationOptions = {
 
 const styles = StyleSheet.create({
   price: {
-    fontSize: 20,
+    fontSize: 15,
     color: '#7edeb9',
     fontWeight: '800'
   },
@@ -294,16 +294,16 @@ const styles = StyleSheet.create({
   contentInformation: {
     marginHorizontal: 15,
     marginBottom: 5,
-    fontSize: 20,
+    fontSize: 12,
   },
   containerInformationRequest: {
-    flex: 1,
     marginHorizontal: 15,
+    marginTop: 30,
   },
   headerTitle: {
     marginHorizontal: 15,
     marginTop: 30,
-    fontSize: 25,
+    fontSize: 20,
     color: '#315F61',
     marginBottom: 10,
     fontWeight: '800'
