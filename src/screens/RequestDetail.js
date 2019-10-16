@@ -72,7 +72,8 @@ export default class RequestDetail extends Component {
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{this.state.startTime} - {this.state.endTime}</MuliText>
+              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} - 
+                          {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
             </View>
             <View style={styles.informationText}>
               <Ionicons
