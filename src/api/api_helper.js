@@ -1,8 +1,10 @@
-import { retrieveToken } from './handleToken';
+import { retrieveToken } from 'utils/handleToken';
+import apiUrl from 'utils/Connection';
+import { logout } from 'api/logout';
 
 //refactor one day 
 export const apiConfig = {
-  host: 'http://192.168.0.102:3000/api/v1/',
+    host: apiUrl.baseUrl,
 }
 
 export const apiEndPoint = {
@@ -41,7 +43,6 @@ class Api {
         console.log({ request: params, headers: options.headers });
         const { token } = await retrieveToken();
         const trimpedToken = token.replace(/['"]+/g, '');
-        console.log(trimpedToken)
         if (token) {
             options.headers['Authorization'] = `Bearer ${trimpedToken}`;
         }
@@ -51,6 +52,7 @@ class Api {
             if (resp.status === 401) {
                 // refresh token
                 console.log('Unauthorized');
+                logout();
             }
             let json = resp.json();
             if (resp.ok) {
