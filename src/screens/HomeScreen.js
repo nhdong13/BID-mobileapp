@@ -39,7 +39,7 @@ class HomeScreen extends Component {
     })
 
     if (this.state.roleId != 0) {
-      
+
       if (this.state.roleId == 2) {
         await getRequests(this.state.userId).then(res => {
           this.setState({ requests: res })
@@ -49,8 +49,8 @@ class HomeScreen extends Component {
         requestBody = {
           id: this.state.userId,
         };
-        await Api.post('invitations/sitterInvitation', requestBody).then( (res) => {
-          this.setState({invitations: res});
+        await Api.post('invitations/sitterInvitation', requestBody).then((res) => {
+          this.setState({ invitations: res });
         }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
       }
 
@@ -89,7 +89,7 @@ class HomeScreen extends Component {
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{request.sittingDate}</MuliText>
-                    <MuliText>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} - 
+                    <MuliText>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}</MuliText>
                     <MuliText>{request.sittingAddress}</MuliText>
                   </View>
@@ -155,48 +155,48 @@ class HomeScreen extends Component {
           }}
           refreshing={this.state.refreshing}
         />
-        ) : 
-        (
-          <View style={{ alignItems: 'center' }}>
-            {invitations != '' && invitations ?
-              <ScrollView>
-                { invitations.map( invitation =>
-                <TouchableOpacity key={invitation.id} style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }} 
-                  onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}>
-                  <View style={{ height: 135 }}>
-                    <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
-                    </View>
-                    <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
-                      <View style={styles.leftInformation}>
-                        <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
-                        <MuliText style={styles.date}>{moment(invitation.sittingRequest.sittingDate).format('DD-MM-YYYY')}</MuliText>
-                        <MuliText>{moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} - 
-                          {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}</MuliText>
-                        <MuliText>{invitation.sittingRequest.sittingAddress}</MuliText>
-                      </View>
-                      <View style={{ alignItems: 'center' }}>
-                        <View style={styles.statusBoxConfirm}>
-                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
+        ) :
+          (
+            <View style={{ alignItems: 'center' }}>
+              {invitations != '' && invitations ?
+                <ScrollView>
+                  {invitations.map(invitation =>
+                    <TouchableOpacity key={invitation.id} style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}
+                      onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}>
+                      <View style={{ height: 135 }}>
+                        <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
                         </View>
-                        <MuliText>$100</MuliText>
+                        <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
+                          <View style={styles.leftInformation}>
+                            <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
+                            <MuliText style={styles.date}>{moment(invitation.sittingRequest.sittingDate).format('DD-MM-YYYY')}</MuliText>
+                            <MuliText>{moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} -
+                          {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}</MuliText>
+                            <MuliText>{invitation.sittingRequest.sittingAddress}</MuliText>
+                          </View>
+                          <View style={{ alignItems: 'center' }}>
+                            <View style={styles.statusBoxConfirm}>
+                              <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
+                            </View>
+                            <MuliText>$100</MuliText>
+                          </View>
+                        </View>
                       </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                )}
-              </ScrollView> : <View style={styles.noRequest}>
-                <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
-                <MuliText>Tap to create one</MuliText>
-                <Image
-                  source={
-                    require('assets/images/no-request.jpg')
-                  }
-                  style={styles.noRequestImage}
-                />
-              </View>}
+                    </TouchableOpacity>
+                  )}
+                </ScrollView> : <View style={styles.noRequest}>
+                  <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
+                  <MuliText>Tap to create one</MuliText>
+                  <Image
+                    source={
+                      require('assets/images/no-request.jpg')
+                    }
+                    style={styles.noRequestImage}
+                  />
+                </View>}
 
             </View>
-        )
+          )
         }
 
         {
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   },
   noRequest: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'white',
     alignItems: 'center',
     marginTop: 20,
     paddingHorizontal: 20,
