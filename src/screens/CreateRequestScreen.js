@@ -23,8 +23,8 @@ class CreateRequestScreen extends Component {
       tokenCode: '',
       createdUser: 1,
       sittingDate: moment().format(),
-      startTime: moment().format('hh:mm:ss'),
-      endTime: moment().format('hh:mm:ss'),
+      startTime: moment().format('HH:mm:ss'),
+      endTime: moment().format('HH:mm:ss'),
       sittingAddress: 'somewhere only we know',
       detailPictureSitter: require("assets/images/Phuc.png"),
       detailPictureChildren: require("assets/images/Baby-6.png"),
@@ -95,11 +95,12 @@ class CreateRequestScreen extends Component {
                 date={this.state.startTime}
                 mode="time"
                 placeholder="select date"
-                format="hh:mm:ss"
+                format="HH:mm:ss"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
                 showIcon={false}
+                is24Hour={true}
               />
               <MuliText style={{ fontSize: 14, fontWeight: '200', color: '#707070' }}>EndTime</MuliText>
               <DatePicker
@@ -107,11 +108,12 @@ class CreateRequestScreen extends Component {
                 date={this.state.endTime}
                 mode="time"
                 placeholder="select end time"
-                format="hh:mm:ss"
+                format="HH:mm:ss"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
                 showIcon={false}
+                is24Hour={true}
               />
             </View>
             <View style={styles.inputRequest}>
