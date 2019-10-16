@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { retrieveToken } from "./handleToken";
+import { retrieveToken } from "utils/handleToken";
 import qs from "qs";
 import moment from 'moment';
-
-const url = 'http://192.168.0.102:3000/api/v1/sittingRequests/listParent';
+import apiUrl from 'utils/Connection';
 
 export async function getRequests(userId) {
     const data = {
@@ -14,7 +13,7 @@ export async function getRequests(userId) {
     if (token) trimpedToken = token.replace(/['"]+/g, '');
     const options = {
         method: 'POST',
-        url: url,
+        url: apiUrl.getRequests,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': `Bearer ${trimpedToken}`
@@ -22,7 +21,7 @@ export async function getRequests(userId) {
         data: qs.stringify(data)
     };
 
-    let response = await axios(options).catch(error => console.log(error));
+    let response = await axios(options).catch(error => console.log('Error on api getRequest ' + error));
     if (response) {
         response.data.map(item => item.sittingDate = new moment(item.sittingDate).format('YYYY-MM-DD'));
         const dataGroup = groupByDate(response.data, 'sittingDate');

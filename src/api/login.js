@@ -1,8 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
-import { saveToken } from './handleToken';
-
-const url = 'http://192.168.0.102:3000/api/v1/auth/login';
+import { saveToken } from 'utils/handleToken';
+import apiUrl from 'utils/Connection';
 
 export async function login(phoneNumber, password) {
     const data = {
@@ -11,7 +10,7 @@ export async function login(phoneNumber, password) {
     }
     const options = {
         method: 'POST',
-        url: url,
+        url: apiUrl.login,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },

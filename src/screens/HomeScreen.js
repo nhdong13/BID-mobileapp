@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { retrieveToken } from 'api/handleToken';
+import { retrieveToken } from 'utils/handleToken';
 import {
   Button,
   StyleSheet,
@@ -11,7 +11,6 @@ import {
 
 import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
-import { getAllUsers } from 'api/getAllUsers';
 import { getRequests } from 'api/getRequests';
 import { getInvitations } from 'api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -168,7 +167,16 @@ class HomeScreen extends Component {
                       </View>
                     </View>
                   </TouchableOpacity>
-                </ScrollView> : <MuliText>lele ko co gi het</MuliText>}
+                </ScrollView> : <View style={styles.noRequest}>
+                  <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
+                  <MuliText>Tap to create one</MuliText>
+                  <Image
+                    source={
+                      require('assets/images/no-request.jpg')
+                    }
+                    style={styles.noRequestImage}
+                  />
+                </View>}
 
             </View>
           )

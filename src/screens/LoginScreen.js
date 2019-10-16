@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from 'react-navigation';
 import { login } from 'api/login';
-import { destroyToken } from 'api/handleToken';
+import { destroyToken } from 'utils/handleToken';
 import Modal from 'react-native-modal';
 import {
   Image,
