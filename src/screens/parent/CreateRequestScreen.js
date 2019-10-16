@@ -133,7 +133,7 @@ class CreateRequestScreen extends Component {
                   date={this.state.startTime}
                   mode="time"
                   placeholder="Start time"
-                  format="hh:mm"
+                  format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{
@@ -171,7 +171,7 @@ class CreateRequestScreen extends Component {
                   date={this.state.endTime}
                   mode="time"
                   placeholder="End time"
-                  format="hh:mm"
+                  format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
                   customStyles={{
