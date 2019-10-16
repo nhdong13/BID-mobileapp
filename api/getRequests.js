@@ -10,7 +10,8 @@ export async function getRequests(userId) {
         userId: userId
     };
     const { token } = await retrieveToken();
-    const trimpedToken = token.replace(/['"]+/g, '');
+    let trimpedToken = '';
+    if (token) trimpedToken = token.replace(/['"]+/g, '');
     const options = {
         method: 'POST',
         url: url,

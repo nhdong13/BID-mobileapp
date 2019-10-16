@@ -10,7 +10,7 @@ export default class RequestDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sittingRequestsID: 1,
+      sittingRequestsID: this.props.navigation.state.params.requestId,
       date: null,
       startTime: null,
       endTime: null,
@@ -19,13 +19,24 @@ export default class RequestDetail extends Component {
       detailPictureChildren: require("../assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       detailPictureSitter: require("../assets/images/Phuc.png"),
-      nameSitter: 'Phuc',
+      nameSitter: null,
+      bsitter: null,
       status: null,
     }
   }
   componentDidMount() {
     Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(resp => {
-      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, status: resp.status })
+      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, bsitter: resp.bsitter, status: resp.status })
+    })
+  }
+
+  onButtonClick(targetStatus){
+    const rqBody = {
+      status: targetStatus,
+    };
+    // console.log(rqBody); console.log(this.state.sittingRequestsID);
+    Api.put('sittingRequests/'+ this.state.sittingRequestsID.toString(), rqBody).then(resp => {
+      // this.props.navigation.navigate.goBack();
     })
   }
 
@@ -161,6 +172,9 @@ export default class RequestDetail extends Component {
             </View>
 
           </View>
+
+          {/* render babysitter if exist */}
+          { this.state.bsitter ?
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>SITTER</MuliText>
             <View style={styles.detailPictureContainer}>
@@ -172,7 +186,28 @@ export default class RequestDetail extends Component {
               </View>
             </View>
           </View>
+          : <View style={styles.detailContainer}></View> }
+          {/* end */}
+
+
+          {/* render button according status */}
+          
           <View style={styles.buttonContainer}>
+            {this.state.status == 'PENDING' && 
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'CANCELED')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Cancel</MuliText>
+              </TouchableOpacity>}
+
+            {this.state.status == 'CONFIRMED' && 
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ONGOING')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Babysitter Check-in</MuliText>
+              </TouchableOpacity>}
+
+            {this.state.status == 'BS_FINISH' && 
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DONE')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Confirm job is finished</MuliText>
+              </TouchableOpacity>}  
+
             {(this.state.status == 'ACCEPTED' || this.state.status == 'DENIED' )?
               (
                 <View style={styles.buttonContainer}>
@@ -191,6 +226,8 @@ export default class RequestDetail extends Component {
             }
             
           </View>
+
+          {/* end */}
         </View>
       </ScrollView>
     );
@@ -220,7 +257,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   submitButton: {
-    width: 100,
+    width: 250,
     height: 50,
     padding: 10,
     backgroundColor: '#315F61',
