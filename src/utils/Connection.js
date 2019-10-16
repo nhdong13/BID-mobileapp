@@ -4,6 +4,7 @@ const apiUrl = {
     getRequests: `${url}/sittingRequests/listParent`,
     getInvitations: `${url}/invitations/`,
     login: `${url}/auth/login`,
+    getRecommend: `${url}/sittingRequests/recommend/`,
 }
 
 export default apiUrl;
