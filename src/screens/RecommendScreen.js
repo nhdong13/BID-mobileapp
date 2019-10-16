@@ -175,6 +175,7 @@ export default class RecommendScreen extends Component {
 
               <View key={item.userId} style={styles.bsitterContainer}>
                 <View style={styles.bsitterItem}>
+
                   <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
                     <Image source={images.parent} style={styles.sitterImage} />
                     <View>
@@ -218,7 +219,6 @@ export default class RecommendScreen extends Component {
                       </View>
                     </View>
                   </TouchableOpacity>
-                  <View></View>
                   <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
                     <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
                       Invite
@@ -241,7 +241,8 @@ RecommendScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#dfe6e9"
+    backgroundColor: "#dfe6e9",
+    paddingBottom: 20,
   },
   textInput: {
     borderColor: "#EEEEEE",
@@ -268,7 +269,6 @@ const styles = StyleSheet.create({
   },
   bsitterContainer: {
     marginTop: 20,
-    justifyContent: "center"
   },
   bsitterItem: {
     flexDirection: "row"
@@ -294,11 +294,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-
   inviteButton: {
-    marginRight: 20,
-    flex: 1,
-    justifyContent: "center"
+    marginTop: 10,
   },
   bsitterName: {
     fontSize: 18,

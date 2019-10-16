@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#dfe6e9',
+    paddingBottom: 20,
   },
   createRequest: {
     width: 60,
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 120,
+    height: 150,
     marginHorizontal: 30,
     alignItems: 'center',
     marginTop: 20,

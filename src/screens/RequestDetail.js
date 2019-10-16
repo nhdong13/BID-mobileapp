@@ -4,7 +4,8 @@ import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from "components/StyledText";
 import moment from 'moment';
 import Api from 'api/api_helper';
-
+import images from "assets/images/images";
+import colors from "assets/Color";
 export default class RequestDetail extends Component {
   constructor(props) {
     super(props);
@@ -198,8 +199,58 @@ export default class RequestDetail extends Component {
             : <View style={styles.detailContainer}></View>}
           {/* end */}
 
+           {/*  Confirm a sitter */}
+          <View style={styles.sectionContainer}>
+            <View style={styles.headerSection}>
+              <MuliText
+                style={{ fontSize: 18, color: "#315f61", marginLeft: 10 }}
+              >
+                Confirm a sitter
+            </MuliText>
+            </View>
+            <ScrollView>
+              <View style={styles.bsitterContainer}>
+                <View style={styles.bsitterItem}>
+                  <TouchableOpacity>
+                    <Image source={images.parent} style={styles.sitterImage} />
+                    <View>
+                      <View style={styles.lowerText}>
+                        <Ionicons
+                          name="ios-pin"
+                          size={24}
+                          style={{ marginBottom: -4, marginLeft: 20 }}
+                          color={colors.lightGreen}
+                        />
+                        <MuliText> 1.1 km </MuliText>
+                        <Ionicons
+                          name="ios-star"
+                          size={24}
+                          style={{ marginBottom: -4, marginLeft: 20 }}
+                          color={colors.lightGreen}
+                        />
+                        <MuliText> 4.1 </MuliText>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <View><TouchableOpacity style={styles.inviteButton} >
+                    <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                      Decline
+                  </MuliText>
+                  </TouchableOpacity>
+                    <TouchableOpacity style={styles.inviteButton} >
+                      <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                        Accept
+                  </MuliText>
+                    </TouchableOpacity></View>
 
-          {/* render button according status */}
+                </View>
+              </View>
+
+            </ScrollView>
+          </View>
+           {/*  End Confirm a sitter */}
+          
+           {/* render button according status */}
 
           <View style={styles.buttonContainer}>
             {this.state.status == 'PENDING' &&
@@ -251,6 +302,57 @@ RequestDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  lowerText: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center"
+  },
+  sectionContainer: {
+    backgroundColor: "white",
+    flex: 1,
+    paddingHorizontal: 20,
+    marginTop: 10
+  },
+  headerSection: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "#bdc3c7",
+    height: 60,
+    alignItems: "center",
+    marginBottom: 15
+  },
+  inviteButton: {
+    width: 100,
+    height: 30,
+    backgroundColor: "#315F61",
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    marginLeft:50
+  },
+  bsitterName: {
+    fontSize: 18,
+    fontWeight: "400",
+    color: "#315F61"
+  },
+  upperText: {
+    flexDirection: "row",
+    marginHorizontal: 10,
+    marginLeft: 15,
+    flex: 1,
+    alignItems: "center"
+  },
+  sitterImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+    resizeMode: "contain",
+    marginLeft: 50,
+  },
+  bsitterItem: {
+    flexDirection: "row"
+  },
   detailPictureContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
