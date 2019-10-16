@@ -19,14 +19,14 @@ export default class AuthLoadingScreen extends React.Component {
             const userToken = res;
             if (userToken.roleId == 2) {
                 console.log("this suppose to go to Parent Navigator");
-                this.props.navigation.navigate(userToken.token && userToken.token != '' ?  'ParentMain' : 'Auth');
+                this.props.navigation.navigate('ParentMain');
             } else if (userToken.roleId == 3) {
                 console.log("this suppose to go to Bsitter Navigator");
-                this.props.navigation.navigate(userToken.token && userToken.token != '' ?  'BsitterMain' : 'Auth');
+                this.props.navigation.navigate('BsitterMain');
             } else {
                 this.props.navigation.navigate('Auth');
             }
-            
+
         });
 
     };
