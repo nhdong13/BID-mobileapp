@@ -1,11 +1,10 @@
-import axios from 'axios';
-import qs from 'qs';
-import { destroyToken } from './handleToken';
+import { destroyToken } from 'utils/handleToken';
 
 export default async function logout() {
+    console.log('it go to logout');
     try {
         await destroyToken();
-        return ({message: 'success'});
+        return ({ message: 'success on logout' });
     } catch (error) {
         return error;
     }

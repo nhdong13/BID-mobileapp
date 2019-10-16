@@ -24,6 +24,10 @@ export const destroyToken = async () => {
         await AsyncStorage.removeItem('@jwt_token');
         await AsyncStorage.removeItem('@userId');
         await AsyncStorage.removeItem('@roleId');
+        const token = await AsyncStorage.getItem('@jwt_token');
+        const userId = await AsyncStorage.getItem('@userId');
+        const roleId = await AsyncStorage.getItem('@roleId');
+        console.log('just checking' + token + ' ' + ' ' + userId + ' ' + roleId)
     } catch (error) {
         console.log(error);
     }
