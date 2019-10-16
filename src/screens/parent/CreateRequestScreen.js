@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
 import {
   Platform,
@@ -22,7 +23,7 @@ class CreateRequestScreen extends Component {
     super(props);
     this.state = {
       tokenCode: '',
-      createdUser: 1,
+      createdUser: null,
       loggedUser: null,
       sittingDate: moment().format('YYYY-MM-DD'),
       startTime: moment().format('hh:mm:ss'),
@@ -39,7 +40,17 @@ class CreateRequestScreen extends Component {
     this.onCreateRequest = this.onCreateRequest.bind(this);
   }
 
+  getDataAccordingToRole = async () => {
+    await retrieveToken().then((res) => {
+      const { userId, roleId } = res;
+      this.setState({ createdUser: userId, roleId: roleId })
+    })
+  }
+
+
   async componentDidMount() {
+    await this.getDataAccordingToRole();
+
     Api.get('users/' + this.state.createdUser.toString()).then(res => {
       this.setState({ loggedUser: res, sittingAddress: res.address });
     });

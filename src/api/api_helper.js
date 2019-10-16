@@ -40,7 +40,7 @@ class Api {
         const url = apiConfig.host + route
         let options = Object.assign({ method: verb }, params ? { body: JSON.stringify(params) } : null);
         options.headers = Api.headers();
-        console.log({ request: params, headers: options.headers });
+        // console.log({ request: params, headers: options.headers });
         const { token } = await retrieveToken();
         const trimpedToken = token.replace(/['"]+/g, '');
         if (token) {
@@ -48,7 +48,7 @@ class Api {
         }
         // return Promise
         return fetch(url, options).then(resp => {
-            console.log({ resp });
+            // console.log({ resp });
             if (resp.status === 401) {
                 // refresh token
                 console.log('Unauthorized');
