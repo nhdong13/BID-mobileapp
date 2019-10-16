@@ -14,6 +14,6 @@ export default createAppContainer(
       Main: MainTabNavigator,
       Recommend: RecommendScreen
     }, {
-    initialRouteName: 'Recommend',
+    initialRouteName: 'AuthLoading',
   })
 );
