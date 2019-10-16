@@ -35,16 +35,17 @@ class HomeScreen extends Component {
       const { userId, roleId } = res;
       this.setState({ userId: userId, roleId: roleId })
     })
-
-    if (this.state.roleId == 2) {
-      await getRequests(this.state.userId).then(res => {
-        this.setState({ requests: res })
-      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
-    } else {
-      await getInvitations(this.state.userId).then(res => {
-        this.setState({ invitations: res })
-      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
-    }
+    if (this.state.roleId != 0) {
+      if (this.state.roleId == 2) {
+        await getRequests(this.state.userId).then(res => {
+          this.setState({ requests: res })
+        }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
+      } else {
+        await getInvitations(this.state.userId).then(res => {
+          this.setState({ invitations: res })
+        }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
+      }
+    } else console.log('Something went wrong -- RoleId not found');
 
   }
 
