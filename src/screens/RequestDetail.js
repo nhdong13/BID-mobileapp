@@ -46,7 +46,6 @@ export default class RequestDetail extends Component {
       invitations: data
     });
 
-    console.log(this.state.invitations);
   };
 
   acceptBabysitter = async sitterId => {
@@ -270,7 +269,7 @@ export default class RequestDetail extends Component {
           {/* end */}
 
           {/*  Confirm a sitter */}
-          {this.state.bsitter == null && (
+          {this.state.bsitter == null && this.state.invitations.length > 0 && (
             <View style={styles.sectionContainer}>
               <View style={styles.headerSection}>
                 <MuliText
