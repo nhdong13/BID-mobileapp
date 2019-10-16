@@ -5,7 +5,7 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import { retrieveToken } from 'api/handleToken';
+import { retrieveToken } from 'utils/handleToken';
 
 export default class AuthLoadingScreen extends React.Component {
     constructor() {
@@ -16,7 +16,7 @@ export default class AuthLoadingScreen extends React.Component {
     _bootstrapAsync = async () => {
         retrieveToken().then(res => {
             const userToken = res;
-            this.props.navigation.navigate(userToken ? 'Main' : 'Auth');
+            this.props.navigation.navigate(userToken.token && userToken.token != '' ? 'Main' : 'Auth');
         });
 
     };
