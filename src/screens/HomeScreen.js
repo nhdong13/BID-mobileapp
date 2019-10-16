@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 120,
+    height: 150,
     marginHorizontal: 30,
     alignItems: 'center',
     marginTop: 20,

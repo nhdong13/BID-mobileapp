@@ -175,7 +175,6 @@ export default class RecommendScreen extends Component {
 
               <View key={item.userId} style={styles.bsitterContainer}>
                 <View style={styles.bsitterItem}>
-
                   <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
                     <Image source={images.parent} style={styles.sitterImage} />
                     <View>
