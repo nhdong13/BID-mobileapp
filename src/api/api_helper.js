@@ -1,4 +1,4 @@
-import { retrieveToken } from '../api/handleToken';
+import { retrieveToken } from './handleToken';
 
 //refactor one day 
 export const apiConfig = {

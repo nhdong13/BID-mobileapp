@@ -11,11 +11,11 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 
-import { MuliText } from '../../components/StyledText';
+import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
 import { ScrollView } from 'react-native-gesture-handler';
-import Api from '../../api/api_helper';
+import Api from 'api/api_helper';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -28,8 +28,8 @@ class CreateRequestScreen extends Component {
       startTime: moment().format('hh:mm:ss'),
       endTime: moment().format('hh:mm:ss'),
       sittingAddress: null,
-      detailPictureSitter: require("../../assets/images/Phuc.png"),
-      detailPictureChildren: require("../../assets/images/Baby-6.png"),
+      detailPictureSitter: require("assets/images/Phuc.png"),
+      detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       price: '100',
       childrenNumber: 1,
