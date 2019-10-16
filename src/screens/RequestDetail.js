@@ -360,7 +360,7 @@ export default class RequestDetail extends Component {
               </TouchableOpacity>
             )}
 
-            {this.state.status == "BS_FINISH" && (
+            {this.state.status == "ONGOING" && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "DONE")}
