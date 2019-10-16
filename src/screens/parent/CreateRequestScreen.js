@@ -67,11 +67,11 @@ class CreateRequestScreen extends Component {
         <View style={styles.containerInformationRequest}>
           <MuliText style={styles.headerTitle}>Babysitting</MuliText>
           <View>
-            <View style={styles.input}>
+            <View style={styles.inputDay}>
               <Ionicons
                 name='ios-calendar'
                 size={25}
-                color='#bdc3c7'
+                color='#7edeb9'
                 style={{
                   marginTop: 8,
                 }}
@@ -97,7 +97,7 @@ class CreateRequestScreen extends Component {
                   },
                   dateText: {
                     fontSize: 20,
-                    color: "black",
+                    color: "#7edeb9",
                   }
                 }}
                 onDateChange={(date) => { this.setState({ sittingDate: date }); console.log(this.state.sittingDate) }}
@@ -128,7 +128,6 @@ class CreateRequestScreen extends Component {
                   customStyles={{
                     dateInput: {
                       borderWidth: 0,
-                
                     },
                     placeholderText: {
                       fontSize: 20,
@@ -166,7 +165,7 @@ class CreateRequestScreen extends Component {
                   customStyles={{
                     dateInput: {
                       borderWidth: 0,
-                    }, 
+                    },
                     placeholderText: {
                       fontSize: 20,
                       color: "#C7C7C7",
@@ -221,11 +220,14 @@ class CreateRequestScreen extends Component {
           </View>
           <View>
             <MuliText style={styles.headerTitle}>Payment</MuliText>
-            <MuliText style={styles.contentInformation}>Propose price: {this.state.price}/h</MuliText>
+            <View style={styles.priceContainer}>
+              <MuliText style={styles.contentInformation}>Propose price:</MuliText>
+              <MuliText style={styles.price}>{this.state.price}/h</MuliText>
+
+            </View>
+
           </View>
         </View>
-
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
             <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
@@ -244,6 +246,26 @@ CreateRequestScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  price:{
+    fontSize: 20,
+    color: '#7edeb9',
+    fontWeight: '800'
+  },
+  priceContainer: {
+    flex: 1,
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  inputDay: {
+    flex: 1,
+    flexDirection: 'row',
+    borderWidth: 0,
+    borderBottomWidth: 2,
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderColor: '#7edeb9'
+  },
   input: {
     flex: 1,
     flexDirection: 'row',
