@@ -15,6 +15,7 @@ import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/getRequests';
 import { getInvitations } from 'api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../api/api_helper';
 
@@ -37,20 +38,23 @@ class HomeScreen extends Component {
       this.setState({ userId: userId, roleId: roleId })
     })
 
-    if (this.state.roleId == 2) {
-      await getRequests(this.state.userId).then(res => {
-        this.setState({ requests: res })
-        console.log(this.state.requests)
-      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
-    } else {
-      requestBody = {
-        id: this.state.userId,
-      };
-      await Api.post('invitations/sitterInvitation', requestBody).then( res => {
-        this.setState({invitations: res});
-      });
-    }
+    if (this.state.roleId != 0) {
+      
+      if (this.state.roleId == 2) {
+        await getRequests(this.state.userId).then(res => {
+          this.setState({ requests: res })
+        }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
+      } else {
 
+        requestBody = {
+          id: this.state.userId,
+        };
+        await Api.post('invitations/sitterInvitation', requestBody).then( (res) => {
+          this.setState({invitations: res});
+        }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
+      }
+
+    } else console.log('Something went wrong -- RoleId not found');
   }
 
   _onRefresh = () => {
@@ -75,7 +79,7 @@ class HomeScreen extends Component {
           </TouchableOpacity>
         </View>
         {roleId && roleId == 2 ? (<Agenda
-          items={this.state.requests}
+          items={requests}
           selected={new moment().format("YYYY-MM-DD")}
           pastScrollRange={50}
           futureScrollRange={50}
@@ -215,21 +219,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#dfe6e9',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
   createRequest: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#ee6e73',
     position: 'absolute',
     opacity: 0.9,
     bottom: 10,
@@ -263,13 +256,6 @@ const styles = StyleSheet.create({
     width: 90,
     height: 40,
     padding: 10,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-    width: 360,
-    height: 250,
   },
   noRequest: {
     flex: 1,
@@ -321,6 +307,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginBottom: 20,
     flex: 0.1,
+    backgroundColor: '#fff'
   },
   scheduleContainerBsitter: {
     alignItems: 'flex-start',
@@ -329,11 +316,12 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 30,
     flex: 0.25,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#315f61',
-    // borderBottomRightRadius: 50,
-    // borderBottomLeftRadius: 50,
     backgroundColor: '#fff'
-
+  },
+  date: {
+    marginBottom: 10,
+    color: colors.darkGreenTitle,
+    fontWeight: "400",
+    fontSize: 15,
   },
 });

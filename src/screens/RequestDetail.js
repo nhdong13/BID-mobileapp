@@ -238,7 +238,7 @@ export default class RequestDetail extends Component {
   }
 }
 RequestDetail.navigationOptions = {
-  header: null,
+  title: 'Request Detail',
 };
 
 const styles = StyleSheet.create({
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   },
   detailInformationContainer: {
     flex: 1,
-    marginTop: 40,
+    marginTop: 20,
     marginHorizontal: 10,
     marginLeft: 10,
   },

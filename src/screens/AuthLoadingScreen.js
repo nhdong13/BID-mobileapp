@@ -6,6 +6,7 @@ import {
     View,
 } from 'react-native';
 import { retrieveToken } from 'utils/handleToken';
+import { Platform } from '@unimodules/core';
 
 export default class AuthLoadingScreen extends React.Component {
     constructor() {
@@ -14,9 +15,18 @@ export default class AuthLoadingScreen extends React.Component {
     }
 
     _bootstrapAsync = async () => {
-        retrieveToken().then(res => {
+        await retrieveToken().then(res => {
             const userToken = res;
-            this.props.navigation.navigate(userToken.token && userToken.token != '' ? 'Main' : 'Auth');
+            if (userToken.roleId == 2) {
+                console.log("this suppose to go to Parent Navigator");
+                this.props.navigation.navigate(userToken.token && userToken.token != '' ?  'ParentMain' : 'Auth');
+            } else if (userToken.roleId == 3) {
+                console.log("this suppose to go to Bsitter Navigator");
+                this.props.navigation.navigate(userToken.token && userToken.token != '' ?  'BsitterMain' : 'Auth');
+            } else {
+                this.props.navigation.navigate('Auth');
+            }
+            
         });
 
     };

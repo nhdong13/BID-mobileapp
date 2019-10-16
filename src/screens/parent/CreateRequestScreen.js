@@ -25,9 +25,9 @@ class CreateRequestScreen extends Component {
       tokenCode: '',
       createdUser: null,
       loggedUser: null,
-      sittingDate: '',
-      startTime: '',
-      endTime: '',
+      sittingDate: moment().format('YYYY-MM-DD'),
+      startTime: moment().format('HH:mm:ss'),
+      endTime: moment().format('HH:mm:ss'),
       sittingAddress: null,
       detailPictureSitter: require("assets/images/Phuc.png"),
       detailPictureChildren: require("assets/images/Baby-6.png"),
@@ -150,7 +150,8 @@ class CreateRequestScreen extends Component {
                       color: "black",
                     }
                   }}
-                  onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
+                  is24Hour
+              onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
                   showIcon={false}
                 />
               </View>
@@ -187,11 +188,12 @@ class CreateRequestScreen extends Component {
                       color: "black",
                     }
                   }}
-                  onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
+                  is24Hour
+              onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
                   showIcon={false}
                 />
               </View>
-            </View>
+            </View>        
           </View>
           <View style={styles.input}>
             <Ionicons

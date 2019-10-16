@@ -39,13 +39,13 @@ class LoginScreen extends Component {
           this.setState({ isModalVisible: true })
         } else {
           this.setState({ roleId: res.data.roleId, userId: res.data.userId });
-          this.props.navigation.navigate('Main', { roleId: this.state.roleId, userId: this.state.userId });
+          this.props.navigation.navigate('AuthLoading', { roleId: this.state.roleId, userId: this.state.userId });
         }
       }).catch(error => console.log('onLogin error' + error));
   }
 
   onSubmitOTP = async () => {
-    this.state.OTP.length === 7 ? this.props.navigation.navigate('Main', { roleId: this.state.roleId, userId: this.state.userId }) : console.log('wrong OTP code, please try again');
+    this.state.OTP.length === 7 ? this.props.navigation.navigate('AuthLoading', { roleId: this.state.roleId, userId: this.state.userId }) : console.log('wrong OTP code, please try again');
   }
 
   toggleModal = () => {
