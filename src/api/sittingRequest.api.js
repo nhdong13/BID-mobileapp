@@ -1,9 +1,7 @@
 import axios from "axios";
-import { retrieveToken } from "./handleToken";
+import { retrieveToken } from "utils/handleToken";
 import qs from "qs";
-import moment from "moment";
-
-const url = "http://192.168.1.2:3000/api/v1/sittingRequests/";
+import apiUrl from 'utils/Connection';
 
 export async function recommend(requestId) {
   //   const data = {
@@ -12,13 +10,15 @@ export async function recommend(requestId) {
   const { token } = await retrieveToken();
   let trimpedToken = "";
   if (token) trimpedToken = token.replace(/['"]+/g, "");
+  let url = apiUrl.getRecommend + requestId;
+  console.log(url);
   const options = {
     method: "GET",
-    url: url + `recommend/1`,
+    url: url,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Bearer ${trimpedToken}`
-    }
+    },
   };
 
   let response = await axios(options).catch(error => console.log(error));
