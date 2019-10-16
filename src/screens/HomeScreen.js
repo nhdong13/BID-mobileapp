@@ -73,7 +73,9 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={roleId == 2 ? styles.scheduleContainer : styles.scheduleContainerBsitter}>
-          <MuliText style={roleId == 2 ? styles.textHeaderParent : styles.textHeaderBsitter}>{roleId && roleId == 2 ? 'When would you need a babysitter ?' : `Hi Sitter`}</MuliText>
+          <MuliText style={roleId == 2 ? styles.textHeaderParent : styles.textHeaderBsitter}>
+            {roleId && roleId == 2 ? 'When would you need a babysitter ?' : `Hi Sitter`}
+          </MuliText>
           <TouchableOpacity>
             <MuliText>Welcome to bid :)</MuliText>
           </TouchableOpacity>

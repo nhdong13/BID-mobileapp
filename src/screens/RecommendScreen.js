@@ -17,56 +17,62 @@ export default class RecommendScreen extends Component {
       matchedCount: 0,
       listMatched: [],
       recommendCount: 0,
-      recommendList: []
+      recommendList: [],
+      requestId: 0,
     };
-
-    this.sendInvitation = this.sendInvitation.bind(this);
   }
 
   getRecommendation = async () => {
-    let data = await recommend(1);
-    this.setState({
-      matchedCount: data.matchedCount,
-      listMatched: data.listMatched,
-      recommendCount: data.recommendCount,
-      recommendList: data.recommendList
-    });
+    if (this.state.requestId !== 0) {
+      let data = await recommend(this.state.requestId);
+      this.setState({
+        matchedCount: data.matchedCount,
+        listMatched: data.listMatched,
+        recommendCount: data.recommendCount,
+        recommendList: data.recommendList
+      });
 
-    return data;
+      return data;
+
+    } else {
+      console.log('RequestId not found - getRecommedation');
+    }
+
   };
 
-  calAge = function (dateOfBirth) {
+  calAge = (dateOfBirth) => {
     let born = this.getYear(dateOfBirth);
     let now = moment().year();
     return now - born;
   };
 
-  getYear = function (dateOfBirth) {
+  getYear = (dateOfBirth) => {
     let arr = dateOfBirth.split("-");
     return arr[0];
   };
 
-  sendInvitation = async function (receiverId) {
-    let invitation = {
-      "requestId": 1,
+  sendInvitation = async (receiverId) => {
+    const invitation = {
+      "requestId": this.state.requestId,
       "status": "PENDING",
       "receiver": receiverId,
     }
-
-    console.log(invitation);
-
-    try {
-      let response = await createInvitation(invitation);
-      console.log(response);
-
-    } catch (error) {
-      console.log(error.message);
-    }
-
+    // console.log(invitation);
+    await createInvitation(invitation)
+      .then(res => console.log(res))
+      .catch(error => console.log(error));
   }
 
+
+
   componentWillMount() {
-    this.getRecommendation();
+    const requestId = this.props.navigation.getParam('requestId');
+    if (requestId && requestId !== 0) {
+      this.setState({ requestId: requestId }, () => this.getRecommendation());
+    } else {
+      console.log('requestId not found - RecommendScreen')
+    }
+
   }
 
   // netstat -ano | findstr 3000
@@ -88,63 +94,64 @@ export default class RecommendScreen extends Component {
             </MuliText>
           </View>
           <ScrollView>
-            {this.state.recommendList.map((item, index) => (
-
-              <View key={item.userId} style={styles.bsitterContainer}>
-                <View style={styles.bsitterItem}>
-                  <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
-                    <Image source={images.parent} style={styles.sitterImage} />
-                    <View>
-                      <View style={styles.upperText}>
-                        <MuliText style={styles.bsitterName}>
-                          {item.user.nickname} -{" "}
-                          {this.calAge(item.user.dateOfBirth)}
-                        </MuliText>
-                        {item.user.gender == "MALE" && (
-                          <Ionicons
-                            name="ios-male"
-                            size={20}
-                            style={{ marginBottom: -2, marginLeft: 20 }}
-                            color={colors.blueAqua}
-                          />
-                        )}
-                        {item.user.gender == "FEMALE" && (
-                          <Ionicons
-                            name="ios-female"
-                            size={20}
-                            style={{ marginBottom: -2, marginLeft: 20 }}
-                            color={colors.pinkLight}
-                          />
-                        )}
-                      </View>
-                      <View style={styles.lowerText}>
-                        <Ionicons
-                          name="ios-pin"
-                          size={24}
-                          style={{ marginBottom: -4, marginLeft: 20 }}
-                          color={colors.lightGreen}
-                        />
-                        <MuliText> 1.1 km </MuliText>
-                        <Ionicons
-                          name="ios-star"
-                          size={24}
-                          style={{ marginBottom: -4, marginLeft: 20 }}
-                          color={colors.lightGreen}
-                        />
-                        <MuliText> {item.averageRating} </MuliText>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View></View>
-                  <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
-                    <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                      Invite
+            {(this.state.recommendList && this.state.recommendList != [])
+              && this.state.recommendList.map((item, index) =>
+                (
+                  <View key={item.userId} style={styles.bsitterContainer}>
+                    <View style={styles.bsitterItem}>
+                      <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
+                        <Image source={images.parent} style={styles.sitterImage} />
+                        <View>
+                          <View style={styles.upperText}>
+                            <MuliText style={styles.bsitterName}>
+                              {item.user.nickname} - {" "}
+                              {this.calAge(item.user.dateOfBirth)}
+                            </MuliText>
+                            {item.user.gender == "MALE" && (
+                              <Ionicons
+                                name="ios-male"
+                                size={20}
+                                style={{ marginBottom: -2, marginLeft: 20 }}
+                                color={colors.blueAqua}
+                              />
+                            )}
+                            {item.user.gender == "FEMALE" && (
+                              <Ionicons
+                                name="ios-female"
+                                size={20}
+                                style={{ marginBottom: -2, marginLeft: 20 }}
+                                color={colors.pinkLight}
+                              />
+                            )}
+                          </View>
+                          <View style={styles.lowerText}>
+                            <Ionicons
+                              name="ios-pin"
+                              size={24}
+                              style={{ marginBottom: -4, marginLeft: 20 }}
+                              color={colors.lightGreen}
+                            />
+                            <MuliText> 1.1 km </MuliText>
+                            <Ionicons
+                              name="ios-star"
+                              size={24}
+                              style={{ marginBottom: -4, marginLeft: 20 }}
+                              color={colors.lightGreen}
+                            />
+                            <MuliText> {item.averageRating} </MuliText>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                      <View></View>
+                      <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
+                        <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                          Invite
                 </MuliText>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-            ))}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )
+              )}
           </ScrollView>
         </View>
 
@@ -164,7 +171,7 @@ export default class RecommendScreen extends Component {
             </MuliText>
           </View>
           <ScrollView>
-            {this.state.listMatched.map((item, index) => (
+            {(this.state.listMatched && this.state.listMatched != []) && this.state.listMatched.map((item, index) => (
 
               <View key={item.userId} style={styles.bsitterContainer}>
                 <View style={styles.bsitterItem}>
