@@ -198,10 +198,6 @@ class HomeScreen extends Component {
             </View>
           )
         }
-
-        {
-          roleId == 2 ? (<Button style={styles.createRequest} title="+" onPress={() => this.props.navigation.navigate('CreateRequest')} />) : (<View></View>)
-        }
       </View>
     );
   }

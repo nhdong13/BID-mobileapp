@@ -6,7 +6,6 @@ import AuthTabNavigator from './AuthTabNavigator';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import ParentTabNavigator from 'navigation/ParentTabNavigator';
 import BsitterTabNavigator from 'navigation/BsitterTabNavigator';
-import RecommendScreen from 'screens/RecommendScreen';
 
 export default createAppContainer(
   createSwitchNavigator(
@@ -14,7 +13,6 @@ export default createAppContainer(
       AuthLoading: AuthLoadingScreen,
       Auth: AuthTabNavigator,
       Main: MainTabNavigator,
-      Recommend: RecommendScreen,
       ParentMain: ParentTabNavigator,
       BsitterMain: BsitterTabNavigator,
     }, {

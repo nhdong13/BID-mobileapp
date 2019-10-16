@@ -67,8 +67,12 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
     };
-    console.log(request);
-    Api.post('sittingRequests', request);
+    Api.post('sittingRequests', request).then((res) => {
+      if (res) {
+        this.props.navigation.navigate('Recommend', { createdUser: this.state.userId });
+      }
+    }).catch(error => console.log(error));
+
   }
 
   render() {
@@ -151,7 +155,7 @@ class CreateRequestScreen extends Component {
                     }
                   }}
                   is24Hour
-              onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
+                  onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
                   showIcon={false}
                 />
               </View>
@@ -189,11 +193,11 @@ class CreateRequestScreen extends Component {
                     }
                   }}
                   is24Hour
-              onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
+                  onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
                   showIcon={false}
                 />
               </View>
-            </View>        
+            </View>
           </View>
           <View style={styles.input}>
             <Ionicons
@@ -259,7 +263,7 @@ CreateRequestScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  price:{
+  price: {
     fontSize: 20,
     color: '#7edeb9',
     fontWeight: '800'

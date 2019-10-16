@@ -8,6 +8,7 @@ import colors from "assets/Color";
 import moment from "moment";
 import { recommend } from "api/sittingRequest.api";
 import { createInvitation } from 'api/invitation.api';
+import { ScrollView } from "react-native-gesture-handler";
 
 export default class RecommendScreen extends Component {
   constructor(props) {
@@ -34,22 +35,22 @@ export default class RecommendScreen extends Component {
     return data;
   };
 
-  calAge = function(dateOfBirth) {
+  calAge = function (dateOfBirth) {
     let born = this.getYear(dateOfBirth);
     let now = moment().year();
     return now - born;
   };
 
-  getYear = function(dateOfBirth) {
+  getYear = function (dateOfBirth) {
     let arr = dateOfBirth.split("-");
     return arr[0];
   };
 
-  sendInvitation = async function(receiverId) {
+  sendInvitation = async function (receiverId) {
     let invitation = {
-    "requestId": 1,
-    "status": "PENDING",
-    "receiver": receiverId,
+      "requestId": 1,
+      "status": "PENDING",
+      "receiver": receiverId,
     }
 
     console.log(invitation);
@@ -57,7 +58,7 @@ export default class RecommendScreen extends Component {
     try {
       let response = await createInvitation(invitation);
       console.log(response);
-      
+
     } catch (error) {
       console.log(error.message);
     }
@@ -86,63 +87,67 @@ export default class RecommendScreen extends Component {
               Recommend ({this.state.recommendCount})
             </MuliText>
           </View>
-          {this.state.recommendList.map((item, index) => (
-          <View key={item.userId} style={styles.bsitterContainer}>
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
-                <Image source={images.parent} style={styles.sitterImage} />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>
-                      {item.user.nickname} -{" "}
-                      {this.calAge(item.user.dateOfBirth)}
-                    </MuliText>
-                    {item.user.gender == "MALE" && (
-                      <Ionicons
-                        name="ios-male"
-                        size={20}
-                        style={{ marginBottom: -2, marginLeft: 20 }}
-                        color={colors.blueAqua}
-                      />
-                    )}
-                    {item.user.gender == "FEMALE" && (
-                      <Ionicons
-                        name="ios-female"
-                        size={20}
-                        style={{ marginBottom: -2, marginLeft: 20 }}
-                        color={colors.pinkLight}
-                      />
-                    )}
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 20 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText> 1.1 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 20 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText> {item.averageRating} </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View></View>
-              <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
-                <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                  Invite
+          <ScrollView>
+            {this.state.recommendList.map((item, index) => (
+
+              <View key={item.userId} style={styles.bsitterContainer}>
+                <View style={styles.bsitterItem}>
+                  <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
+                    <Image source={images.parent} style={styles.sitterImage} />
+                    <View>
+                      <View style={styles.upperText}>
+                        <MuliText style={styles.bsitterName}>
+                          {item.user.nickname} -{" "}
+                          {this.calAge(item.user.dateOfBirth)}
+                        </MuliText>
+                        {item.user.gender == "MALE" && (
+                          <Ionicons
+                            name="ios-male"
+                            size={20}
+                            style={{ marginBottom: -2, marginLeft: 20 }}
+                            color={colors.blueAqua}
+                          />
+                        )}
+                        {item.user.gender == "FEMALE" && (
+                          <Ionicons
+                            name="ios-female"
+                            size={20}
+                            style={{ marginBottom: -2, marginLeft: 20 }}
+                            color={colors.pinkLight}
+                          />
+                        )}
+                      </View>
+                      <View style={styles.lowerText}>
+                        <Ionicons
+                          name="ios-pin"
+                          size={24}
+                          style={{ marginBottom: -4, marginLeft: 20 }}
+                          color={colors.lightGreen}
+                        />
+                        <MuliText> 1.1 km </MuliText>
+                        <Ionicons
+                          name="ios-star"
+                          size={24}
+                          style={{ marginBottom: -4, marginLeft: 20 }}
+                          color={colors.lightGreen}
+                        />
+                        <MuliText> {item.averageRating} </MuliText>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <View></View>
+                  <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
+                    <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                      Invite
                 </MuliText>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+            ))}
+          </ScrollView>
         </View>
-        
+
 
         <View style={styles.sectionContainer}>
           <View style={styles.headerSection}>
@@ -158,61 +163,64 @@ export default class RecommendScreen extends Component {
               Matched Babysitter ({this.state.matchedCount})
             </MuliText>
           </View>
-          {this.state.listMatched.map((item, index) => (
-            <View key={item.userId} style={styles.bsitterContainer}>
-              <View style={styles.bsitterItem}>
-                <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
-                  <Image source={images.parent} style={styles.sitterImage} />
-                  <View>
-                    <View style={styles.upperText}>
-                      <MuliText style={styles.bsitterName}>
-                        {item.user.nickname} -{" "}
-                        {this.calAge(item.user.dateOfBirth)}
-                      </MuliText>
-                      {item.user.gender == "MALE" && (
+          <ScrollView>
+            {this.state.listMatched.map((item, index) => (
+
+              <View key={item.userId} style={styles.bsitterContainer}>
+                <View style={styles.bsitterItem}>
+                  <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
+                    <Image source={images.parent} style={styles.sitterImage} />
+                    <View>
+                      <View style={styles.upperText}>
+                        <MuliText style={styles.bsitterName}>
+                          {item.user.nickname} -{" "}
+                          {this.calAge(item.user.dateOfBirth)}
+                        </MuliText>
+                        {item.user.gender == "MALE" && (
+                          <Ionicons
+                            name="ios-male"
+                            size={20}
+                            style={{ marginBottom: -2, marginLeft: 20 }}
+                            color={colors.blueAqua}
+                          />
+                        )}
+                        {item.user.gender == "FEMALE" && (
+                          <Ionicons
+                            name="ios-female"
+                            size={20}
+                            style={{ marginBottom: -2, marginLeft: 20 }}
+                            color={colors.pinkLight}
+                          />
+                        )}
+                      </View>
+                      <View style={styles.lowerText}>
                         <Ionicons
-                          name="ios-male"
-                          size={20}
-                          style={{ marginBottom: -2, marginLeft: 20 }}
-                          color={colors.blueAqua}
+                          name="ios-pin"
+                          size={24}
+                          style={{ marginBottom: -4, marginLeft: 20 }}
+                          color={colors.lightGreen}
                         />
-                      )}
-                      {item.user.gender == "FEMALE" && (
+                        <MuliText> 1.1 km </MuliText>
                         <Ionicons
-                          name="ios-female"
-                          size={20}
-                          style={{ marginBottom: -2, marginLeft: 20 }}
-                          color={colors.pinkLight}
+                          name="ios-star"
+                          size={24}
+                          style={{ marginBottom: -4, marginLeft: 20 }}
+                          color={colors.lightGreen}
                         />
-                      )}
+                        <MuliText> 4.1 </MuliText>
+                      </View>
                     </View>
-                    <View style={styles.lowerText}>
-                      <Ionicons
-                        name="ios-pin"
-                        size={24}
-                        style={{ marginBottom: -4, marginLeft: 20 }}
-                        color={colors.lightGreen}
-                      />
-                      <MuliText> 1.1 km </MuliText>
-                      <Ionicons
-                        name="ios-star"
-                        size={24}
-                        style={{ marginBottom: -4, marginLeft: 20 }}
-                        color={colors.lightGreen}
-                      />
-                      <MuliText> 4.1 </MuliText>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                <View></View>
-                <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
-                  <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                    Invite
+                  </TouchableOpacity>
+                  <View></View>
+                  <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
+                    <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                      Invite
                   </MuliText>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </ScrollView>
         </View>
       </View>
     );
