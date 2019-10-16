@@ -163,6 +163,7 @@ class HomeScreen extends Component {
               {invitations != '' && invitations ?
                 <ScrollView>
                   {invitations.map(invitation =>
+                  // { this.state.invitationStatus == 'PENDING' &&
                     <TouchableOpacity key={invitation.id} style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}
                       onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}>
                       <View style={{ height: 135 }}>

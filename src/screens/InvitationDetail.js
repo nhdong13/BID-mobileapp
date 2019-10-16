@@ -22,11 +22,13 @@ export default class InvitationDetail extends Component {
       nameSitter: 'Phuc',
       status: null,
       isModalVisible: false,
+      requestId: 1,
+      invitationStatus: 'PENDING',
     }
   }
-  componentDidMount() {
-    Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
-      this.setState({ date: resp.sittingRequest.sittingDay, startTime: resp.sittingRequest.startTime, 
+  getData = async () => {
+    await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
+      this.setState({ invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime, 
         endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status })
     })
   }
@@ -36,6 +38,28 @@ export default class InvitationDetail extends Component {
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
+
+  componentDidMount(){
+    this.getData();
+  }
+
+  onButtonClick(targetStatus) {
+    ivBody = {
+      status: targetStatus,
+    };
+    // console.log(rqBody); console.log(this.state.sittingRequestsID);
+    Api.put('invitations/' + this.state.invitationID.toString(), ivBody).then(resp => {
+      // this.props.navigation.navigate.goBack();
+    });
+
+    // rqBody = {
+    //   status: 'CONFIRMED',
+    // }
+    // Api.put('sittingRequests/' + this.state.requestId.toString(), rqBody).then(resp => {
+    //   // this.props.navigation.navigate.goBack();
+    // });
+  }
+
   render() {
     return (
 
@@ -167,10 +191,19 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-            </TouchableOpacity>
-            {this.state.isModalVisible ?
+            { this.state.invitationStatus == 'PENDING' &&
+            <View>
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+              </TouchableOpacity>
+              
+
+              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
+                <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+              </TouchableOpacity>
+            </View>}
+
+            {/* {this.state.isModalVisible ?
               (
                 <Modal
                   isVisible={this.state.isModalVisible}
@@ -203,11 +236,7 @@ export default class InvitationDetail extends Component {
               (
                 <View></View>
               )
-            }
-
-            <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-            </TouchableOpacity>
+            } */}
           </View>
         </View>
       </ScrollView>
