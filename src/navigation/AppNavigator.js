@@ -4,7 +4,8 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import AuthTabNavigator from './AuthTabNavigator';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
-import RecommendScreen from 'screens/RecommendScreen';
+import ParentTabNavigator from 'navigation/ParentTabNavigator';
+import BsitterTabNavigator from 'navigation/BsitterTabNavigator';
 
 export default createAppContainer(
   createSwitchNavigator(
@@ -13,6 +14,8 @@ export default createAppContainer(
       Auth: AuthTabNavigator,
       Main: MainTabNavigator,
       Recommend: RecommendScreen
+      ParentMain: ParentTabNavigator,
+      BsitterMain: BsitterTabNavigator,
     }, {
     initialRouteName: 'AuthLoading',
   })
