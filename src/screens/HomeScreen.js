@@ -3,6 +3,7 @@ import { retrieveToken } from 'utils/handleToken';
 import {
   Button,
   StyleSheet,
+  Text,
   View,
   Image,
   RefreshControl,
@@ -15,6 +16,7 @@ import { getRequests } from 'api/getRequests';
 import { getInvitations } from 'api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
+import Api from '../api/api_helper';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -38,11 +40,15 @@ class HomeScreen extends Component {
     if (this.state.roleId == 2) {
       await getRequests(this.state.userId).then(res => {
         this.setState({ requests: res })
+        console.log(this.state.requests)
       }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
     } else {
-      await getInvitations(this.state.userId).then(res => {
-        this.setState({ invitations: res })
-      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
+      requestBody = {
+        id: this.state.userId,
+      };
+      await Api.post('invitations/sitterInvitation', requestBody).then( res => {
+        this.setState({invitations: res});
+      });
     }
 
   }
@@ -79,7 +85,8 @@ class HomeScreen extends Component {
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{request.sittingDate}</MuliText>
-                    <MuliText>{request.startTime} - {request.endTime}</MuliText>
+                    <MuliText>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} - 
+                          {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}</MuliText>
                     <MuliText>{request.sittingAddress}</MuliText>
                   </View>
                   <View style={styles.rightInformation}>
@@ -144,42 +151,48 @@ class HomeScreen extends Component {
           }}
           refreshing={this.state.refreshing}
         />
-        ) : (
-            <View style={{ alignItems: 'center' }}>
-              {invitations != '' && invitations ?
-                <ScrollView>
-                  <TouchableOpacity style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }} onPress={() => this.props.navigation.navigate('InvitationDetail')}>
-                    <View style={{ height: 135 }}>
-                      <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+        ) : 
+        (
+          <View style={{ alignItems: 'center' }}>
+            {invitations != '' && invitations ?
+              <ScrollView>
+                { invitations.map( invitation =>
+                <TouchableOpacity key={invitation.id} style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }} 
+                  onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}>
+                  <View style={{ height: 135 }}>
+                    <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+                    </View>
+                    <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
+                      <View style={styles.leftInformation}>
+                        <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
+                        <MuliText style={styles.date}>{moment(invitation.sittingRequest.sittingDate).format('DD-MM-YYYY')}</MuliText>
+                        <MuliText>{moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} - 
+                          {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}</MuliText>
+                        <MuliText>{invitation.sittingRequest.sittingAddress}</MuliText>
                       </View>
-                      <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
-                        <View style={styles.leftInformation}>
-                          <MuliText style={styles.date}>2019-10-15</MuliText>
-                          <MuliText>03:00 PM - 05:00 PM</MuliText>
-                          <MuliText>529 Lê Đức Thọ, Phường 16, Gò Vấp, Hồ Chí Minh, Vietnam</MuliText>
+                      <View style={{ alignItems: 'center' }}>
+                        <View style={styles.statusBoxConfirm}>
+                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
                         </View>
-                        <View style={{ alignItems: 'center' }}>
-                          <View style={styles.statusBoxConfirm}>
-                            <MuliText style={{ fontWeight: '100', color: 'red' }}>DONE</MuliText>
-                          </View>
-                          <MuliText>$100</MuliText>
-                        </View>
+                        <MuliText>$100</MuliText>
                       </View>
                     </View>
-                  </TouchableOpacity>
-                </ScrollView> : <View style={styles.noRequest}>
-                  <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
-                  <MuliText>Tap to create one</MuliText>
-                  <Image
-                    source={
-                      require('assets/images/no-request.jpg')
-                    }
-                    style={styles.noRequestImage}
-                  />
-                </View>}
+                  </View>
+                </TouchableOpacity>
+                )}
+              </ScrollView> : <View style={styles.noRequest}>
+                <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
+                <MuliText>Tap to create one</MuliText>
+                <Image
+                  source={
+                    require('assets/images/no-request.jpg')
+                  }
+                  style={styles.noRequestImage}
+                />
+              </View>}
 
             </View>
-          )
+        )
         }
 
         {
