@@ -175,6 +175,7 @@ export default class RecommendScreen extends Component {
 
               <View key={item.userId} style={styles.bsitterContainer}>
                 <View style={styles.bsitterItem}>
+
                   <TouchableOpacity style={{ flexDirection: "row", flexGrow: 2 }}>
                     <Image source={images.parent} style={styles.sitterImage} />
                     <View>
@@ -240,7 +241,8 @@ RecommendScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#dfe6e9"
+    backgroundColor: "#dfe6e9",
+    paddingBottom: 20,
   },
   textInput: {
     borderColor: "#EEEEEE",
