@@ -25,7 +25,16 @@ export default class RequestDetail extends Component {
   }
   componentDidMount() {
     Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(resp => {
-      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, bsitter: resp.bsitter, status: resp.status })
+      this.setState(
+        {
+          date: resp.sittingDay,
+          startTime: resp.startTime,
+          endTime: resp.endTime,
+          address: resp.sittingAddress,
+          bsitter: resp.bsitter,
+          status: resp.status
+        }
+      )
     })
   }
 
@@ -72,7 +81,7 @@ export default class RequestDetail extends Component {
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} - 
+              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
             </View>
             <View style={styles.informationText}>

@@ -69,7 +69,7 @@ class CreateRequestScreen extends Component {
     };
     Api.post('sittingRequests', request).then((res) => {
       if (res) {
-        this.props.navigation.navigate('Recommend', { createdUser: this.state.userId });
+        this.props.navigation.navigate('Recommend', { requestId: res.id });
       }
     }).catch(error => console.log(error));
 
