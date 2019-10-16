@@ -10,7 +10,7 @@ export default class InvitationDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invitationID: 1,
+      invitationID: this.props.navigation.state.params.invitationId,
       date: '2019-10-03',
       startTime: '12:00 AM',
       endTime: '3:00 AM',
@@ -26,7 +26,8 @@ export default class InvitationDetail extends Component {
   }
   componentDidMount() {
     Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
-      this.setState({ date: resp.sittingDay, startTime: resp.startTime, endTime: resp.endTime, address: resp.sittingAddress, status: resp.status })
+      this.setState({ date: resp.sittingRequest.sittingDay, startTime: resp.sittingRequest.startTime, 
+        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status })
     })
   }
   onLogin =  () => {
@@ -68,7 +69,8 @@ export default class InvitationDetail extends Component {
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{this.state.startTime} - {this.state.endTime}</MuliText>
+              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} - 
+                          {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
             </View>
             <View style={styles.informationText}>
               <Ionicons
