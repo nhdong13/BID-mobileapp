@@ -5,8 +5,9 @@ import { MuliText } from "components/StyledText";
 import { Ionicons } from "@expo/vector-icons";
 import images from "assets/images/images";
 import colors from "assets/Color";
-import { recommend } from "api/sittingRequest.api";
 import moment from "moment";
+import { recommend } from "api/sittingRequest.api";
+import { createInvitation } from 'api/invitation.api';
 
 export default class RecommendScreen extends Component {
   constructor(props) {
@@ -17,6 +18,8 @@ export default class RecommendScreen extends Component {
       recommendCount: 0,
       recommendList: []
     };
+
+    this.sendInvitation = this.sendInvitation.bind(this);
   }
 
   getRecommendation = async () => {
@@ -41,6 +44,25 @@ export default class RecommendScreen extends Component {
     let arr = dateOfBirth.split("-");
     return arr[0];
   };
+
+  sendInvitation = async function(receiverId) {
+    let invitation = {
+    "requestId": 1,
+    "status": "PENDING",
+    "receiver": receiverId,
+    }
+
+    console.log(invitation);
+
+    try {
+      let response = await createInvitation(invitation);
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error.message);
+    }
+
+  }
 
   componentWillMount() {
     this.getRecommendation();
@@ -111,7 +133,7 @@ export default class RecommendScreen extends Component {
                 </View>
               </TouchableOpacity>
               <View></View>
-              <TouchableOpacity style={styles.inviteButton}>
+              <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
                 <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
                   Invite
                 </MuliText>
@@ -183,7 +205,7 @@ export default class RecommendScreen extends Component {
                   </View>
                 </TouchableOpacity>
                 <View></View>
-                <TouchableOpacity style={styles.inviteButton}>
+                <TouchableOpacity style={styles.inviteButton} onPress={() => this.sendInvitation(item.userId)}>
                   <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
                     Invite
                   </MuliText>

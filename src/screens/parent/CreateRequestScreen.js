@@ -76,97 +76,171 @@ class CreateRequestScreen extends Component {
       <ScrollView>
 
         <View style={styles.containerInformationRequest}>
-          <MuliText style={styles.headerTitle}>BABYSITTING</MuliText>
-          <View style={styles.containerDetailInformationRequest}>
-            <View>
-              <MuliText style={styles.headerText}>Date</MuliText>
-            </View>
-            <View>
+          <MuliText style={styles.headerTitle}>Babysitting</MuliText>
+          <View>
+            <View style={styles.inputDay}>
+              <Ionicons
+                name='ios-calendar'
+                size={25}
+                color='#7edeb9'
+                style={{
+                  marginTop: 8,
+                }}
+              />
               <DatePicker
                 style={styles.pickedDate}
                 date={this.state.sittingDate}
                 mode="date"
-                placeholder="select date"
+                placeholder="Date"
                 format="YYYY-MM-DD"
                 minDate="2019-10-01"
                 maxDate="2019-12-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
+                customStyles={{
+                  dateInput: {
+                    borderWidth: 0,
+                  },
+                  placeholderText: {
+                    fontSize: 20,
+                    color: "#C7C7C7",
+                    marginRight: 70,
+                  },
+                  dateText: {
+                    fontSize: 20,
+                    color: "#7edeb9",
+                  }
+                }}
                 onDateChange={(date) => { this.setState({ sittingDate: date }); console.log(this.state.sittingDate) }}
                 showIcon={false}
               />
             </View>
           </View>
-          <View style={styles.containerDetailInformationRequest}>
-            <MuliText style={styles.headerText}>Start time</MuliText>
-            <DatePicker
-              style={styles.pickedTime}
-              date={this.state.startTime}
-              mode="time"
-              androidMode="default"
-              placeholder="select date"
-              format="HH:mm:ss"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              showIcon={false}
-              is24Hour
+          <View style={{ flexDirection: 'row' }}>
+            <View>
+              <View style={styles.input}>
+                <Ionicons
+                  name='ios-timer'
+                  size={25}
+                  color='#bdc3c7'
+                  style={{
+                    marginTop: 8,
+                  }}
+                />
+
+                <DatePicker
+                  style={styles.pickedTime}
+                  date={this.state.startTime}
+                  mode="time"
+                  placeholder="Start time"
+                  format="hh:mm"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateInput: {
+                      borderWidth: 0,
+                    },
+                    placeholderText: {
+                      fontSize: 20,
+                      color: "#C7C7C7",
+                      marginRight: 30,
+                    },
+                    dateText: {
+                      fontSize: 20,
+                      color: "black",
+                    }
+                  }}
+                  is24Hour
               onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
-            />
-          </View>
-          <View style={styles.containerDetailInformationRequest}>
-            <MuliText style={styles.headerText}>EndTime</MuliText>
-            <DatePicker
-              style={styles.pickedTime}
-              date={this.state.endTime}
-              mode="time"
-              placeholder="select end time"
-              format="HH:mm:ss"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              showIcon={false}
-              is24Hour
+                  showIcon={false}
+                />
+              </View>
+            </View>
+            <View>
+              <View style={styles.input}>
+                <Ionicons
+                  name='ios-time'
+                  size={25}
+                  color='#bdc3c7'
+                  style={{
+                    marginTop: 8,
+                  }}
+                />
+                <DatePicker
+                  style={styles.pickedTime}
+                  date={this.state.endTime}
+                  mode="time"
+                  placeholder="End time"
+                  format="hh:mm"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateInput: {
+                      borderWidth: 0,
+                    },
+                    placeholderText: {
+                      fontSize: 20,
+                      color: "#C7C7C7",
+                      marginRight: 30,
+                    },
+                    dateText: {
+                      fontSize: 20,
+                      color: "black",
+                    }
+                  }}
+                  is24Hour
               onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
-            />
+                  showIcon={false}
+                />
+              </View>
+            </View>        
           </View>
-          <View style={styles.informationText}>
+          <View style={styles.input}>
             <Ionicons
               name='ios-home'
-              size={22}
-              style={{ marginBottom: -5 }}
+              size={25}
               color='#bdc3c7'
+              style={{
+                marginBottom: 5,
+              }}
             />
             <MuliText style={styles.contentInformation}>Address: {this.state.sittingAddress}</MuliText>
           </View>
-          <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
-          <View style={{ marginHorizontal: 15 }}>
-            <View style={styles.detailPictureContainer}>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}</MuliText>
-                </View>
-              </View>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}</MuliText>
-                </View>
-              </View>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}</MuliText>
-                </View>
-              </View>
+          <MuliText style={styles.headerTitle}>Children</MuliText>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.input}>
+              <Ionicons
+                name='ios-happy'
+                size={25}
+                color='#bdc3c7'
+                style={{
+                  marginBottom: 5,
+                }}
+              />
+              <MuliText style={styles.contentInformation}>We have {this.state.childrenNumber} chilren</MuliText>
+            </View>
+            <View style={styles.input}>
+              <Ionicons
+                name='ios-heart-empty'
+                size={25}
+                color='#bdc3c7'
+                style={{
+                  marginBottom: 5,
+                }}
+              />
+              <MuliText style={styles.contentInformation}>Min Age: {this.state.minAgeOfChildren}</MuliText>
             </View>
           </View>
           <View>
             <MuliText style={styles.headerTitle}>Payment</MuliText>
-            <MuliText style={styles.contentInformation}>Propose price: {this.state.price}/h</MuliText>
+            <View style={styles.priceContainer}>
+              <MuliText style={styles.contentInformation}>Propose price:</MuliText>
+              <MuliText style={styles.price}>{this.state.price}/h</MuliText>
+
+            </View>
+
           </View>
         </View>
-
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
             <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
@@ -185,78 +259,62 @@ CreateRequestScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  contentInformation: {
-    fontSize: 15,
-    paddingLeft: 15,
-    color: '#315F61',
+  price:{
+    fontSize: 20,
+    color: '#7edeb9',
+    fontWeight: '800'
   },
-  informationText: {
-    marginHorizontal: 10,
-    fontSize: 18,
-    marginTop: 30,
+  priceContainer: {
+    flex: 1,
+    marginTop: 20,
     flexDirection: 'row',
-    color: '#bdc3c7'
-    // backgroundColor: 'red',
+    justifyContent: 'space-between',
   },
-  headerText: {
-    fontSize: 15,
-    fontWeight: '200',
-    color: '#707070'
+  inputDay: {
+    flex: 1,
+    flexDirection: 'row',
+    borderWidth: 0,
+    borderBottomWidth: 2,
+    marginHorizontal: 15,
+    marginTop: 15,
+    borderColor: '#7edeb9'
+  },
+  input: {
+    flex: 1,
+    flexDirection: 'row',
+    borderWidth: 0,
+    borderBottomWidth: 2,
+    marginHorizontal: 15,
+    marginTop: 15,
+  },
+  contentInformation: {
+    marginHorizontal: 15,
+    marginBottom: 5,
+    fontSize: 20,
   },
   containerInformationRequest: {
     flex: 1,
     marginHorizontal: 15,
   },
-  containerDetailInformationRequest: {
-    margin: 10,
-  },
   headerTitle: {
-    marginLeft: 10,
+    marginHorizontal: 15,
     marginTop: 30,
-    fontSize: 30,
+    fontSize: 25,
     color: '#315F61',
     marginBottom: 10,
     fontWeight: '800'
   },
-  pickedTime: {
-    width: 250,
-    height: 40,
-    marginTop: 5,
-  },
-  pickedDate: {
-    width: 250,
-    height: 40,
-    marginTop: 5,
-  },
-  detailPictureContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  profileImg: {
-    marginTop: 20,
-    width: 70,
-    height: 70,
-    borderRadius: 100 / 2,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "black"
-  },
-  name: {
-    alignItems: "center",
-  },
   submitButton: {
-    width: 300,
-    height: 60,
+    width: 200,
+    height: 50,
     padding: 10,
     backgroundColor: '#315F61',
-    borderRadius: 30,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   buttonContainer: {
     paddingTop: 30,
     alignItems: 'center',
   },
-
 });
