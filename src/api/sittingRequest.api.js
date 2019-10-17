@@ -70,6 +70,6 @@ export async function cancelRequest(request) {
   };
 
   let response = await axios(options).catch(error => console.log(error));
-  console.log(response.data);
+  // console.log(response.data);
   return response;
 }
