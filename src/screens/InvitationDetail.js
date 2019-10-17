@@ -5,6 +5,7 @@ import { MuliText } from "components/StyledText";
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import Api from 'api/api_helper';
+import { updateInvitation } from 'api/invitation.api'
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export default class InvitationDetail extends Component {
       detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       detailPictureParent: require("assets/images/Phuc.png"),
-      nameSitter: 'Phuc',
+      parentName: 'Phuc',
       status: null,
       isModalVisible: false,
       requestId: 1,
@@ -28,11 +29,18 @@ export default class InvitationDetail extends Component {
       minAgeOfChildren: 1,
     }
   }
+
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
       this.setState({
-        invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime,
-        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status
+        parentName: resp.sittingRequest.user.nickname,
+        invitationStatus: resp.status,
+        date: resp.sittingRequest.sittingDate,
+        requestId: resp.sittingRequest.id,
+        startTime: resp.sittingRequest.startTime,
+        endTime: resp.sittingRequest.endTime,
+        address: resp.sittingRequest.sittingAddress,
+        status: resp.sittingRequest.status
       })
     })
   }
@@ -47,21 +55,14 @@ export default class InvitationDetail extends Component {
     this.getData();
   }
 
-  onButtonClick(targetStatus) {
-    ivBody = {
+  onButtonClick = (targetStatus) => {
+    const ivBody = {
+      id: this.state.invitationID,
       status: targetStatus,
     };
-    // console.log(rqBody); console.log(this.state.sittingRequestsID);
-    Api.put('invitations/' + this.state.invitationID.toString(), ivBody).then(resp => {
-      // this.props.navigation.navigate.goBack();
-    });
-
-    // rqBody = {
-    //   status: 'CONFIRMED',
-    // }
-    // Api.put('sittingRequests/' + this.state.requestId.toString(), rqBody).then(resp => {
-    //   // this.props.navigation.navigate.goBack();
-    // });
+    updateInvitation(ivBody).then(res => {
+      this.props.navigation.navigate('Home', { loading: false });
+    }).catch(error => console.log(error));
   }
 
   render() {
@@ -97,8 +98,10 @@ export default class InvitationDetail extends Component {
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
-                          {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
+              <MuliText style={styles.contentInformation}>
+                {moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
+                {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}
+              </MuliText>
             </View>
             <View style={styles.informationText}>
               <Ionicons
@@ -239,41 +242,6 @@ export default class InvitationDetail extends Component {
                   <MuliText style={{ color: '#adffcb', fontSize: 15 }}>Accept</MuliText>
                 </TouchableOpacity>
               </View>}
-
-            {/* {this.state.isModalVisible ?
-              (
-                <Modal
-                  isVisible={this.state.isModalVisible}
-                  hasBackdrop={true} backdropOpacity={0.9}
-                  onBackdropPress={this.toggleModal}
-                  backdropColor='white'
-                  onBackButtonPress={this.toggleModal}
-                >
-                  <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-                    <MuliText style={{ color: '#707070', fontSize: 16 }}>Please input your Authentication Code</MuliText>
-                    <View style={styles.textContainer}>
-                      <TextInput
-                        style={styles.textInput}
-                        onChangeText={text => this.setState({ OTP: text })}
-                        placeholder='Authentication code'
-                        disableFullscreenUI={false}
-                        value={this.state.OTP}
-                        keyboardType='number-pad'
-                      />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity style={styles.submitButton} onPress={this.onSubmitOTP}>
-                        <MuliText style={{ color: 'white', fontSize: 16 }}>Submit</MuliText>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </Modal>
-              )
-              :
-              (
-                <View></View>
-              )
-            } */}
           </View>
         </View>
       </ScrollView>

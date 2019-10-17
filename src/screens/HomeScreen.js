@@ -172,7 +172,7 @@ class HomeScreen extends Component {
         />
         ) :
           (
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', flex: 0.8 }}>
               {invitations != '' && invitations ?
                 <ScrollView>
                   {invitations.map(invitation =>
