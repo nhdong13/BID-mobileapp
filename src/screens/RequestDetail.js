@@ -63,7 +63,7 @@ export default class RequestDetail extends Component {
           endTime: resp.endTime,
           address: resp.sittingAddress,
           bsitter: resp.bsitter,
-          status: resp.status
+          status: resp.status,
         });
       }
     );
@@ -79,7 +79,9 @@ export default class RequestDetail extends Component {
       status: targetStatus
     };
     
-    cancelRequest(data).then(res => console.log(res)).catch(error => console.log(error));
+    cancelRequest(data).then(res => {
+      this.props.navigation.navigate('Home', { loading: false });
+    }).catch(error => console.log(error));
 
   }
 
@@ -250,7 +252,7 @@ export default class RequestDetail extends Component {
                     style={styles.profileImg}
                   ></Image>
                   <View style={styles.name}>
-                    <MuliText>{this.state.nameSitter}</MuliText>
+                    <MuliText>{this.state.bsitter.nickname}</MuliText>
                   </View>
                 </View>
               </View>
@@ -261,14 +263,12 @@ export default class RequestDetail extends Component {
           {/* end */}
 
           {/*  Confirm a sitter */}
-          {this.state.bsitter == null && this.state.invitations.length > 0 && (
-            <View style={styles.sectionContainer}>
+          {this.state.status == "PENDING" && this.state.bsitter == null && this.state.invitations.length > 0 && (
+            (<View style={styles.sectionContainer}>
               <View style={styles.headerSection}>
                 <MuliText
                   style={{ fontSize: 18, color: "#315f61", marginLeft: 10 }}
-                >
-                  Confirm a sitter
-                </MuliText>
+                >Confirm a sitter</MuliText>
               </View>
               <ScrollView>
                 {this.state.invitations &&
@@ -281,6 +281,7 @@ export default class RequestDetail extends Component {
                             source={images.parent}
                             style={styles.sitterImage}
                           />
+                          <MuliText>{item.user.nickname}</MuliText>
                           <View>
                             <View style={styles.lowerText}>
                               <Ionicons
@@ -323,7 +324,7 @@ export default class RequestDetail extends Component {
                     </View>
                   ))}
               </ScrollView>
-            </View>
+            </View>)
           )}
           {/*  End Confirm a sitter */}
 
