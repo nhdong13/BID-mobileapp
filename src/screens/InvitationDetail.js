@@ -24,22 +24,26 @@ export default class InvitationDetail extends Component {
       isModalVisible: false,
       requestId: 1,
       invitationStatus: 'PENDING',
+      childrenNumber: 1,
+      minAgeOfChildren: 1,
     }
   }
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
-      this.setState({ invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime, 
-        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status })
+      this.setState({
+        invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime,
+        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status
+      })
     })
   }
-  onLogin =  () => {
-          this.setState({ isModalVisible: true })
+  onLogin = () => {
+    this.setState({ isModalVisible: true })
   }
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.getData();
   }
 
@@ -93,7 +97,7 @@ export default class InvitationDetail extends Component {
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} - 
+              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
             </View>
             <View style={styles.informationText}>
@@ -117,25 +121,27 @@ export default class InvitationDetail extends Component {
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
-            <View style={styles.detailPictureContainer}>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}  {"\n"} Age:2 year old</MuliText>
-                </View>
-              </View>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren} {"\n"} Age:1 year old</MuliText>
-                </View>
-              </View>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren} {"\n"} Age:3 year old</MuliText>
-                </View>
-              </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name="ios-happy"
+                size={22}
+                style={{ marginBottom: -5 }}
+                color="#bdc3c7"
+              />
+              <MuliText style={styles.contentInformation}>
+                Number of children: {this.state.childrenNumber}
+              </MuliText>
+            </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name="ios-heart-empty"
+                size={22}
+                style={{ marginBottom: -5 }}
+                color="#bdc3c7"
+              />
+              <MuliText style={styles.contentInformation}>
+                Min age:{this.state.minAgeOfChildren}
+              </MuliText>
             </View>
           </View>
           <View style={styles.detailContainer}>
@@ -191,17 +197,17 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            { this.state.invitationStatus == 'PENDING' &&
-            <View>
-              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
-                <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-              </TouchableOpacity>
-              
+            {this.state.invitationStatus == 'PENDING' &&
+              <View>
+                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                </TouchableOpacity>
 
-              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
-                <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-              </TouchableOpacity>
-            </View>}
+
+                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                </TouchableOpacity>
+              </View>}
 
             {/* {this.state.isModalVisible ?
               (

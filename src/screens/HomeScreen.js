@@ -104,7 +104,7 @@ class HomeScreen extends Component {
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{moment(request.sittingDate).format('dddd Do MMMM')}</MuliText>
-                    <MuliText style = {{color: '#7edeb9'}}>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
+                    <MuliText style={{ color: '#7edeb9' }}>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}</MuliText>
                     <MuliText style={{ marginTop: 10 }}>{request.sittingAddress}</MuliText>
                   </View>
@@ -190,28 +190,28 @@ class HomeScreen extends Component {
                             {moment(invitation.sittingRequest.sittingDate).format('dddd Do MMMM')}
                           </MuliText>
                           <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
-                          <MuliText style={{ marginTop: 10, color: '#7edeb9'}}>
+                          <MuliText style={{ marginTop: 10, color: '#7edeb9' }}>
                             {moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} -
                               {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}
                           </MuliText>
                           <MuliText style={{ marginTop: 10 }}>{invitation.sittingRequest.sittingAddress}</MuliText>
                         </View>
                         <View style={styles.rightInformation}>
-                            {invitation.status == 'PENDING' ?
-                              (
-                                <View style={styles.statusBoxPending}>
-                                  <MuliText style={{ fontWeight: '800', color: 'gray' }}>{invitation.status}</MuliText>
-                                </View>
-                              )
-                              :
-                              (
-                                <View style={styles.statusBoxConfirm}>
-                                  <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
-                                </View>
-                              )
-                            }
-                            <MuliText>$100</MuliText>
-                   
+                          {invitation.status == 'PENDING' ?
+                            (
+                              <View style={styles.statusBoxPending}>
+                                <MuliText style={{ fontWeight: '800', color: 'gray' }}>{invitation.status}</MuliText>
+                              </View>
+                            )
+                            :
+                            (
+                              <View style={styles.statusBoxConfirm}>
+                                <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
+                              </View>
+                            )
+                          }
+                          <MuliText>$100</MuliText>
+
                         </View>
                       </View>
 
