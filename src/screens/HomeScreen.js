@@ -18,6 +18,7 @@ import { withNavigationFocus } from 'react-navigation';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../api/api_helper';
+import { Loader } from 'utils/Loader';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -28,12 +29,14 @@ class HomeScreen extends Component {
       userId: 0,
       roleId: 0,
       refreshing: false,
-      agenda: 0
+      agenda: 0,
+      loading: false,
     }
   }
 
   // for user role of Parent - roleId == 2
   getDataAccordingToRole = async () => {
+
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId: userId, roleId: roleId })
@@ -41,15 +44,16 @@ class HomeScreen extends Component {
 
     if (this.state.roleId != 0) {
       if (this.state.roleId == 2) {
+        this.setState({ loading: true })
         await getRequests(this.state.userId).then(res => {
-          this.setState({ requests: res });
+          this.setState({ requests: res, loading: false });
         }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
       } else {
         requestBody = {
           id: this.state.userId,
         };
         await Api.post('invitations/sitterInvitation', requestBody).then((res) => {
-          this.setState({ invitations: res });
+          this.setState({ invitations: res, loading: false });
         }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
       }
 
@@ -70,16 +74,17 @@ class HomeScreen extends Component {
   async componentDidUpdate(prevProps) {
     const data = this.state;
     if (prevProps.isFocused !== this.props.isFocused) {
+      this.setState({ loading: true })
       if (data.userId != 0 && data.roleId == 2) {
         await getRequests(data.userId).then(res => {
-          this.setState({ requests: res }, () => this.setState({ agenda: Math.random() }))
+          this.setState({ requests: res }, () => this.setState({ agenda: Math.random(), loading: false }))
         }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
       } else if (data.userId != 0 && data.roleId == 3) {
         requestBody = {
           id: data.userId,
         };
         await Api.post('invitations/sitterInvitation', requestBody).then((res) => {
-          this.setState({ invitations: res });
+          this.setState({ invitations: res, loading: false });
         }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
       }
     }
@@ -93,6 +98,7 @@ class HomeScreen extends Component {
       <View key={this.state.agenda} style={roleId == 2 ?
         styles.container : styles.containerBsitter
       }>
+        <Loader loading={this.state.loading} />
         <View style={roleId == 2 ?
           styles.scheduleContainer : styles.scheduleContainerBsitter}>
           <MuliText style={roleId == 2 ?
@@ -125,7 +131,7 @@ class HomeScreen extends Component {
                     {request.status == 'PENDING' ?
                       (
                         <View style={styles.statusBoxPending}>
-                          <MuliText style={{ fontWeight: '800', color: 'gray' }}>{request.status}</MuliText>
+                          <MuliText style={{ fontWeight: '100', color: 'gray' }}>{request.status}</MuliText>
                         </View>
                       )
                       :
@@ -220,7 +226,7 @@ class HomeScreen extends Component {
                           {invitation.status == 'PENDING' ?
                             (
                               <View style={styles.statusBoxPending}>
-                                <MuliText style={{ fontWeight: '800', color: 'gray' }}>{invitation.status}</MuliText>
+                                <MuliText style={{ fontWeight: '100', color: 'gray' }}>{invitation.status}</MuliText>
                               </View>
                             )
                             :

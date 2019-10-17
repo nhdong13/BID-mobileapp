@@ -2,13 +2,13 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import CreateRequestScreen from '../screens/parent/CreateRequestScreen';
-import RequestDetail from '../screens/RequestDetail';
-import InvitationDetail from '../screens/InvitationDetail';
-import RecommendBabysitter from '../screens/RecommendScreen';
+import TabBarIcon from 'components/TabBarIcon';
+import HomeScreen from 'screens/HomeScreen';
+import SettingsScreen from 'screens/SettingsScreen';
+import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
+import RequestDetail from 'screens/RequestDetail';
+import InvitationDetail from 'screens/InvitationDetail';
+import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 
 const config = Platform.select({
   default: {},
