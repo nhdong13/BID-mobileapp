@@ -52,6 +52,7 @@ export default class RequestDetail extends Component {
 
   acceptBabysitter = async sitterId => {
     await acceptBabysitter(this.state.sittingRequestsID, sitterId);
+    this.props.navigation.navigate("Home");
   };
 
   componentDidMount() {
@@ -351,7 +352,11 @@ export default class RequestDetail extends Component {
             {this.state.status == "CONFIRMED" && (
               <TouchableOpacity
                 style={styles.submitButton}
-                onPress={this.onButtonClick.bind(this, "ONGOING")}
+                onPress={() => {
+                  this.onButtonClick("ONGOING");
+                  this.props.navigation.navigate("Home");
+
+                }}
               >
                 <MuliText style={{ color: "#2ecc71", fontSize: 12 }}>
                   Babysitter Check-in
@@ -362,7 +367,10 @@ export default class RequestDetail extends Component {
             {this.state.status == "ONGOING" && (
               <TouchableOpacity
                 style={styles.submitButton}
-                onPress={this.onButtonClick.bind(this, "DONE")}
+                onPress={() => {
+                  this.onButtonClick("DONE");
+                  this.props.navigation.navigate("Home");
+                }}
               >
                 <MuliText style={{ color: "#8e44ad", fontSize: 11 }}>
                   Confirm job is finished

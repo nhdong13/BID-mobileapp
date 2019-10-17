@@ -161,7 +161,7 @@ class HomeScreen extends Component {
                 }>
                 <View style={styles.noRequest}>
                   <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
-                  <MuliText>Tap to create one</MuliText>
+                  <MuliText>Tap New Sitting to create one</MuliText>
                   <Image
                     source={
                       require('assets/images/no-request.jpg')
