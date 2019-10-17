@@ -148,7 +148,7 @@ export default class RequestDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
+            <MuliText style={styles.headerTitle}>Children</MuliText>
             <View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={{ flexDirection: 'row' }}>
@@ -161,7 +161,7 @@ export default class RequestDetail extends Component {
                         color="#adffcb"
                       />
                       <View>
-                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                        <MuliText style={{ marginLeft: 10, fontSize: 15 }}>2</MuliText>
                       </View>
                     </View>
                     <MuliText style={styles.grayOptionInformation}>Number of children</MuliText>
@@ -175,7 +175,7 @@ export default class RequestDetail extends Component {
                         color="#adffcb"
                       />
                       <View>
-                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                        <MuliText style={{ marginLeft: 10, fontSize: 15 }}>2</MuliText>
                       </View>
                     </View>
                     <MuliText style={styles.grayOptionInformation}>Age of the youngest</MuliText>
@@ -186,7 +186,7 @@ export default class RequestDetail extends Component {
 
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>OPTIONS</MuliText>
+            <MuliText style={styles.headerTitle}>Options</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-cash"
@@ -256,17 +256,31 @@ export default class RequestDetail extends Component {
 
           {/* render babysitter if exist */}
           {this.state.bsitter ? (
-            <View style={styles.detailContainer}>
-              <MuliText style={styles.headerTitle}>SITTER</MuliText>
-              <View style={styles.detailPictureContainer}>
-                <View>
-                  <Image
-                    source={this.state.detailPictureSitter}
-                    style={styles.profileImg}
-                  ></Image>
-                  <View style={styles.name}>
-                    <MuliText>{this.state.bsitter.nickname}</MuliText>
-                  </View>
+            <View style={styles.detailPictureContainer}>
+              <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
+              <View style={styles.leftInformation}>
+                <MuliText style={styles.pictureInformation}>Sitter</MuliText>
+                <MuliText style={{ fontSize: 15 }}>{this.state.bsitter.nickname}</MuliText>
+              </View>
+              <View style={styles.rightInformation}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity>
+                    <Ionicons
+                      name='ios-call'
+                      size={22}
+                      style={{ marginBottom: -5, marginHorizontal: 5 }}
+                      color="#bdc3c7"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <Ionicons
+                      name='ios-chatbubbles'
+                      size={22}
+                      style={{ marginBottom: -5, marginLeft: 10 }}
+                      color="#adffcb"
+                    />
+                  </TouchableOpacity>
+
                 </View>
               </View>
             </View>
@@ -274,8 +288,8 @@ export default class RequestDetail extends Component {
               <View style={styles.detailContainer}></View>
             )}
           {/* end */}
-
           {/*  Confirm a sitter */}
+
           {this.state.status == "PENDING" && this.state.bsitter == null && this.state.invitations.length > 0 && (
             (<View style={styles.sectionContainer}>
               <View style={styles.headerSection}>
@@ -287,35 +301,35 @@ export default class RequestDetail extends Component {
                 {this.state.invitations &&
                   this.state.invitations != [] &&
                   this.state.invitations.map((item, index) => (
-                    <View key={item.id} style={styles.bsitterContainer}>
-                      <View style={styles.bsitterItem}>
-                        <TouchableOpacity>
-                          <Image
-                            source={images.parent}
-                            style={styles.sitterImage}
-                          />
-                          <MuliText>{item.user.nickname}</MuliText>
-                          <View>
-                            <View style={styles.lowerText}>
-                              <Ionicons
-                                name="ios-pin"
-                                size={19}
-                                style={{ marginBottom: -4, marginLeft: 20 }}
-                                color={colors.lightGreen}
-                              />
-                              <MuliText> 1.1 km </MuliText>
-                              <Ionicons
-                                name="ios-star"
-                                size={19}
-                                style={{ marginBottom: -4, marginLeft: 20 }}
-                                color={colors.lightGreen}
-                              />
-                              <MuliText>
-                                {item.user.babysitter.averageRating}
-                              </MuliText>
-                            </View>
+                    <View key={item.id} style={styles.detailPictureContainer}>
+                      <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
+                      <View style={styles.leftInformationSitter}>
+                        <MuliText style={styles.pictureInformationSitter}>Sitter</MuliText>
+                        <MuliText style={{ fontSize: 15 , marginLeft: 25}}>{item.user.nickname}</MuliText>
+                        <View style={styles.lowerText}>
+                          <View style ={{flexDirection:'row'}}>
+                            <Ionicons
+                              name="ios-pin"
+                              size={19}
+                              style={{ marginBottom: -4}}
+                              color={colors.lightGreen}
+                            />
+                            <MuliText> 1.1 km </MuliText>
                           </View>
-                        </TouchableOpacity>
+                          <View style ={{flexDirection:'row'}}>
+                            <Ionicons
+                              name="ios-star"
+                              size={19}
+                              style={{ marginBottom: -4, marginLeft: 5}}
+                              color={colors.lightGreen}
+                            />
+                            <MuliText>
+                              {item.user.babysitter.averageRating}
+                            </MuliText>
+                          </View>
+                        </View>
+                      </View>
+                      <View style={styles.rightInformationSitter}>
                         <View>
                           {/* <TouchableOpacity style={styles.inviteButton} >
                           <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
@@ -393,12 +407,12 @@ export default class RequestDetail extends Component {
           ) : (
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  style={styles.submitButton}
+                  style={styles.listBabySitterButton}
                   onPress={() => {
                     this.props.navigation.navigate("Recommend", { userId: 1 });
                   }}
                 >
-                  <MuliText style={{ color: "white", fontSize: 11 }}>
+                  <MuliText style={{ color: "blue", fontSize: 13 }}>
                     View List Babysitters
                 </MuliText>
                 </TouchableOpacity>
@@ -416,6 +430,32 @@ RequestDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  rightInformationSitter: {
+    marginLeft: 'auto',
+  },
+  rightInformation: {
+    marginLeft: 'auto',
+    marginTop: 15,
+  },
+  pictureInformationSitter: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: '#bdc3c7',
+    marginLeft: 25,
+  },
+  pictureInformation: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: '#bdc3c7',
+    marginLeft:15,
+  },
+  leftInformationSitter: {
+    marginLeft: 30,
+  },
+  leftInformation: {
+    marginTop: 10,
+    marginLeft: 10,
+  },
   childrenInformationContainer: {
     flex: 1,
     backgroundColor: 'white',
@@ -433,8 +473,6 @@ const styles = StyleSheet.create({
   },
   lowerText: {
     flexDirection: "row",
-    flex: 1,
-    alignItems: "center"
   },
   sectionContainer: {
     backgroundColor: "white",
@@ -473,8 +511,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   sitterImage: {
-    width: 100,
-    height: 100,
+    width: '100%',
     borderRadius: 20,
     resizeMode: "contain",
     marginLeft: 50
@@ -484,15 +521,19 @@ const styles = StyleSheet.create({
   },
   detailPictureContainer: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    marginTop: 30,
+  },
+  listBabySitterButton: {
+    marginVertical: 10,
+    width: '100%',
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonContainer: {
+    alignItems: 'center',
     flex: 1,
-    flexDirection: "row",
-    marginBottom: 50,
-    marginTop: 20,
-    marginHorizontal: 35,
-    justifyContent: "space-between"
+    justifyContent: 'center'
   },
   detailContainer: {
     marginTop: 20
@@ -501,13 +542,12 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   submitButton: {
-    width: 250,
-    height: 50,
-    padding: 10,
-    backgroundColor: "#315F61",
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center"
+    width: 80,
+    height: 30,
+    padding: 5,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   answerButton: {
     width: 150,
@@ -532,10 +572,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   profileImg: {
-    marginTop: 20,
     width: 70,
     height: 70,
-    borderRadius: 100 / 2,
+    borderRadius: 140 / 2,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "black"
@@ -552,12 +591,12 @@ const styles = StyleSheet.create({
   },
   contentInformation: {
     fontSize: 12,
-    paddingLeft: 15,
+    paddingLeft: 10,
     color: "#315F61"
   },
   contentInformationDate: {
     fontSize: 12,
-    paddingLeft: 15,
+    paddingLeft: 10,
     color: "#315F61",
     fontWeight: "700"
   },
@@ -591,7 +630,7 @@ const styles = StyleSheet.create({
   grayOptionInformation: {
     color: "#bdc3c7",
     fontSize: 11,
-    paddingLeft: 10,
+    paddingLeft: 11,
     fontWeight: "200"
   },
   textOption: {

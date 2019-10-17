@@ -242,7 +242,7 @@ class CreateRequestScreen extends Component {
             <MuliText style={styles.headerTitle}>Payment</MuliText>
             <View style={styles.priceContainer}>
               <MuliText style={styles.contentInformation}>Propose price:</MuliText>
-              <MuliText style={styles.price}>{this.state.price}/h</MuliText>
+              <MuliText style={styles.price}>{this.state.price}$/h</MuliText>
 
             </View>
 
