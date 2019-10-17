@@ -123,7 +123,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
+            <MuliText style={styles.headerTitle}>Children</MuliText>
             <View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={{ flexDirection: 'row' }}>
@@ -160,7 +160,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>OPTIONS</MuliText>
+            <MuliText style={styles.headerTitle}>Options</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-cash'
@@ -294,7 +294,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: 10,
     marginTop: 5,
     marginHorizontal: 35,
     justifyContent: 'space-between',
