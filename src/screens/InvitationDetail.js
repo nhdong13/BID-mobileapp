@@ -123,7 +123,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
+            <MuliText style={styles.headerTitle}>Children</MuliText>
             <View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={{ flexDirection: 'row' }}>
@@ -160,7 +160,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>OPTIONS</MuliText>
+            <MuliText style={styles.headerTitle}>Options</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-cash'
@@ -195,7 +195,7 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>VietNamese</MuliText>
+                <MuliText style={styles.optionInformation}>Vietnamese</MuliText>
                 <MuliText style={styles.grayOptionInformation}>You need to speak at least one of these language</MuliText>
               </View>
             </View>
@@ -205,7 +205,7 @@ export default class InvitationDetail extends Component {
               <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
               <View style={styles.leftInformation}>
                 <MuliText style={styles.pictureInformation}>Parent</MuliText>
-                <MuliText style={{ fontSize: 15 }}>Brody G.</MuliText>
+                <MuliText style={{ fontSize: 15 }}>{this.state.parentName}</MuliText>
               </View>
               <View style={styles.rightInformation}>
                 <View style={{ flexDirection: 'row' }}>
@@ -294,7 +294,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: 10,
     marginTop: 5,
     marginHorizontal: 35,
     justifyContent: 'space-between',

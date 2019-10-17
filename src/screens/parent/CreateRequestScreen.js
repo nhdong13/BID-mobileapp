@@ -33,7 +33,7 @@ class CreateRequestScreen extends Component {
       detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       price: '100',
-      childrenNumber: 1,
+      childrenNumber: 2,
       minAgeOfChildren: 1,
     };
 
@@ -242,7 +242,7 @@ class CreateRequestScreen extends Component {
             <MuliText style={styles.headerTitle}>Payment</MuliText>
             <View style={styles.priceContainer}>
               <MuliText style={styles.contentInformation}>Propose price:</MuliText>
-              <MuliText style={styles.price}>{this.state.price}/h</MuliText>
+              <MuliText style={styles.price}>{this.state.price}$/h</MuliText>
 
             </View>
 

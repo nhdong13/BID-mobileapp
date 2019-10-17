@@ -28,6 +28,7 @@ class HomeScreen extends Component {
       userId: 0,
       roleId: 0,
       refreshing: false,
+      agenda: 0
     }
   }
 
@@ -39,13 +40,11 @@ class HomeScreen extends Component {
     })
 
     if (this.state.roleId != 0) {
-
       if (this.state.roleId == 2) {
         await getRequests(this.state.userId).then(res => {
-          this.setState({ requests: res })
+          this.setState({ requests: res });
         }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
       } else {
-
         requestBody = {
           id: this.state.userId,
         };
@@ -68,16 +67,30 @@ class HomeScreen extends Component {
     this.getDataAccordingToRole();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
+    const data = this.state;
     if (prevProps.isFocused !== this.props.isFocused) {
-      this.getDataAccordingToRole();
+      if (data.userId != 0 && data.roleId == 2) {
+        await getRequests(data.userId).then(res => {
+          this.setState({ requests: res }, () => this.setState({ agenda: Math.random() }))
+        }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
+      } else if (data.userId != 0 && data.roleId == 3) {
+        requestBody = {
+          id: data.userId,
+        };
+        await Api.post('invitations/sitterInvitation', requestBody).then((res) => {
+          this.setState({ invitations: res });
+        }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Invitations ' + error));
+      }
     }
   }
+
+  // componentWillUpdate(prevPr)
 
   render() {
     const { roleId, requests, invitations } = this.state;
     return (
-      <View style={roleId == 2 ?
+      <View key={this.state.agenda} style={roleId == 2 ?
         styles.container : styles.containerBsitter
       }>
         <View style={roleId == 2 ?
@@ -174,7 +187,14 @@ class HomeScreen extends Component {
           (
             <View style={{ alignItems: 'center', flex: 0.8 }}>
               {invitations != '' && invitations ?
-                <ScrollView>
+                <ScrollView
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={this.state.refreshing}
+                      onRefresh={this._onRefresh}
+                    />
+                  }
+                >
                   {invitations.map(invitation =>
                     <TouchableOpacity key={invitation.id} style={{
                       backgroundColor: '#fff',

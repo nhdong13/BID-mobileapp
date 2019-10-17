@@ -36,7 +36,6 @@ export async function acceptBabysitter(requestId, sitterId) {
   if (token) trimpedToken = token.replace(/['"]+/g, "");
 
   let url = apiUrl.acceptBabysitter + requestId + '&' + sitterId;
-  // console.log(url);
 
   const options = {
     method: "GET",
