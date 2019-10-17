@@ -103,10 +103,10 @@ class HomeScreen extends Component {
               }>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
-                    <MuliText style={styles.date}>{request.sittingDate}</MuliText>
-                    <MuliText>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
+                    <MuliText style={styles.date}>{moment(request.sittingDate).format('dddd Do MMMM')}</MuliText>
+                    <MuliText style={{ color: '#7edeb9' }}>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}</MuliText>
-                    <MuliText>{request.sittingAddress}</MuliText>
+                    <MuliText style={{ marginTop: 10 }}>{request.sittingAddress}</MuliText>
                   </View>
                   <View style={styles.rightInformation}>
                     {request.status == 'PENDING' ?
@@ -182,30 +182,39 @@ class HomeScreen extends Component {
                       marginHorizontal: 20,
                       borderRadius: 20
                     }}
+
                       onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}>
-                      <View style={{ height: 135 }}>
-                        <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
-                        </View>
-                        <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
-                          <View style={styles.leftInformation}>
-                            <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
-                            <MuliText style={styles.date}>
-                              {moment(invitation.sittingRequest.sittingDate).format('DD-MM-YYYY')}
-                            </MuliText>
-                            <MuliText>
-                              {moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} -
+                      <View style={styles.requestItemSitter}>
+                        <View style={styles.leftInformationSitter}>
+                          <MuliText style={styles.date}>
+                            {moment(invitation.sittingRequest.sittingDate).format('dddd Do MMMM')}
+                          </MuliText>
+                          <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
+                          <MuliText style={{ marginTop: 10, color: '#7edeb9' }}>
+                            {moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} -
                               {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}
-                            </MuliText>
-                            <MuliText>{invitation.sittingRequest.sittingAddress}</MuliText>
-                          </View>
-                          <View style={{ alignItems: 'center' }}>
-                            <View style={styles.statusBoxConfirm}>
-                              <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
-                            </View>
-                            <MuliText>$100</MuliText>
-                          </View>
+                          </MuliText>
+                          <MuliText style={{ marginTop: 10 }}>{invitation.sittingRequest.sittingAddress}</MuliText>
+                        </View>
+                        <View style={styles.rightInformation}>
+                          {invitation.status == 'PENDING' ?
+                            (
+                              <View style={styles.statusBoxPending}>
+                                <MuliText style={{ fontWeight: '800', color: 'gray' }}>{invitation.status}</MuliText>
+                              </View>
+                            )
+                            :
+                            (
+                              <View style={styles.statusBoxConfirm}>
+                                <MuliText style={{ fontWeight: '100', color: 'red' }}>{invitation.status}</MuliText>
+                              </View>
+                            )
+                          }
+                          <MuliText>$100</MuliText>
+
                         </View>
                       </View>
+
                     </TouchableOpacity>
                   )}
                 </ScrollView> : <View style={styles.noRequest}>
@@ -277,9 +286,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'green',
-    width: 90,
-    height: 40,
-    padding: 10,
+    width: 100,
+    height: 50,
+    padding: 5,
   },
   noRequest: {
     flex: 1,
@@ -302,19 +311,36 @@ const styles = StyleSheet.create({
     height: 236,
     marginVertical: 20
   },
+  requestItemSitter: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    height: 200,
+    width: 350,
+    marginHorizontal: 15,
+    alignItems: 'center',
+    borderRadius: 15,
+    marginBottom: 5,
+  },
   requestItem: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 150,
+    height: 180,
     marginHorizontal: 30,
     alignItems: 'center',
     marginTop: 20,
     borderRadius: 15,
+    marginBottom: 5,
+  },
+  leftInformationSitter: {
+    //backgroundColor: 'blue',
+    marginLeft: 10,
+    flex: 1,
   },
   leftInformation: {
     // backgroundColor: 'blue',
-    margin: 15,
+    margin: 10,
     paddingHorizontal: 5,
     flex: 1,
   },
@@ -343,6 +369,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   date: {
+    marginTop: 5,
     marginBottom: 10,
     color: colors.darkGreenTitle,
     fontWeight: "400",
