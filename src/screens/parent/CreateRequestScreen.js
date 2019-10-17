@@ -25,9 +25,9 @@ class CreateRequestScreen extends Component {
       tokenCode: '',
       createdUser: null,
       loggedUser: null,
-      sittingDate: moment().format('YYYY-MM-DD'),
-      startTime: moment().format('HH:mm:ss'),
-      endTime: moment().format('HH:mm:ss'),
+      sittingDate: null,
+      startTime: null,
+      endTime: null,
       sittingAddress: null,
       detailPictureSitter: require("assets/images/Phuc.png"),
       detailPictureChildren: require("assets/images/Baby-6.png"),
@@ -97,7 +97,7 @@ class CreateRequestScreen extends Component {
                 mode="date"
                 placeholder="Date"
                 format="YYYY-MM-DD"
-                minDate="2019-10-01"
+                minDate={moment().format('YYYY-MM-DD')}
                 maxDate="2019-12-01"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -135,6 +135,8 @@ class CreateRequestScreen extends Component {
                 <DatePicker
                   style={styles.pickedTime}
                   date={this.state.startTime}
+                  minDate={moment().format()}
+                  maxDate={this.state.endTime}
                   mode="time"
                   placeholder="Start time"
                   format="HH:mm"
@@ -155,7 +157,7 @@ class CreateRequestScreen extends Component {
                     }
                   }}
                   is24Hour
-                  onDateChange={(time) => { this.setState({ startTime: time }); console.log(this.state.startTime) }}
+                  onDateChange={(time) => { this.setState({ startTime: time}); console.log(this.state.startTime) }}
                   showIcon={false}
                 />
               </View>
@@ -172,6 +174,7 @@ class CreateRequestScreen extends Component {
                 />
                 <DatePicker
                   style={styles.pickedTime}
+                  minDate={(this.state.startTime)}
                   date={this.state.endTime}
                   mode="time"
                   placeholder="End time"
