@@ -340,12 +340,12 @@ const styles = StyleSheet.create({
   },
   contentInformation: {
     fontSize: 10,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: '#315F61',
   },
   contentInformationDate: {
     fontSize: 12,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: '#315F61',
     fontWeight: '700'
   },
