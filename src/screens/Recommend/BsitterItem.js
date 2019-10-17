@@ -3,6 +3,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import moment from "moment";
 import { MuliText } from "components/StyledText";
 import { Ionicons } from "@expo/vector-icons";
+import { createInvitation } from "api/invitation.api";
 import images from "assets/images/images";
 import colors from "assets/Color";
 
@@ -28,7 +29,7 @@ export default class Bsitter extends Component {
 
     sendInvitation = async receiverId => {
         const invitation = {
-            requestId: this.state.requestId,
+            requestId: this.props.requestId,
             status: "PENDING",
             receiver: receiverId
         };
@@ -94,8 +95,11 @@ export default class Bsitter extends Component {
                     <TouchableOpacity
                         style={this.state.isDisabled == false ? styles.inviteButton : styles.inviteButtonDisable}
                         disabled={this.state.isDisabled}
-                        // onPress={() => this.sendInvitation(item.userId)}
-                        onPress={() => { this.setState({ isDisabled: true }); console.log(item.userId) }}
+                        onPress={() => {
+                            this.sendInvitation(item.userId);
+                            this.setState({ isDisabled: true });
+                        }}
+                    // onPress={() => { this.setState({ isDisabled: true }); console.log(item.userId) }}
                     >
                         <MuliText style={this.state.isDisabled == false ? { color: "#78ddb6", fontSize: 16 } : { color: "#7f8c8d", fontSize: 16 }}>
                             Invite

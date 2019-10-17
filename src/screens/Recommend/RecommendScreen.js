@@ -68,7 +68,7 @@ export default class RecommendScreen extends Component {
             this.state.recommendList.length != 0 && (
               <FlatList
                 data={this.state.recommendList}
-                renderItem={({ item }) => <Bsitter item={item} />}
+                renderItem={({ item }) => <Bsitter requestId={this.state.requestId} item={item} />}
                 keyExtractor={item => item.user.id.toString()}
               />
             )
@@ -94,7 +94,7 @@ export default class RecommendScreen extends Component {
             this.state.listMatched.length != 0 && (
               <FlatList
                 data={this.state.listMatched}
-                renderItem={({ item }) => <Bsitter item={item} />}
+                renderItem={({ item }) => <Bsitter requestId={this.state.requestId} item={item} />}
                 keyExtractor={item => item.user.id.toString()}
               />
             )
