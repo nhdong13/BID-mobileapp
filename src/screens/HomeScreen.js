@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
   Button,
+  Header,
   StyleSheet,
-  Text,
   View,
   Image,
   RefreshControl,
@@ -13,8 +13,8 @@ import {
 import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/getRequests';
-import { getInvitations } from 'api/getInvitations';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { withNavigationFocus } from 'react-navigation';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../api/api_helper';
@@ -68,13 +68,24 @@ class HomeScreen extends Component {
     this.getDataAccordingToRole();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.isFocused !== this.props.isFocused) {
+      this.getDataAccordingToRole();
+    }
+  }
+
   render() {
     const { roleId, requests, invitations } = this.state;
     return (
-      <View style={styles.container}>
-        <View style={roleId == 2 ? styles.scheduleContainer : styles.scheduleContainerBsitter}>
-          <MuliText style={roleId == 2 ? styles.textHeaderParent : styles.textHeaderBsitter}>
-            {roleId && roleId == 2 ? 'When would you need a babysitter ?' : `Hi Sitter`}
+      <View style={roleId == 2 ?
+        styles.container : styles.containerBsitter
+      }>
+        <View style={roleId == 2 ?
+          styles.scheduleContainer : styles.scheduleContainerBsitter}>
+          <MuliText style={roleId == 2 ?
+            styles.textHeaderParent : styles.textHeaderBsitter}>
+            {roleId && roleId == 2 ?
+              'When would you need a babysitter ?' : `Hi Sitter`}
           </MuliText>
           <TouchableOpacity>
             <MuliText>Welcome to bid :)</MuliText>
@@ -87,7 +98,9 @@ class HomeScreen extends Component {
           futureScrollRange={50}
           renderItem={(request) => {
             return (
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('RequestDetail', { requestId: request.id })}>
+              <TouchableOpacity onPress={
+                () => this.props.navigation.navigate('RequestDetail', { requestId: request.id })
+              }>
                 <View style={styles.requestItem}>
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.date}>{request.sittingDate}</MuliText>
@@ -163,8 +176,12 @@ class HomeScreen extends Component {
               {invitations != '' && invitations ?
                 <ScrollView>
                   {invitations.map(invitation =>
-                  // { this.state.invitationStatus == 'PENDING' &&
-                    <TouchableOpacity key={invitation.id} style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}
+                    <TouchableOpacity key={invitation.id} style={{
+                      backgroundColor: '#fff',
+                      marginTop: 20,
+                      marginHorizontal: 20,
+                      borderRadius: 20
+                    }}
                       onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}>
                       <View style={{ height: 135 }}>
                         <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
@@ -172,9 +189,13 @@ class HomeScreen extends Component {
                         <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
                           <View style={styles.leftInformation}>
                             <MuliText>Invitation from {invitation.sittingRequest.user.nickname}</MuliText>
-                            <MuliText style={styles.date}>{moment(invitation.sittingRequest.sittingDate).format('DD-MM-YYYY')}</MuliText>
-                            <MuliText>{moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} -
-                          {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}</MuliText>
+                            <MuliText style={styles.date}>
+                              {moment(invitation.sittingRequest.sittingDate).format('DD-MM-YYYY')}
+                            </MuliText>
+                            <MuliText>
+                              {moment.utc(invitation.sittingRequest.startTime, 'HH:mm').format('HH:mm')} -
+                              {moment.utc(invitation.sittingRequest.endTime, 'HH:mm').format('HH:mm')}
+                            </MuliText>
                             <MuliText>{invitation.sittingRequest.sittingAddress}</MuliText>
                           </View>
                           <View style={{ alignItems: 'center' }}>
@@ -206,7 +227,7 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+export default withNavigationFocus(HomeScreen);
 
 HomeScreen.navigationOptions = {
   header: null,
@@ -216,8 +237,11 @@ HomeScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  containerBsitter: {
+    flex: 1,
     backgroundColor: '#dfe6e9',
-    paddingBottom: 20,
   },
   createRequest: {
     width: 60,
@@ -303,8 +327,8 @@ const styles = StyleSheet.create({
   scheduleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30,
-    paddingTop: 20,
+    marginTop: 25,
+    paddingVertical: 15,
     marginBottom: 20,
     flex: 0.1,
     backgroundColor: '#fff'
@@ -312,8 +336,8 @@ const styles = StyleSheet.create({
   scheduleContainerBsitter: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    marginTop: 30,
-    paddingTop: 20,
+    marginTop: 25,
+    paddingVertical: 15,
     paddingLeft: 30,
     flex: 0.25,
     backgroundColor: '#fff'

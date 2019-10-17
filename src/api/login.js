@@ -27,7 +27,13 @@ export async function login(phoneNumber, password) {
         .then(res => {
             saveToken(res.data.token, res.data.userId, res.data.roleId);
             return res;
-        }).catch(error => console.log(error));
+        }).catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else console.log('onLogin error' + error)
+        });
     return response;
 }
 
