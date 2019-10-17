@@ -57,7 +57,6 @@ export default class RecommendScreen extends Component {
     };
     // console.log(invitation);
     await createInvitation(invitation)
-      .then(res => console.log(res))
       .catch(error => console.log(error));
   };
 

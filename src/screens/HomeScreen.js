@@ -28,6 +28,7 @@ class HomeScreen extends Component {
       userId: 0,
       roleId: 0,
       refreshing: false,
+      agenda: 0
     }
   }
 
@@ -68,16 +69,22 @@ class HomeScreen extends Component {
     this.getDataAccordingToRole();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (prevProps.isFocused !== this.props.isFocused) {
-      this.getDataAccordingToRole();
+      await getRequests(this.state.userId).then(res => {
+        this.setState({ requests: res }, () => this.setState({ agenda: Math.random() }))
+      }).catch(error => console.log('HomeScreen - getDataAccordingToRole - Requests ' + error))
+
+      console.log(this.state.requests);
     }
   }
+
+  // componentWillUpdate(prevPr)
 
   render() {
     const { roleId, requests, invitations } = this.state;
     return (
-      <View style={roleId == 2 ?
+      <View key={this.state.agenda} style={roleId == 2 ?
         styles.container : styles.containerBsitter
       }>
         <View style={roleId == 2 ?
