@@ -5,6 +5,7 @@ import { MuliText } from "components/StyledText";
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import Api from 'api/api_helper';
+import { updateInvitation } from 'api/invitation.api'
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export default class InvitationDetail extends Component {
       detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       detailPictureParent: require("assets/images/Phuc.png"),
-      nameSitter: 'Phuc',
+      parentName: 'Phuc',
       status: null,
       isModalVisible: false,
       requestId: 1,
@@ -32,8 +33,14 @@ export default class InvitationDetail extends Component {
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
       this.setState({
-        invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime,
-        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status
+        parentName: resp.sittingRequest.user.nickname,
+        invitationStatus: resp.status,
+        date: resp.sittingRequest.sittingDate,
+        requestId: resp.sittingRequest.id,
+        startTime: resp.sittingRequest.startTime,
+        endTime: resp.sittingRequest.endTime,
+        address: resp.sittingRequest.sittingAddress,
+        status: resp.sittingRequest.status
       })
     })
   }
@@ -49,21 +56,13 @@ export default class InvitationDetail extends Component {
   }
 
   onButtonClick = (targetStatus) => {
-    console.log(targetStatus);
     const ivBody = {
+      id: this.state.invitationID,
       status: targetStatus,
     };
-    // console.log(rqBody); console.log(this.state.sittingRequestsID);
-    Api.put('invitations/' + this.state.invitationID.toString(), ivBody).then(resp => {
-      // this.props.navigation.navigate.goBack();
-    });
-
-    // rqBody = {
-    //   status: 'CONFIRMED',
-    // }
-    // Api.put('sittingRequests/' + this.state.requestId.toString(), rqBody).then(resp => {
-    //   // this.props.navigation.navigate.goBack();
-    // });
+    updateInvitation(ivBody).then(res => {
+      this.props.navigation.navigate('Home', { loading: false });
+    }).catch(error => console.log(error));
   }
 
   render() {
@@ -92,16 +91,18 @@ export default class InvitationDetail extends Component {
               />
               <MuliText style={styles.contentInformation}>{this.state.price}</MuliText>
             </View>
-            <MuliText style={styles.informationText}>
+            <View style={styles.informationText}>
               <Ionicons
                 name='ios-timer'
                 size={22}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
-                          {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
-            </MuliText>
+              <MuliText style={styles.contentInformation}>
+                {moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
+                {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}
+              </MuliText>
+            </View>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-home'
@@ -121,31 +122,7 @@ export default class InvitationDetail extends Component {
               <MuliText style={styles.contentInformation}>{this.state.status}</MuliText>
             </View>
           </View>
-          <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-happy"
-                size={22}
-                style={{ marginBottom: -5 }}
-                color="#bdc3c7"
-              />
-              <MuliText style={styles.contentInformation}>
-                Number of children: {this.state.childrenNumber}
-              </MuliText>
-            </View>
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-heart-empty"
-                size={22}
-                style={{ marginBottom: -5 }}
-                color="#bdc3c7"
-              />
-              <MuliText style={styles.contentInformation}>
-                Min age:{this.state.minAgeOfChildren}
-              </MuliText>
-            </View>
-          </View>
+
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>OPTIONS</MuliText>
             <View style={styles.informationText}>
@@ -193,7 +170,7 @@ export default class InvitationDetail extends Component {
               <View>
                 <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
                 <View style={styles.name}>
-                  <MuliText >{this.state.nameSitter}</MuliText>
+                  <MuliText>{this.state.parentName}</MuliText>
                 </View>
               </View>
             </View>
@@ -201,50 +178,15 @@ export default class InvitationDetail extends Component {
           <View style={styles.buttonContainer}>
             {this.state.invitationStatus == 'PENDING' &&
               <View>
-                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick("ACCEPTED")}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick('ACCEPTED')}>
                   <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick("DENIED")}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick('DENIED')}>
                   <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
                 </TouchableOpacity>
               </View>}
-
-            {/* {this.state.isModalVisible ?
-              (
-                <Modal
-                  isVisible={this.state.isModalVisible}
-                  hasBackdrop={true} backdropOpacity={0.9}
-                  onBackdropPress={this.toggleModal}
-                  backdropColor='white'
-                  onBackButtonPress={this.toggleModal}
-                >
-                  <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-                    <MuliText style={{ color: '#707070', fontSize: 16 }}>Please input your Authentication Code</MuliText>
-                    <View style={styles.textContainer}>
-                      <TextInput
-                        style={styles.textInput}
-                        onChangeText={text => this.setState({ OTP: text })}
-                        placeholder='Authentication code'
-                        disableFullscreenUI={false}
-                        value={this.state.OTP}
-                        keyboardType='number-pad'
-                      />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity style={styles.submitButton} onPress={this.onSubmitOTP}>
-                        <MuliText style={{ color: 'white', fontSize: 16 }}>Submit</MuliText>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </Modal>
-              )
-              :
-              (
-                <View></View>
-              )
-            } */}
           </View>
         </View>
       </ScrollView>
@@ -252,7 +194,7 @@ export default class InvitationDetail extends Component {
   }
 }
 InvitationDetail.navigationOptions = {
-  header: null,
+  title: "Invitation detail",
 };
 
 const styles = StyleSheet.create({

@@ -62,7 +62,6 @@ class HomeScreen extends Component {
     const { roleId, requests } = this.state;
     return (
       <View style={styles.container}>
-        <MuliText style={styles.headerTitle}>All sitting</MuliText>
         <View style={{ alignItems: 'center' }}>
           {requests != '' && requests ?
             <ScrollView>
@@ -110,7 +109,7 @@ class HomeScreen extends Component {
 export default HomeScreen;
 
 HomeScreen.navigationOptions = {
-  header: null,
+  title: "Incoming Sitting",
 };
 
 
