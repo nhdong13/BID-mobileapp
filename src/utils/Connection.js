@@ -6,6 +6,7 @@ const apiUrl = {
     login: `${url}/auth/login`,
     getRecommend: `${url}/sittingRequests/recommend/`,
     acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
+    cancelRequest: `${url}/sittingRequests/`,
 }
 
 export default apiUrl;

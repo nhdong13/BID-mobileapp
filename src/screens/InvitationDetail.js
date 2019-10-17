@@ -28,6 +28,7 @@ export default class InvitationDetail extends Component {
       minAgeOfChildren: 1,
     }
   }
+
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
       this.setState({
@@ -47,8 +48,9 @@ export default class InvitationDetail extends Component {
     this.getData();
   }
 
-  onButtonClick(targetStatus) {
-    ivBody = {
+  onButtonClick = (targetStatus) => {
+    console.log(targetStatus);
+    const ivBody = {
       status: targetStatus,
     };
     // console.log(rqBody); console.log(this.state.sittingRequestsID);
@@ -90,7 +92,7 @@ export default class InvitationDetail extends Component {
               />
               <MuliText style={styles.contentInformation}>{this.state.price}</MuliText>
             </View>
-            <View style={styles.informationText}>
+            <MuliText style={styles.informationText}>
               <Ionicons
                 name='ios-timer'
                 size={22}
@@ -99,7 +101,7 @@ export default class InvitationDetail extends Component {
               />
               <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
-            </View>
+            </MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-home'
@@ -199,12 +201,12 @@ export default class InvitationDetail extends Component {
           <View style={styles.buttonContainer}>
             {this.state.invitationStatus == 'PENDING' &&
               <View>
-                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick("ACCEPTED")}>
                   <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick("DENIED")}>
                   <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
                 </TouchableOpacity>
               </View>}
