@@ -26,25 +26,29 @@ export default class InvitationDetail extends Component {
       invitationStatus: 'PENDING',
     }
   }
+
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
-      this.setState({ invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime, 
-        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status })
+      this.setState({
+        invitationStatus: resp.status, date: resp.sittingRequest.sittingDay, requestId: resp.sittingRequest.id, startTime: resp.sittingRequest.startTime,
+        endTime: resp.sittingRequest.endTime, address: resp.sittingRequest.sittingAddress, status: resp.sittingRequest.status
+      })
     })
   }
-  onLogin =  () => {
-          this.setState({ isModalVisible: true })
+  onLogin = () => {
+    this.setState({ isModalVisible: true })
   }
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.getData();
   }
 
-  onButtonClick(targetStatus) {
-    ivBody = {
+  onButtonClick = (targetStatus) => {
+    console.log(targetStatus);
+    const ivBody = {
       status: targetStatus,
     };
     // console.log(rqBody); console.log(this.state.sittingRequestsID);
@@ -86,16 +90,16 @@ export default class InvitationDetail extends Component {
               />
               <MuliText style={styles.contentInformation}>{this.state.price}</MuliText>
             </View>
-            <View style={styles.informationText}>
+            <MuliText style={styles.informationText}>
               <Ionicons
                 name='ios-timer'
                 size={22}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
-              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} - 
+              <MuliText style={styles.contentInformation}>{moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
                           {moment.utc(this.state.endTime, 'HH:mm').format('HH:mm')}</MuliText>
-            </View>
+            </MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-home'
@@ -191,17 +195,17 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            { this.state.invitationStatus == 'PENDING' &&
-            <View>
-              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
-                <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
-              </TouchableOpacity>
-              
+            {this.state.invitationStatus == 'PENDING' &&
+              <View>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick("ACCEPTED")}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+                </TouchableOpacity>
 
-              <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
-                <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
-              </TouchableOpacity>
-            </View>}
+
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick("DENIED")}>
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                </TouchableOpacity>
+              </View>}
 
             {/* {this.state.isModalVisible ?
               (

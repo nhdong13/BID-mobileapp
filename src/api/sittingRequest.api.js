@@ -54,3 +54,22 @@ export async function acceptBabysitter(requestId, sitterId) {
     return { message: "error trying to get data from response" };
   }
 }
+
+export async function cancelRequest(request) {
+  const { token } = await retrieveToken();
+  let trimpedToken = "";
+  if (token) trimpedToken = token.replace(/['"]+/g, "");
+  const options = {
+    method: "PUT",
+    url: `${apiUrl.cancelRequest}${request.id}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${trimpedToken}`
+    },
+    data: qs.stringify(request),
+  };
+
+  let response = await axios(options).catch(error => console.log(error));
+  console.log(response.data);
+  return response;
+}

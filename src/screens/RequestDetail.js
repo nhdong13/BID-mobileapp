@@ -15,7 +15,7 @@ import Api from "api/api_helper";
 import images from "assets/images/images";
 import colors from "assets/Color";
 import { listByRequestAndStatus } from "api/invitation.api";
-import { acceptBabysitter } from "api/sittingRequest.api";
+import { acceptBabysitter, cancelRequest } from "api/sittingRequest.api";
 export default class RequestDetail extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +56,7 @@ export default class RequestDetail extends Component {
     Api.get("sittingRequests/" + this.state.sittingRequestsID.toString()).then(
       resp => {
         this.setState({
-          date: resp.sittingDay,
+          date: resp.sittingDate,
           startTime: resp.startTime,
           endTime: resp.endTime,
           address: resp.sittingAddress,
@@ -72,16 +72,13 @@ export default class RequestDetail extends Component {
   }
 
   onButtonClick(targetStatus) {
-    const rqBody = {
+    const data = {
+      id: this.state.sittingRequestsID,
       status: targetStatus
     };
-    // console.log(rqBody); console.log(this.state.sittingRequestsID);
-    Api.put(
-      "sittingRequests/" + this.state.sittingRequestsID.toString(),
-      rqBody
-    ).then(resp => {
-      // this.props.navigation.navigate.goBack();
-    });
+    
+    cancelRequest(data).then(res => console.log(res)).catch(error => console.log(error));
+
   }
 
   render() {
