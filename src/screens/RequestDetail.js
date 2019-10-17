@@ -305,22 +305,22 @@ export default class RequestDetail extends Component {
                       <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
                       <View style={styles.leftInformationSitter}>
                         <MuliText style={styles.pictureInformationSitter}>Sitter</MuliText>
-                        <MuliText style={{ fontSize: 15 , marginLeft: 25}}>{item.user.nickname}</MuliText>
+                        <MuliText style={{ fontSize: 15, marginLeft: 25 }}>{item.user.nickname}</MuliText>
                         <View style={styles.lowerText}>
-                          <View style ={{flexDirection:'row'}}>
+                          <View style={{ flexDirection: 'row' }}>
                             <Ionicons
                               name="ios-pin"
                               size={19}
-                              style={{ marginBottom: -4}}
+                              style={{ marginBottom: -4 }}
                               color={colors.lightGreen}
                             />
                             <MuliText> 1.1 km </MuliText>
                           </View>
-                          <View style ={{flexDirection:'row'}}>
+                          <View style={{ flexDirection: 'row' }}>
                             <Ionicons
                               name="ios-star"
                               size={19}
-                              style={{ marginBottom: -4, marginLeft: 5}}
+                              style={{ marginBottom: -4, marginLeft: 5 }}
                               color={colors.lightGreen}
                             />
                             <MuliText>
@@ -363,7 +363,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "CANCELED")}
               >
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#e74c3c", fontSize: 11 }}>
                   Cancel
                 </MuliText>
               </TouchableOpacity>
@@ -374,7 +374,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "ONGOING")}
               >
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#2ecc71", fontSize: 12 }}>
                   Babysitter Check-in
                 </MuliText>
               </TouchableOpacity>
@@ -385,7 +385,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "DONE")}
               >
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#8e44ad", fontSize: 11 }}>
                   Confirm job is finished
                 </MuliText>
               </TouchableOpacity>
@@ -394,12 +394,12 @@ export default class RequestDetail extends Component {
           {this.state.status == "ACCEPTED" || this.state.status == "DENIED" ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#2ecc71", fontSize: 11 }}>
                   Accept
                 </MuliText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#e74c3c", fontSize: 11 }}>
                   Decline
                 </MuliText>
               </TouchableOpacity>
@@ -409,10 +409,10 @@ export default class RequestDetail extends Component {
                 <TouchableOpacity
                   style={styles.listBabySitterButton}
                   onPress={() => {
-                    this.props.navigation.navigate("Recommend", { userId: 1 });
+                    this.props.navigation.navigate("Recommend", { requestId: this.state.sittingRequestsID });
                   }}
                 >
-                  <MuliText style={{ color: "blue", fontSize: 13 }}>
+                  <MuliText style={{ color: "#8e44ad", fontSize: 13 }}>
                     View List Babysitters
                 </MuliText>
                 </TouchableOpacity>
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '400',
     color: '#bdc3c7',
-    marginLeft:15,
+    marginLeft: 15,
   },
   leftInformationSitter: {
     marginLeft: 30,
