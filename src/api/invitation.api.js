@@ -3,6 +3,8 @@ import { retrieveToken } from "utils/handleToken";
 import apiUrl from "utils/Connection";
 import qs from 'qs';
 
+const url = "http://192.168.0.102:3000/api/v1/invitations/";
+
 export async function getInvitations(userId) {
   const { token } = await retrieveToken();
   let trimpedToken = "";
@@ -24,7 +26,7 @@ export async function getInvitations(userId) {
   return response;
 }
 
-export default createInvitation = async (invitation) => {
+export async function createInvitation(invitation) {
   const { token } = await retrieveToken();
   let trimpedToken = "";
   if (token) trimpedToken = token.replace(/['"]+/g, "");
@@ -41,24 +43,4 @@ export default createInvitation = async (invitation) => {
   let response = await axios(options).catch(error => console.log(error));
   console.log(response.data);
   return response;
-}
-
-export async function listByRequestAndStatus(requestId, status) {
-  const { token } = await retrieveToken();
-  let trimpedToken = "";
-  if (token) trimpedToken = token.replace(/['"]+/g, "");
-
-  let url = apiUrl.getInvitations + 'listByRequestAndStatus/' + requestId + '&' + status;
-
-  const options = {
-    method: "GET",
-    url: url,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Bearer ${trimpedToken}`
-    },
-  };
-
-  let response = await axios(options).catch(error => console.log(error));
-  return response.data;
 }
