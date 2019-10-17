@@ -78,7 +78,7 @@ export default class RequestDetail extends Component {
       id: this.state.sittingRequestsID,
       status: targetStatus
     };
-    
+
     cancelRequest(data).then(res => {
       this.props.navigation.navigate('Home', { loading: false });
     }).catch(error => console.log(error));
@@ -93,7 +93,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-calendar"
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color="#bdc3c7"
               />
@@ -104,7 +104,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-cash"
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color="#bdc3c7"
               />
@@ -115,7 +115,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-timer"
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color="#bdc3c7"
               />
@@ -127,7 +127,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-home"
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color="#bdc3c7"
               />
@@ -137,8 +137,8 @@ export default class RequestDetail extends Component {
             </View>
             <View style={styles.informationText}>
               <Ionicons
-                name="ios-home"
-                size={22}
+                name="ios-megaphone"
+                size={17}
                 style={{ marginBottom: -5 }}
                 color="#bdc3c7"
               />
@@ -149,35 +149,48 @@ export default class RequestDetail extends Component {
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-happy"
-                size={22}
-                style={{ marginBottom: -5 }}
-                color="#bdc3c7"
-              />
-              <MuliText style={styles.contentInformation}>
-                Number of children: {this.state.childrenNumber}
-              </MuliText>
+            <View>
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                      <Ionicons
+                        name='ios-man'
+                        size={22}
+                        style={{ marginBottom: -5, marginLeft: 15 }}
+                        color="#adffcb"
+                      />
+                      <View>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                      </View>
+                    </View>
+                    <MuliText style={styles.grayOptionInformation}>Number of children</MuliText>
+                  </View>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                      <Ionicons
+                        name='ios-happy'
+                        size={22}
+                        style={{ marginBottom: -5, marginLeft: 15 }}
+                        color="#adffcb"
+                      />
+                      <View>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                      </View>
+                    </View>
+                    <MuliText style={styles.grayOptionInformation}>Age of the youngest</MuliText>
+                  </View>
+                </View>
+              </ScrollView>
             </View>
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-heart-empty"
-                size={22}
-                style={{ marginBottom: -5 }}
-                color="#bdc3c7"
-              />
-              <MuliText style={styles.contentInformation}>
-                Min age:{this.state.minAgeOfChildren}
-              </MuliText>
-            </View>
+
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>OPTIONS</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-cash"
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
                 color="#bdc3c7"
               />
@@ -194,7 +207,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-car"
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
                 color="#bdc3c7"
               />
@@ -211,7 +224,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-text"
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
                 color="#bdc3c7"
               />
@@ -226,7 +239,7 @@ export default class RequestDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-man"
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 10 }}
                 color="#bdc3c7"
               />
@@ -267,7 +280,7 @@ export default class RequestDetail extends Component {
             (<View style={styles.sectionContainer}>
               <View style={styles.headerSection}>
                 <MuliText
-                  style={{ fontSize: 18, color: "#315f61", marginLeft: 10 }}
+                  style={styles.headerTitle}
                 >Confirm a sitter</MuliText>
               </View>
               <ScrollView>
@@ -286,14 +299,14 @@ export default class RequestDetail extends Component {
                             <View style={styles.lowerText}>
                               <Ionicons
                                 name="ios-pin"
-                                size={24}
+                                size={19}
                                 style={{ marginBottom: -4, marginLeft: 20 }}
                                 color={colors.lightGreen}
                               />
                               <MuliText> 1.1 km </MuliText>
                               <Ionicons
                                 name="ios-star"
-                                size={24}
+                                size={19}
                                 style={{ marginBottom: -4, marginLeft: 20 }}
                                 color={colors.lightGreen}
                               />
@@ -314,7 +327,7 @@ export default class RequestDetail extends Component {
                             onPress={() => this.acceptBabysitter(item.user.id)}
                           >
                             <MuliText
-                              style={{ color: "#78ddb6", fontSize: 16 }}
+                              style={{ color: "#78ddb6", fontSize: 11 }}
                             >
                               Accept
                             </MuliText>
@@ -336,7 +349,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "CANCELED")}
               >
-                <MuliText style={{ color: "white", fontSize: 16 }}>
+                <MuliText style={{ color: "white", fontSize: 11 }}>
                   Cancel
                 </MuliText>
               </TouchableOpacity>
@@ -347,7 +360,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "ONGOING")}
               >
-                <MuliText style={{ color: "white", fontSize: 16 }}>
+                <MuliText style={{ color: "white", fontSize: 11 }}>
                   Babysitter Check-in
                 </MuliText>
               </TouchableOpacity>
@@ -358,7 +371,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "DONE")}
               >
-                <MuliText style={{ color: "white", fontSize: 16 }}>
+                <MuliText style={{ color: "white", fontSize: 11 }}>
                   Confirm job is finished
                 </MuliText>
               </TouchableOpacity>
@@ -367,12 +380,12 @@ export default class RequestDetail extends Component {
           {this.state.status == "ACCEPTED" || this.state.status == "DENIED" ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: "white", fontSize: 16 }}>
+                <MuliText style={{ color: "white", fontSize: 11 }}>
                   Accept
                 </MuliText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: "white", fontSize: 16 }}>
+                <MuliText style={{ color: "white", fontSize: 11 }}>
                   Decline
                 </MuliText>
               </TouchableOpacity>
@@ -385,8 +398,8 @@ export default class RequestDetail extends Component {
                     this.props.navigation.navigate("Recommend", { userId: 1 });
                   }}
                 >
-                  <MuliText style={{ color: "white", fontSize: 16 }}>
-                    Create Request
+                  <MuliText style={{ color: "white", fontSize: 11 }}>
+                    View List Babysitters
                 </MuliText>
                 </TouchableOpacity>
               </View>
@@ -403,6 +416,21 @@ RequestDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  childrenInformationContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    marginHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 5,
+    borderRadius: 15,
+    height: 100,
+    width: 160,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 1,
+  },
   lowerText: {
     flexDirection: "row",
     flex: 1,
@@ -411,16 +439,16 @@ const styles = StyleSheet.create({
   sectionContainer: {
     backgroundColor: "white",
     flex: 1,
-    paddingHorizontal: 20,
     marginTop: 10
   },
   headerSection: {
     flexDirection: "row",
     borderBottomWidth: 1,
     borderColor: "#bdc3c7",
-    height: 60,
+    height: 20,
     alignItems: "center",
-    marginBottom: 15
+    marginBottom: 5,
+    marginLeft: 5,
   },
   inviteButton: {
     width: 100,
@@ -433,7 +461,7 @@ const styles = StyleSheet.create({
     marginLeft: 50
   },
   bsitterName: {
-    fontSize: 18,
+    fontSize: 13,
     fontWeight: "400",
     color: "#315F61"
   },
@@ -467,7 +495,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   detailContainer: {
-    marginTop: 30
+    marginTop: 20
   },
   name: {
     alignItems: "center"
@@ -492,13 +520,14 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 15,
     color: "#315F61",
     marginBottom: 10,
-    fontWeight: "800"
+    fontWeight: "800",
+    marginLeft: 5,
   },
   optionsText: {
-    fontSize: 20,
+    fontSize: 15,
     color: "gray",
     fontWeight: "bold"
   },
@@ -515,55 +544,54 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   informationText: {
-    fontSize: 18,
-    marginTop: 30,
+    fontSize: 13,
+    marginTop: 20,
     flexDirection: "row",
     color: "#bdc3c7"
     // backgroundColor: 'red',
   },
   contentInformation: {
-    fontSize: 15,
+    fontSize: 12,
     paddingLeft: 15,
     color: "#315F61"
   },
   contentInformationDate: {
-    fontSize: 15,
+    fontSize: 12,
     paddingLeft: 15,
     color: "#315F61",
     fontWeight: "700"
   },
   priceText: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 150,
     marginTop: 30,
     flexDirection: "row"
   },
   detailInformationContainer: {
     flex: 1,
-    marginTop: 20,
-    marginHorizontal: 10,
-    marginLeft: 10
+    marginTop: 10,
+    marginHorizontal: 5,
   },
   detailOptionsContainer: {
     flex: 1,
     marginTop: 20
   },
   optionText: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 50,
     marginTop: 30,
     flexDirection: "row"
   },
 
   optionInformation: {
-    fontSize: 18,
-    paddingLeft: 20,
+    fontSize: 13,
+    paddingLeft: 10,
     fontWeight: "400"
   },
   grayOptionInformation: {
     color: "#bdc3c7",
-    fontSize: 16,
-    paddingLeft: 20,
+    fontSize: 11,
+    paddingLeft: 10,
     fontWeight: "200"
   },
   textOption: {
