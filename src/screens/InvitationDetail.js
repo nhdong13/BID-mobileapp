@@ -74,7 +74,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-calendar'
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
@@ -85,7 +85,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-cash'
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
@@ -94,7 +94,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-timer'
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
@@ -106,7 +106,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-home'
-                size={22}
+                size={17}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
@@ -114,21 +114,57 @@ export default class InvitationDetail extends Component {
             </View>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-home'
-                size={22}
+                name='ios-megaphone'
+                size={17}
                 style={{ marginBottom: -5 }}
                 color='#bdc3c7'
               />
               <MuliText style={styles.contentInformation}>{this.state.status}</MuliText>
             </View>
           </View>
-
+          <View style={styles.detailContainer}>
+            <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
+            <View>
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                      <Ionicons
+                        name='ios-man'
+                        size={22}
+                        style={{ marginBottom: -5, marginLeft: 15 }}
+                        color="#adffcb"
+                      />
+                      <View>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                      </View>
+                    </View>
+                    <MuliText style={styles.grayOptionInformation}>Number of children</MuliText>
+                  </View>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                      <Ionicons
+                        name='ios-happy'
+                        size={22}
+                        style={{ marginBottom: -5, marginLeft: 15 }}
+                        color="#adffcb"
+                      />
+                      <View>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                      </View>
+                    </View>
+                    <MuliText style={styles.grayOptionInformation}>Age of the youngest</MuliText>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>OPTIONS</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-cash'
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
                 color='#bdc3c7'
               />
@@ -141,7 +177,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-car'
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
                 color='#bdc3c7'
               />
@@ -154,7 +190,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-text'
-                size={27}
+                size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
                 color='#bdc3c7'
               />
@@ -165,26 +201,45 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>PARENT</MuliText>
             <View style={styles.detailPictureContainer}>
-              <View>
-                <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText>{this.state.parentName}</MuliText>
+              <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
+              <View style={styles.leftInformation}>
+                <MuliText style={styles.pictureInformation}>Parent</MuliText>
+                <MuliText style={{ fontSize: 15 }}>Brody G.</MuliText>
+              </View>
+              <View style={styles.rightInformation}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity>
+                    <Ionicons
+                      name='ios-call'
+                      size={22}
+                      style={{ marginBottom: -5, marginHorizontal: 5 }}
+                      color="#bdc3c7"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <Ionicons
+                      name='ios-chatbubbles'
+                      size={22}
+                      style={{ marginBottom: -5, marginLeft: 10 }}
+                      color="#adffcb"
+                    />
+                  </TouchableOpacity>
+
                 </View>
               </View>
             </View>
           </View>
+          <View style={styles.line}></View>
           <View style={styles.buttonContainer}>
             {this.state.invitationStatus == 'PENDING' &&
-              <View>
-                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick('ACCEPTED')}>
-                  <MuliText style={{ color: 'white', fontSize: 16 }}>Accept</MuliText>
+              <View style={styles.buttonContainer}>
+
+                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
+                  <MuliText style={{ color: 'red', fontSize: 15 }}>Decline</MuliText>
                 </TouchableOpacity>
-
-
-                <TouchableOpacity style={styles.submitButton} onPress={() => this.onButtonClick('DENIED')}>
-                  <MuliText style={{ color: 'white', fontSize: 16 }}>Decline</MuliText>
+                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
+                  <MuliText style={{ color: '#adffcb', fontSize: 15 }}>Accept</MuliText>
                 </TouchableOpacity>
               </View>}
           </View>
@@ -194,53 +249,82 @@ export default class InvitationDetail extends Component {
   }
 }
 InvitationDetail.navigationOptions = {
-  title: "Invitation detail",
+  title: "Invitation Detail"
 };
 
 const styles = StyleSheet.create({
+  line: {
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    flex: 1,
+    marginTop: 15,
+    borderRadius: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  childrenInformationContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    marginHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 5,
+    borderRadius: 15,
+    height: 100,
+    width: 160,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  rightInformation: {
+    marginLeft: 'auto',
+    marginTop: 15,
+  },
+  leftInformation: {
+    marginTop: 10,
+    marginLeft: 10,
+  },
   detailPictureContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: 50,
-    marginTop: 20,
+    marginBottom: 10,
+    marginTop: 5,
     marginHorizontal: 35,
     justifyContent: 'space-between',
   },
   detailContainer: {
-    marginTop: 30,
-  },
-  name: {
-    alignItems: "center"
+    marginTop: 25,
   },
   submitButton: {
-    width: 100,
-    height: 50,
-    padding: 10,
-    backgroundColor: '#315F61',
-    borderRadius: 10,
+    width: 80,
+    height: 30,
+    padding: 5,
+    borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 15,
     color: '#315F61',
-    marginBottom: 10,
+    marginBottom: 5,
     fontWeight: '800'
   },
   optionsText: {
-    fontSize: 20,
+    fontSize: 15,
     color: "gray",
     fontWeight: 'bold',
   },
   profileImg: {
-    marginTop: 20,
     width: 70,
     height: 70,
-    borderRadius: 100 / 2,
+    borderRadius: 140 / 2,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "black"
@@ -249,56 +333,61 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   informationText: {
-    fontSize: 18,
-    marginTop: 30,
+    fontSize: 13,
+    marginTop: 20,
     flexDirection: 'row',
     color: '#bdc3c7'
     // backgroundColor: 'red',
   },
   contentInformation: {
-    fontSize: 15,
-    paddingLeft: 15,
+    fontSize: 10,
+    paddingLeft: 10,
     color: '#315F61',
   },
   contentInformationDate: {
-    fontSize: 15,
-    paddingLeft: 15,
+    fontSize: 12,
+    paddingLeft: 10,
     color: '#315F61',
     fontWeight: '700'
   },
   priceText: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 150,
     marginTop: 30,
     flexDirection: 'row',
   },
   detailInformationContainer: {
     flex: 1,
-    marginTop: 40,
-    marginHorizontal: 10,
-    marginLeft: 10,
+    marginTop: 5,
+    marginHorizontal: 5,
+    marginLeft: 5,
   },
   detailOptionsContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 15,
   },
   optionText: {
-    fontSize: 20,
-    marginLeft: 50,
-    marginTop: 30,
+    fontSize: 15,
+    marginLeft: 30,
+    marginTop: 20,
     flexDirection: 'row',
   },
-
+  pictureInformation: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: '#bdc3c7',
+  },
   optionInformation: {
-    fontSize: 18,
-    paddingLeft: 20,
+    fontSize: 13,
+    paddingLeft: 15,
     fontWeight: '400'
   },
   grayOptionInformation: {
     color: '#bdc3c7',
-    fontSize: 16,
-    paddingLeft: 20,
-    fontWeight: '200'
+    fontSize: 11,
+    paddingLeft: 15,
+    fontWeight: '200',
+    marginTop: 10,
   },
   textOption: {
     marginHorizontal: 5,
