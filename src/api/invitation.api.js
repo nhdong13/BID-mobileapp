@@ -20,7 +20,6 @@ export async function getInvitations(userId) {
 
   let response = await axios(options).catch(error => console.log(error));
   if (response && response.data) {
-    console.log(response.data);
   }
 
   return response;
@@ -41,7 +40,6 @@ export async function createInvitation(invitation) {
   };
 
   let response = await axios(options).catch(error => console.log(error));
-  console.log(response.data);
   return response;
 }
 

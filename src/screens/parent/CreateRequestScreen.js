@@ -33,7 +33,7 @@ class CreateRequestScreen extends Component {
       detailPictureChildren: require("assets/images/Baby-6.png"),
       nameChildren: 'Nam',
       price: '100',
-      childrenNumber: 1,
+      childrenNumber: 2,
       minAgeOfChildren: 1,
     };
 

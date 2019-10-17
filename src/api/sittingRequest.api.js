@@ -36,7 +36,6 @@ export async function acceptBabysitter(requestId, sitterId) {
   if (token) trimpedToken = token.replace(/['"]+/g, "");
 
   let url = apiUrl.acceptBabysitter + requestId + '&' + sitterId;
-  console.log(url);
 
   const options = {
     method: "GET",
@@ -70,6 +69,5 @@ export async function cancelRequest(request) {
   };
 
   let response = await axios(options).catch(error => console.log(error));
-  console.log(response.data);
   return response;
 }
