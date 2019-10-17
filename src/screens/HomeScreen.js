@@ -125,7 +125,7 @@ class HomeScreen extends Component {
                       :
                       (
                         <View style={styles.statusBoxConfirm}>
-                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{request.status}</MuliText>
+                          <MuliText style={{ fontWeight: '100', color: 'red' , fontSize: 13}}>{request.status}</MuliText>
                         </View>
                       )
                     }
