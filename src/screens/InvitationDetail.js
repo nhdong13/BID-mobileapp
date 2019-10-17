@@ -195,7 +195,7 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>VietNamese</MuliText>
+                <MuliText style={styles.optionInformation}>Vietnamese</MuliText>
                 <MuliText style={styles.grayOptionInformation}>You need to speak at least one of these language</MuliText>
               </View>
             </View>
@@ -205,7 +205,7 @@ export default class InvitationDetail extends Component {
               <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
               <View style={styles.leftInformation}>
                 <MuliText style={styles.pictureInformation}>Parent</MuliText>
-                <MuliText style={{ fontSize: 15 }}>Brody G.</MuliText>
+                <MuliText style={{ fontSize: 15 }}>{this.state.parentName}</MuliText>
               </View>
               <View style={styles.rightInformation}>
                 <View style={{ flexDirection: 'row' }}>
