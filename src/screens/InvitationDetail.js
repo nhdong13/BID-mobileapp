@@ -24,6 +24,8 @@ export default class InvitationDetail extends Component {
       isModalVisible: false,
       requestId: 1,
       invitationStatus: 'PENDING',
+      childrenNumber: 1,
+      minAgeOfChildren: 1,
     }
   }
 
@@ -121,25 +123,27 @@ export default class InvitationDetail extends Component {
           </View>
           <View style={styles.detailContainer}>
             <MuliText style={styles.headerTitle}>CHILDREN</MuliText>
-            <View style={styles.detailPictureContainer}>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren}  {"\n"} Age:2 year old</MuliText>
-                </View>
-              </View>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren} {"\n"} Age:1 year old</MuliText>
-                </View>
-              </View>
-              <View >
-                <Image source={this.state.detailPictureChildren} style={styles.profileImg} ></Image>
-                <View style={styles.name}>
-                  <MuliText >{this.state.nameChildren} {"\n"} Age:3 year old</MuliText>
-                </View>
-              </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name="ios-happy"
+                size={22}
+                style={{ marginBottom: -5 }}
+                color="#bdc3c7"
+              />
+              <MuliText style={styles.contentInformation}>
+                Number of children: {this.state.childrenNumber}
+              </MuliText>
+            </View>
+            <View style={styles.informationText}>
+              <Ionicons
+                name="ios-heart-empty"
+                size={22}
+                style={{ marginBottom: -5 }}
+                color="#bdc3c7"
+              />
+              <MuliText style={styles.contentInformation}>
+                Min age:{this.state.minAgeOfChildren}
+              </MuliText>
             </View>
           </View>
           <View style={styles.detailContainer}>
