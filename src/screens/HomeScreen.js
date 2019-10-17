@@ -131,7 +131,7 @@ class HomeScreen extends Component {
                     {request.status == 'PENDING' ?
                       (
                         <View style={styles.statusBoxPending}>
-                          <MuliText style={{ fontWeight: '800', color: 'gray' }}>{request.status}</MuliText>
+                          <MuliText style={{ fontWeight: '100', color: 'gray' }}>{request.status}</MuliText>
                         </View>
                       )
                       :
@@ -226,7 +226,7 @@ class HomeScreen extends Component {
                           {invitation.status == 'PENDING' ?
                             (
                               <View style={styles.statusBoxPending}>
-                                <MuliText style={{ fontWeight: '800', color: 'gray' }}>{invitation.status}</MuliText>
+                                <MuliText style={{ fontWeight: '100', color: 'gray' }}>{invitation.status}</MuliText>
                               </View>
                             )
                             :
