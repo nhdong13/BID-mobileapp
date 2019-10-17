@@ -38,7 +38,12 @@ CreateRequestStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null,
+      })
+    },
     RequestDetail: RequestDetail,
     Recommend: RecommendBabysitter,
     CreateRequest: CreateRequestScreen,

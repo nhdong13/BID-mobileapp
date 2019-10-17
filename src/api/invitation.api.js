@@ -19,11 +19,14 @@ export async function getInvitations(userId) {
   };
 
   let response = await axios(options).catch(error => console.log(error));
-  console.log(response.data);
+  if (response && response.data) {
+    console.log(response.data);
+  }
+
   return response;
 }
 
-export async function createInvitation(invitation) {
+export default createInvitation = async (invitation) => {
   const { token } = await retrieveToken();
   let trimpedToken = "";
   if (token) trimpedToken = token.replace(/['"]+/g, "");

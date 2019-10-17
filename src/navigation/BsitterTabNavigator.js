@@ -13,7 +13,12 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
     {
-        Home: HomeScreen,
+        Home: {
+            screen: HomeScreen,
+            navigationOptions: ({ navigation }) => ({
+              header: null,
+            })
+          },
         InvitationDetail: InvitationDetail
     },
     config

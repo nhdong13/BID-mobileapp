@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Header } from 'react-navigation';
 import { login } from 'api/login';
-import { destroyToken } from 'utils/handleToken';
+import { ToastAndroid } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   Image,
@@ -19,7 +18,7 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '0326261307',
+      phoneNumber: '02',
       password: '12341234',
       title: 'lallalala',
       OTP: '',
@@ -33,15 +32,26 @@ class LoginScreen extends Component {
     const { phoneNumber, password } = this.state;
     login(phoneNumber, password)
       .then((res) => {
-        console.log(res.data)
-        if (res.data.roleId && res.data.roleId == 3) {
-          this.setState({ roleId: res.data.roleId, userId: res.data.userId });
-          this.setState({ isModalVisible: true })
+        if (res && res != 400) {
+          if (res.data.roleId && res.data.roleId == 3) {
+            this.setState({ roleId: res.data.roleId, userId: res.data.userId });
+            this.setState({ isModalVisible: true })
+          } else {
+            this.setState({ roleId: res.data.roleId, userId: res.data.userId });
+            this.props.navigation.navigate('AuthLoading', { roleId: this.state.roleId, userId: this.state.userId });
+          }
         } else {
-          this.setState({ roleId: res.data.roleId, userId: res.data.userId });
-          this.props.navigation.navigate('AuthLoading', { roleId: this.state.roleId, userId: this.state.userId });
+          ToastAndroid.showWithGravity(
+            'Wrong Username or Password',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            80
+          );
         }
-      }).catch(error => console.log('onLogin error' + error));
+      }).catch(error => {
+        console.log('Error on LoginScreen ' + error);
+      });
   }
 
   onSubmitOTP = async () => {
