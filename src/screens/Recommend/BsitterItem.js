@@ -11,7 +11,6 @@ export default class Bsitter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDisabled: false
     };
   }
 

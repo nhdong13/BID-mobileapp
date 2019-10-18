@@ -24,13 +24,7 @@ export default class SettingsScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.informationContainer}>
-          <View>
-            <MuliText style={styles.nameText}>{this.state.name}</MuliText>
-            <TouchableOpacity>
-              <MuliText style={styles.viewProfileText}>View profile</MuliText>
-            </TouchableOpacity>
-          </View>
-          <Image source={this.state.detailPicture} style={styles.profileImg} ></Image>
+          
         </View>
         <View style={{ marginHorizontal: 25, marginTop: 10 }}>
           <MuliText style={styles.headerTitle}>MY ACCOUNT</MuliText>
