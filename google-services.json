@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "575307365631",
+    "firebase_url": "https://planar-sun-252106.firebaseio.com",
+    "project_id": "planar-sun-252106",
+    "storage_bucket": "planar-sun-252106.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575307365631:android:e7671c65c5780825d4a0ca",
+        "android_client_info": {
+          "package_name": "com.capstoneproject.bid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575307365631-e9ondhgf967mg81n7o883l8vied3d09u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiH5BCQFVvi-8G73A5LRHtA6Om3n-Tc_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575307365631-e9ondhgf967mg81n7o883l8vied3d09u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

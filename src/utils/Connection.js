@@ -8,6 +8,7 @@ const apiUrl = {
     acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
     cancelRequest: `${url}/sittingRequests/`,
     updateInvitation: `${url}/invitations/`,
+    registerExpoToken: ''
 }
 
 export default apiUrl;

@@ -147,7 +147,7 @@ export default class InvitationDetail extends Component {
                         name='ios-happy'
                         size={22}
                         style={{ marginBottom: -5, marginLeft: 15 }}
-                        color="#adffcb"
+                        color="#2ecc71"
                       />
                       <View>
                         <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
@@ -182,8 +182,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Lift</MuliText>
-                <MuliText style={styles.grayOptionInformation}>The parent will take me home</MuliText>
+                <MuliText style={styles.optionInformation}>Pick-up</MuliText>
+                <MuliText style={styles.grayOptionInformation}>Pick my kids at their school</MuliText>
               </View>
             </View>
 
@@ -196,7 +196,7 @@ export default class InvitationDetail extends Component {
               />
               <View style={styles.textOption}>
                 <MuliText style={styles.optionInformation}>Vietnamese</MuliText>
-                <MuliText style={styles.grayOptionInformation}>You need to speak at least one of these language</MuliText>
+                <MuliText style={styles.grayOptionInformation}>You need to know at least Vietnamese to communicate</MuliText>
               </View>
             </View>
           </View>
@@ -222,7 +222,7 @@ export default class InvitationDetail extends Component {
                       name='ios-chatbubbles'
                       size={22}
                       style={{ marginBottom: -5, marginLeft: 10 }}
-                      color="#adffcb"
+                      color="#2ecc71"
                     />
                   </TouchableOpacity>
 
@@ -230,16 +230,14 @@ export default class InvitationDetail extends Component {
               </View>
             </View>
           </View>
-          <View style={styles.line}></View>
           <View style={styles.buttonContainer}>
             {this.state.invitationStatus == 'PENDING' &&
               <View style={styles.buttonContainer}>
-
                 <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
                   <MuliText style={{ color: 'red', fontSize: 15 }}>Decline</MuliText>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
-                  <MuliText style={{ color: '#adffcb', fontSize: 15 }}>Accept</MuliText>
+                <TouchableOpacity style={styles.acceptButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
+                  <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>Accept</MuliText>
                 </TouchableOpacity>
               </View>}
           </View>
@@ -253,18 +251,6 @@ InvitationDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  line: {
-    borderWidth: 0,
-    borderBottomWidth: 1,
-    flex: 1,
-    marginTop: 15,
-    borderRadius: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 1,
-  },
   childrenInformationContainer: {
     flex: 1,
     backgroundColor: 'white',
@@ -294,20 +280,32 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 5,
+    marginTop: 25,
     marginHorizontal: 35,
     justifyContent: 'space-between',
+    paddingBottom: 10,
   },
   detailContainer: {
     marginTop: 25,
   },
   submitButton: {
-    width: 80,
-    height: 30,
+    width: 90,
+    height: 35,
     padding: 5,
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  acceptButton: {
+    width: 90,
+    height: 35,
+    padding: 5,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#2ecc71',
+    borderWidth: 2,
+    backgroundColor: 'white'
   },
   headerTitle: {
     fontSize: 15,
@@ -340,12 +338,12 @@ const styles = StyleSheet.create({
   },
   contentInformation: {
     fontSize: 10,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: '#315F61',
   },
   contentInformationDate: {
     fontSize: 12,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: '#315F61',
     fontWeight: '700'
   },

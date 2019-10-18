@@ -52,6 +52,7 @@ export default class RequestDetail extends Component {
 
   acceptBabysitter = async sitterId => {
     await acceptBabysitter(this.state.sittingRequestsID, sitterId);
+    this.props.navigation.navigate("Home");
   };
 
   componentDidMount() {
@@ -262,27 +263,6 @@ export default class RequestDetail extends Component {
                 <MuliText style={styles.pictureInformation}>Sitter</MuliText>
                 <MuliText style={{ fontSize: 15 }}>{this.state.bsitter.nickname}</MuliText>
               </View>
-              <View style={styles.rightInformation}>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity>
-                    <Ionicons
-                      name='ios-call'
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Ionicons
-                      name='ios-chatbubbles'
-                      size={22}
-                      style={{ marginBottom: -5, marginLeft: 10 }}
-                      color="#adffcb"
-                    />
-                  </TouchableOpacity>
-
-                </View>
-              </View>
             </View>
           ) : (
               <View style={styles.detailContainer}></View>
@@ -305,25 +285,25 @@ export default class RequestDetail extends Component {
                       <Image source={this.state.detailPictureSitter} style={styles.profileImg} ></Image>
                       <View style={styles.leftInformationSitter}>
                         <MuliText style={styles.pictureInformationSitter}>Sitter</MuliText>
-                        <MuliText style={{ fontSize: 15 , marginLeft: 25}}>{item.user.nickname}</MuliText>
+                        <MuliText style={{ fontSize: 15 }}>{item.user.nickname}</MuliText>
                         <View style={styles.lowerText}>
-                          <View style ={{flexDirection:'row'}}>
+                          <View style={{ flexDirection: 'row' }}>
                             <Ionicons
                               name="ios-pin"
-                              size={19}
-                              style={{ marginBottom: -4}}
+                              size={17}
+                              style={{ marginBottom: 2 }}
                               color={colors.lightGreen}
                             />
-                            <MuliText> 1.1 km </MuliText>
+                            <MuliText style={{ marginLeft: 3 }}> 1.1 km </MuliText>
                           </View>
-                          <View style ={{flexDirection:'row'}}>
+                          <View style={{ flexDirection: 'row' }}>
                             <Ionicons
                               name="ios-star"
-                              size={19}
-                              style={{ marginBottom: -4, marginLeft: 5}}
+                              size={17}
+                              style={{ marginBottom: 2, marginLeft: 5 }}
                               color={colors.lightGreen}
                             />
-                            <MuliText>
+                            <MuliText style={{ marginLeft: 3 }}>
                               {item.user.babysitter.averageRating}
                             </MuliText>
                           </View>
@@ -363,7 +343,7 @@ export default class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={this.onButtonClick.bind(this, "CANCELED")}
               >
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#e74c3c", fontSize: 11 }}>
                   Cancel
                 </MuliText>
               </TouchableOpacity>
@@ -372,9 +352,13 @@ export default class RequestDetail extends Component {
             {this.state.status == "CONFIRMED" && (
               <TouchableOpacity
                 style={styles.submitButton}
-                onPress={this.onButtonClick.bind(this, "ONGOING")}
+                onPress={() => {
+                  this.onButtonClick("ONGOING");
+                  this.props.navigation.navigate("Home");
+
+                }}
               >
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#2ecc71", fontSize: 12 }}>
                   Babysitter Check-in
                 </MuliText>
               </TouchableOpacity>
@@ -383,9 +367,12 @@ export default class RequestDetail extends Component {
             {this.state.status == "ONGOING" && (
               <TouchableOpacity
                 style={styles.submitButton}
-                onPress={this.onButtonClick.bind(this, "DONE")}
+                onPress={() => {
+                  this.onButtonClick("DONE");
+                  this.props.navigation.navigate("Home");
+                }}
               >
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#8e44ad", fontSize: 11 }}>
                   Confirm job is finished
                 </MuliText>
               </TouchableOpacity>
@@ -394,12 +381,12 @@ export default class RequestDetail extends Component {
           {this.state.status == "ACCEPTED" || this.state.status == "DENIED" ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#2ecc71", fontSize: 11 }}>
                   Accept
                 </MuliText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: "white", fontSize: 11 }}>
+                <MuliText style={{ color: "#e74c3c", fontSize: 11 }}>
                   Decline
                 </MuliText>
               </TouchableOpacity>
@@ -409,10 +396,10 @@ export default class RequestDetail extends Component {
                 <TouchableOpacity
                   style={styles.listBabySitterButton}
                   onPress={() => {
-                    this.props.navigation.navigate("Recommend", { userId: 1 });
+                    this.props.navigation.navigate("Recommend", { requestId: this.state.sittingRequestsID });
                   }}
                 >
-                  <MuliText style={{ color: "blue", fontSize: 13 }}>
+                  <MuliText style={{ color: "#8e44ad", fontSize: 13 }}>
                     View List Babysitters
                 </MuliText>
                 </TouchableOpacity>
@@ -441,16 +428,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '400',
     color: '#bdc3c7',
-    marginLeft: 25,
   },
   pictureInformation: {
     fontSize: 13,
     fontWeight: '400',
     color: '#bdc3c7',
-    marginLeft:15,
   },
   leftInformationSitter: {
-    marginLeft: 30,
+    marginLeft: 10,
   },
   leftInformation: {
     marginTop: 10,
@@ -521,7 +506,7 @@ const styles = StyleSheet.create({
   },
   detailPictureContainer: {
     flexDirection: "row",
-    marginTop: 30,
+    marginTop: 20,
   },
   listBabySitterButton: {
     marginVertical: 10,
@@ -591,12 +576,12 @@ const styles = StyleSheet.create({
   },
   contentInformation: {
     fontSize: 12,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: "#315F61"
   },
   contentInformationDate: {
     fontSize: 12,
-    paddingLeft: 10,
+    paddingLeft: 15,
     color: "#315F61",
     fontWeight: "700"
   },
@@ -624,14 +609,15 @@ const styles = StyleSheet.create({
 
   optionInformation: {
     fontSize: 13,
-    paddingLeft: 10,
+    paddingLeft: 15,
     fontWeight: "400"
   },
   grayOptionInformation: {
-    color: "#bdc3c7",
+    color: '#bdc3c7',
     fontSize: 11,
-    paddingLeft: 11,
-    fontWeight: "200"
+    paddingLeft: 15,
+    fontWeight: '200',
+    marginTop: 10,
   },
   textOption: {
     marginHorizontal: 5

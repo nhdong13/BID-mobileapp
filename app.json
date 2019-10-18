@@ -35,7 +35,12 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.capstoneproject.bid",
+      "googleServicesFile": "./google-services.json"
+    },
     "ios": {
+      "bundleIdentifier": "com.capstoneproject.bid",
       "supportsTablet": true
     },
     "description": ""
