@@ -35,6 +35,22 @@ export default class RecommendScreen extends Component {
     }
   };
 
+  changeInviteStatus = (receiverId) => {
+    this.setState(prevState => ({
+      listMatched: prevState.listMatched.map(el =>
+        el.userId === receiverId
+          ? Object.assign(el, { isInvited: true })
+          : el
+      ),
+      recommendList: prevState.recommendList.map(el =>
+        el.userId === receiverId
+          ? Object.assign(el, { isInvited: true })
+          : el
+      )
+    }));
+    console.log(this.state.listMatched);
+  }
+
   componentWillMount() {
     const requestId = this.props.navigation.getParam("requestId");
     if (requestId && requestId !== 0) {
@@ -48,6 +64,7 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.state.recommendList && this.state.recommendList.length > 0 && (
         <View style={styles.sectionContainer}>
           <View style={styles.headerSection}>
             <Ionicons
@@ -66,14 +83,15 @@ export default class RecommendScreen extends Component {
           {
             this.state.recommendList &&
             this.state.recommendList.length != 0 && (
-              <FlatList
+              <FlatList 
                 data={this.state.recommendList}
-                renderItem={({ item }) => <Bsitter requestId={this.state.requestId} item={item} />}
+                renderItem={({ item }) => <Bsitter callBack={this.changeInviteStatus} requestId={this.state.requestId} item={item} />}
                 keyExtractor={item => item.user.id.toString()}
               />
             )
           }
         </View>
+        )}
 
         <View style={styles.sectionContainer}>
           <View style={styles.headerSection}>
@@ -92,9 +110,9 @@ export default class RecommendScreen extends Component {
           {
             this.state.listMatched &&
             this.state.listMatched.length != 0 && (
-              <FlatList
+              <FlatList 
                 data={this.state.listMatched}
-                renderItem={({ item }) => <Bsitter requestId={this.state.requestId} item={item} />}
+                renderItem={({ item }) => <Bsitter callBack={this.changeInviteStatus} requestId={this.state.requestId} item={item} />}
                 keyExtractor={item => item.user.id.toString()}
               />
             )
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     backgroundColor: "white",
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: 20,
     marginTop: 10
   },
