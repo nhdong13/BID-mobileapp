@@ -16,6 +16,6 @@ echo Initiating android devices...
 
 cd %ANDROID_HOME%
 
-emulator -avd Nexus_5X_API_28
+emulator -avd Pixel_2_API_28
 
 pause
