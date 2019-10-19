@@ -37,53 +37,6 @@ export default class ProfileDetail extends Component {
         };
     }
 
-    //   getAcceptedInvitations = async () => {
-    //     let data = await listByRequestAndStatus(
-    //       this.state.sittingRequestsID,
-    //       "ACCEPTED"
-    //     );
-
-    //     this.setState({
-    //       invitations: data
-    //     });
-
-    //   };
-
-    //   acceptBabysitter = async sitterId => {
-    //     await acceptBabysitter(this.state.sittingRequestsID, sitterId);
-    //     this.props.navigation.navigate("Home");
-    //   };
-
-    //   componentDidMount() {
-    //     Api.get("sittingRequests/" + this.state.sittingRequestsID.toString()).then(
-    //       resp => {
-    //         this.setState({
-    //           date: resp.sittingDate,
-    //           startTime: resp.startTime,
-    //           endTime: resp.endTime,
-    //           address: resp.sittingAddress,
-    //           bsitter: resp.bsitter,
-    //           status: resp.status,
-    //         });
-    //       }
-    //     );
-    //   }
-
-    //   componentWillMount() {
-    //     this.getAcceptedInvitations();
-    //   }
-
-    //   onButtonClick(targetStatus) {
-    //     const data = {
-    //       id: this.state.sittingRequestsID,
-    //       status: targetStatus
-    //     };
-
-    //     cancelRequest(data).then(res => {
-    //       this.props.navigation.navigate('Home', { loading: false });
-    //     }).catch(error => console.log(error));
-
-    //   }
 
     render() {
         return (
@@ -136,12 +89,7 @@ export default class ProfileDetail extends Component {
                 </View>
                 <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>Địa chỉ: bí mật :]]</MuliText>
                 <View
-                    style={{
-                        borderBottomColor: colors.gray,
-                        borderBottomWidth: 1,
-                        marginTop: 10,
-                        marginHorizontal: 25,
-                    }}
+                    style={styles.line}
                 />
                 <View style={{
                     marginHorizontal: 25,
@@ -179,12 +127,7 @@ export default class ProfileDetail extends Component {
                     </MuliText>
                 </View>
                 <View
-                    style={{
-                        borderBottomColor: colors.gray,
-                        borderBottomWidth: 1,
-                        marginTop: 10,
-                        marginHorizontal: 25,
-                    }}
+                    style={styles.line}
                 />
                 <View style={styles.detailContainer}>
                     <MuliText style={styles.headerTitle}>Tùy chọn</MuliText>
@@ -320,12 +263,7 @@ export default class ProfileDetail extends Component {
                     </ScrollView>
                 </View>
                 <View
-                    style={{
-                        borderBottomColor: colors.gray,
-                        borderBottomWidth: 1,
-                        marginTop: 10,
-                        marginHorizontal: 25,
-                    }}
+                    style={styles.line}
                 />
                 <View style={styles.detailContainer}>
                     <MuliText style={styles.headerTitle}>Đánh giá</MuliText>
@@ -345,11 +283,7 @@ export default class ProfileDetail extends Component {
                                     />
                                 </View>
                             </View>
-                            <View style={{
-                                marginLeft: 8,
-                                marginRight: 100,
-                                flex: 1,
-                            }}>
+                            <View style={styles.textReview}>
                                 <MuliText numberOfLines={3} >Chỉnh sửa api google, Làm con tôi té, trừ điểm</MuliText>
                             </View>
 
@@ -372,11 +306,7 @@ export default class ProfileDetail extends Component {
                                     />
                                 </View>
                             </View>
-                            <View style={{
-                                marginLeft: 8,
-                                marginRight: 100,
-                                flex: 1,
-                            }}>
+                            <View style={styles.textReview}>
                                 <MuliText numberOfLines={3} >Đẹp trai</MuliText>
                             </View>
 
@@ -399,11 +329,7 @@ export default class ProfileDetail extends Component {
                                     />
                                 </View>
                             </View>
-                            <View style={{
-                                marginLeft: 8,
-                                marginRight: 100,
-                                flex: 1,
-                            }}>
+                            <View style={styles.textReview}>
                                 <MuliText numberOfLines={3} >Nuôi trẻ mập còn hơn ba nó</MuliText>
                             </View>
 
@@ -420,8 +346,19 @@ ProfileDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-    reivewContainer:{
-        flexDirection: 'row', 
+    textReview: {
+        marginLeft: 8,
+        marginRight: 100,
+        flex: 1,
+    },
+    line: {
+        borderBottomColor: colors.gray,
+        borderBottomWidth: 1,
+        marginTop: 10,
+        marginHorizontal: 25,
+    },
+    reivewContainer: {
+        flexDirection: 'row',
         marginTop: 10,
     },
     nameReview: {
