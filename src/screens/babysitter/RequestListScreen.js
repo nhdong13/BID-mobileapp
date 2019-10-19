@@ -73,7 +73,7 @@ class HomeScreen extends Component {
                     </View>
                     <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
                       <View style={styles.leftInformation}>
-                        <MuliText>Request from {request.user.nickname}</MuliText>
+                        <MuliText>Yêu cầu từ {request.user.nickname}</MuliText>
                         <MuliText style={styles.date}>{moment(request.sittingDate).format('DD-MM-YYYY')}</MuliText>
                         <MuliText>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
                       {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}</MuliText>
@@ -90,8 +90,8 @@ class HomeScreen extends Component {
                 </TouchableOpacity>
               )}
             </ScrollView> : <View style={styles.noRequest}>
-              <MuliText style={styles.noRequestText}>You don't have any request for now</MuliText>
-              <MuliText>Tap to create one</MuliText>
+              <MuliText style={styles.noRequestText}>Hiện tại bạn không có yêu cầu nào</MuliText>
+              <MuliText>Nhấn để tạo yêu cầu</MuliText>
               <Image
                 source={
                   require('assets/images/no-request.jpg')

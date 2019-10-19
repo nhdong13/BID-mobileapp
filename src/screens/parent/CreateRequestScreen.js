@@ -80,7 +80,7 @@ class CreateRequestScreen extends Component {
       <ScrollView>
 
         <View style={styles.containerInformationRequest}>
-          <MuliText style={styles.headerTitle}>Babysitting</MuliText>
+          <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
           <View>
             <View style={styles.inputDay}>
               <Ionicons
@@ -211,9 +211,9 @@ class CreateRequestScreen extends Component {
                 marginBottom: 5,
               }}
             />
-            <MuliText style={styles.contentInformation}>Address: {this.state.sittingAddress}</MuliText>
+            <MuliText style={styles.contentInformation}>Địa chỉ: {this.state.sittingAddress}</MuliText>
           </View>
-          <MuliText style={styles.headerTitle}>Children</MuliText>
+          <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.input}>
               <Ionicons
@@ -224,7 +224,7 @@ class CreateRequestScreen extends Component {
                   marginBottom: 5,
                 }}
               />
-              <MuliText style={styles.contentInformation}>Number of children: {this.state.childrenNumber} </MuliText>
+              <MuliText style={styles.contentInformation}>Số trẻ: {this.state.childrenNumber} </MuliText>
             </View>
             <View style={styles.input}>
               <Ionicons
@@ -235,21 +235,21 @@ class CreateRequestScreen extends Component {
                   marginBottom: 5,
                 }}
               />
-              <MuliText style={styles.contentInformation}>Min Age: {this.state.minAgeOfChildren}</MuliText>
+              <MuliText style={styles.contentInformation}>Nhỏ tuổi nhất: {this.state.minAgeOfChildren}</MuliText>
             </View>
           </View>
           <View>
-            <MuliText style={styles.headerTitle}>Payment</MuliText>
+            <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
             <View style={styles.priceContainer}>
-              <MuliText style={styles.contentInformation}>Propose price:</MuliText>
-              <MuliText style={styles.price}>{this.state.price}$/h</MuliText>
+              <MuliText style={styles.contentInformation}>Số tiền dự kiến:</MuliText>
+              <MuliText style={styles.price}>{this.state.price}VND/h</MuliText>
 
             </View>
 
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Next</MuliText>
+              <MuliText style={{ color: 'white', fontSize: 16 }}>Kế tiếp</MuliText>
             </TouchableOpacity>
           </View>
         </View>

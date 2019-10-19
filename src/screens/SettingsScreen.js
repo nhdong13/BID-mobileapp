@@ -24,12 +24,15 @@ export default class SettingsScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.informationContainer}>
-          
+
         </View>
         <View style={{ marginHorizontal: 25, marginTop: 10 }}>
-          <MuliText style={styles.headerTitle}>MY ACCOUNT</MuliText>
+          <MuliText style={styles.headerTitle}>Tài khoản của (Tên user)</MuliText>
           <View>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+              onPress={
+                () => this.props.navigation.navigate('Detail')}
+              style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
                   name='ios-switch'
@@ -37,7 +40,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>Sitting preferences</MuliText>
+                <MuliText style={styles.contentInformation}>Chi tiết tài khoản</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -56,7 +59,26 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>Address and Schedule</MuliText>
+                <MuliText style={styles.contentInformation}>Đặc điểm ưu tiên</MuliText>
+              </View>
+              <View>
+                <Ionicons
+                  name='ios-arrow-forward'
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color='#bdc3c7'
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailInformationContainer}>
+              <View style={styles.informationText}>
+                <Ionicons
+                  name='ios-home'
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color='#bdc3c7'
+                />
+                <MuliText style={styles.contentInformation}>Lịch trông trẻ</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -75,7 +97,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>Unavailabilities</MuliText>
+                <MuliText style={styles.contentInformation}>Lịch nghỉ</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -94,7 +116,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>History</MuliText>
+                <MuliText style={styles.contentInformation}>Lịch sử</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -113,7 +135,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>My family</MuliText>
+                <MuliText style={styles.contentInformation}>Vòng tròn tin tưởng</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -132,7 +154,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>Payment</MuliText>
+                <MuliText style={styles.contentInformation}>Thanh toán</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -147,7 +169,7 @@ export default class SettingsScreen extends Component {
 
         </View>
         <View style={{ marginHorizontal: 25, marginTop: 20 }}>
-          <MuliText style={styles.headerTitle}>SETTINGS</MuliText>
+          <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
           <View>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
@@ -157,7 +179,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>Settings</MuliText>
+                <MuliText style={styles.contentInformation}>Tùy chỉnh</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -176,7 +198,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='#bdc3c7'
                 />
-                <MuliText style={styles.contentInformation}>Help & Info</MuliText>
+                <MuliText style={styles.contentInformation}>Giúp đỡ và thông tin liên quan</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -195,7 +217,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color='red'
                 />
-                <MuliText style={styles.contentInformation}>Log out</MuliText>
+                <MuliText style={styles.contentInformation}>Thoát</MuliText>
               </View>
               <View>
                 <Ionicons
