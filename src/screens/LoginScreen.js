@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { login } from 'api/login';
-import { ToastAndroid } from 'react-native';
 import Modal from 'react-native-modal';
 import {
   Image,
@@ -10,6 +9,7 @@ import {
   TextInput,
   View,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -20,12 +20,11 @@ class LoginScreen extends Component {
     this.state = {
       phoneNumber: '02',
       password: '12341234',
-      title: 'lallalala',
       OTP: '',
       isModalVisible: false,
       roleId: null,
+      userId: null,
     };
-
   }
 
   onLogin = async () => {
@@ -35,10 +34,13 @@ class LoginScreen extends Component {
         if (res && res != 400) {
           if (res.data.roleId && res.data.roleId == 3) {
             this.setState({ roleId: res.data.roleId, userId: res.data.userId });
-            this.setState({ isModalVisible: true })
+            this.setState({ isModalVisible: true });
           } else {
             this.setState({ roleId: res.data.roleId, userId: res.data.userId });
-            this.props.navigation.navigate('AuthLoading', { roleId: this.state.roleId, userId: this.state.userId });
+            this.props.navigation.navigate('AuthLoading', {
+              roleId: this.state.roleId,
+              userId: this.state.userId,
+            });
           }
         } else {
           ToastAndroid.showWithGravity(
@@ -46,17 +48,24 @@ class LoginScreen extends Component {
             ToastAndroid.LONG,
             ToastAndroid.TOP,
             25,
-            80
+            80,
           );
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log('Error on LoginScreen ' + error);
       });
-  }
+  };
 
   onSubmitOTP = async () => {
-    this.state.OTP.length === 7 ? this.props.navigation.navigate('AuthLoading', { roleId: this.state.roleId, userId: this.state.userId }) : console.log('wrong OTP code, please try again');
-  }
+    // eslint-disable-next-line no-unused-expressions
+    this.state.OTP.length == 7
+      ? this.props.navigation.navigate('AuthLoading', {
+          roleId: this.state.roleId,
+          userId: this.state.userId,
+        })
+      : console.log('wrong OTP code, please try again');
+  };
 
   toggleModal = () => {
     if (this.state.roleId && this.state.roleId == 3) {
@@ -71,39 +80,38 @@ class LoginScreen extends Component {
       <KeyboardAvoidingView
         style={{ flex: 1, justifyContent: 'center' }}
         keyboardVerticalOffset={60}
-        behavior={Platform.OS === "ios" ? 'padding' : 'height'}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       >
         <View style={styles.welcomeContainer}>
           <Image
-            source={
-              require('assets/images/logo.png')
-            }
+            source={require('assets/images/logo.png')}
             style={styles.logoImage}
           />
         </View>
         <View style={styles.welcomeContainer}>
-          <Image source={
-            require('assets/images/login-family.png')
-          }
+          <Image
+            source={require('assets/images/login-family.png')}
             style={styles.familyImage}
           />
-          <MuliText style={{ color: '#707070', fontSize: 16 }}>Xin hãy đăng nhập để tiếp tục</MuliText>
+          <MuliText style={{ color: '#707070', fontSize: 16 }}>
+            Xin hãy đăng nhập để tiếp tục
+          </MuliText>
         </View>
         <View style={styles.textContainer}>
           <TextInput
             style={styles.textInput}
-            onChangeText={text => this.setState({ phoneNumber: text })}
-            placeholder='Username'
+            onChangeText={(text) => this.setState({ phoneNumber: text })}
+            placeholder="Username"
             disableFullscreenUI={false}
             value={this.state.phoneNumber}
-            textContentType='username'
+            textContentType="username"
           />
         </View>
         <View style={styles.textContainer}>
           <TextInput
             style={styles.textInput}
-            onChangeText={text => this.setState({ password: text })}
-            placeholder='Password'
+            onChangeText={(text) => this.setState({ password: text })}
+            placeholder="Password"
             disableFullscreenUI={false}
             value={this.state.password}
             secureTextEntry={true}
@@ -111,46 +119,61 @@ class LoginScreen extends Component {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-            <MuliText style={{ color: 'white', fontSize: 16 }}>Đăng nhập</MuliText>
+            <MuliText style={{ color: 'white', fontSize: 16 }}>
+              Đăng nhập
+            </MuliText>
           </TouchableOpacity>
         </View>
-        {this.state.isModalVisible ?
-          (
-            <Modal
-              isVisible={this.state.isModalVisible}
-              hasBackdrop={true} backdropOpacity={0.9}
-              onBackdropPress={this.toggleModal}
-              backdropColor='white'
-              onBackButtonPress={this.toggleModal}
+        {this.state.isModalVisible ? (
+          <Modal
+            isVisible={this.state.isModalVisible}
+            hasBackdrop={true}
+            backdropOpacity={0.9}
+            onBackdropPress={this.toggleModal}
+            backdropColor="white"
+            onBackButtonPress={this.toggleModal}
+          >
+            <View
+              style={{
+                flex: 0.2,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'white',
+              }}
             >
-              <View style={{ flex: 0.2, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-                <MuliText style={{ color: '#707070', fontSize: 16 }}>Xin nhập Authentication Code</MuliText>
-                <View style={styles.textContainer}>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={text => this.setState({ OTP: text })}
-                    placeholder='Authentication code'
-                    disableFullscreenUI={false}
-                    value={this.state.OTP}
-                    keyboardType='number-pad'
-                  />
-                </View>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.submitButton} onPress={this.onSubmitOTP}>
-                    <MuliText style={{ color: 'white', fontSize: 16 }}>Gửi</MuliText>
-                  </TouchableOpacity>
-                </View>
+              <MuliText style={{ color: '#707070', fontSize: 16 }}>
+                Xin nhập Authentication Code
+              </MuliText>
+              <View style={styles.textContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(text) => this.setState({ OTP: text })}
+                  placeholder="Authentication code"
+                  disableFullscreenUI={false}
+                  value={this.state.OTP}
+                  keyboardType="number-pad"
+                />
               </View>
-            </Modal>
-          )
-          :
-          (
-            <View></View>
-          )
-        }
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={this.onSubmitOTP}
+                >
+                  <MuliText style={{ color: 'white', fontSize: 16 }}>
+                    Gửi
+                  </MuliText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        ) : (
+          <View />
+        )}
 
         <View style={styles.welcomeContainer}>
-          <MuliText>copyrights claim thing that you don't want to read</MuliText>
+          <MuliText>
+            copyrights claim thing that you don't want to read
+          </MuliText>
         </View>
       </KeyboardAvoidingView>
     );

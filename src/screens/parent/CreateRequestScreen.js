@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
-import {
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Text,
-  View,
-  Image,
-  KeyboardAvoidingView
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
@@ -22,43 +13,33 @@ class CreateRequestScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tokenCode: '',
-      createdUser: null,
+      userId: null,
       loggedUser: null,
       sittingDate: null,
       startTime: null,
       endTime: null,
       sittingAddress: null,
-      detailPictureSitter: require("assets/images/Phuc.png"),
-      detailPictureChildren: require("assets/images/Baby-6.png"),
-      nameChildren: 'Nam',
       price: '100',
       childrenNumber: 2,
       minAgeOfChildren: 1,
     };
-
-    this.onCreateRequest = this.onCreateRequest.bind(this);
   }
-
-  getDataAccordingToRole = async () => {
-    await retrieveToken().then((res) => {
-      const { userId, roleId } = res;
-      this.setState({ createdUser: userId, roleId: roleId })
-    })
-  }
-
 
   async componentDidMount() {
     await this.getDataAccordingToRole();
 
-    Api.get('users/' + this.state.createdUser.toString()).then(res => {
+    Api.get('users/' + this.state.userId.toString()).then((res) => {
       this.setState({ loggedUser: res, sittingAddress: res.address });
+      console.log(
+        'PHUC: CreateRequestScreen -> componentDidMount -> loggedUser',
+        this.state.loggedUser,
+      );
     });
   }
 
-  onCreateRequest() {
+  onCreateRequest = () => {
     const request = {
-      createdUser: this.state.createdUser,
+      createdUser: this.state.userId,
       sittingDate: this.state.sittingDate,
       startTime: this.state.startTime,
       endTime: this.state.endTime,
@@ -67,26 +48,37 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
     };
-    Api.post('sittingRequests', request).then((res) => {
-      if (res) {
-        this.props.navigation.navigate('Recommend', { requestId: res.id });
-      }
-    }).catch(error => console.log(error));
+    Api.post('sittingRequests', request)
+      .then((res) => {
+        if (res) {
+          this.props.navigation.navigate('Recommend', { requestId: res.id });
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
-  }
+  getDataAccordingToRole = async () => {
+    await retrieveToken().then((res) => {
+      const { userId, roleId } = res;
+      this.setState({ userId, roleId });
+      console.log(
+        'PHUC: CreateRequestScreen -> getDataAccordingToRole -> roleId',
+        roleId + this.state.roleId,
+      );
+    });
+  };
 
   render() {
     return (
       <ScrollView>
-
         <View style={styles.containerInformationRequest}>
           <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
           <View>
             <View style={styles.inputDay}>
               <Ionicons
-                name='ios-calendar'
+                name="ios-calendar"
                 size={20}
-                color='#7edeb9'
+                color="#7edeb9"
                 style={{
                   marginTop: 10,
                 }}
@@ -107,15 +99,17 @@ class CreateRequestScreen extends Component {
                   },
                   placeholderText: {
                     fontSize: 15,
-                    color: "#C7C7C7",
+                    color: '#C7C7C7',
                     marginRight: 70,
                   },
                   dateText: {
                     fontSize: 15,
-                    color: "#7edeb9",
-                  }
+                    color: '#7edeb9',
+                  },
                 }}
-                onDateChange={(date) => { this.setState({ sittingDate: date }); console.log(this.state.sittingDate) }}
+                onDateChange={(date) => {
+                  this.setState({ sittingDate: date });
+                }}
                 showIcon={false}
               />
             </View>
@@ -124,9 +118,9 @@ class CreateRequestScreen extends Component {
             <View>
               <View style={styles.input}>
                 <Ionicons
-                  name='ios-timer'
+                  name="ios-timer"
                   size={20}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                   style={{
                     marginTop: 10,
                   }}
@@ -148,16 +142,19 @@ class CreateRequestScreen extends Component {
                     },
                     placeholderText: {
                       fontSize: 15,
-                      color: "#C7C7C7",
+                      color: '#C7C7C7',
                       marginRight: 30,
                     },
                     dateText: {
                       fontSize: 15,
-                      color: "black",
-                    }
+                      color: 'black',
+                    },
                   }}
                   is24Hour
-                  onDateChange={(time) => { this.setState({ startTime: time}); console.log(this.state.startTime) }}
+                  onDateChange={(time) => {
+                    this.setState({ startTime: time });
+                    console.log(this.state.startTime);
+                  }}
                   showIcon={false}
                 />
               </View>
@@ -165,16 +162,16 @@ class CreateRequestScreen extends Component {
             <View>
               <View style={styles.input}>
                 <Ionicons
-                  name='ios-time'
+                  name="ios-time"
                   size={20}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                   style={{
                     marginTop: 10,
                   }}
                 />
                 <DatePicker
                   style={styles.pickedTime}
-                  minDate={(this.state.startTime)}
+                  minDate={this.state.startTime}
                   date={this.state.endTime}
                   mode="time"
                   placeholder="End time"
@@ -187,16 +184,19 @@ class CreateRequestScreen extends Component {
                     },
                     placeholderText: {
                       fontSize: 15,
-                      color: "#C7C7C7",
+                      color: '#C7C7C7',
                       marginRight: 30,
                     },
                     dateText: {
                       fontSize: 15,
-                      color: "black",
-                    }
+                      color: 'black',
+                    },
                   }}
                   is24Hour
-                  onDateChange={(time) => { this.setState({ endTime: time }); console.log(this.state.endTime) }}
+                  onDateChange={(time) => {
+                    this.setState({ endTime: time });
+                    console.log(this.state.endTime);
+                  }}
                   showIcon={false}
                 />
               </View>
@@ -204,56 +204,66 @@ class CreateRequestScreen extends Component {
           </View>
           <View style={styles.input}>
             <Ionicons
-              name='ios-home'
+              name="ios-home"
               size={20}
-              color='#bdc3c7'
+              color="#bdc3c7"
               style={{
                 marginBottom: 5,
               }}
             />
-            <MuliText style={styles.contentInformation}>Địa chỉ: {this.state.sittingAddress}</MuliText>
+            <MuliText style={styles.contentInformation}>
+              Địa chỉ: {this.state.sittingAddress}
+            </MuliText>
           </View>
           <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.input}>
               <Ionicons
-                name='ios-happy'
+                name="ios-happy"
                 size={20}
-                color='#bdc3c7'
+                color="#bdc3c7"
                 style={{
                   marginBottom: 5,
                 }}
               />
-              <MuliText style={styles.contentInformation}>Số trẻ: {this.state.childrenNumber} </MuliText>
+              <MuliText style={styles.contentInformation}>
+                Số trẻ: {this.state.childrenNumber}{' '}
+              </MuliText>
             </View>
             <View style={styles.input}>
               <Ionicons
-                name='ios-heart-empty'
+                name="ios-heart-empty"
                 size={20}
-                color='#bdc3c7'
+                color="#bdc3c7"
                 style={{
                   marginBottom: 5,
                 }}
               />
-              <MuliText style={styles.contentInformation}>Nhỏ tuổi nhất: {this.state.minAgeOfChildren}</MuliText>
+              <MuliText style={styles.contentInformation}>
+                Nhỏ tuổi nhất: {this.state.minAgeOfChildren}
+              </MuliText>
             </View>
           </View>
           <View>
             <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
             <View style={styles.priceContainer}>
-              <MuliText style={styles.contentInformation}>Số tiền dự kiến:</MuliText>
+              <MuliText style={styles.contentInformation}>
+                Số tiền dự kiến:
+              </MuliText>
               <MuliText style={styles.price}>{this.state.price}VND/h</MuliText>
-
             </View>
-
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.submitButton} onPress={this.onCreateRequest}>
-              <MuliText style={{ color: 'white', fontSize: 16 }}>Kế tiếp</MuliText>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={this.onCreateRequest}
+            >
+              <MuliText style={{ color: 'white', fontSize: 16 }}>
+                Kế tiếp
+              </MuliText>
             </TouchableOpacity>
           </View>
         </View>
-
       </ScrollView>
     );
   }
@@ -269,7 +279,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 15,
     color: '#7edeb9',
-    fontWeight: '800'
+    fontWeight: '800',
   },
   priceContainer: {
     flex: 1,
@@ -284,7 +294,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     marginHorizontal: 15,
     marginTop: 15,
-    borderColor: '#7edeb9'
+    borderColor: '#7edeb9',
   },
   input: {
     flex: 1,
@@ -309,7 +319,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#315F61',
     marginBottom: 10,
-    fontWeight: '800'
+    fontWeight: '800',
   },
   submitButton: {
     width: 200,

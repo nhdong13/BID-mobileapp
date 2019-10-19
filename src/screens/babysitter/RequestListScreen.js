@@ -1,20 +1,15 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
-  Button,
   StyleSheet,
-  Text,
   View,
   Image,
-  RefreshControl,
-  ScrollView
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
-import { Agenda } from 'react-native-calendars';
-import { getRequests } from 'api/getRequests';
-import { getInvitations } from 'api/getInvitations';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../../api/api_helper';
@@ -28,78 +23,113 @@ class HomeScreen extends Component {
       userId: 0,
       roleId: 0,
       refreshing: false,
-    }
-  }
-
-  // for user role of Parent - roleId == 2
-  getDataAccordingToRole = async () => {
-    await retrieveToken().then((res) => {
-      const { userId, roleId } = res;
-      this.setState({ userId: userId, roleId: roleId })
-    });
-
-    requestBody = {
-      bsId: this.state.userId,
     };
-
-    await Api.post('sittingRequests/bsitterSitting', requestBody).then(res => {
-      this.setState({ requests: res })
-    });
-  }
-
-  _onRefresh = () => {
-    this.setState({ refreshing: true });
-    this.getDataAccordingToRole().then(() => {
-      this.setState({ refreshing: false });
-    });
   }
 
   componentWillMount() {
     this.getDataAccordingToRole();
   }
 
+  // for user role of Parent - roleId == 2
+  getDataAccordingToRole = async () => {
+    await retrieveToken().then((res) => {
+      const { userId, roleId } = res;
+      this.setState({ userId, roleId });
+    });
+
+    const requestBody = {
+      bsId: this.state.userId,
+    };
+
+    await Api.post('sittingRequests/bsitterSitting', requestBody).then(
+      (res) => {
+        this.setState({ requests: res });
+      },
+    );
+  };
+
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.getDataAccordingToRole().then(() => {
+      this.setState({ refreshing: false });
+    });
+  };
+
   render() {
-    const { roleId, requests } = this.state;
+    const { requests } = this.state;
     return (
       <View style={styles.container}>
         <View style={{ alignItems: 'center' }}>
-          {requests != '' && requests ?
+          {requests != '' && requests ? (
             <ScrollView>
-              {requests.map(request =>
-                <TouchableOpacity key={request.id} style={{ backgroundColor: '#fff', marginTop: 20, marginHorizontal: 20, borderRadius: 20 }}>
-                  {/* onPress={() => this.props.navigation.navigate('InvitationDetail', { invitationId: invitation.id })}> */}
+              {requests.map((request) => (
+                <TouchableOpacity
+                  key={request.id}
+                  style={{
+                    backgroundColor: '#fff',
+                    marginTop: 20,
+                    marginHorizontal: 20,
+                    borderRadius: 20,
+                  }}
+                >
+                  {/* onPress={() => this.props.navigation.navigate('InvitationDetail'
+                , { invitationId: invitation.id })}> */}
                   <View style={{ height: 135 }}>
-                    <View style={{ flex: 0.2, backgroundColor: '#78ddb6', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
-                    </View>
-                    <View style={{ flex: 0.8, width: 350, height: 150, flexDirection: 'row' }}>
+                    <View
+                      style={{
+                        flex: 0.2,
+                        backgroundColor: '#78ddb6',
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
+                      }}
+                    />
+                    <View
+                      style={{
+                        flex: 0.8,
+                        width: 350,
+                        height: 150,
+                        flexDirection: 'row',
+                      }}
+                    >
                       <View style={styles.leftInformation}>
                         <MuliText>Yêu cầu từ {request.user.nickname}</MuliText>
-                        <MuliText style={styles.date}>{moment(request.sittingDate).format('DD-MM-YYYY')}</MuliText>
-                        <MuliText>{moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
-                      {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}</MuliText>
+                        <MuliText style={styles.date}>
+                          {moment(request.sittingDate).format('DD-MM-YYYY')}
+                        </MuliText>
+                        <MuliText>
+                          {moment
+                            .utc(request.startTime, 'HH:mm')
+                            .format('HH:mm')}{' '}
+                          -
+                          {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
+                        </MuliText>
                         <MuliText>{request.sittingAddress}</MuliText>
                       </View>
                       <View style={{ alignItems: 'center' }}>
                         <View style={styles.statusBoxConfirm}>
-                          <MuliText style={{ fontWeight: '100', color: 'red' }}>{request.status}</MuliText>
+                          <MuliText style={{ fontWeight: '100', color: 'red' }}>
+                            {request.status}
+                          </MuliText>
                         </View>
                         <MuliText>$100</MuliText>
                       </View>
                     </View>
                   </View>
                 </TouchableOpacity>
-              )}
-            </ScrollView> : <View style={styles.noRequest}>
-              <MuliText style={styles.noRequestText}>Hiện tại bạn không có yêu cầu nào</MuliText>
+              ))}
+            </ScrollView>
+          ) : (
+            <View style={styles.noRequest}>
+              <MuliText style={styles.noRequestText}>
+                Hiện tại bạn không có yêu cầu nào
+              </MuliText>
               <MuliText>Nhấn để tạo yêu cầu</MuliText>
               <Image
-                source={
-                  require('assets/images/no-request.jpg')
-                }
+                source={require('assets/images/no-request.jpg')}
                 style={styles.noRequestImage}
               />
-            </View>}
-
+            </View>
+          )}
         </View>
       </View>
     );
@@ -109,9 +139,8 @@ class HomeScreen extends Component {
 export default HomeScreen;
 
 HomeScreen.navigationOptions = {
-  title: "Incoming Sitting",
+  title: 'Incoming Sitting',
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -131,14 +160,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#315f61',
     fontWeight: 'bold',
-    lineHeight: 20
+    lineHeight: 20,
   },
   textHeaderBsitter: {
     fontSize: 20,
     color: '#315f61',
     fontWeight: 'bold',
     lineHeight: 20,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   statusBoxPending: {
     justifyContent: 'center',
@@ -175,7 +204,7 @@ const styles = StyleSheet.create({
   noRequestImage: {
     width: 261,
     height: 236,
-    marginVertical: 20
+    marginVertical: 20,
   },
   requestItem: {
     flex: 1,
@@ -205,7 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#315F61',
     marginBottom: 10,
-    fontWeight: '800'
+    fontWeight: '800',
   },
   scheduleContainer: {
     alignItems: 'center',
@@ -214,7 +243,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginBottom: 20,
     flex: 0.1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   scheduleContainerBsitter: {
     alignItems: 'flex-start',
@@ -223,12 +252,12 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 30,
     flex: 0.25,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   date: {
     marginBottom: 10,
     color: colors.darkGreenTitle,
-    fontWeight: "400",
+    fontWeight: '400',
     fontSize: 15,
   },
 });
