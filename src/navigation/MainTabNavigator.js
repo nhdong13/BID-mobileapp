@@ -1,6 +1,9 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+} from 'react-navigation';
 
 import TabBarIcon from 'components/TabBarIcon';
 import HomeScreen from 'screens/HomeScreen';
@@ -17,9 +20,9 @@ const config = Platform.select({
 const CreateRequestStack = createStackNavigator(
   {
     CreateRequest: CreateRequestScreen,
-    HomeScreen: HomeScreen,
+    HomeScreen,
   },
-  config
+  config,
 );
 
 CreateRequestStack.navigationOptions = {
@@ -27,11 +30,7 @@ CreateRequestStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-add'
-          : 'md-add'
-      }
+      name={Platform.OS == 'ios' ? 'ios-add' : 'md-add'}
     />
   ),
 };
@@ -41,12 +40,12 @@ CreateRequestStack.path = '';
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
-    RequestDetail: RequestDetail,
+    RequestDetail,
     Recommend: RecommendBabysitter,
     CreateRequest: CreateRequestScreen,
-    InvitationDetail: InvitationDetail
+    InvitationDetail,
   },
-  config
+  config,
 );
 
 HomeStack.navigationOptions = {
@@ -54,11 +53,7 @@ HomeStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-home'
-          : 'md-home'
-      }
+      name={Platform.OS == 'ios' ? 'ios-home' : 'md-home'}
     />
   ),
 };
@@ -69,13 +64,16 @@ const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
   },
-  config
+  config,
 );
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS == 'ios' ? 'ios-options' : 'md-options'}
+    />
   ),
 };
 

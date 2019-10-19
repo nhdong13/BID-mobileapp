@@ -1,11 +1,10 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 
-export function RequestItem(props) {
+export default function RequestItem(props) {
   return (
-      <View {...props}>
-          <Text {...props} style={[props.style, { fontFamily: 'muli' }]} />
-      </View>
-    
+    <View {...props}>
+      <Text {...props} style={[props.style, { fontFamily: 'muli' }]} />
+    </View>
   );
 }
