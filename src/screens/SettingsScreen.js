@@ -1,214 +1,245 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity } from "react-native";
+import React, { Component } from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
-import { MuliText } from "components/StyledText";
+import { MuliText } from 'components/StyledText';
 import logout from 'api/logout';
+
 export default class SettingsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      detailPicture: require("assets/images/Phuc.png"),
-      name: 'Phuc'
-    }
+    this.state = {};
   }
 
   onLogout = async () => {
-    logout().then((res) => {
-      console.log(res);
-      if (res) this.props.navigation.navigate('Auth');
-    }).catch(error => console.log(error));
-  }
-
+    logout()
+      .then((res) => {
+        console.log(res);
+        if (res) {
+          this.props.navigation.navigate('Auth');
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
   render() {
     return (
       <ScrollView>
-        <View style={styles.informationContainer}>
-          <View>
-            <MuliText style={styles.nameText}>{this.state.name}</MuliText>
-            <TouchableOpacity>
-              <MuliText style={styles.viewProfileText}>View profile</MuliText>
-            </TouchableOpacity>
-          </View>
-          <Image source={this.state.detailPicture} style={styles.profileImg} ></Image>
-        </View>
+        <View style={styles.informationContainer} />
         <View style={{ marginHorizontal: 25, marginTop: 10 }}>
-          <MuliText style={styles.headerTitle}>MY ACCOUNT</MuliText>
+          <MuliText style={styles.headerTitle}>
+            Tài khoản của (Tên user)
+          </MuliText>
           <View>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Detail')}
+              style={styles.detailInformationContainer}
+            >
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-switch'
+                  name="ios-switch"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>Sitting preferences</MuliText>
+                <MuliText style={styles.contentInformation}>
+                  Chi tiết tài khoản
+                </MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-home'
+                  name="ios-home"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>Address and Schedule</MuliText>
+                <MuliText style={styles.contentInformation}>
+                  Đặc điểm ưu tiên
+                </MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-calendar'
+                  name="ios-home"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>Unavailabilities</MuliText>
+                <MuliText style={styles.contentInformation}>
+                  Lịch trông trẻ
+                </MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-timer'
+                  name="ios-calendar"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>History</MuliText>
+                <MuliText style={styles.contentInformation}>Lịch nghỉ</MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-contacts'
+                  name="ios-timer"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>My family</MuliText>
+                <MuliText style={styles.contentInformation}>Lịch sử</MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-cash'
+                  name="ios-contacts"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>Payment</MuliText>
+                <MuliText style={styles.contentInformation}>
+                  Vòng tròn tin tưởng
+                </MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailInformationContainer}>
+              <View style={styles.informationText}>
+                <Ionicons
+                  name="ios-cash"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color="#bdc3c7"
+                />
+                <MuliText style={styles.contentInformation}>
+                  Thanh toán
+                </MuliText>
+              </View>
+              <View>
+                <Ionicons
+                  name="ios-arrow-forward"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
           </View>
-
         </View>
         <View style={{ marginHorizontal: 25, marginTop: 20 }}>
-          <MuliText style={styles.headerTitle}>SETTINGS</MuliText>
+          <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
           <View>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-settings'
+                  name="ios-settings"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>Settings</MuliText>
+                <MuliText style={styles.contentInformation}>Tùy chỉnh</MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-information-circle-outline'
+                  name="ios-information-circle-outline"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>Help & Info</MuliText>
+                <MuliText style={styles.contentInformation}>
+                  Giúp đỡ và thông tin liên quan
+                </MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer} onPress={this.onLogout}>
+            <TouchableOpacity
+              style={styles.detailInformationContainer}
+              onPress={this.onLogout}
+            >
               <View style={styles.informationText}>
                 <Ionicons
-                  name='ios-log-out'
+                  name="ios-log-out"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='red'
+                  color="red"
                 />
-                <MuliText style={styles.contentInformation}>Log out</MuliText>
+                <MuliText style={styles.contentInformation}>Thoát</MuliText>
               </View>
               <View>
                 <Ionicons
-                  name='ios-arrow-forward'
+                  name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color='#bdc3c7'
+                  color="#bdc3c7"
                 />
               </View>
             </TouchableOpacity>
@@ -234,20 +265,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    //backgroundColor: 'red'
+    // backgroundColor: 'red'
   },
   informationText: {
     fontSize: 18,
     flexDirection: 'row',
-    color: '#bdc3c7'
+    color: '#bdc3c7',
     // backgroundColor: 'red',
   },
   headerTitle: {
     fontSize: 25,
     color: '#315F61',
     marginBottom: 10,
-    fontWeight: '800'
-
+    fontWeight: '800',
   },
   nameText: {
     fontSize: 35,
@@ -260,17 +290,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     flexDirection: 'row',
     marginTop: 35,
-    //backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
   profileImg: {
     marginLeft: 'auto',
     width: 80,
     height: 80,
     borderRadius: 160 / 2,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: 'black',
   },
 });
-
-

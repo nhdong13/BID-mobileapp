@@ -1,11 +1,16 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
-import { MuliText } from "components/StyledText";
+import { MuliText } from 'components/StyledText';
 import moment from 'moment';
-import Modal from 'react-native-modal';
 import Api from 'api/api_helper';
-import { updateInvitation } from 'api/invitation.api'
+import { updateInvitation } from 'api/invitation.api';
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -17,66 +22,67 @@ export default class InvitationDetail extends Component {
       endTime: '3:00 AM',
       address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
       price: '30/H',
-      detailPictureChildren: require("assets/images/Baby-6.png"),
-      nameChildren: 'Nam',
-      detailPictureParent: require("assets/images/Phuc.png"),
+      detailPictureParent: require('assets/images/Phuc.png'),
       parentName: 'Phuc',
       status: null,
       isModalVisible: false,
-      requestId: 1,
       invitationStatus: 'PENDING',
       childrenNumber: 1,
       minAgeOfChildren: 1,
-    }
+    };
   }
-
-  getData = async () => {
-    await Api.get('invitations/' + this.state.invitationID.toString()).then(resp => {
-      this.setState({
-        parentName: resp.sittingRequest.user.nickname,
-        invitationStatus: resp.status,
-        date: resp.sittingRequest.sittingDate,
-        requestId: resp.sittingRequest.id,
-        startTime: resp.sittingRequest.startTime,
-        endTime: resp.sittingRequest.endTime,
-        address: resp.sittingRequest.sittingAddress,
-        status: resp.sittingRequest.status
-      })
-    })
-  }
-  onLogin = () => {
-    this.setState({ isModalVisible: true })
-  }
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
 
   componentDidMount() {
     this.getData();
   }
+
+  getData = async () => {
+    await Api.get('invitations/' + this.state.invitationID.toString()).then(
+      (resp) => {
+        this.setState({
+          parentName: resp.sittingRequest.user.nickname,
+          invitationStatus: resp.status,
+          date: resp.sittingRequest.sittingDate,
+          startTime: resp.sittingRequest.startTime,
+          endTime: resp.sittingRequest.endTime,
+          address: resp.sittingRequest.sittingAddress,
+          status: resp.sittingRequest.status,
+        });
+      },
+    );
+  };
+
+  onLogin = () => {
+    this.setState({ isModalVisible: true });
+  };
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
 
   onButtonClick = (targetStatus) => {
     const ivBody = {
       id: this.state.invitationID,
       status: targetStatus,
     };
-    updateInvitation(ivBody).then(res => {
-      this.props.navigation.navigate('Home', { loading: false });
-    }).catch(error => console.log(error));
-  }
+    updateInvitation(ivBody)
+      .then(() => {
+        this.props.navigation.navigate('Home', { loading: false });
+      })
+      .catch((error) => console.log(error));
+  };
 
   render() {
     return (
-
       <ScrollView>
         <View style={{ marginHorizontal: 30, backgroundColor: 'white' }}>
           <View style={styles.detailInformationContainer}>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-calendar'
+                name="ios-calendar"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
               <MuliText style={styles.contentInformationDate}>
                 {moment(this.state.date).format('dddd Do MMMM')}
@@ -84,19 +90,21 @@ export default class InvitationDetail extends Component {
             </View>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-cash'
+                name="ios-cash"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
-              <MuliText style={styles.contentInformation}>{this.state.price}</MuliText>
+              <MuliText style={styles.contentInformation}>
+                {this.state.price}
+              </MuliText>
             </View>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-timer'
+                name="ios-timer"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
                 {moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
@@ -105,113 +113,141 @@ export default class InvitationDetail extends Component {
             </View>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-home'
+                name="ios-home"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
-              <MuliText style={styles.contentInformation}>{this.state.address}</MuliText>
+              <MuliText style={styles.contentInformation}>
+                {this.state.address}
+              </MuliText>
             </View>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-megaphone'
+                name="ios-megaphone"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
-              <MuliText style={styles.contentInformation}>{this.state.status}</MuliText>
+              <MuliText style={styles.contentInformation}>
+                {this.state.status}
+              </MuliText>
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Children</MuliText>
+            <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
             <View>
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
                 <View style={{ flexDirection: 'row' }}>
                   <View style={styles.childrenInformationContainer}>
                     <View style={{ flexDirection: 'row', marginTop: 25 }}>
                       <Ionicons
-                        name='ios-man'
+                        name="ios-man"
                         size={22}
                         style={{ marginBottom: -5, marginLeft: 15 }}
                         color="#adffcb"
                       />
                       <View>
-                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>
+                          {this.state.childrenNumber}
+                        </MuliText>
                       </View>
                     </View>
-                    <MuliText style={styles.grayOptionInformation}>Number of children</MuliText>
+                    <MuliText style={styles.grayOptionInformation}>
+                      Số trẻ
+                    </MuliText>
                   </View>
                   <View style={styles.childrenInformationContainer}>
                     <View style={{ flexDirection: 'row', marginTop: 25 }}>
                       <Ionicons
-                        name='ios-happy'
+                        name="ios-happy"
                         size={22}
                         style={{ marginBottom: -5, marginLeft: 15 }}
                         color="#2ecc71"
                       />
                       <View>
-                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>
+                          {this.state.minAgeOfChildren}
+                        </MuliText>
                       </View>
                     </View>
-                    <MuliText style={styles.grayOptionInformation}>Age of the youngest</MuliText>
+                    <MuliText style={styles.grayOptionInformation}>
+                      Nhỏ tuổi nhất:
+                    </MuliText>
                   </View>
                 </View>
               </ScrollView>
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Options</MuliText>
+            <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-cash'
+                name="ios-cash"
                 size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>In-app payment </MuliText>
-                <MuliText style={styles.grayOptionInformation}>The parent pay via online payment</MuliText>
+                <MuliText style={styles.optionInformation}>
+                  Trả bằng thẻ{' '}
+                </MuliText>
+                <MuliText style={styles.grayOptionInformation}>
+                  Phụ huynh trả bằng thẻ
+                </MuliText>
               </View>
             </View>
 
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-car'
+                name="ios-car"
                 size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Pick-up</MuliText>
-                <MuliText style={styles.grayOptionInformation}>Pick my kids at their school</MuliText>
+                <MuliText style={styles.optionInformation}>Đưa đón</MuliText>
+                <MuliText style={styles.grayOptionInformation}>
+                  Đón trẻ tại trường
+                </MuliText>
               </View>
             </View>
 
             <View style={styles.informationText}>
               <Ionicons
-                name='ios-text'
+                name="ios-text"
                 size={22}
                 style={{ marginBottom: -5, marginHorizontal: 5 }}
-                color='#bdc3c7'
+                color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Vietnamese</MuliText>
-                <MuliText style={styles.grayOptionInformation}>You need to know at least Vietnamese to communicate</MuliText>
+                <MuliText style={styles.optionInformation}>Tiếng Việt</MuliText>
+                <MuliText style={styles.grayOptionInformation}>
+                  Bạn cần biết tiếng địa phương
+                </MuliText>
               </View>
             </View>
           </View>
           <View style={styles.detailContainer}>
             <View style={styles.detailPictureContainer}>
-              <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
+              <Image
+                source={this.state.detailPictureParent}
+                style={styles.profileImg}
+              />
               <View style={styles.leftInformation}>
-                <MuliText style={styles.pictureInformation}>Parent</MuliText>
-                <MuliText style={{ fontSize: 15 }}>{this.state.parentName}</MuliText>
+                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
+                <MuliText style={{ fontSize: 15 }}>
+                  {this.state.parentName}
+                </MuliText>
               </View>
               <View style={styles.rightInformation}>
                 <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity>
                     <Ionicons
-                      name='ios-call'
+                      name="ios-call"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
                       color="#bdc3c7"
@@ -219,27 +255,37 @@ export default class InvitationDetail extends Component {
                   </TouchableOpacity>
                   <TouchableOpacity>
                     <Ionicons
-                      name='ios-chatbubbles'
+                      name="ios-chatbubbles"
                       size={22}
                       style={{ marginBottom: -5, marginLeft: 10 }}
                       color="#2ecc71"
                     />
                   </TouchableOpacity>
-
                 </View>
               </View>
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            {this.state.invitationStatus == 'PENDING' &&
+            {this.state.invitationStatus == 'PENDING' && (
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
-                  <MuliText style={{ color: 'red', fontSize: 15 }}>Decline</MuliText>
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={() => this.onButtonClick('DENIED')}
+                >
+                  <MuliText style={{ color: 'red', fontSize: 15 }}>
+                    Từ chối
+                  </MuliText>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.acceptButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
-                  <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>Accept</MuliText>
+                <TouchableOpacity
+                  style={styles.acceptButton}
+                  onPress={() => this.onButtonClick('ACCEPTED')}
+                >
+                  <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>
+                    Chấp nhận
+                  </MuliText>
                 </TouchableOpacity>
-              </View>}
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -247,7 +293,7 @@ export default class InvitationDetail extends Component {
   }
 }
 InvitationDetail.navigationOptions = {
-  title: "Invitation Detail"
+  title: 'Invitation Detail',
 };
 
 const styles = StyleSheet.create({
@@ -305,26 +351,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: '#2ecc71',
     borderWidth: 2,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   headerTitle: {
     fontSize: 15,
     color: '#315F61',
     marginBottom: 5,
-    fontWeight: '800'
+    fontWeight: '800',
   },
   optionsText: {
     fontSize: 15,
-    color: "gray",
+    color: 'gray',
     fontWeight: 'bold',
   },
   profileImg: {
     width: 70,
     height: 70,
     borderRadius: 140 / 2,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: "black"
+    borderColor: 'black',
   },
   textAndDayContainer: {
     flexDirection: 'row',
@@ -333,7 +379,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 20,
     flexDirection: 'row',
-    color: '#bdc3c7'
+    color: '#bdc3c7',
     // backgroundColor: 'red',
   },
   contentInformation: {
@@ -345,7 +391,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingLeft: 15,
     color: '#315F61',
-    fontWeight: '700'
+    fontWeight: '700',
   },
   priceText: {
     fontSize: 15,
@@ -377,7 +423,7 @@ const styles = StyleSheet.create({
   optionInformation: {
     fontSize: 13,
     paddingLeft: 15,
-    fontWeight: '400'
+    fontWeight: '400',
   },
   grayOptionInformation: {
     color: '#bdc3c7',
@@ -388,5 +434,5 @@ const styles = StyleSheet.create({
   },
   textOption: {
     marginHorizontal: 5,
-  }
+  },
 });

@@ -2,7 +2,5 @@ import React from 'react';
 import { Text } from 'react-native';
 
 export function MuliText(props) {
-  return (
-    <Text {...props} style={[props.style, { fontFamily: 'muli' }]} />
-  );
+  return <Text {...props} style={[props.style, { fontFamily: 'muli' }]} />;
 }
