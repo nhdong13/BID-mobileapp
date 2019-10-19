@@ -93,13 +93,13 @@ export default class Bsitter extends Component {
               onPress={() => this.sendInvitation(item.userId)}
             >
               <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                Invite
+                Mời
               </MuliText>
             </TouchableOpacity>
           )}
           {item.isInvited && (
             <MuliText style={{ color: "#B81A1A", fontSize: 16 }}>
-              Invited
+              Đã mời
             </MuliText>
           )}
         </View>

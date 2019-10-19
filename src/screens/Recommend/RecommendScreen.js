@@ -76,7 +76,7 @@ export default class RecommendScreen extends Component {
             <MuliText
               style={{ fontSize: 18, color: "#315f61", marginLeft: 10 }}
             >
-              Recommend ({this.state.recommendCount})
+              Đề nghị ({this.state.recommendCount})
             </MuliText>
           </View>
 
@@ -104,7 +104,7 @@ export default class RecommendScreen extends Component {
             <MuliText
               style={{ fontSize: 18, color: "#315f61", marginLeft: 10 }}
             >
-              Matched Babysitter ({this.state.matchedCount})
+              Người giữ trẻ phù hợp ({this.state.matchedCount})
             </MuliText>
           </View>
           {

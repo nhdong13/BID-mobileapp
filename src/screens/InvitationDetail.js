@@ -123,7 +123,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Children</MuliText>
+            <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
             <View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={{ flexDirection: 'row' }}>
@@ -139,7 +139,7 @@ export default class InvitationDetail extends Component {
                         <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
                       </View>
                     </View>
-                    <MuliText style={styles.grayOptionInformation}>Number of children</MuliText>
+                    <MuliText style={styles.grayOptionInformation}>Số trẻ</MuliText>
                   </View>
                   <View style={styles.childrenInformationContainer}>
                     <View style={{ flexDirection: 'row', marginTop: 25 }}>
@@ -153,14 +153,14 @@ export default class InvitationDetail extends Component {
                         <MuliText style={{ marginLeft: 15, fontSize: 15 }}>2</MuliText>
                       </View>
                     </View>
-                    <MuliText style={styles.grayOptionInformation}>Age of the youngest</MuliText>
+                    <MuliText style={styles.grayOptionInformation}>Nhỏ tuổi nhất:</MuliText>
                   </View>
                 </View>
               </ScrollView>
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Options</MuliText>
+            <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name='ios-cash'
@@ -169,8 +169,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>In-app payment </MuliText>
-                <MuliText style={styles.grayOptionInformation}>The parent pay via online payment</MuliText>
+                <MuliText style={styles.optionInformation}>Trả bằng thẻ </MuliText>
+                <MuliText style={styles.grayOptionInformation}>Phụ huynh trả bằng thẻ</MuliText>
               </View>
             </View>
 
@@ -182,8 +182,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Pick-up</MuliText>
-                <MuliText style={styles.grayOptionInformation}>Pick my kids at their school</MuliText>
+                <MuliText style={styles.optionInformation}>Đưa đón</MuliText>
+                <MuliText style={styles.grayOptionInformation}>Đón trẻ tại trường</MuliText>
               </View>
             </View>
 
@@ -195,8 +195,8 @@ export default class InvitationDetail extends Component {
                 color='#bdc3c7'
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Vietnamese</MuliText>
-                <MuliText style={styles.grayOptionInformation}>You need to know at least Vietnamese to communicate</MuliText>
+                <MuliText style={styles.optionInformation}>Tiếng Việt</MuliText>
+                <MuliText style={styles.grayOptionInformation}>Bạn cần biết tiếng địa phương</MuliText>
               </View>
             </View>
           </View>
@@ -204,7 +204,7 @@ export default class InvitationDetail extends Component {
             <View style={styles.detailPictureContainer}>
               <Image source={this.state.detailPictureParent} style={styles.profileImg} ></Image>
               <View style={styles.leftInformation}>
-                <MuliText style={styles.pictureInformation}>Parent</MuliText>
+                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
                 <MuliText style={{ fontSize: 15 }}>{this.state.parentName}</MuliText>
               </View>
               <View style={styles.rightInformation}>
@@ -234,10 +234,10 @@ export default class InvitationDetail extends Component {
             {this.state.invitationStatus == 'PENDING' &&
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.submitButton} onPress={this.onButtonClick.bind(this, 'DENIED')}>
-                  <MuliText style={{ color: 'red', fontSize: 15 }}>Decline</MuliText>
+                  <MuliText style={{ color: 'red', fontSize: 15 }}>Từ chối</MuliText>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.acceptButton} onPress={this.onButtonClick.bind(this, 'ACCEPTED')}>
-                  <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>Accept</MuliText>
+                  <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>Chấp nhận</MuliText>
                 </TouchableOpacity>
               </View>}
           </View>
