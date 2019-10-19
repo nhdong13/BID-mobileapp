@@ -38,11 +38,13 @@ class HomeScreen extends Component {
 
   async componentDidUpdate(prevProps) {
     const data = this.state;
+    console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
       this.setState({ loading: true });
       if (data.userId != 0 && data.roleId == 2) {
         await getRequests(data.userId)
           .then((res) => {
+          console.log('PHUC: componentDidUpdate -> res', res);
             this.setState({ requests: res }, () =>
               this.setState({ agenda: Math.random(), loading: false })
             );

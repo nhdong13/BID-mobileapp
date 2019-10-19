@@ -48,7 +48,7 @@ export default class InvitationDetail extends Component {
           address: resp.sittingRequest.sittingAddress,
           status: resp.sittingRequest.status,
         });
-      }
+      },
     );
   };
 
@@ -135,7 +135,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Children</MuliText>
+            <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
             <View>
               <ScrollView
                 horizontal={true}
@@ -157,7 +157,7 @@ export default class InvitationDetail extends Component {
                       </View>
                     </View>
                     <MuliText style={styles.grayOptionInformation}>
-                      Number of children
+                      Số trẻ
                     </MuliText>
                   </View>
                   <View style={styles.childrenInformationContainer}>
@@ -175,7 +175,7 @@ export default class InvitationDetail extends Component {
                       </View>
                     </View>
                     <MuliText style={styles.grayOptionInformation}>
-                      Age of the youngest
+                      Nhỏ tuổi nhất:
                     </MuliText>
                   </View>
                 </View>
@@ -183,7 +183,7 @@ export default class InvitationDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Options</MuliText>
+            <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-cash"
@@ -193,10 +193,10 @@ export default class InvitationDetail extends Component {
               />
               <View style={styles.textOption}>
                 <MuliText style={styles.optionInformation}>
-                  In-app payment{' '}
+                  Trả bằng thẻ{' '}
                 </MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  The parent pay via online payment
+                  Phụ huynh trả bằng thẻ
                 </MuliText>
               </View>
             </View>
@@ -209,9 +209,9 @@ export default class InvitationDetail extends Component {
                 color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Pick-up</MuliText>
+                <MuliText style={styles.optionInformation}>Đưa đón</MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  Pick my kids at their school
+                  Đón trẻ tại trường
                 </MuliText>
               </View>
             </View>
@@ -224,9 +224,9 @@ export default class InvitationDetail extends Component {
                 color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Vietnamese</MuliText>
+                <MuliText style={styles.optionInformation}>Tiếng Việt</MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  You need to know at least Vietnamese to communicate
+                  Bạn cần biết tiếng địa phương
                 </MuliText>
               </View>
             </View>
@@ -238,7 +238,7 @@ export default class InvitationDetail extends Component {
                 style={styles.profileImg}
               />
               <View style={styles.leftInformation}>
-                <MuliText style={styles.pictureInformation}>Parent</MuliText>
+                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
                 <MuliText style={{ fontSize: 15 }}>
                   {this.state.parentName}
                 </MuliText>
@@ -273,7 +273,7 @@ export default class InvitationDetail extends Component {
                   onPress={() => this.onButtonClick('DENIED')}
                 >
                   <MuliText style={{ color: 'red', fontSize: 15 }}>
-                    Decline
+                    Từ chối
                   </MuliText>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -281,7 +281,7 @@ export default class InvitationDetail extends Component {
                   onPress={() => this.onButtonClick('ACCEPTED')}
                 >
                   <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>
-                    Accept
+                    Chấp nhận
                   </MuliText>
                 </TouchableOpacity>
               </View>

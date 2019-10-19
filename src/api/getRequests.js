@@ -8,6 +8,8 @@ export async function getRequests(userId) {
   const data = {
     userId: userId,
   };
+  console.log('PHUC: getRequests -> data', data);
+
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
@@ -22,21 +24,23 @@ export async function getRequests(userId) {
   };
 
   const response = await axios(options).catch((error) =>
-    console.log('Error on api getRequest ' + error),
+    console.log('PHUC: getRequests -> error', error),
   );
+  console.log('PHUC: getRequests -> response', response);
+
   if (response) {
-    const parsedResponse = response.data.map(
+    response.data.map(
       (item) =>
         (item.sittingDate = new moment(item.sittingDate).format('YYYY-MM-DD')),
     );
-    const dataGroup = groupByDate(parsedResponse, 'sittingDate');
+    const dataGroup = groupByDate(response.data, 'sittingDate');
     return dataGroup;
   }
   return { message: 'error trying to get data from response' };
 }
 
 const groupByDate = (data, property) =>
-// group ngay tat ca request theo ngay
+  // group ngay tat ca request theo ngay
   data.reduce((acc, obj) => {
     const key = obj[property];
     if (!acc[key]) acc[key] = [];

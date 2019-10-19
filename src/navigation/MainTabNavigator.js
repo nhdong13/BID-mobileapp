@@ -12,6 +12,7 @@ import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import InvitationDetail from 'screens/InvitationDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
+import ProfileDetail from 'screens/ProfileDetail';
 
 const config = Platform.select({
   default: {},
@@ -63,6 +64,7 @@ HomeStack.path = '';
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    Detail: ProfileDetail
   },
   config,
 );

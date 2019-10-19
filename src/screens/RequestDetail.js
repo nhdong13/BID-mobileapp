@@ -64,7 +64,7 @@ export default class RequestDetail extends Component {
         this.props.navigation.navigate('Home', { loading: false });
       })
       .catch((error) => console.log(error));
-  }
+  };
 
   getAcceptedInvitations = async () => {
     const data = await listByRequestAndStatus(
@@ -167,7 +167,7 @@ export default class RequestDetail extends Component {
                       </View>
                     </View>
                     <MuliText style={styles.grayOptionInformation}>
-                      Number of children
+                      Số trẻ:{' '}
                     </MuliText>
                   </View>
                   <View style={styles.childrenInformationContainer}>
@@ -185,7 +185,7 @@ export default class RequestDetail extends Component {
                       </View>
                     </View>
                     <MuliText style={styles.grayOptionInformation}>
-                      Age of the youngest
+                      Nhỏ tuổi nhất:{' '}
                     </MuliText>
                   </View>
                 </View>
@@ -193,7 +193,7 @@ export default class RequestDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Options</MuliText>
+            <MuliText style={styles.headerTitle}>Tùy chọn khác</MuliText>
             <View style={styles.informationText}>
               <Ionicons
                 name="ios-cash"
@@ -203,10 +203,10 @@ export default class RequestDetail extends Component {
               />
               <View style={styles.textOption}>
                 <MuliText style={styles.optionInformation}>
-                  Payment by Credit card
+                  Trả bằng thẻ
                 </MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  Card payment depends on sitter
+                  Thẻ tùy vào người giữ trẻ
                 </MuliText>
               </View>
             </View>
@@ -220,10 +220,10 @@ export default class RequestDetail extends Component {
               />
               <View style={styles.textOption}>
                 <MuliText style={styles.optionInformation}>
-                  The Sitter does not have a car
+                  Người giữ trẻ không có xe
                 </MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  I will take the Sitter home
+                  Tôi sẽ đưa người giữ trẻ về nhà
                 </MuliText>
               </View>
             </View>
@@ -236,9 +236,9 @@ export default class RequestDetail extends Component {
                 color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>VietNamese</MuliText>
+                <MuliText style={styles.optionInformation}>Tiếng Việt</MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  I want the Sitter to speak one of these languages natively
+                  Tôi muốn người giữ trẻ nói tiếng địa phương
                 </MuliText>
               </View>
             </View>
@@ -251,11 +251,9 @@ export default class RequestDetail extends Component {
                 color="#bdc3c7"
               />
               <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>
-                  Complementary insurance
-                </MuliText>
+                <MuliText style={styles.optionInformation}>Bảo hiểm</MuliText>
                 <MuliText style={styles.grayOptionInformation}>
-                  You didn't take the complementary insurance
+                  Tôi không có bảo hiểm
                 </MuliText>
               </View>
             </View>
@@ -269,7 +267,9 @@ export default class RequestDetail extends Component {
                 style={styles.profileImg}
               />
               <View style={styles.leftInformation}>
-                <MuliText style={styles.pictureInformation}>Sitter</MuliText>
+                <MuliText style={styles.pictureInformation}>
+                  Người giữ trẻ
+                </MuliText>
                 <MuliText style={{ fontSize: 15 }}>
                   {this.state.bsitter.nickname}
                 </MuliText>
@@ -287,7 +287,7 @@ export default class RequestDetail extends Component {
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
                   <MuliText style={styles.headerTitle}>
-                    Confirm a sitter
+                    Xác nhận người giữ trẻ
                   </MuliText>
                 </View>
                 <ScrollView>
@@ -301,7 +301,7 @@ export default class RequestDetail extends Component {
                         />
                         <View style={styles.leftInformationSitter}>
                           <MuliText style={styles.pictureInformationSitter}>
-                            Sitter
+                            Người giữ trẻ
                           </MuliText>
                           <MuliText style={{ fontSize: 15 }}>
                             {item.user.nickname}
@@ -315,8 +315,7 @@ export default class RequestDetail extends Component {
                                 color={colors.lightGreen}
                               />
                               <MuliText style={{ marginLeft: 3 }}>
-                                {' '}
-                                1.1 km{' '}
+                                1.1 km
                               </MuliText>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
@@ -369,7 +368,7 @@ export default class RequestDetail extends Component {
                 onPress={() => this.onButtonClick('CANCELED')}
               >
                 <MuliText style={{ color: '#e74c3c', fontSize: 11 }}>
-                  Cancel
+                  Hủy
                 </MuliText>
               </TouchableOpacity>
             )}
@@ -383,7 +382,7 @@ export default class RequestDetail extends Component {
                 }}
               >
                 <MuliText style={{ color: '#2ecc71', fontSize: 12 }}>
-                  Babysitter Check-in
+                  Người giữ trẻ Check-in
                 </MuliText>
               </TouchableOpacity>
             )}
@@ -397,7 +396,7 @@ export default class RequestDetail extends Component {
                 }}
               >
                 <MuliText style={{ color: '#8e44ad', fontSize: 11 }}>
-                  Confirm job is finished
+                  Xác nhận công việc hoàn thành
                 </MuliText>
               </TouchableOpacity>
             )}
@@ -406,12 +405,12 @@ export default class RequestDetail extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.answerButton}>
                 <MuliText style={{ color: '#2ecc71', fontSize: 11 }}>
-                  Accept
+                  Chấp nhận
                 </MuliText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.answerButton}>
                 <MuliText style={{ color: '#e74c3c', fontSize: 11 }}>
-                  Decline
+                  Từ chối
                 </MuliText>
               </TouchableOpacity>
             </View>
@@ -426,7 +425,7 @@ export default class RequestDetail extends Component {
                 }}
               >
                 <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
-                  View List Babysitters
+                  Danh sách người giữ trẻ
                 </MuliText>
               </TouchableOpacity>
             </View>

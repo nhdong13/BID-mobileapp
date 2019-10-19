@@ -48,7 +48,7 @@ class LoginScreen extends Component {
             ToastAndroid.LONG,
             ToastAndroid.TOP,
             25,
-            80
+            80,
           );
         }
       })
@@ -94,7 +94,7 @@ class LoginScreen extends Component {
             style={styles.familyImage}
           />
           <MuliText style={{ color: '#707070', fontSize: 16 }}>
-            Please login to continue
+            Xin hãy đăng nhập để tiếp tục
           </MuliText>
         </View>
         <View style={styles.textContainer}>
@@ -119,7 +119,9 @@ class LoginScreen extends Component {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-            <MuliText style={{ color: 'white', fontSize: 16 }}>Login</MuliText>
+            <MuliText style={{ color: 'white', fontSize: 16 }}>
+              Đăng nhập
+            </MuliText>
           </TouchableOpacity>
         </View>
         {this.state.isModalVisible ? (
@@ -140,7 +142,7 @@ class LoginScreen extends Component {
               }}
             >
               <MuliText style={{ color: '#707070', fontSize: 16 }}>
-                Please input your Authentication Code
+                Xin nhập Authentication Code
               </MuliText>
               <View style={styles.textContainer}>
                 <TextInput
@@ -158,7 +160,7 @@ class LoginScreen extends Component {
                   onPress={this.onSubmitOTP}
                 >
                   <MuliText style={{ color: 'white', fontSize: 16 }}>
-                    Submit
+                    Gửi
                   </MuliText>
                 </TouchableOpacity>
               </View>

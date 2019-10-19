@@ -92,9 +92,7 @@ class HomeScreen extends Component {
                       }}
                     >
                       <View style={styles.leftInformation}>
-                        <MuliText>
-                          Request from {request.user.nickname}
-                        </MuliText>
+                        <MuliText>Yêu cầu từ {request.user.nickname}</MuliText>
                         <MuliText style={styles.date}>
                           {moment(request.sittingDate).format('DD-MM-YYYY')}
                         </MuliText>
@@ -123,9 +121,9 @@ class HomeScreen extends Component {
           ) : (
             <View style={styles.noRequest}>
               <MuliText style={styles.noRequestText}>
-                You don't have any request for now
+                Hiện tại bạn không có yêu cầu nào
               </MuliText>
-              <MuliText>Tap to create one</MuliText>
+              <MuliText>Nhấn để tạo yêu cầu</MuliText>
               <Image
                 source={require('assets/images/no-request.jpg')}
                 style={styles.noRequestImage}
