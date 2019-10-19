@@ -8,7 +8,7 @@ export async function getRequests(userId) {
   const data = {
     userId: userId,
   };
-  console.log('PHUC: getRequests -> data', data);
+  // console.log('PHUC: getRequests -> data', data);
 
   const { token } = await retrieveToken();
   let trimpedToken = '';
@@ -26,7 +26,7 @@ export async function getRequests(userId) {
   const response = await axios(options).catch((error) =>
     console.log('PHUC: getRequests -> error', error),
   );
-  console.log('PHUC: getRequests -> response', response);
+  // console.log('PHUC: getRequests -> response', response);
 
   if (response) {
     response.data.map(
