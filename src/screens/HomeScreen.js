@@ -6,6 +6,7 @@ import {
   Image,
   RefreshControl,
   ScrollView,
+  FlatList,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -14,6 +15,8 @@ import { getRequests } from 'api/getRequests';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { withNavigationFocus } from 'react-navigation';
 import Loader from 'utils/Loader';
+import SitterHome from 'screens/babysitter/SitterHome';
+import ParentHome from 'screens/parent/ParentHome';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../api/api_helper';
@@ -38,22 +41,22 @@ class HomeScreen extends Component {
 
   async componentDidUpdate(prevProps) {
     const data = this.state;
-    console.log('PHUC: componentDidUpdate -> data', data);
+    // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
       this.setState({ loading: true });
       if (data.userId != 0 && data.roleId == 2) {
         await getRequests(data.userId)
           .then((res) => {
-          console.log('PHUC: componentDidUpdate -> res', res);
+            // console.log('PHUC: componentDidUpdate -> res', res);
             this.setState({ requests: res }, () =>
-              this.setState({ agenda: Math.random(), loading: false })
+              this.setState({ agenda: Math.random(), loading: false }),
             );
           })
 
           .catch((error) =>
             console.log(
-              'HomeScreen - getDataAccordingToRole - Requests ' + error
-            )
+              'HomeScreen - getDataAccordingToRole - Requests ' + error,
+            ),
           );
       } else if (data.userId != 0 && data.roleId == 3) {
         const requestBody = {
@@ -65,8 +68,8 @@ class HomeScreen extends Component {
           })
           .catch((error) =>
             console.log(
-              'HomeScreen - getDataAccordingToRole - Invitations ' + error
-            )
+              'HomeScreen - getDataAccordingToRole - Invitations ' + error,
+            ),
           );
       }
     }
@@ -88,8 +91,8 @@ class HomeScreen extends Component {
           })
           .catch((error) =>
             console.log(
-              'HomeScreen - getDataAccordingToRole - Requests ' + error
-            )
+              'HomeScreen - getDataAccordingToRole - Requests ' + error,
+            ),
           );
       } else {
         const requestBody = {
@@ -101,8 +104,8 @@ class HomeScreen extends Component {
           })
           .catch((error) =>
             console.log(
-              'HomeScreen - getDataAccordingToRole - Invitations ' + error
-            )
+              'HomeScreen - getDataAccordingToRole - Invitations ' + error,
+            ),
           );
       }
     } else console.log('Something went wrong -- RoleId not found');
@@ -118,25 +121,28 @@ class HomeScreen extends Component {
   // componentWillUpdate(prevPr)
 
   render() {
-    const { roleId, requests, invitations } = this.state;
+    const { roleId, requests, invitations, loading, refreshing } = this.state;
+    const {
+      container,
+      containerBsitter,
+      textParent,
+      textBsitter,
+      scheduleContainer,
+      scheduleContainerBsitter,
+      noRequest,
+      noRequestText,
+      noRequestImage,
+    } = styles;
     return (
       <View
         key={this.state.agenda}
-        style={roleId == 2 ? styles.container : styles.containerBsitter}
+        style={roleId == 2 ? container : containerBsitter}
       >
-        <Loader loading={this.state.loading} />
+        <Loader loading={loading} />
         <View
-          style={
-            roleId == 2
-              ? styles.scheduleContainer
-              : styles.scheduleContainerBsitter
-          }
+          style={roleId == 2 ? scheduleContainer : scheduleContainerBsitter}
         >
-          <MuliText
-            style={
-              roleId == 2 ? styles.textHeaderParent : styles.textHeaderBsitter
-            }
-          >
+          <MuliText style={roleId == 2 ? textParent : textBsitter}>
             {roleId && roleId == 2
               ? 'When would you need a babysitter ?'
               : 'Hi Sitter'}
@@ -151,52 +157,7 @@ class HomeScreen extends Component {
             selected={new moment().format('YYYY-MM-DD')}
             pastScrollRange={50}
             futureScrollRange={50}
-            renderItem={(request) => (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate('RequestDetail', {
-                    requestId: request.id,
-                  })
-                }
-              >
-                <View style={styles.requestItem}>
-                  <View style={styles.leftInformation}>
-                    <MuliText style={styles.date}>
-                      {moment(request.sittingDate).format('dddd Do MMMM')}
-                    </MuliText>
-                    <MuliText style={{ color: '#7edeb9' }}>
-                      {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
-                      {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
-                    </MuliText>
-                    <MuliText style={{ marginTop: 10 }}>
-                      {request.sittingAddress}
-                    </MuliText>
-                  </View>
-                  <View style={styles.rightInformation}>
-                    {request.status == 'PENDING' ? (
-                      <View style={styles.statusBoxPending}>
-                        <MuliText style={{ fontWeight: '100', color: 'gray' }}>
-                          {request.status}
-                        </MuliText>
-                      </View>
-                    ) : (
-                      <View style={styles.statusBoxConfirm}>
-                        <MuliText
-                          style={{
-                            fontWeight: '100',
-                            color: 'red',
-                            fontSize: 13,
-                          }}
-                        >
-                          {request.status}
-                        </MuliText>
-                      </View>
-                    )}
-                    <MuliText>$100</MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            )}
+            renderItem={(request) => <ParentHome request={request} />}
             rowHasChanged={(r1, r2) => r1.text != r2.text}
             renderDay={() => <View />}
             renderEmptyDate={() => <View />}
@@ -204,19 +165,19 @@ class HomeScreen extends Component {
               <ScrollView
                 refreshControl={
                   <RefreshControl
-                    refreshing={this.state.refreshing}
+                    refreshing={refreshing}
                     onRefresh={this._onRefresh}
                   />
                 }
               >
-                <View style={styles.noRequest}>
-                  <MuliText style={styles.noRequestText}>
+                <View style={noRequest}>
+                  <MuliText style={noRequestText}>
                     You don't have any request for now
                   </MuliText>
                   <MuliText>Tap New Sitting to create one</MuliText>
                   <Image
                     source={require('assets/images/no-request.jpg')}
-                    style={styles.noRequestImage}
+                    style={noRequestImage}
                   />
                 </View>
               </ScrollView>
@@ -234,91 +195,31 @@ class HomeScreen extends Component {
                 this.setState({ refreshing: false });
               });
             }}
-            refreshing={this.state.refreshing}
+            refreshing={refreshing}
           />
         ) : (
           <View style={{ alignItems: 'center', flex: 0.8 }}>
             {invitations != '' && invitations ? (
-              <ScrollView
+              <FlatList
                 refreshControl={
                   <RefreshControl
-                    refreshing={this.state.refreshing}
+                    refreshing={refreshing}
                     onRefresh={this._onRefresh}
                   />
                 }
-              >
-                {invitations.map((invitation) => (
-                  <TouchableOpacity
-                    key={invitation.id}
-                    style={{
-                      backgroundColor: '#fff',
-                      marginTop: 20,
-                      marginHorizontal: 20,
-                      borderRadius: 20,
-                    }}
-                    onPress={() =>
-                      this.props.navigation.navigate('InvitationDetail', {
-                        invitationId: invitation.id,
-                      })
-                    }
-                  >
-                    <View style={styles.requestItemSitter}>
-                      <View style={styles.leftInformationSitter}>
-                        <MuliText style={styles.date}>
-                          {moment(invitation.sittingRequest.sittingDate).format(
-                            'dddd Do MMMM'
-                          )}
-                        </MuliText>
-                        <MuliText>
-                          Invitation from{' '}
-                          {invitation.sittingRequest.user.nickname}
-                        </MuliText>
-                        <MuliText style={{ marginTop: 10, color: '#7edeb9' }}>
-                          {moment
-                            .utc(invitation.sittingRequest.startTime, 'HH:mm')
-                            .format('HH:mm')}{' '}
-                          -
-                          {moment
-                            .utc(invitation.sittingRequest.endTime, 'HH:mm')
-                            .format('HH:mm')}
-                        </MuliText>
-                        <MuliText style={{ marginTop: 10 }}>
-                          {invitation.sittingRequest.sittingAddress}
-                        </MuliText>
-                      </View>
-                      <View style={styles.rightInformation}>
-                        {invitation.status == 'PENDING' ? (
-                          <View style={styles.statusBoxPending}>
-                            <MuliText
-                              style={{ fontWeight: '100', color: 'gray' }}
-                            >
-                              {invitation.status}
-                            </MuliText>
-                          </View>
-                        ) : (
-                          <View style={styles.statusBoxConfirm}>
-                            <MuliText
-                              style={{ fontWeight: '100', color: 'red' }}
-                            >
-                              {invitation.status}
-                            </MuliText>
-                          </View>
-                        )}
-                        <MuliText>$100</MuliText>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
+                data={invitations}
+                renderItem={({ item }) => <SitterHome invitation={item} />}
+                keyExtractor={(item) => item.id.toString()}
+              />
             ) : (
-              <View style={styles.noRequest}>
-                <MuliText style={styles.noRequestText}>
+              <View style={noRequest}>
+                <MuliText style={noRequestText}>
                   You don't have any request for now
                 </MuliText>
                 <MuliText>Tap to create one</MuliText>
                 <Image
                   source={require('assets/images/no-request.jpg')}
-                  style={styles.noRequestImage}
+                  style={noRequestImage}
                 />
               </View>
             )}
@@ -344,43 +245,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#dfe6e9',
   },
-  createRequest: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: 'absolute',
-    opacity: 0.9,
-    bottom: 10,
-    right: 10,
-  },
-  textHeaderParent: {
+  textParent: {
     fontSize: 20,
     color: '#315f61',
     fontWeight: 'bold',
     lineHeight: 20,
   },
-  textHeaderBsitter: {
+  textBsitter: {
     fontSize: 20,
     color: '#315f61',
     fontWeight: 'bold',
     lineHeight: 20,
     alignItems: 'flex-start',
-  },
-  statusBoxPending: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'green',
-    width: 90,
-    height: 40,
-    padding: 10,
-  },
-  statusBoxConfirm: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'green',
-    width: 100,
-    height: 50,
-    padding: 5,
   },
   noRequest: {
     flex: 1,
@@ -402,45 +278,6 @@ const styles = StyleSheet.create({
     width: 261,
     height: 236,
     marginVertical: 20,
-  },
-  requestItemSitter: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    height: 200,
-    width: 350,
-    marginHorizontal: 15,
-    alignItems: 'center',
-    borderRadius: 15,
-    marginBottom: 5,
-  },
-  requestItem: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    height: 180,
-    marginHorizontal: 30,
-    alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 15,
-    marginBottom: 5,
-  },
-  leftInformationSitter: {
-    // backgroundColor: 'blue',
-    marginLeft: 10,
-    flex: 1,
-  },
-  leftInformation: {
-    // backgroundColor: 'blue',
-    margin: 10,
-    paddingHorizontal: 5,
-    flex: 1,
-  },
-  rightInformation: {
-    // backgroundColor: 'green',
-    flex: 1,
-    alignItems: 'flex-end',
-    paddingRight: 20,
   },
   scheduleContainer: {
     alignItems: 'center',

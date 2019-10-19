@@ -25,8 +25,9 @@ export default class Bsitter extends Component {
   };
 
   sendInvitation = async (receiverId) => {
+    const { requestId } = this.props;
     const invitation = {
-      requestId: this.props.requestId,
+      requestId: requestId,
       status: 'PENDING',
       receiver: receiverId,
     };
@@ -91,13 +92,13 @@ export default class Bsitter extends Component {
               style={styles.inviteButton}
               onPress={() => this.sendInvitation(item.userId)}
             >
-              <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+              <MuliText style={{ color: '#78ddb6', fontSize: 16 }}>
                 Mời
               </MuliText>
             </TouchableOpacity>
           )}
           {item.isInvited && (
-            <MuliText style={{ color: "#B81A1A", fontSize: 16 }}>
+            <MuliText style={{ color: '#B81A1A', fontSize: 16 }}>
               Đã mời
             </MuliText>
           )}
