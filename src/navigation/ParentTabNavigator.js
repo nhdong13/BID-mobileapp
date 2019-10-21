@@ -11,7 +11,7 @@ import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
-import MyNetwork from '../screens/circle/MyNetwork';
+// import MyNetwork from '../screens/circle/MyNetwork';
 
 
 const config = Platform.select({
@@ -67,7 +67,8 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
-    Circles: MyNetwork,
+    // Circles: MyNetwork,
+    Recommend: RecommendBabysitter,
   },
   config,
 );

@@ -40,7 +40,7 @@ class HomeScreen extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getDataAccordingToRole();
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
@@ -87,12 +87,19 @@ class HomeScreen extends Component {
   }
 
   handleNotification = (notification) => {
-    console.log('PHUC: HomeScreen -> handleNotification -> notification', notification);
-    if (notification) {
+    const { roleId } = this.state;
+    if (roleId == 2) {
+      this.setState({ notification: notification }, () => {
+        const { notification } = this.state;
+        this.props.navigation.navigate('RequestDetail', {
+          requestId: notification.data.id,
+        });
+      });
+    } else {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
         this.props.navigation.navigate('InvitationDetail', {
-          invitationId: notification.data.invitationId,
+          invitationId: notification.data.id,
         });
       });
     }
