@@ -145,7 +145,7 @@ export default class RequestDetail extends Component {
             </View>
           </View>
           <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Children</MuliText>
+            <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
             <View>
               <ScrollView
                 horizontal={true}
@@ -347,7 +347,7 @@ export default class RequestDetail extends Component {
                               <MuliText
                                 style={{ color: '#78ddb6', fontSize: 11 }}
                               >
-                                Accept
+                                Chấp nhận
                               </MuliText>
                             </TouchableOpacity>
                           </View>

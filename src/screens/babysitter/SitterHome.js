@@ -36,7 +36,7 @@ class SitterHome extends Component {
               )}
             </MuliText>
             <MuliText>
-              Invitation from {invitation.sittingRequest.user.nickname}
+              Lời mời từ {invitation.sittingRequest.user.nickname}
             </MuliText>
             <MuliText style={{ marginTop: 10, color: '#7edeb9' }}>
               {moment

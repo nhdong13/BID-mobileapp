@@ -26,7 +26,7 @@ const ISStack = createStackNavigator(
 );
 
 ISStack.navigationOptions = {
-  tabBarLabel: 'Incomming Sitting',
+  tabBarLabel: 'Lịch sắp tới',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -52,7 +52,7 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Trang chủ',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -71,7 +71,7 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: 'Tùy chỉnh',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
