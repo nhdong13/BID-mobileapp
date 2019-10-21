@@ -57,7 +57,10 @@ class HomeScreen extends Component {
           .then((res) => {
             // console.log('PHUC: componentDidUpdate -> res', res);
             this.setState({ requests: res }, () =>
-              this.setState({ agenda: Math.random(), loading: false }),
+              this.setState({
+                agenda: Math.random(),
+                loading: false,
+              }),
             );
           })
 
@@ -83,15 +86,16 @@ class HomeScreen extends Component {
     }
   }
 
-  // handleNotification = (notification) => {
-  //   this.setState({ notification: notification }, () => {
-  //     const { notification } = this.state;
-  //     this.props.navigation.navigate('Invitation', {
-  //       notification: notification,
-  //       sittingRequestsID: notification.sittingRequestId,
-  //     });
-  //   });
-  // };
+  handleNotification = (notification) => {
+    if (notification) {
+      this.setState({ notification: notification }, () => {
+        const { notification } = this.state;
+        this.props.navigation.navigate('Invitation', {
+          sittingRequestsID: notification.sittingRequestId,
+        });
+      });
+    }
+  };
 
   getDataAccordingToRole = async () => {
     // check role of user parent - 1, bsitter - 2
