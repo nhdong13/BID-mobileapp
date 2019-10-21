@@ -13,6 +13,7 @@
     "jest/globals": true
   },
   "rules": {
+    "no-shadow": "off",
     "global-require": "off",
     "no-confusing-arrow": "off",
     "prefer-object-spread": "off",
