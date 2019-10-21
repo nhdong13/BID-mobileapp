@@ -293,7 +293,7 @@ export default class InvitationDetail extends Component {
   }
 }
 InvitationDetail.navigationOptions = {
-  title: 'Invitation Detail',
+  title: 'Chi tiết lời mời',
 };
 
 const styles = StyleSheet.create({

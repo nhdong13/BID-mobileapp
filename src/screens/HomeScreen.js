@@ -144,11 +144,11 @@ class HomeScreen extends Component {
         >
           <MuliText style={roleId == 2 ? textParent : textBsitter}>
             {roleId && roleId == 2
-              ? 'When would you need a babysitter ?'
-              : 'Hi Sitter'}
+              ? 'Khi nào bạn cần người giữ trẻ?'
+              : 'Chào bạn'}
           </MuliText>
           <TouchableOpacity>
-            <MuliText>Welcome to bid :)</MuliText>
+            <MuliText>Chào mừng đến với BID:)</MuliText>
           </TouchableOpacity>
         </View>
         {roleId && roleId == 2 ? (
@@ -172,9 +172,9 @@ class HomeScreen extends Component {
               >
                 <View style={noRequest}>
                   <MuliText style={noRequestText}>
-                    You don't have any request for now
+                    Hiện tại bạn không có yêu cầu nào
                   </MuliText>
-                  <MuliText>Tap New Sitting to create one</MuliText>
+                  <MuliText>Nhấn vào đây để tạo yêu cầu</MuliText>
                   <Image
                     source={require('assets/images/no-request.jpg')}
                     style={noRequestImage}
@@ -214,9 +214,9 @@ class HomeScreen extends Component {
             ) : (
               <View style={noRequest}>
                 <MuliText style={noRequestText}>
-                  You don't have any request for now
+                  Hiện tại bạn không có yêu cầu nào
                 </MuliText>
-                <MuliText>Tap to create one</MuliText>
+                <MuliText>Nhấn vào đây để tạo yêu cầu</MuliText>
                 <Image
                   source={require('assets/images/no-request.jpg')}
                   style={noRequestImage}

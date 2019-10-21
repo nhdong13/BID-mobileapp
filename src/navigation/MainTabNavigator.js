@@ -50,7 +50,7 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Trang chủ',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -61,6 +61,8 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
+
+
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -70,7 +72,7 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: 'Tùy chỉnh',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -80,6 +82,8 @@ SettingsStack.navigationOptions = {
 };
 
 SettingsStack.path = '';
+
+
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
