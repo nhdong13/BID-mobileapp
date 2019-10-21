@@ -14,20 +14,8 @@ export default class ProfileDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: null,
-      startTime: null,
-      endTime: null,
-      address: null,
-      price: '30/H',
       detailPictureChildren: require('assets/images/Baby-6.png'),
-      nameChildren: 'Nam',
       detailPictureSitter: require('assets/images/Phuc.png'),
-      nameSitter: null,
-      bsitter: null,
-      status: null,
-      invitations: [],
-      childrenNumber: 1,
-      minAgeOfChildren: 1,
     };
   }
 
@@ -371,7 +359,7 @@ export default class ProfileDetail extends Component {
             <Image
               source={this.state.detailPictureSitter}
               style={styles.profileImg}
-            ></Image>
+            />
             <View>
               <View style={{ flexDirection: 'row', marginLeft: 8 }}>
                 <MuliText style={styles.nameReview}>Dương</MuliText>
@@ -402,7 +390,7 @@ export default class ProfileDetail extends Component {
             <Image
               source={this.state.detailPictureSitter}
               style={styles.profileImg}
-            ></Image>
+            />
             <View>
               <View style={{ flexDirection: 'row', marginLeft: 8 }}>
                 <MuliText style={styles.nameReview}>Đông</MuliText>
@@ -431,7 +419,7 @@ export default class ProfileDetail extends Component {
             <Image
               source={this.state.detailPictureSitter}
               style={styles.profileImg}
-            ></Image>
+            />
             <View>
               <View style={{ flexDirection: 'row', marginLeft: 8 }}>
                 <MuliText style={styles.nameReview}>Kỳ</MuliText>
