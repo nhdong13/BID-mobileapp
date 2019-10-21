@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
@@ -30,10 +31,10 @@ class CreateRequestScreen extends Component {
 
     Api.get('users/' + this.state.userId.toString()).then((res) => {
       this.setState({ loggedUser: res, sittingAddress: res.address });
-      console.log(
-        'PHUC: CreateRequestScreen -> componentDidMount -> loggedUser',
-        this.state.loggedUser,
-      );
+      // console.log(
+      // 'PHUC: CreateRequestScreen -> componentDidMount -> loggedUser',
+      // this.state.loggedUser,
+      // );
     });
   }
 
@@ -61,10 +62,10 @@ class CreateRequestScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      console.log(
-        'PHUC: CreateRequestScreen -> getDataAccordingToRole -> roleId',
-        roleId + this.state.roleId,
-      );
+      // console.log(
+      // 'PHUC: CreateRequestScreen -> getDataAccordingToRole -> roleId',
+      // roleId + this.state.roleId,
+      // );
     });
   };
 

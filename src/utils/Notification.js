@@ -1,11 +1,9 @@
 /* eslint-disable no-undef */
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
-import apiUrl from 'utils/Connection';
+import { registerExpoToken } from 'api/expo.api';
 
-const PUSH_ENDPOINT = apiUrl.registerExpoToken;
-
-export default async function registerForPushNotificationsAsync() {
+export default async function registerPushNotifications(userId) {
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS,
   );
@@ -28,22 +26,12 @@ export default async function registerForPushNotificationsAsync() {
   // Get the token that uniquely identifies this device
   const token = await Notifications.getExpoPushTokenAsync();
 
-  // POST the token to your backend server from where you can retrieve it to send push notifications
-  // eslint-disable-next-line no-undef
-  // eslint-disable-next-line consistent-return
-  return fetch(PUSH_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      token: {
-        value: token,
-      },
-      user: {
-        username: 'Brent',
-      },
-    }),
-  });
+  const request = {
+    userId: userId,
+    token: token,
+  };
+
+  registerExpoToken(request)
+    .then((res) => res)
+    .catch((error) => console.error(error));
 }
