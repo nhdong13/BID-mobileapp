@@ -11,6 +11,8 @@ import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
+import MyNetwork from '../screens/circle/MyNetwork';
+
 
 const config = Platform.select({
   default: {},
@@ -24,7 +26,7 @@ const CreateRequestStack = createStackNavigator(
 );
 
 CreateRequestStack.navigationOptions = {
-  tabBarLabel: 'New Sitting',
+  tabBarLabel: 'Tạo mới yêu cầu',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -52,7 +54,7 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Trang chủ',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -63,6 +65,25 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
+const CircleStack = createStackNavigator(
+  {
+    Circles: MyNetwork,
+  },
+  config,
+);
+
+CircleStack.navigationOptions = {
+  tabBarLabel: 'Vòng tròn tin tưởng',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
+    />
+  ),
+};
+
+CircleStack.path = '';
+
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -71,7 +92,7 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: 'Tùy chỉnh',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -84,8 +105,10 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
+  CircleStack,
   CreateRequestStack,
   SettingsStack,
+
 });
 
 tabNavigator.path = '';
