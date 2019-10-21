@@ -4,7 +4,7 @@ import {
   View,
   Image,
   ScrollView,
-  TouchableOpacity,
+  // TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -106,7 +106,7 @@ export default class ProfileDetail extends Component {
                             </View>
                         </View> */}
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               alignContent: 'center',
               marginLeft: 'auto',
@@ -119,7 +119,7 @@ export default class ProfileDetail extends Component {
               color={colors.lightGreen}
             />
             <MuliText style={{ color: colors.lightGreen }}>Like </MuliText>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>
           Địa chỉ: {this.state.address}
@@ -137,17 +137,9 @@ export default class ProfileDetail extends Component {
         ) : (
           <View />
         )}
-        <View style={styles.line} />
-
-        {/* ba
-            by
-            sit
-            ter de
-            tail
-        */}
+        {/* <View style={styles.line} />
         {this.state.roleId == 3 && (
           <View>
-            {/* description */}
             <View
               style={{
                 marginHorizontal: 25,
@@ -197,8 +189,6 @@ export default class ProfileDetail extends Component {
               </MuliText>
             </View>
             <View style={styles.line} />
-
-            {/* tùy chọn */}
             <View style={styles.detailContainer}>
               <MuliText style={styles.headerTitle}>Tùy chọn</MuliText>
               <View style={styles.informationText}>
@@ -257,7 +247,6 @@ export default class ProfileDetail extends Component {
                 </View>
               </View>
             </View>
-            {/* kỹ năng */}
             <View style={styles.detailContainer}>
               <MuliText style={styles.headerTitle}>Kỹ năng</MuliText>
               <ScrollView
@@ -440,21 +429,7 @@ export default class ProfileDetail extends Component {
               </View>
             </View>
           </View>
-        )}
-        {/* e
-            n
-            d
-            baby
-            sit
-            ter
-        */}
-
-        {/* pa
-            re
-            nt
-            de
-            tail
-        */}
+        )} */}
         {this.state.roleId == 2 && (
           <View style={styles.detailContainer}>
             {this.state.child != null ? (
@@ -495,7 +470,7 @@ export default class ProfileDetail extends Component {
   }
 }
 ProfileDetail.navigationOptions = {
-  title: 'Profile detail',
+  title: 'Chi tiết hồ sơ',
 };
 
 const styles = StyleSheet.create({

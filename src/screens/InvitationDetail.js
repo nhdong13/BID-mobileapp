@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   acceptButton: {
-    width: 90,
+    width: 100,
     height: 35,
     padding: 5,
     borderRadius: 6,

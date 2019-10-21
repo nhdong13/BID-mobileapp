@@ -63,24 +63,24 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const CircleStack = createStackNavigator(
-  {
-    Circles: SettingsScreen,
-  },
-  config,
-);
+// const CircleStack = createStackNavigator(
+//   {
+//     Circles: SettingsScreen,
+//   },
+//   config,
+// );
 
-CircleStack.navigationOptions = {
-  tabBarLabel: 'Vòng tròn tin tưởng',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
-    />
-  ),
-};
+// CircleStack.navigationOptions = {
+//   tabBarLabel: 'Vòng tròn tin tưởng',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
+//     />
+//   ),
+// };
 
-CircleStack.path = '';
+// CircleStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -103,10 +103,9 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  CircleStack,
+  // CircleStack,
   CreateRequestStack,
   SettingsStack,
-
 });
 
 tabNavigator.path = '';
