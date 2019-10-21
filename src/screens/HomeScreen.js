@@ -87,11 +87,12 @@ class HomeScreen extends Component {
   }
 
   handleNotification = (notification) => {
+    console.log('PHUC: HomeScreen -> handleNotification -> notification', notification);
     if (notification) {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
-        this.props.navigation.navigate('Invitation', {
-          sittingRequestsID: notification.sittingRequestId,
+        this.props.navigation.navigate('InvitationDetail', {
+          invitationId: notification.data.invitationId,
         });
       });
     }
