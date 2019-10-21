@@ -127,7 +127,7 @@ export default class RecommendScreen extends Component {
 }
 
 RecommendScreen.navigationOptions = {
-  title: 'Recommend babysitter',
+  title: 'Đề nghị người giữ trẻ',
 };
 
 const styles = StyleSheet.create({

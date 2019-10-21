@@ -139,7 +139,7 @@ class HomeScreen extends Component {
 export default HomeScreen;
 
 HomeScreen.navigationOptions = {
-  title: 'Incoming Sitting',
+  title: 'Yêu cầu giữ trẻ',
 };
 
 const styles = StyleSheet.create({
