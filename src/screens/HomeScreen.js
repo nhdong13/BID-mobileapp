@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
@@ -11,7 +13,7 @@ import {
 
 import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
-import { getRequests } from 'api/getRequests';
+import { getRequests } from 'api/sittingRequest.api';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { withNavigationFocus } from 'react-navigation';
 import Loader from 'utils/Loader';
@@ -19,7 +21,9 @@ import SitterHome from 'screens/babysitter/SitterHome';
 import ParentHome from 'screens/parent/ParentHome';
 import colors from 'assets/Color';
 import moment from 'moment';
-import Api from '../api/api_helper';
+import Api from 'api/api_helper';
+import registerPushNotifications from 'utils/Notification';
+import { Notifications } from 'expo';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -32,11 +36,15 @@ class HomeScreen extends Component {
       refreshing: false,
       agenda: 0,
       loading: false,
+      notitfication: {},
     };
   }
 
   componentWillMount() {
     this.getDataAccordingToRole();
+    this._notificationSubscription = Notifications.addListener(
+      this.handleNotification,
+    );
   }
 
   async componentDidUpdate(prevProps) {
@@ -49,7 +57,10 @@ class HomeScreen extends Component {
           .then((res) => {
             // console.log('PHUC: componentDidUpdate -> res', res);
             this.setState({ requests: res }, () =>
-              this.setState({ agenda: Math.random(), loading: false }),
+              this.setState({
+                agenda: Math.random(),
+                loading: false,
+              }),
             );
           })
 
@@ -75,15 +86,36 @@ class HomeScreen extends Component {
     }
   }
 
-  // for user role of Parent - roleId == 2
+  handleNotification = (notification) => {
+    if (notification) {
+      this.setState({ notification: notification }, () => {
+        const { notification } = this.state;
+        this.props.navigation.navigate('Invitation', {
+          sittingRequestsID: notification.sittingRequestId,
+        });
+      });
+    }
+  };
+
   getDataAccordingToRole = async () => {
+    // check role of user parent - 1, bsitter - 2
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
+      registerPushNotifications(userId).then((response) => {
+        if (response) {
+          console.log(
+            'PHUC: HomeScreen -> getDataAccordingToRole -> res',
+            response.data,
+          );
+        }
+      });
     });
 
+    // call api according to their role
     if (this.state.roleId != 0) {
       if (this.state.roleId == 2) {
+        // get data for parent (requests)
         this.setState({ loading: true });
         await getRequests(this.state.userId)
           .then((res) => {
@@ -95,6 +127,8 @@ class HomeScreen extends Component {
             ),
           );
       } else {
+        // get data for the babysitter (invitations)
+        this.setState({ loading: true });
         const requestBody = {
           id: this.state.userId,
         };
@@ -117,8 +151,6 @@ class HomeScreen extends Component {
       this.setState({ refreshing: false });
     });
   };
-
-  // componentWillUpdate(prevPr)
 
   render() {
     const { roleId, requests, invitations, loading, refreshing } = this.state;
