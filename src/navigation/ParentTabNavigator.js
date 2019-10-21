@@ -67,8 +67,7 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
-    // Circles: MyNetwork,
-    Recommend: RecommendBabysitter,
+    Circles: SettingsScreen,
   },
   config,
 );
