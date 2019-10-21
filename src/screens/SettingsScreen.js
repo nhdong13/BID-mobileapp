@@ -3,22 +3,42 @@ import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
 import logout from 'api/logout';
+import Api from 'api/api_helper';
+import { retrieveToken } from 'utils/handleToken';
 
 export default class SettingsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { name: '' };
   }
+
+  componentDidMount() {
+    this.getDataAccordingToRole();
+  }
+
 
   onLogout = async () => {
     logout()
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res) {
           this.props.navigation.navigate('Auth');
         }
       })
       .catch((error) => console.log(error));
+  };
+
+  getDataAccordingToRole = async () => {
+    // check role of user parent - 1, bsitter - 2
+    await retrieveToken().then((res) => {
+      const { userId } = res;
+      this.setState({ userId });
+    });
+
+    await Api.get('users/' + this.state.userId.toString()).then((res) => {
+      this.setState({ name: res.nickname });
+      // console.log(res);
+    });
   };
 
   render() {
@@ -27,7 +47,7 @@ export default class SettingsScreen extends Component {
         <View style={styles.informationContainer} />
         <View style={{ marginHorizontal: 25, marginTop: 10 }}>
           <MuliText style={styles.headerTitle}>
-            Tài khoản của (Tên user)
+            {this.state.name}
           </MuliText>
           <View>
             <TouchableOpacity

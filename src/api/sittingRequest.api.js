@@ -87,7 +87,7 @@ export async function getRequests(userId) {
     data: qs.stringify(data),
   };
 
-  const response = await axios(options).catch((error) => {
+  const response = await axios(options).catch(() => {
     if (userId != 0) console.log('PHUC: getRequests -> error', userId);
   });
   // console.log('PHUC: getRequests -> response', response);

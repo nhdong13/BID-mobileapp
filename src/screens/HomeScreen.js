@@ -103,12 +103,12 @@ class HomeScreen extends Component {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
       registerPushNotifications(userId).then((response) => {
-        if (response) {
-          console.log(
-            'PHUC: HomeScreen -> getDataAccordingToRole -> res',
-            response.data,
-          );
-        }
+        // if (response) {
+        //   console.log(
+        //     'PHUC: HomeScreen -> getDataAccordingToRole -> res',
+        //     response.data,
+        //   );
+        // }
       });
     });
 
