@@ -20,7 +20,7 @@ export default class SettingsScreen extends Component {
   onLogout = async () => {
     logout()
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res) {
           this.props.navigation.navigate('Auth');
         }
@@ -37,7 +37,7 @@ export default class SettingsScreen extends Component {
 
     await Api.get('users/' + this.state.userId.toString()).then((res) => {
       this.setState({ name: res.nickname });
-      console.log(res);
+      // console.log(res);
     });
   };
 
