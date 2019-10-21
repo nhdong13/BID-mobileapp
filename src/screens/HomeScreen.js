@@ -102,17 +102,13 @@ class HomeScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      registerPushNotifications(userId).then((response) => {
-        console.log(
-          'PHUC: HomeScreen -> getDataAccordingToRole -> outside',
-          response,
-        );
-        if (response) {
-          console.log(
-            'PHUC: HomeScreen -> getDataAccordingToRole -> res',
-            response.data,
-          );
-        }
+      registerPushNotifications(userId).then(() => {
+        // if (response) {
+        //   console.log(
+        //     'PHUC: HomeScreen -> getDataAccordingToRole -> res',
+        //     response.data,
+        //   );
+        // }
       });
     });
 
