@@ -53,7 +53,6 @@ export default class RecommendScreen extends Component {
         el.userId == receiverId ? Object.assign(el, { isInvited: true }) : el,
       ),
     }));
-    console.log(this.state.listMatched);
   };
 
   // netstat -ano | findstr 3000
