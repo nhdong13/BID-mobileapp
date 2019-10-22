@@ -30,6 +30,10 @@ export default class InvitationDetail extends Component {
       childrenNumber: 1,
       minAgeOfChildren: 1,
     };
+    console.log(
+      'PHUC: InvitationDetail -> constructor -> invitationID',
+      this.state.invitationID,
+    );
   }
 
   componentDidMount() {

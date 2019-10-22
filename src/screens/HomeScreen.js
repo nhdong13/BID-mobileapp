@@ -42,6 +42,9 @@ class HomeScreen extends Component {
 
   componentWillMount() {
     this.getDataAccordingToRole();
+  }
+
+  componentDidMount() {
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
@@ -87,11 +90,19 @@ class HomeScreen extends Component {
   }
 
   handleNotification = (notification) => {
-    if (notification) {
+    const { roleId } = this.state;
+    if (roleId == 2) {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
-        this.props.navigation.navigate('Invitation', {
-          sittingRequestsID: notification.sittingRequestId,
+        this.props.navigation.navigate('RequestDetail', {
+          requestId: notification.data.id,
+        });
+      });
+    } else {
+      this.setState({ notification: notification }, () => {
+        const { notification } = this.state;
+        this.props.navigation.navigate('InvitationDetail', {
+          invitationId: notification.data.id,
         });
       });
     }
@@ -103,12 +114,12 @@ class HomeScreen extends Component {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
       registerPushNotifications(userId).then((response) => {
-        // if (response) {
-        //   console.log(
-        //     'PHUC: HomeScreen -> getDataAccordingToRole -> res',
-        //     response.data,
-        //   );
-        // }
+        if (response) {
+          console.log(
+            'PHUC: HomeScreen -> getDataAccordingToRole -> res',
+            response.data,
+          );
+        }
       });
     });
 
@@ -153,6 +164,7 @@ class HomeScreen extends Component {
   };
 
   render() {
+    const { navigation } = this.props;
     const { roleId, requests, invitations, loading, refreshing } = this.state;
     const {
       container,
@@ -179,8 +191,8 @@ class HomeScreen extends Component {
               ? 'Khi nào bạn cần người giữ trẻ?'
               : 'Chào bạn'}
           </MuliText>
-          <TouchableOpacity>
-            <MuliText>Chào mừng đến với BID:)</MuliText>
+          <TouchableOpacity style={{ borderWidth: 1, borderColor: '#bdc3c7', marginTop: 20 }} onPress={() => navigation.navigate('CreateRequest')}>
+            <MuliText style={{ color: '#bdc3c7', justifyContent: 'center' }}>  Nhấn vào đây để tạo yêu cầu nhé  </MuliText>
           </TouchableOpacity>
         </View>
         {roleId && roleId == 2 ? (
