@@ -190,8 +190,8 @@ class HomeScreen extends Component {
               ? 'Khi nào bạn cần người giữ trẻ?'
               : 'Chào bạn'}
           </MuliText>
-          <TouchableOpacity>
-            <MuliText>Chào mừng đến với BID:)</MuliText>
+          <TouchableOpacity style={{ borderWidth: 1, borderColor: '#bdc3c7', marginTop: 20 }}>
+            <MuliText style={{ color: '#bdc3c7', justifyContent: 'center' }}>  Nhấn vào đây để tạo yêu cầu nhé  </MuliText>
           </TouchableOpacity>
         </View>
         {roleId && roleId == 2 ? (
