@@ -126,9 +126,9 @@ export default class RecommendScreen extends Component {
   }
 }
 
-RecommendScreen.navigationOptions = {
-  title: 'Đề nghị người giữ trẻ',
-};
+// RecommendScreen.navigationOptions = {
+//   title: 'Đề nghị người giữ trẻ',
+// };
 
 const styles = StyleSheet.create({
   container: {

@@ -11,6 +11,7 @@ import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
+import BsitterProfile from 'screens/Recommend/BsitterProfile';
 
 const config = Platform.select({
   default: {},
@@ -45,8 +46,25 @@ const HomeStack = createStackNavigator(
       }),
     },
     RequestDetail: RequestDetail,
-    Recommend: RecommendBabysitter,
-    CreateRequest: CreateRequestScreen,
+    CreateRequest: {
+      screen: CreateRequestScreen,
+      navigationOptions: () => ({
+        title: 'A',
+        headerBackTitle: 'RecommendBabysitter',
+      })
+    },
+    Recommend: {
+      screen: RecommendBabysitter,
+      navigationOptions: () => ({
+        title: 'Người giữ trẻ phù hợp',
+      })
+    },
+    SitterProfile: {
+      screen: BsitterProfile,
+      navigationOptions: () => ({
+        title: 'Thông tin người giữ trẻ',
+      })
+    }
   },
   config,
 );
