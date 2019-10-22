@@ -11,29 +11,32 @@ import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
+import ProfileDetail from 'screens/ProfileDetail';
+
+// import MyNetwork from '../screens/circle/MyNetwork';
 
 const config = Platform.select({
   default: {},
 });
 
-const CreateRequestStack = createStackNavigator(
-  {
-    CreateRequest: CreateRequestScreen,
-  },
-  config,
-);
+// const CreateRequestStack = createStackNavigator(
+//   {
+//     CreateRequest: CreateRequestScreen,
+//   },
+//   config,
+// );
 
-CreateRequestStack.navigationOptions = {
-  tabBarLabel: 'Tạo mới yêu cầu',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS == 'ios' ? 'ios-add' : 'md-add'}
-    />
-  ),
-};
+// CreateRequestStack.navigationOptions = {
+//   tabBarLabel: 'Tạo mới yêu cầu',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={Platform.OS == 'ios' ? 'ios-add' : 'md-add'}
+//     />
+//   ),
+// };
 
-CreateRequestStack.path = '';
+// CreateRequestStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
@@ -85,6 +88,7 @@ CircleStack.path = '';
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    Profile: ProfileDetail,
   },
   config,
 );
@@ -104,9 +108,7 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   CircleStack,
-  CreateRequestStack,
   SettingsStack,
-
 });
 
 tabNavigator.path = '';

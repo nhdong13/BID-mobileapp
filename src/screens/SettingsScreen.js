@@ -51,7 +51,7 @@ export default class SettingsScreen extends Component {
           </MuliText>
           <View>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Detail')}
+              onPress={() => this.props.navigation.navigate('Profile')}
               style={styles.detailInformationContainer}
             >
               <View style={styles.informationText}>
