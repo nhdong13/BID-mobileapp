@@ -315,7 +315,7 @@ export default class RequestDetail extends Component {
                                 color={colors.lightGreen}
                               />
                               <MuliText style={{ marginLeft: 3 }}>
-                                1.1 km
+                                {item.user.babysitter.distance} km
                               </MuliText>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
@@ -499,6 +499,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   inviteButton: {
+    flex: 1,
     width: 100,
     height: 30,
     backgroundColor: '#315F61',
