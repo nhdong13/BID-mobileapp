@@ -61,12 +61,10 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-
-
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
-    Detail: ProfileDetail
+    Detail: ProfileDetail,
   },
   config,
 );
@@ -82,8 +80,6 @@ SettingsStack.navigationOptions = {
 };
 
 SettingsStack.path = '';
-
-
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
