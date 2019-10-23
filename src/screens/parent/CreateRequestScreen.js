@@ -75,8 +75,7 @@ class CreateRequestScreen extends Component {
     });
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  toggleHidden(key) {
+  toggleHidden = (key) => {
     // eslint-disable-next-line no-unused-expressions
     this.state.child[key.id - 1].checked == null ?
       this.state.child[key.id - 1].checked = true :
@@ -85,7 +84,7 @@ class CreateRequestScreen extends Component {
     this.calculate();
   }
 
-  calculate() {
+  calculate = () => {
     let childCounter = 0;
     let minAge = 99;
     this.state.child.forEach((element) => {
