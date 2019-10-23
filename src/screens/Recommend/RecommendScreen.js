@@ -5,6 +5,7 @@ import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { recommend } from 'api/sittingRequest.api';
 import { FlatList } from 'react-native-gesture-handler';
+import colors from 'assets/Color';
 import Bsitter from 'screens/Recommend/BsitterItem';
 
 export default class RecommendScreen extends Component {
@@ -75,38 +76,36 @@ export default class RecommendScreen extends Component {
               </MuliText>
             </View>
 
-            {this.state.recommendList &&
-              this.state.recommendList.length != 0 && (
-                <FlatList
-                  data={this.state.recommendList}
-                  renderItem={({ item }) => (
-                    <Bsitter
-                      callBack={this.changeInviteStatus}
-                      requestId={this.state.requestId}
-                      item={item}
-                    />
-                  )}
-                  keyExtractor={(item) => item.user.id.toString()}
+            <FlatList
+              data={this.state.recommendList}
+              renderItem={({ item }) => (
+                <Bsitter
+                  callBack={this.changeInviteStatus}
+                  requestId={this.state.requestId}
+                  item={item}
                 />
               )}
+              keyExtractor={(item) => item.user.id.toString()}
+            />
           </View>
         )}
 
-        <View style={styles.sectionContainer}>
-          <View style={styles.headerSection}>
-            <Ionicons
-              name="ios-arrow-down"
-              size={24}
-              style={{ marginBottom: -6, marginLeft: 20 }}
-              color="#315f61"
-            />
-            <MuliText
-              style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-            >
-              Người giữ trẻ phù hợp ({this.state.matchedCount})
-            </MuliText>
-          </View>
-          {this.state.listMatched && this.state.listMatched.length != 0 && (
+        {this.state.listMatched && this.state.listMatched.length > 0 && (
+          <View style={styles.sectionContainer}>
+            <View style={styles.headerSection}>
+              <Ionicons
+                name="ios-arrow-down"
+                size={24}
+                style={{ marginBottom: -6, marginLeft: 20 }}
+                color="#315f61"
+              />
+              <MuliText
+                style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+              >
+                Người giữ trẻ phù hợp ({this.state.matchedCount})
+              </MuliText>
+            </View>
+
             <FlatList
               data={this.state.listMatched}
               renderItem={({ item }) => (
@@ -118,16 +117,23 @@ export default class RecommendScreen extends Component {
               )}
               keyExtractor={(item) => item.user.id.toString()}
             />
-          )}
-        </View>
+          </View>
+        )}
+        {this.state.recommendList.length <= 0 && this.state.listMatched.length <= 0 && (
+          <View style={styles.notfoundMessage}>
+            <MuliText style={{ fontSize: 18, color: 'black', marginLeft: 10}}>
+              Không có người trông trẻ nào phù hợp với yêu cầu của bạn.
+            </MuliText>
+          </View>
+        )}
       </View>
     );
   }
 }
 
-RecommendScreen.navigationOptions = {
-  title: 'Đề nghị người giữ trẻ',
-};
+// RecommendScreen.navigationOptions = {
+//   title: 'Đề nghị người giữ trẻ',
+// };
 
 const styles = StyleSheet.create({
   container: {
@@ -157,6 +163,12 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     marginBottom: 15,
+  },
+  notfoundMessage: {
+    backgroundColor: 'white',
+    flex: 1,
+    padding: 20,
+    marginTop: 10,
   },
   bsitterContainer: {
     marginTop: 20,

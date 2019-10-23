@@ -11,4 +11,9 @@ const apiUrl = {
   registerExpoToken: `${url}/trackings/`,
 };
 
+export const babysitterAPI = {
+  getProfile: `${url}/babysitters/`,
+  getProfileByRequest: `${url}/babysitters/readByRequest/`,
+};
+
 export default apiUrl;
