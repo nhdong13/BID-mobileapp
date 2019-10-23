@@ -51,7 +51,6 @@ class CreateRequestScreen extends Component {
     };
     Api.post('sittingRequests', request)
       .then((res) => {
-        
         if (res) {
           this.props.navigation.navigate('Recommend', { requestId: res.id });
         }
@@ -131,8 +130,8 @@ class CreateRequestScreen extends Component {
                 <DatePicker
                   style={styles.pickedTime}
                   date={this.state.startTime}
-                  minDate={moment().format()}
-                  maxDate={this.state.endTime}
+                  // minDate={moment().format()}
+                  // maxDate={this.state.endTime}
                   mode="time"
                   placeholder="Start time"
                   format="HH:mm"
@@ -173,7 +172,7 @@ class CreateRequestScreen extends Component {
                 />
                 <DatePicker
                   style={styles.pickedTime}
-                  minDate={this.state.startTime}
+                  // minDate={this.state.startTime}
                   date={this.state.endTime}
                   mode="time"
                   placeholder="End time"
