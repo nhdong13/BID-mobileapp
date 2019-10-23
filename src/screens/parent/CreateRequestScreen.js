@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
@@ -21,8 +21,9 @@ class CreateRequestScreen extends Component {
       endTime: null,
       sittingAddress: null,
       price: '100',
-      childrenNumber: 2,
-      minAgeOfChildren: 1,
+      childrenNumber: 0,
+      minAgeOfChildren: 99,
+      child: null,
     };
   }
 
@@ -30,7 +31,11 @@ class CreateRequestScreen extends Component {
     await this.getDataAccordingToRole();
 
     Api.get('users/' + this.state.userId.toString()).then((res) => {
-      this.setState({ loggedUser: res, sittingAddress: res.address });
+      this.setState({
+        loggedUser: res,
+        sittingAddress: res.address,
+        child: res.parent.children,
+      });
       // console.log(
       // 'PHUC: CreateRequestScreen -> componentDidMount -> loggedUser',
       // this.state.loggedUser,
@@ -49,9 +54,9 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
     };
+    console.log(request);
     Api.post('sittingRequests', request)
       .then((res) => {
-        
         if (res) {
           this.props.navigation.navigate('Recommend', { requestId: res.id });
         }
@@ -69,6 +74,27 @@ class CreateRequestScreen extends Component {
       // );
     });
   };
+
+  toggleHidden = (key) => {
+    // eslint-disable-next-line no-unused-expressions
+    this.state.child[key.id - 1].checked == null ?
+      this.state.child[key.id - 1].checked = true :
+      this.state.child[key.id - 1].checked = !this.state.child[key.id - 1].checked;
+    this.forceUpdate();
+    this.calculate();
+  }
+
+  calculate = () => {
+    let childCounter = 0;
+    let minAge = 99;
+    this.state.child.forEach((element) => {
+      if (element.checked) {
+        childCounter += 1;
+        if (minAge > element.age) minAge = element.age;
+      }
+    });
+    this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge, });
+  }
 
   render() {
     return (
@@ -131,8 +157,8 @@ class CreateRequestScreen extends Component {
                 <DatePicker
                   style={styles.pickedTime}
                   date={this.state.startTime}
-                  minDate={moment().format()}
-                  maxDate={this.state.endTime}
+                  // minDate={moment().format()}
+                  // maxDate={this.state.endTime}
                   mode="time"
                   placeholder="Start time"
                   format="HH:mm"
@@ -173,7 +199,7 @@ class CreateRequestScreen extends Component {
                 />
                 <DatePicker
                   style={styles.pickedTime}
-                  minDate={this.state.startTime}
+                  // minDate={this.state.startTime}
                   date={this.state.endTime}
                   mode="time"
                   placeholder="End time"
@@ -242,8 +268,40 @@ class CreateRequestScreen extends Component {
                 }}
               />
               <MuliText style={styles.contentInformation}>
-                Nhỏ tuổi nhất: {this.state.minAgeOfChildren}
+                Nhỏ tuổi nhất: { this.state.minAgeOfChildren == 99 ? 'N/A' : this.state.minAgeOfChildren }
               </MuliText>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.detailContainer}>
+              {this.state.child != null ? (
+                <View>
+                  <MuliText style={styles.headerTitle}>
+                    Số lượng trẻ: {this.state.child.length}
+                  </MuliText>
+                  <View style={styles.detailPictureContainer}>
+                    {this.state.child.map((item) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <TouchableOpacity
+                        key={item.id}
+                        onPress={() => { this.toggleHidden(item); }}
+                      >
+                        <Image
+                          source={{ uri: item.image }}
+                          style={styles.profileImg}
+                        />
+                        <View style={styles.name}>
+                          <Text style={{ fontWeight: this.state.child[item.id - 1].checked ? "bold" : "normal" }}>
+                            {item.name} - {item.age}t
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+              ) : (
+                <View />
+              )}
             </View>
           </View>
           <View>
@@ -335,5 +393,21 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingTop: 30,
     alignItems: 'center',
+  },
+  detailPictureContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  detailContainer: {
+    marginHorizontal: 25,
+    marginTop: 20,
+  },
+  profileImg: {
+    width: 80,
+    height: 80,
+    borderRadius: 140 / 2,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'black',
   },
 });
