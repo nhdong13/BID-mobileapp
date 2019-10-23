@@ -54,7 +54,7 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
     };
-    console.log(request);
+    // console.log(request);
     Api.post('sittingRequests', request)
       .then((res) => {
         if (res) {
