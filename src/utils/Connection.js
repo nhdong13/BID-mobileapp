@@ -1,4 +1,4 @@
-const url = 'http://192.168.0.117:5000/api/v1';
+const url = 'http://192.168.1.3:5000/api/v1';
 const apiUrl = {
   baseUrl: `${url}/`,
   getRequests: `${url}/sittingRequests/listParent`,
@@ -9,6 +9,11 @@ const apiUrl = {
   cancelRequest: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
   registerExpoToken: `${url}/trackings/`,
+};
+
+export const babysitterAPI = {
+  getProfile: `${url}/babysitters/`,
+  getProfileByRequest: `${url}/babysitters/readByRequest/`,
 };
 
 export default apiUrl;

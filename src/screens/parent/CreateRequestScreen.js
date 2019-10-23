@@ -51,6 +51,7 @@ class CreateRequestScreen extends Component {
     };
     Api.post('sittingRequests', request)
       .then((res) => {
+        
         if (res) {
           this.props.navigation.navigate('Recommend', { requestId: res.id });
         }

@@ -6,8 +6,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { createInvitation } from 'api/invitation.api';
 import images from 'assets/images/images';
 import colors from 'assets/Color';
+import { withNavigation } from 'react-navigation';
 
-export default class Bsitter extends Component {
+export class Bsitter extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -40,11 +41,16 @@ export default class Bsitter extends Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, navigation, requestId } = this.props;
     return (
       <View key={item.userId} style={styles.bsitterContainer}>
         <View style={styles.bsitterItem}>
-          <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', flexGrow: 2 }}
+            onPress={() =>
+              navigation.navigate('SitterProfile', { sitterId: item.userId, requestId: requestId })
+            }
+          >
             <Image source={images.parent} style={styles.sitterImage} />
             <View>
               <View style={styles.upperText}>
@@ -107,6 +113,8 @@ export default class Bsitter extends Component {
     );
   }
 }
+
+export default withNavigation(Bsitter);
 
 const styles = StyleSheet.create({
   container: {
