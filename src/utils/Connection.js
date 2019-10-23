@@ -1,4 +1,4 @@
-const url = 'http://192.168.0.102:5000/api/v1';
+const url = 'http://10.251.234.113:5000/api/v1';
 const apiUrl = {
   baseUrl: `${url}/`,
   getRequests: `${url}/sittingRequests/listParent`,
