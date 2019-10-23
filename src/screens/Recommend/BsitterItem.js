@@ -41,14 +41,14 @@ export class Bsitter extends Component {
   };
 
   render() {
-    const { item, navigation } = this.props;
+    const { item, navigation, requestId } = this.props;
     return (
       <View key={item.userId} style={styles.bsitterContainer}>
         <View style={styles.bsitterItem}>
           <TouchableOpacity
             style={{ flexDirection: 'row', flexGrow: 2 }}
             onPress={() =>
-              navigation.navigate('SitterProfile', { sitterId: item.userId })
+              navigation.navigate('SitterProfile', { sitterId: item.userId, requestId: requestId })
             }
           >
             <Image source={images.parent} style={styles.sitterImage} />

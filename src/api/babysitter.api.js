@@ -4,13 +4,13 @@ import qs from 'qs';
 import { babysitterAPI } from 'utils/Connection';
 import moment from 'moment';
 
-export async function getProfile(sitterId) {
+export async function getProfileByRequest(sitterId, requestId) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
 
-  const url = babysitterAPI.getProfile + sitterId;
-
+  const url = babysitterAPI.getProfileByRequest + sitterId + '&' + requestId;
+  
   const options = {
     method: 'GET',
     url: url,
