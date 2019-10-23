@@ -1,4 +1,6 @@
-const url = 'http://10.251.234.113:5000/api/v1';
+import { HOST_ENDPOINT } from 'react-native-dotenv';
+
+const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
   baseUrl: `${url}/`,
   getRequests: `${url}/sittingRequests/listParent`,
