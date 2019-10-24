@@ -53,6 +53,8 @@ export default class InvitationDetail extends Component {
           address: resp.sittingRequest.sittingAddress,
           status: resp.sittingRequest.status,
           price: resp.sittingRequest.totalPrice,
+          childrenNumber: resp.sittingRequest.childrenNumber,
+          minAgeOfChildren: resp.sittingRequest.minAgeOfChildren,
         });
       },
     );
