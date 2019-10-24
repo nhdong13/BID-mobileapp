@@ -5,7 +5,6 @@ import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { recommend } from 'api/sittingRequest.api';
 import { FlatList } from 'react-native-gesture-handler';
-import colors from 'assets/Color';
 import Bsitter from 'screens/Recommend/BsitterItem';
 
 export default class RecommendScreen extends Component {
@@ -17,6 +16,8 @@ export default class RecommendScreen extends Component {
       recommendCount: 0,
       recommendList: [],
       requestId: 0,
+      isModalVisible: true,
+      isModalVisible2: true,
     };
   }
 
@@ -56,6 +57,22 @@ export default class RecommendScreen extends Component {
     }));
   };
 
+  callFunc() {
+    if (this.state.isModalVisible) {
+      this.setState({ isModalVisible: false });
+    } else {
+      this.setState({ isModalVisible: true });
+    }
+  }
+
+  callFunc2() {
+    if (this.state.isModalVisible2) {
+      this.setState({ isModalVisible2: false });
+    } else {
+      this.setState({ isModalVisible2: true });
+    }
+  }
+
   // netstat -ano | findstr 3000
   render() {
     return (
@@ -64,68 +81,94 @@ export default class RecommendScreen extends Component {
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
               <Ionicons
-                name="ios-arrow-down"
+                name={
+                  this.state.isModalVisible ? 'ios-arrow-down' : 'ios-arrow-up'
+                }
                 size={24}
                 style={{ marginBottom: -6, marginLeft: 20 }}
                 color="#315f61"
+                onPress={() => {
+                  this.callFunc();
+                }}
               />
               <MuliText
                 style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
               >
-                Đề nghị ({this.state.recommendCount})
+                Đề nghị (Gần nhất) ({this.state.recommendCount})
               </MuliText>
             </View>
-
-            <FlatList
-              data={this.state.recommendList}
-              renderItem={({ item }) => (
-                <Bsitter
-                  callBack={this.changeInviteStatus}
-                  requestId={this.state.requestId}
-                  item={item}
-                />
-              )}
-              keyExtractor={(item) => item.user.id.toString()}
-            />
+            {this.state.isModalVisible && (
+              <View>
+                {this.state.recommendList &&
+                this.state.recommendList.length > 0 ? (
+                  <FlatList
+                    data={this.state.recommendList}
+                    renderItem={({ item }) => (
+                      <Bsitter
+                        callBack={this.changeInviteStatus}
+                        requestId={this.state.requestId}
+                        item={item}
+                      />
+                    )}
+                    keyExtractor={(item) => item.user.id.toString()}
+                  />
+                ) : (
+                  <View>
+                    <MuliText>
+                      Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
+                      bạn
+                    </MuliText>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
         )}
 
-        {this.state.listMatched && this.state.listMatched.length > 0 && (
-          <View style={styles.sectionContainer}>
-            <View style={styles.headerSection}>
-              <Ionicons
-                name="ios-arrow-down"
-                size={24}
-                style={{ marginBottom: -6, marginLeft: 20 }}
-                color="#315f61"
-              />
-              <MuliText
-                style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-              >
-                Người giữ trẻ phù hợp ({this.state.matchedCount})
-              </MuliText>
-            </View>
-
-            <FlatList
-              data={this.state.listMatched}
-              renderItem={({ item }) => (
-                <Bsitter
-                  callBack={this.changeInviteStatus}
-                  requestId={this.state.requestId}
-                  item={item}
-                />
-              )}
-              keyExtractor={(item) => item.user.id.toString()}
+        <View style={styles.sectionContainer}>
+          <View style={styles.headerSection}>
+            <Ionicons
+              name={
+                this.state.isModalVisible2 ? 'ios-arrow-down' : 'ios-arrow-up'
+              }
+              size={24}
+              style={{ marginBottom: -6, marginLeft: 20 }}
+              color="#315f61"
+              onPress={() => {
+                this.callFunc2();
+              }}
             />
-          </View>
-        )}
-        {this.state.recommendList.length <= 0 && this.state.listMatched.length <= 0 && (
-          <View style={styles.notfoundMessage}>
-            <MuliText style={{ fontSize: 18, color: 'black', marginLeft: 10}}>
-              Không có người trông trẻ nào phù hợp với yêu cầu của bạn.
+            <MuliText
+              style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+            >
+              Người giữ trẻ phù hợp ({this.state.matchedCount})
             </MuliText>
           </View>
-        )}
+          {this.state.isModalVisible2 && (
+            <View>
+              {this.state.listMatched && this.state.listMatched.length != 0 ? (
+                <FlatList
+                  data={this.state.listMatched}
+                  renderItem={({ item }) => (
+                    <Bsitter
+                      callBack={this.changeInviteStatus}
+                      requestId={this.state.requestId}
+                      item={item}
+                    />
+                  )}
+                  keyExtractor={(item) => item.user.id.toString()}
+                />
+              ) : (
+                <View>
+                  <MuliText>
+                    Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
+                    bạn
+                  </MuliText>
+                </View>
+              )}
+            </View>
+          )}
+        </View>
       </View>
     );
   }

@@ -23,9 +23,8 @@ class SitterHome extends Component {
           borderRadius: 20,
         }}
         onPress={() =>
-          navigation.navigate('InvitationDetail', {
-            invitationId: invitation.id,
-          })
+          (invitation.status == 'EXPIRED' || invitation.status == 'DENIED') ?
+            null : navigation.navigate('InvitationDetail', { invitationId: invitation.id, })
         }
       >
         <View style={styles.requestItemSitter}>
@@ -47,25 +46,48 @@ class SitterHome extends Component {
                 .utc(invitation.sittingRequest.endTime, 'HH:mm')
                 .format('HH:mm')}
             </MuliText>
-            <MuliText style={{ marginTop: 10 }}>
-              {invitation.sittingRequest.sittingAddress}
-            </MuliText>
           </View>
           <View style={styles.rightInformation}>
-            {invitation.status == 'PENDING' ? (
+            {invitation.status == 'ACCEPTED' && (
               <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: 'gray' }}>
-                  {invitation.status}
-                </MuliText>
-              </View>
-            ) : (
-              <View style={styles.statusBoxConfirm}>
-                <MuliText style={{ fontWeight: '100', color: 'red' }}>
+                <MuliText
+                  style={{ fontWeight: '100', color: colors.confirmed }}
+                >
                   {invitation.status}
                 </MuliText>
               </View>
             )}
-            <MuliText>$100</MuliText>
+            {invitation.status == 'PENDING' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.pending }}>
+                  {invitation.status}
+                </MuliText>
+              </View>
+            )}
+            {invitation.status == 'CANCELED' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.canceled }}>
+                  {invitation.status}
+                </MuliText>
+              </View>
+            )}
+            {invitation.status == 'CONFIRMED' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText
+                  style={{ fontWeight: '100', color: colors.confirmed }}
+                >
+                  {invitation.status}
+                </MuliText>
+              </View>
+            )}
+            {invitation.status == 'DONE' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.done }}>
+                  {invitation.status}
+                </MuliText>
+              </View>
+            )}
+            <MuliText>100VND</MuliText>
           </View>
         </View>
       </TouchableOpacity>
@@ -110,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'green',
-    width: 90,
+    width: 120,
     height: 40,
     padding: 10,
   },
@@ -147,7 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 200,
+    height: 150,
     width: 350,
     marginHorizontal: 15,
     alignItems: 'center',

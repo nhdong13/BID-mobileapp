@@ -29,7 +29,9 @@ export default class RequestDetail extends Component {
       invitations: [],
       childrenNumber: 1,
       minAgeOfChildren: 1,
+      isModalVisible: false,
     };
+    this.callFunc = this.callFunc.bind(this);
   }
 
   componentWillMount() {
@@ -81,6 +83,14 @@ export default class RequestDetail extends Component {
     await acceptBabysitter(this.state.sittingRequestsID, sitterId);
     this.props.navigation.navigate('Home');
   };
+
+  callFunc() {
+    if (this.state.isModalVisible) {
+      this.setState({ isModalVisible: false });
+    } else {
+      this.setState({ isModalVisible: true });
+    }
+  }
 
   render() {
     return (
@@ -140,125 +150,180 @@ export default class RequestDetail extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.status}
+                {this.state.status == 'PENDING' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.pending }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'DONE' && (
+                  <MuliText style={{ fontWeight: '100', color: colors.done }}>
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'ONGOING' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.ongoing }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'CANCELED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'CONFIRMED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.confirmed }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
               </MuliText>
             </View>
           </View>
-          <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
-            <View>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              >
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={styles.childrenInformationContainer}>
-                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
-                      <Ionicons
-                        name="ios-man"
-                        size={22}
-                        style={{ marginBottom: -5, marginLeft: 15 }}
-                        color="#adffcb"
-                      />
-                      <View>
-                        <MuliText style={{ marginLeft: 10, fontSize: 15 }}>
-                          {this.state.childrenNumber}
-                        </MuliText>
+          <View style={{ flex: 1, marginTop: 15, marginLeft: 10 }}>
+            <TouchableOpacity
+              onPress={() => {
+                this.callFunc();
+              }}
+              title="Show more detail"
+              style={{ flex: 1 }}
+            >
+              <MuliText style={{ color: colors.blueAqua }}>Xem thêm</MuliText>
+            </TouchableOpacity>
+            {this.state.isModalVisible && (
+              <View>
+                <View style={styles.detailContainer}>
+                  <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
+                  <View>
+                    <ScrollView
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                    >
+                      <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.childrenInformationContainer}>
+                          <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                            <Ionicons
+                              name="ios-man"
+                              size={22}
+                              style={{ marginBottom: -5, marginLeft: 15 }}
+                              color="#adffcb"
+                            />
+                            <View>
+                              <MuliText
+                                style={{ marginLeft: 10, fontSize: 15 }}
+                              >
+                                {this.state.childrenNumber}
+                              </MuliText>
+                            </View>
+                          </View>
+                          <MuliText style={styles.grayOptionInformation}>
+                            Số trẻ:{' '}
+                          </MuliText>
+                        </View>
+                        <View style={styles.childrenInformationContainer}>
+                          <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                            <Ionicons
+                              name="ios-happy"
+                              size={22}
+                              style={{ marginBottom: -5, marginLeft: 15 }}
+                              color="#adffcb"
+                            />
+                            <View>
+                              <MuliText
+                                style={{ marginLeft: 10, fontSize: 15 }}
+                              >
+                                {this.state.minAgeOfChildren}
+                              </MuliText>
+                            </View>
+                          </View>
+                          <MuliText style={styles.grayOptionInformation}>
+                            Nhỏ tuổi nhất:{' '}
+                          </MuliText>
+                        </View>
                       </View>
-                    </View>
-                    <MuliText style={styles.grayOptionInformation}>
-                      Số trẻ:{' '}
-                    </MuliText>
-                  </View>
-                  <View style={styles.childrenInformationContainer}>
-                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
-                      <Ionicons
-                        name="ios-happy"
-                        size={22}
-                        style={{ marginBottom: -5, marginLeft: 15 }}
-                        color="#adffcb"
-                      />
-                      <View>
-                        <MuliText style={{ marginLeft: 10, fontSize: 15 }}>
-                          {this.state.minAgeOfChildren}
-                        </MuliText>
-                      </View>
-                    </View>
-                    <MuliText style={styles.grayOptionInformation}>
-                      Nhỏ tuổi nhất:{' '}
-                    </MuliText>
+                    </ScrollView>
                   </View>
                 </View>
-              </ScrollView>
-            </View>
+                <View style={styles.detailContainer}>
+                  <MuliText style={styles.headerTitle}>Tùy chọn khác</MuliText>
+                  <View style={styles.informationText}>
+                    <Ionicons
+                      name="ios-cash"
+                      size={22}
+                      style={{ marginBottom: -5, marginHorizontal: 5 }}
+                      color="#bdc3c7"
+                    />
+                    <View style={styles.textOption}>
+                      <MuliText style={styles.optionInformation}>
+                        Trả bằng thẻ
+                      </MuliText>
+                      <MuliText style={styles.grayOptionInformation}>
+                        Thẻ tùy vào người giữ trẻ
+                      </MuliText>
+                    </View>
+                  </View>
+
+                  <View style={styles.informationText}>
+                    <Ionicons
+                      name="ios-car"
+                      size={22}
+                      style={{ marginBottom: -5, marginHorizontal: 5 }}
+                      color="#bdc3c7"
+                    />
+                    <View style={styles.textOption}>
+                      <MuliText style={styles.optionInformation}>
+                        Người giữ trẻ không có xe
+                      </MuliText>
+                      <MuliText style={styles.grayOptionInformation}>
+                        Tôi sẽ đưa người giữ trẻ về nhà
+                      </MuliText>
+                    </View>
+                  </View>
+
+                  <View style={styles.informationText}>
+                    <Ionicons
+                      name="ios-text"
+                      size={22}
+                      style={{ marginBottom: -5, marginHorizontal: 5 }}
+                      color="#bdc3c7"
+                    />
+                    <View style={styles.textOption}>
+                      <MuliText style={styles.optionInformation}>
+                        Tiếng Việt
+                      </MuliText>
+                      <MuliText style={styles.grayOptionInformation}>
+                        Tôi muốn người giữ trẻ nói tiếng địa phương
+                      </MuliText>
+                    </View>
+                  </View>
+
+                  <View style={styles.informationText}>
+                    <Ionicons
+                      name="ios-man"
+                      size={22}
+                      style={{ marginBottom: -5, marginHorizontal: 10 }}
+                      color="#bdc3c7"
+                    />
+                    <View style={styles.textOption}>
+                      <MuliText style={styles.optionInformation}>
+                        Bảo hiểm
+                      </MuliText>
+                      <MuliText style={styles.grayOptionInformation}>
+                        Tôi không có bảo hiểm
+                      </MuliText>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            )}
           </View>
-          <View style={styles.detailContainer}>
-            <MuliText style={styles.headerTitle}>Tùy chọn khác</MuliText>
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-cash"
-                size={22}
-                style={{ marginBottom: -5, marginHorizontal: 5 }}
-                color="#bdc3c7"
-              />
-              <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>
-                  Trả bằng thẻ
-                </MuliText>
-                <MuliText style={styles.grayOptionInformation}>
-                  Thẻ tùy vào người giữ trẻ
-                </MuliText>
-              </View>
-            </View>
-
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-car"
-                size={22}
-                style={{ marginBottom: -5, marginHorizontal: 5 }}
-                color="#bdc3c7"
-              />
-              <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>
-                  Người giữ trẻ không có xe
-                </MuliText>
-                <MuliText style={styles.grayOptionInformation}>
-                  Tôi sẽ đưa người giữ trẻ về nhà
-                </MuliText>
-              </View>
-            </View>
-
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-text"
-                size={22}
-                style={{ marginBottom: -5, marginHorizontal: 5 }}
-                color="#bdc3c7"
-              />
-              <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Tiếng Việt</MuliText>
-                <MuliText style={styles.grayOptionInformation}>
-                  Tôi muốn người giữ trẻ nói tiếng địa phương
-                </MuliText>
-              </View>
-            </View>
-
-            <View style={styles.informationText}>
-              <Ionicons
-                name="ios-man"
-                size={22}
-                style={{ marginBottom: -5, marginHorizontal: 10 }}
-                color="#bdc3c7"
-              />
-              <View style={styles.textOption}>
-                <MuliText style={styles.optionInformation}>Bảo hiểm</MuliText>
-                <MuliText style={styles.grayOptionInformation}>
-                  Tôi không có bảo hiểm
-                </MuliText>
-              </View>
-            </View>
-          </View>
-
+          {/* render button according status */}
           {/* render babysitter if exist */}
           {this.state.bsitter ? (
             <View style={styles.detailPictureContainer}>
@@ -276,98 +341,117 @@ export default class RequestDetail extends Component {
               </View>
             </View>
           ) : (
-            <View style={styles.detailContainer} />
+            <View />
           )}
           {/* end */}
           {/*  Confirm a sitter */}
 
-          {this.state.status == 'PENDING' &&
-            this.state.bsitter == null &&
-            this.state.invitations.length > 0 && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.headerSection}>
-                  <MuliText style={styles.headerTitle}>
-                    Xác nhận người giữ trẻ
-                  </MuliText>
-                </View>
-                <ScrollView>
-                  {this.state.invitations &&
-                    this.state.invitations != [] &&
-                    this.state.invitations.map((item) => (
-                      <View key={item.id} style={styles.detailPictureContainer}>
-                        <Image
-                          source={this.state.detailPictureSitter}
-                          style={styles.profileImg}
-                        />
-                        <View style={styles.leftInformationSitter}>
-                          <MuliText style={styles.pictureInformationSitter}>
-                            Người giữ trẻ
-                          </MuliText>
-                          <MuliText style={{ fontSize: 15 }}>
-                            {item.user.nickname}
-                          </MuliText>
-                          <View style={styles.lowerText}>
-                            <View style={{ flexDirection: 'row' }}>
-                              <Ionicons
-                                name="ios-pin"
-                                size={17}
-                                style={{ marginBottom: 2 }}
-                                color={colors.lightGreen}
-                              />
-                              <MuliText style={{ marginLeft: 3 }}>
-                                {item.user.babysitter.distance} km
-                              </MuliText>
-                            </View>
-                            <View style={{ flexDirection: 'row' }}>
-                              <Ionicons
-                                name="ios-star"
-                                size={17}
-                                style={{ marginBottom: 2, marginLeft: 5 }}
-                                color={colors.lightGreen}
-                              />
-                              <MuliText style={{ marginLeft: 3 }}>
-                                {item.user.babysitter.averageRating}
-                              </MuliText>
-                            </View>
+          {this.state.status == 'PENDING' && this.state.invitations.length > 0 && (
+            <View style={styles.sectionContainer}>
+              <View style={styles.headerSection}>
+                <MuliText style={styles.headerTitle}>
+                  Xác nhận người giữ trẻ
+                </MuliText>
+              </View>
+              <ScrollView>
+                {this.state.invitations &&
+                  this.state.invitations != [] &&
+                  this.state.invitations.map((item) => (
+                    <View key={item.id} style={styles.detailPictureContainer}>
+                      <Image
+                        source={this.state.detailPictureSitter}
+                        style={styles.profileImg}
+                      />
+                      <View style={styles.leftInformationSitter}>
+                        <MuliText style={styles.pictureInformationSitter}>
+                          Người giữ trẻ
+                        </MuliText>
+                        <MuliText style={{ fontSize: 15 }}>
+                          {item.user.nickname}
+                        </MuliText>
+                        <View style={styles.lowerText}>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Ionicons
+                              name="ios-pin"
+                              size={17}
+                              style={{ marginBottom: 2 }}
+                              color={colors.lightGreen}
+                            />
+                            <MuliText style={{ marginLeft: 3 }}>
+                              {item.user.babysitter.distance} km
+                            </MuliText>
+                          </View>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Ionicons
+                              name="ios-star"
+                              size={17}
+                              style={{ marginBottom: 2, marginLeft: 5 }}
+                              color={colors.lightGreen}
+                            />
+                            <MuliText style={{ marginLeft: 3 }}>
+                              {item.user.babysitter.averageRating}
+                            </MuliText>
                           </View>
                         </View>
-                        <View style={styles.rightInformationSitter}>
-                          <View>
-                            {/* <TouchableOpacity style={styles.inviteButton} >
+                      </View>
+                      <View style={styles.rightInformationSitter}>
+                        <View>
+                          {/* <TouchableOpacity style={styles.inviteButton} >
                           <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
                             Decline
                           </MuliText>
                         </TouchableOpacity> */}
-                            <TouchableOpacity
-                              style={styles.inviteButton}
-                              onPress={() =>
-                                this.acceptBabysitter(item.user.id)
-                              }
+                          <TouchableOpacity
+                            style={styles.inviteButton}
+                            onPress={() => this.acceptBabysitter(item.user.id)}
+                          >
+                            <MuliText
+                              style={{ color: '#78ddb6', fontSize: 11 }}
                             >
-                              <MuliText
-                                style={{ color: '#78ddb6', fontSize: 11 }}
-                              >
-                                Chấp nhận
-                              </MuliText>
-                            </TouchableOpacity>
-                          </View>
+                              Chấp nhận
+                            </MuliText>
+                          </TouchableOpacity>
                         </View>
                       </View>
-                    ))}
-                </ScrollView>
+                    </View>
+                  ))}
+              </ScrollView>
+            </View>
+          )}
+          {this.state.status == 'PENDING' &&
+            this.state.invitations.length == 0 && (
+              <View
+                style={{
+                  marginHorizontal: 15,
+                  marginTop: 30,
+                  alignItems: 'center',
+                }}
+              >
+                <MuliText style={{ color: colors.gray, fontSize: 12 }}>
+                  Chưa có người giữ trẻ nào chấp nhận yêu cầu của bạn
+                </MuliText>
               </View>
             )}
-          {/*  End Confirm a sitter */}
-
-          {/* render button according status */}
-
+          {this.state.status == 'CANCELED' && (
+            <View
+              style={{
+                marginHorizontal: 10,
+                marginTop: 30,
+                alignItems: 'center',
+              }}
+            >
+              <MuliText style={{ color: colors.gray }}>
+                Bạn đã hủy yêu cầu này
+              </MuliText>
+            </View>
+          )}
           <View style={styles.buttonContainer}>
             {this.state.status == 'PENDING' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => this.onButtonClick('CANCELED')}
               >
-                <MuliText style={{ color: '#e74c3c', fontSize: 11 }}>
+                <MuliText style={{ color: '#e74c3c', fontSize: 15 }}>
                   Hủy
                 </MuliText>
               </TouchableOpacity>
@@ -424,9 +508,9 @@ export default class RequestDetail extends Component {
                   });
                 }}
               >
-                <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
+                {/* <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
                   Danh sách người giữ trẻ
-                </MuliText>
+                </MuliText> */}
               </TouchableOpacity>
             </View>
           )}
@@ -438,7 +522,7 @@ export default class RequestDetail extends Component {
   }
 }
 RequestDetail.navigationOptions = {
-  title: 'Request Detail',
+  title: 'Yêu cầu chi tiết',
 };
 
 const styles = StyleSheet.create({
@@ -447,7 +531,7 @@ const styles = StyleSheet.create({
   },
   rightInformation: {
     marginLeft: 'auto',
-    marginTop: 15,
+    marginTop: 10,
   },
   pictureInformationSitter: {
     fontSize: 13,
@@ -460,26 +544,26 @@ const styles = StyleSheet.create({
     color: '#bdc3c7',
   },
   leftInformationSitter: {
-    marginLeft: 10,
+    marginLeft: 5,
   },
   leftInformation: {
-    marginTop: 10,
-    marginLeft: 10,
+    marginTop: 5,
+    marginLeft: 5,
   },
   childrenInformationContainer: {
     flex: 1,
     backgroundColor: 'white',
-    marginHorizontal: 15,
-    marginTop: 15,
+    marginHorizontal: 10,
+    marginTop: 10,
     marginBottom: 5,
-    borderRadius: 15,
-    height: 100,
-    width: 160,
+    borderRadius: 10,
+    height: 80,
+    width: 140,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
-    elevation: 1,
+    elevation: 2,
   },
   lowerText: {
     flexDirection: 'row',
@@ -487,7 +571,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     backgroundColor: 'white',
     flex: 1,
-    marginTop: 10,
+    marginTop: 5,
   },
   headerSection: {
     flexDirection: 'row',
@@ -506,8 +590,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    marginLeft: 50,
+    marginTop: 15,
+    marginLeft: 45,
   },
   bsitterName: {
     fontSize: 13,
@@ -516,44 +600,45 @@ const styles = StyleSheet.create({
   },
   upperText: {
     flexDirection: 'row',
-    marginHorizontal: 10,
-    marginLeft: 15,
+    marginHorizontal: 5,
+    marginLeft: 10,
     flex: 1,
     alignItems: 'center',
   },
   sitterImage: {
     width: '100%',
-    borderRadius: 20,
+    borderRadius: 15,
     resizeMode: 'contain',
-    marginLeft: 50,
+    marginLeft: 45,
   },
   bsitterItem: {
     flexDirection: 'row',
   },
   detailPictureContainer: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 15,
   },
   listBabySitterButton: {
-    marginVertical: 10,
+    marginVertical: 5,
     width: '100%',
     padding: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonContainer: {
+    marginTop: 20,
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
   },
   detailContainer: {
-    marginTop: 20,
+    marginTop: 15,
   },
   name: {
     alignItems: 'center',
   },
   submitButton: {
-    width: 80,
+    width: 250,
     height: 30,
     padding: 5,
     borderRadius: 6,
@@ -571,9 +656,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   headerTitle: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#315F61',
-    marginBottom: 10,
+    marginBottom: 5,
     fontWeight: '800',
     marginLeft: 5,
   },
@@ -595,55 +680,55 @@ const styles = StyleSheet.create({
   },
   informationText: {
     fontSize: 13,
-    marginTop: 20,
+    marginTop: 15,
     flexDirection: 'row',
     color: '#bdc3c7',
     // backgroundColor: 'red',
   },
   contentInformation: {
     fontSize: 12,
-    paddingLeft: 15,
+    paddingLeft: 10,
     color: '#315F61',
   },
   contentInformationDate: {
     fontSize: 12,
-    paddingLeft: 15,
+    paddingLeft: 10,
     color: '#315F61',
     fontWeight: '700',
   },
   priceText: {
     fontSize: 15,
     marginLeft: 150,
-    marginTop: 30,
+    marginTop: 25,
     flexDirection: 'row',
   },
   detailInformationContainer: {
     flex: 1,
-    marginTop: 10,
+    marginTop: 5,
     marginHorizontal: 5,
   },
   detailOptionsContainer: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 15,
   },
   optionText: {
     fontSize: 15,
-    marginLeft: 50,
-    marginTop: 30,
+    marginLeft: 45,
+    marginTop: 25,
     flexDirection: 'row',
   },
 
   optionInformation: {
     fontSize: 13,
-    paddingLeft: 15,
+    paddingLeft: 10,
     fontWeight: '400',
   },
   grayOptionInformation: {
     color: '#bdc3c7',
     fontSize: 11,
-    paddingLeft: 15,
+    paddingLeft: 10,
     fontWeight: '200',
-    marginTop: 10,
+    marginTop: 5,
   },
   textOption: {
     marginHorizontal: 5,
