@@ -22,7 +22,7 @@ export default class InvitationDetail extends Component {
       startTime: '12:00 AM',
       endTime: '3:00 AM',
       address: '68/87 TA20, Thoi An, Ho Chi Minh, Viet Nam',
-      price: '30/H',
+      price: 0,
       detailPictureParent: require('assets/images/Phuc.png'),
       parentName: 'Phuc',
       status: null,
@@ -52,6 +52,9 @@ export default class InvitationDetail extends Component {
           endTime: resp.sittingRequest.endTime,
           address: resp.sittingRequest.sittingAddress,
           status: resp.sittingRequest.status,
+          price: resp.sittingRequest.totalPrice,
+          childrenNumber: resp.sittingRequest.childrenNumber,
+          minAgeOfChildren: resp.sittingRequest.minAgeOfChildren,
         });
       },
     );
@@ -109,7 +112,7 @@ export default class InvitationDetail extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.price}
+                {this.state.price} VND
               </MuliText>
             </View>
             <View style={styles.informationText}>

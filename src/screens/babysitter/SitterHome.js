@@ -23,8 +23,11 @@ class SitterHome extends Component {
           borderRadius: 20,
         }}
         onPress={() =>
-          (invitation.status == 'EXPIRED' || invitation.status == 'DENIED') ?
-            null : navigation.navigate('InvitationDetail', { invitationId: invitation.id, })
+          invitation.status == 'EXPIRED' || invitation.status == 'DENIED'
+            ? null
+            : navigation.navigate('InvitationDetail', {
+                invitationId: invitation.id,
+              })
         }
       >
         <View style={styles.requestItemSitter}>
@@ -57,6 +60,13 @@ class SitterHome extends Component {
                 </MuliText>
               </View>
             )}
+            {invitation.status == 'EXPIRED' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.canceled }}>
+                  {invitation.status}
+                </MuliText>
+              </View>
+            )}
             {invitation.status == 'PENDING' && (
               <View style={styles.statusBoxPending}>
                 <MuliText style={{ fontWeight: '100', color: colors.pending }}>
@@ -80,6 +90,7 @@ class SitterHome extends Component {
                 </MuliText>
               </View>
             )}
+
             {invitation.status == 'DONE' && (
               <View style={styles.statusBoxPending}>
                 <MuliText style={{ fontWeight: '100', color: colors.done }}>
@@ -87,7 +98,7 @@ class SitterHome extends Component {
                 </MuliText>
               </View>
             )}
-            <MuliText>100VND</MuliText>
+            <MuliText>{invitation.sittingRequest.totalPrice}VND</MuliText>
           </View>
         </View>
       </TouchableOpacity>

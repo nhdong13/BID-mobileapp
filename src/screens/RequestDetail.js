@@ -24,7 +24,7 @@ export class RequestDetail extends Component {
       startTime: null,
       endTime: null,
       address: null,
-      price: '30/H',
+      price: 0,
       bsitter: null,
       status: null,
       invitations: [],
@@ -55,6 +55,7 @@ export class RequestDetail extends Component {
           bsitter: resp.bsitter,
           canCheckIn: resp.canCheckIn,
           canCheckOut: resp.canCheckOut,
+          price: resp.totalPrice,
         });
       },
     );
@@ -136,7 +137,7 @@ export class RequestDetail extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.price}
+                {this.state.price} VND
               </MuliText>
             </View>
             <View style={styles.informationText}>

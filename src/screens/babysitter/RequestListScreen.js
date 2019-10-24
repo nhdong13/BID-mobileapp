@@ -111,7 +111,7 @@ class HomeScreen extends Component {
                             {request.status}
                           </MuliText>
                         </View>
-                        <MuliText>100VND</MuliText>
+                        <MuliText>{request.totalPrice} VND</MuliText>
                       </View>
                     </View>
                   </View>
