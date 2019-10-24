@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import * as Permissions from 'expo-permissions';
+import { withNavigation } from 'react-navigation';
 import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import apiUrl from './Connection';
-import { withNavigation } from 'react-navigation';
 
 export class QRcodeScannerScreen extends React.Component {
   constructor(props) {

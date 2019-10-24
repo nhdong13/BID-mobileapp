@@ -24,7 +24,7 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
-import ModalPushNotification from 'components/ModalPushNotification';
+// import ModalPushNotification from 'components/ModalPushNotification';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -179,8 +179,6 @@ class HomeScreen extends Component {
       requests,
       invitations,
       refreshing,
-      setVisible,
-      notification,
     } = this.state;
     const {
       textBsitterRequest,
@@ -202,12 +200,12 @@ class HomeScreen extends Component {
       >
         {/* <Loader loading={loading} /> */}
 
-        {setVisible == true && (
+        {/* {setVisible == true && (
           <ModalPushNotification
             setVisible={setVisible}
             notification={notification}
           />
-        )}
+        )} */}
 
         <View
           style={roleId == 2 ? scheduleContainer : scheduleContainerBsitter}
@@ -239,7 +237,7 @@ class HomeScreen extends Component {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{ marginTop: 30, height: 50 }}
             onPress={() => this.confirmModalPopup()}
           >
@@ -250,7 +248,7 @@ class HomeScreen extends Component {
                 ? 'touch here to see some surprise'
                 : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
             </MuliText>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {roleId && roleId == 2 ? (
           <Agenda
@@ -281,9 +279,9 @@ class HomeScreen extends Component {
                     </MuliText>
                     <View
                       style={{
-                        borderRadius: 1,
-                        borderColor: colors.gray,
-                        borderWidth: 1,
+                        // borderRadius: 1,
+                        // borderColor: colors.gray,
+                        // borderWidth: 1,
                         paddingHorizontal: 10,
                       }}
                     >
