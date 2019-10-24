@@ -20,10 +20,11 @@ class CreateRequestScreen extends Component {
       startTime: null,
       endTime: null,
       sittingAddress: null,
-      price: '100',
+      price: 100,
       childrenNumber: 0,
       minAgeOfChildren: 99,
       child: null,
+      totalPrice: 0,
     };
   }
 
@@ -44,6 +45,9 @@ class CreateRequestScreen extends Component {
   }
 
   onCreateRequest = () => {
+    if (this.state.childrenNumber == 0) {
+      return;
+    }
     const request = {
       createdUser: this.state.userId,
       sittingDate: this.state.sittingDate,
@@ -53,8 +57,9 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
+      totalPrice: this.state.totalPrice,
     };
-    console.log(request);
+    // console.log(request);
     Api.post('sittingRequests', request)
       .then((res) => {
         if (res) {
@@ -77,9 +82,9 @@ class CreateRequestScreen extends Component {
 
   toggleHidden = (key) => {
     // eslint-disable-next-line no-unused-expressions
-    this.state.child[key.id - 1].checked == null ?
-      this.state.child[key.id - 1].checked = true :
-      this.state.child[key.id - 1].checked = !this.state.child[key.id - 1].checked;
+    key.checked == null ?
+      key.checked = true :
+      key.checked = !key.checked;
     this.forceUpdate();
     this.calculate();
   }
@@ -291,7 +296,7 @@ class CreateRequestScreen extends Component {
                           style={styles.profileImg}
                         />
                         <View style={styles.name}>
-                          <Text style={{ fontWeight: this.state.child[item.id - 1].checked ? "bold" : "normal" }}>
+                          <Text style={{ fontWeight: (item.checked == null || item.checked == false) ? "normal" : "bold" }}>
                             {item.name} - {item.age}t
                           </Text>
                         </View>
