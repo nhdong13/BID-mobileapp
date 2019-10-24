@@ -32,6 +32,7 @@ export class Bsitter extends Component {
       status: 'PENDING',
       receiver: receiverId,
     };
+
     // console.log(invitation);
     await createInvitation(invitation)
       .then(() => {
@@ -48,7 +49,10 @@ export class Bsitter extends Component {
           <TouchableOpacity
             style={{ flexDirection: 'row', flexGrow: 2 }}
             onPress={() =>
-              navigation.navigate('SitterProfile', { sitterId: item.userId, requestId: requestId })
+              navigation.navigate('SitterProfile', {
+                sitterId: item.userId,
+                requestId: requestId,
+              })
             }
           >
             <Image source={images.parent} style={styles.sitterImage} />
