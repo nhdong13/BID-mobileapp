@@ -20,11 +20,12 @@ class CreateRequestScreen extends Component {
       startTime: null,
       endTime: null,
       sittingAddress: null,
-      price: 100,
+      price: 0,
       childrenNumber: 0,
       minAgeOfChildren: 99,
       child: null,
       totalPrice: 0,
+      spPrice: null,
     };
   }
 
@@ -57,7 +58,7 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.totalPrice,
+      totalPrice: this.state.price,
     };
     // console.log(request);
     Api.post('sittingRequests', request)
@@ -82,12 +83,10 @@ class CreateRequestScreen extends Component {
 
   toggleHidden = (key) => {
     // eslint-disable-next-line no-unused-expressions
-    key.checked == null ?
-      key.checked = true :
-      key.checked = !key.checked;
+    key.checked == null ? (key.checked = true) : (key.checked = !key.checked);
     this.forceUpdate();
     this.calculate();
-  }
+  };
 
   calculate = () => {
     let childCounter = 0;
@@ -98,8 +97,46 @@ class CreateRequestScreen extends Component {
         if (minAge > element.age) minAge = element.age;
       }
     });
-    this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge, });
-  }
+    this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge });
+  };
+
+  updatePrice = async () => {
+    if (this.state.startTime == null || this.state.endTime == null) return;
+    await Api.get('configuration/' + this.state.sittingDate.toString()).then(
+      (res) => {
+        this.setState({
+          spPrice: res,
+        });
+      },
+    );
+
+    // eslint-disable-next-line radix
+    const startP = parseInt(this.state.startTime[0] + this.state.startTime[1]);
+    // eslint-disable-next-line radix
+    const endP = parseInt(this.state.endTime[0] + this.state.endTime[1]);
+    //
+    // console.log(abc + 'aaaa');
+    let i;
+
+    let tempTotal = 0.0;
+    // eslint-disable-next-line no-plusplus
+    for (i = startP + 1; i < endP; i++) {
+      let temp = this.state.spPrice[i.toString()];
+      if (temp == null) tempTotal += this.state.spPrice['base'];
+      else tempTotal += temp;
+    }
+    let temp = 0.0;
+    temp =
+      (60 - parseInt(this.state.startTime[3] + this.state.startTime[4])) / 60.0;
+    let price = this.state.spPrice[startP.toString()];
+    if (price == null) tempTotal += this.state.spPrice['base'] * temp;
+    else tempTotal += temp * price;
+    temp = parseInt(this.state.endTime[3] + this.state.endTime[4]) / 60.0;
+    price = this.state.spPrice[endP.toString()];
+    if (price == null) tempTotal += this.state.spPrice['base'] * temp;
+    else tempTotal += temp * price;
+    this.setState({ price: tempTotal });
+  };
 
   render() {
     return (
@@ -140,8 +177,9 @@ class CreateRequestScreen extends Component {
                     color: '#7edeb9',
                   },
                 }}
-                onDateChange={(date) => {
-                  this.setState({ sittingDate: date });
+                onDateChange={async (date) => {
+                  await this.setState({ sittingDate: date });
+                  this.updatePrice();
                 }}
                 showIcon={false}
               />
@@ -184,9 +222,10 @@ class CreateRequestScreen extends Component {
                     },
                   }}
                   is24Hour
-                  onDateChange={(time) => {
-                    this.setState({ startTime: time });
+                  onDateChange={async (time) => {
+                    await this.setState({ startTime: time });
                     console.log(this.state.startTime);
+                    this.updatePrice();
                   }}
                   showIcon={false}
                 />
@@ -226,9 +265,10 @@ class CreateRequestScreen extends Component {
                     },
                   }}
                   is24Hour
-                  onDateChange={(time) => {
-                    this.setState({ endTime: time });
+                  onDateChange={async (time) => {
+                    await this.setState({ endTime: time });
                     console.log(this.state.endTime);
+                    this.updatePrice();
                   }}
                   showIcon={false}
                 />
@@ -273,7 +313,10 @@ class CreateRequestScreen extends Component {
                 }}
               />
               <MuliText style={styles.contentInformation}>
-                Nhỏ tuổi nhất: { this.state.minAgeOfChildren == 99 ? 'N/A' : this.state.minAgeOfChildren }
+                Nhỏ tuổi nhất:{' '}
+                {this.state.minAgeOfChildren == 99
+                  ? 'N/A'
+                  : this.state.minAgeOfChildren}
               </MuliText>
             </View>
           </View>
@@ -289,14 +332,23 @@ class CreateRequestScreen extends Component {
                       // eslint-disable-next-line react/no-array-index-key
                       <TouchableOpacity
                         key={item.id}
-                        onPress={() => { this.toggleHidden(item); }}
+                        onPress={() => {
+                          this.toggleHidden(item);
+                        }}
                       >
                         <Image
                           source={{ uri: item.image }}
                           style={styles.profileImg}
                         />
                         <View style={styles.name}>
-                          <Text style={{ fontWeight: (item.checked == null || item.checked == false) ? "normal" : "bold" }}>
+                          <Text
+                            style={{
+                              fontWeight:
+                                item.checked == null || item.checked == false
+                                  ? 'normal'
+                                  : 'bold',
+                            }}
+                          >
                             {item.name} - {item.age}t
                           </Text>
                         </View>
