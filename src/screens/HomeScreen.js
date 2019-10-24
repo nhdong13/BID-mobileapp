@@ -167,6 +167,8 @@ class HomeScreen extends Component {
     const { navigation } = this.props;
     const { roleId, requests, invitations, loading, refreshing } = this.state;
     const {
+      textBsitterRequest,
+      textParentRequest,
       container,
       containerBsitter,
       textParent,
@@ -191,8 +193,17 @@ class HomeScreen extends Component {
               ? 'Khi nào bạn cần người giữ trẻ?'
               : 'Chào bạn'}
           </MuliText>
-          <TouchableOpacity style={{ borderWidth: 1, borderColor: '#bdc3c7', marginTop: 20 }} onPress={() => navigation.navigate('CreateRequest')}>
-            <MuliText style={{ color: '#bdc3c7', justifyContent: 'center' }}>  Nhấn vào đây để tạo yêu cầu nhé  </MuliText>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            onPress={() => navigation.navigate('CreateRequest')}
+          >
+            <MuliText
+              style={roleId == 2 ? textParentRequest : textBsitterRequest}
+            >
+              {roleId && roleId == 2
+                ? 'Nhấn vào đây để tạo yêu cầu nhé'
+                : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
+            </MuliText>
           </TouchableOpacity>
         </View>
         {roleId && roleId == 2 ? (
@@ -214,16 +225,25 @@ class HomeScreen extends Component {
                   />
                 }
               >
-                <View style={noRequest}>
-                  <MuliText style={noRequestText}>
-                    Hiện tại bạn không có yêu cầu nào
-                  </MuliText>
-                  <MuliText>Nhấn vào đây để tạo yêu cầu</MuliText>
-                  <Image
-                    source={require('assets/images/no-request.jpg')}
-                    style={noRequestImage}
-                  />
-                </View>
+                <TouchableOpacity
+                  style={{ marginTop: 20 }}
+                  onPress={() => navigation.navigate('CreateRequest')}
+                >
+                  <View style={noRequest}>
+                    <MuliText style={noRequestText}>
+                      Hiện tại bạn không có yêu cầu nào
+                    </MuliText>
+
+                    <MuliText style={styles.textParentRequest}>
+                      Nhấn vào đây để tạo yêu cầu nhé
+                    </MuliText>
+
+                    <Image
+                      source={require('assets/images/no-request.jpg')}
+                      style={noRequestImage}
+                    />
+                  </View>
+                </TouchableOpacity>
               </ScrollView>
             )}
             hideKnob={false}
@@ -260,7 +280,6 @@ class HomeScreen extends Component {
                 <MuliText style={noRequestText}>
                   Hiện tại bạn không có yêu cầu nào
                 </MuliText>
-                <MuliText>Nhấn vào đây để tạo yêu cầu</MuliText>
                 <Image
                   source={require('assets/images/no-request.jpg')}
                   style={noRequestImage}
@@ -281,6 +300,12 @@ HomeScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  textParentRequest: {
+    color: colors.gray,
+  },
+  textBsitterRequest: {
+    color: colors.gray,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -290,13 +315,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#dfe6e9',
   },
   textParent: {
-    fontSize: 20,
+    marginTop: 20,
+    fontSize: 19,
     color: '#315f61',
     fontWeight: 'bold',
     lineHeight: 20,
   },
   textBsitter: {
-    fontSize: 20,
+    marginTop: 20,
+    fontSize: 19,
     color: '#315f61',
     fontWeight: 'bold',
     lineHeight: 20,
@@ -336,7 +363,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     marginTop: 25,
-    paddingVertical: 15,
     paddingLeft: 30,
     flex: 0.25,
     backgroundColor: '#fff',
