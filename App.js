@@ -1,13 +1,47 @@
 import { AppLoading } from 'expo';
+import { retrieveToken } from 'utils/handleToken';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import apiUrl from 'utils/Connection';
+import io from 'socket.io-client';
+import NavigationService from './NavigationService.js';
 
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App(props) {
+  console.log('local ra cai coi ' + NavigationService);
+  useEffect(() => {
+    retrieveToken().then((res) => {
+      const { roleId } = res;
+
+      if (roleId == 3) {
+        console.log('useEffect react hook');
+        const bsitterSocket = io(apiUrl.socketIo, {
+          transports: ['websocket'],
+        });
+
+        bsitterSocket.on('connect', () => {
+          console.log('main app socket to recceiver');
+        });
+
+        bsitterSocket.on('qrTrigger', (qr) => {
+          console.log('PHUC: App -> qr', qr);
+          NavigationService.navigate('QrSitter', { qrData: qr });
+        });
+
+        bsitterSocket.on('connect_error', (error) => {
+          console.log('connection error  ', error);
+        });
+
+        bsitterSocket.on('error', (error) => {
+          console.log('jsut some normal error, error in general ', error);
+        });
+      }
+    });
+  }, []);
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
@@ -22,7 +56,11 @@ export default function App(props) {
   return (
     <View style={styles.container}>
       {Platform.OS == 'ios' && <StatusBar barStyle="default" />}
-      <AppNavigator />
+      <AppNavigator
+        ref={(navigatoRef) => {
+          NavigationService.setTopLevelNavigator(navigatoRef);
+        }}
+      />
     </View>
   );
 }

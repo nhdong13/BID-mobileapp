@@ -9,14 +9,14 @@ import {
   RefreshControl,
   ScrollView,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/sittingRequest.api';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { withNavigationFocus } from 'react-navigation';
-import Loader from 'utils/Loader';
+// import Loader from 'utils/Loader';
 import SitterHome from 'screens/babysitter/SitterHome';
 import ParentHome from 'screens/parent/ParentHome';
 import colors from 'assets/Color';
@@ -24,6 +24,7 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
+import ModalPushNotification from 'components/ModalPushNotification';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class HomeScreen extends Component {
       agenda: 0,
       loading: false,
       notitfication: {},
+      setVisible: false,
     };
   }
 
@@ -54,7 +56,6 @@ class HomeScreen extends Component {
     const data = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
-      this.setState({ loading: true });
       if (data.userId != 0 && data.roleId == 2) {
         await getRequests(data.userId)
           .then((res) => {
@@ -62,7 +63,7 @@ class HomeScreen extends Component {
             this.setState({ requests: res }, () =>
               this.setState({
                 agenda: Math.random(),
-                loading: false,
+                setVisible: false,
               }),
             );
           })
@@ -78,7 +79,7 @@ class HomeScreen extends Component {
         };
         await Api.post('invitations/sitterInvitation', requestBody)
           .then((res) => {
-            this.setState({ invitations: res, loading: false });
+            this.setState({ invitations: res, setVisible: false });
           })
           .catch((error) =>
             console.log(
@@ -93,11 +94,12 @@ class HomeScreen extends Component {
     const { roleId } = this.state;
     if (roleId == 2) {
       this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.props.navigation.navigate('RequestDetail', {
-          requestId: notification.data.id,
-        });
+        // const { notification } = this.state;
+        // this.props.navigation.navigate('RequestDetail', {
+        //   requestId: notification.data.id,
+        // });
       });
+      // this.confirmModalPopup();
     } else {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
@@ -108,11 +110,15 @@ class HomeScreen extends Component {
     }
   };
 
+  confirmModalPopup = () => {
+    this.setState({ setVisible: !this.state.setVisible });
+  };
+
   getDataAccordingToRole = async () => {
     // check role of user parent - 1, bsitter - 2
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
-      this.setState({ userId, roleId });
+      this.setState({ userId, roleId, setVisible: false });
       registerPushNotifications(userId).then((response) => {
         if (response) {
           console.log(
@@ -127,10 +133,9 @@ class HomeScreen extends Component {
     if (this.state.roleId != 0) {
       if (this.state.roleId == 2) {
         // get data for parent (requests)
-        this.setState({ loading: true });
         await getRequests(this.state.userId)
           .then((res) => {
-            this.setState({ requests: res, loading: false });
+            this.setState({ requests: res });
           })
           .catch((error) =>
             console.log(
@@ -139,13 +144,17 @@ class HomeScreen extends Component {
           );
       } else {
         // get data for the babysitter (invitations)
-        this.setState({ loading: true });
+        // this.setState({ loading: true });
         const requestBody = {
           id: this.state.userId,
         };
         await Api.post('invitations/sitterInvitation', requestBody)
           .then((res) => {
-            this.setState({ invitations: res, loading: false });
+            this.setState({
+              invitations: res,
+              loading: false,
+              setVisible: false,
+            });
           })
           .catch((error) =>
             console.log(
@@ -157,15 +166,22 @@ class HomeScreen extends Component {
   };
 
   _onRefresh = () => {
-    this.setState({ refreshing: true });
+    // this.setState({ refreshing: true });
     this.getDataAccordingToRole().then(() => {
-      this.setState({ refreshing: false });
+      // this.setState({ refreshing: false });
     });
   };
 
   render() {
     const { navigation } = this.props;
-    const { roleId, requests, invitations, loading, refreshing } = this.state;
+    const {
+      roleId,
+      requests,
+      invitations,
+      refreshing,
+      setVisible,
+      notification,
+    } = this.state;
     const {
       textBsitterRequest,
       textParentRequest,
@@ -184,7 +200,15 @@ class HomeScreen extends Component {
         key={this.state.agenda}
         style={roleId == 2 ? container : containerBsitter}
       >
-        <Loader loading={loading} />
+        {/* <Loader loading={loading} /> */}
+
+        {setVisible == true && (
+          <ModalPushNotification
+            setVisible={setVisible}
+            notification={notification}
+          />
+        )}
+
         <View
           style={roleId == 2 ? scheduleContainer : scheduleContainerBsitter}
         >
@@ -202,6 +226,19 @@ class HomeScreen extends Component {
             >
               {roleId && roleId == 2
                 ? 'Nhấn vào đây để tạo yêu cầu nhé'
+                : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
+            </MuliText>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ marginTop: 30, height: 50 }}
+            onPress={() => this.confirmModalPopup()}
+          >
+            <MuliText
+              style={roleId == 2 ? textParentRequest : textBsitterRequest}
+            >
+              {roleId && roleId == 2
+                ? 'touch here to see some surprise'
                 : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
             </MuliText>
           </TouchableOpacity>

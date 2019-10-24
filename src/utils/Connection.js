@@ -12,7 +12,7 @@ const apiUrl = {
   cancelRequest: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
   registerExpoToken: `${url}/trackings/`,
-  socketIo: `${url}/socket`,
+  socketIo: `${url}/qr`,
 };
 
 export const babysitterAPI = {

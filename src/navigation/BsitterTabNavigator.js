@@ -5,6 +5,7 @@ import {
   createBottomTabNavigator,
 } from 'react-navigation';
 
+import qrBsitter from 'screens/qrBsitter';
 import InvitationDetail from 'screens/InvitationDetail';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -24,6 +25,7 @@ const HomeStack = createStackNavigator(
       }),
     },
     InvitationDetail: InvitationDetail,
+    QrSitter: qrBsitter,
   },
   config,
 );

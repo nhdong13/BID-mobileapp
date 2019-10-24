@@ -14,6 +14,7 @@ import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
 import MyNetwork from 'screens/circle/MyNetwork';
+import QRcodeScannerScreen from 'utils/qrScanner';
 
 const config = Platform.select({
   default: {},
@@ -85,6 +86,7 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
+    QrScanner: QRcodeScannerScreen,
     Circles: MyNetwork,
   },
   config,
@@ -123,8 +125,8 @@ SettingsStack.navigationOptions = {
 SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
-  CircleStack,
   HomeStack,
+  CircleStack,
   SettingsStack,
 });
 
