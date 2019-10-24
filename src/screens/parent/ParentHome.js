@@ -67,7 +67,7 @@ class ParentHome extends Component {
                 </MuliText>
               </View>
             )}
-            <MuliText>100VND</MuliText>
+            <MuliText>{request.totalPrice} VND</MuliText>
           </View>
         </View>
       </TouchableOpacity>
