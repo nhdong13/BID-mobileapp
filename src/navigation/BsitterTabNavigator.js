@@ -6,8 +6,6 @@ import {
 } from 'react-navigation';
 
 import InvitationDetail from 'screens/InvitationDetail';
-import RequestDetail from 'screens/RequestDetail';
-import RequestList from 'screens/babysitter/RequestListScreen';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -15,27 +13,6 @@ import SettingsScreen from '../screens/SettingsScreen';
 const config = Platform.select({
   default: {},
 });
-
-// Babysitter Incoming sitting
-const ISStack = createStackNavigator(
-  {
-    RequestList: RequestList,
-    RequestDetail: RequestDetail,
-  },
-  config,
-);
-
-ISStack.navigationOptions = {
-  tabBarLabel: 'Lịch sắp tới',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS == 'ios' ? 'ios-home' : 'md-home'}
-    />
-  ),
-};
-
-ISStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
@@ -84,7 +61,6 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  ISStack,
   SettingsStack,
 });
 

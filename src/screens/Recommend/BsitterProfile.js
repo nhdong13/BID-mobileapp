@@ -73,9 +73,6 @@ export default class BsitterProfile extends Component {
 
   // netstat -ano | findstr 3000
   render() {
-    const { sitter } = this.state;
-    const { user } = sitter;
-
     return (
       <View style={styles.container}>
         {this.state.sitter && (
