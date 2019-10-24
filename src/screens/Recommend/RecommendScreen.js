@@ -174,9 +174,9 @@ export default class RecommendScreen extends Component {
   }
 }
 
-RecommendScreen.navigationOptions = {
-  title: 'Đề nghị người giữ trẻ',
-};
+// RecommendScreen.navigationOptions = {
+//   title: 'Đề nghị người giữ trẻ',
+// };
 
 const styles = StyleSheet.create({
   container: {
@@ -206,6 +206,12 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     marginBottom: 15,
+  },
+  notfoundMessage: {
+    backgroundColor: 'white',
+    flex: 1,
+    padding: 20,
+    marginTop: 10,
   },
   bsitterContainer: {
     marginTop: 20,

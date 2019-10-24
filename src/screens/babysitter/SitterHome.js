@@ -23,9 +23,8 @@ class SitterHome extends Component {
           borderRadius: 20,
         }}
         onPress={() =>
-          navigation.navigate('InvitationDetail', {
-            invitationId: invitation.id,
-          })
+          (invitation.status == 'EXPIRED' || invitation.status == 'DENIED') ?
+            null : navigation.navigate('InvitationDetail', { invitationId: invitation.id, })
         }
       >
         <View style={styles.requestItemSitter}>

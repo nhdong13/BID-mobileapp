@@ -40,11 +40,13 @@ class Api {
     const url = apiConfig.host + route;
     const options = Object.assign(
       { method: verb },
-      params ? { body: JSON.stringify(params) } : null
+      params ? { body: JSON.stringify(params) } : null,
     );
     options.headers = Api.headers();
     // console.log({ request: params, headers: options.headers });
-    const { token } = await retrieveToken();
+    const { token } = await retrieveToken().catch((error) =>
+      console.log(error),
+    );
     const trimpedToken = token.replace(/['"]+/g, '');
     if (token) {
       options.headers.Authorization = `Bearer ${trimpedToken}`;

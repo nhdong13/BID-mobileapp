@@ -72,7 +72,7 @@ export async function getRequests(userId) {
   const data = {
     userId: userId,
   };
-  console.log('PHUC: getRequests -> data chac t danh may qua', data);
+  // console.log('PHUC: getRequests -> data chac t danh may qua', data);
 
   const { token } = await retrieveToken();
   let trimpedToken = '';
@@ -90,7 +90,7 @@ export async function getRequests(userId) {
   const response = await axios(options).catch(() => {
     if (userId != 0) console.log('PHUC: getRequests -> error', userId);
   });
-  // console.log('PHUC: getRequests -> response', response);
+  // // console.log('PHUC: getRequests -> response', response);
 
   if (response) {
     response.data.map(
