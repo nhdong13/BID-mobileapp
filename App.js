@@ -41,6 +41,8 @@ async function loadResourcesAsync() {
       muli: require('./assets/fonts/Muli-Regular.ttf'),
       muliBold: require('./assets/fonts/Muli-Bold.ttf'),
       muliSemiBold: require('./assets/fonts/Muli-SemiBold.ttf'),
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
     }),
   ]);
 }
