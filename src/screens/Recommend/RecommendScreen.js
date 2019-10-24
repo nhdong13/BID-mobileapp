@@ -77,7 +77,7 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.recommendList && this.state.recommendList.length > 0 ? (
+        {this.state.recommendList && this.state.recommendList.length > 0 && (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
               <Ionicons
@@ -116,14 +116,8 @@ export default class RecommendScreen extends Component {
               </View>
             )}
           </View>
-        ) : (
-          <View>
-            <MuliText>
-              Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
-            </MuliText>
-          </View>
         )}
-        }
+
         <View style={styles.sectionContainer}>
           <View style={styles.headerSection}>
             <Ionicons
@@ -145,7 +139,7 @@ export default class RecommendScreen extends Component {
           </View>
           {this.state.isModalVisible2 && (
             <View>
-              {this.state.listMatched && this.state.listMatched.length != 0 ? (
+              {this.state.listMatched && this.state.listMatched.length != 0 && (
                 <FlatList
                   data={this.state.listMatched}
                   renderItem={({ item }) => (
@@ -157,13 +151,6 @@ export default class RecommendScreen extends Component {
                   )}
                   keyExtractor={(item) => item.user.id.toString()}
                 />
-              ) : (
-                <View>
-                  <MuliText>
-                    Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
-                    bạn
-                  </MuliText>
-                </View>
               )}
             </View>
           )}
