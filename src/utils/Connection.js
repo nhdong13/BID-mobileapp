@@ -7,7 +7,7 @@ const apiUrl = {
   getRequests: `${url}/sittingRequests/listParent`,
   getInvitations: `${url}/invitations/`,
   login: `${url}/auth/login`,
-  getRecommend: `${url}/sittingRequests/frecommend/`,
+  getRecommend: `${url}/sittingRequests/recommend/`,
   acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
   cancelRequest: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
