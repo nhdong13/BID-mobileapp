@@ -48,7 +48,7 @@ export class Bsitter extends Component {
           <TouchableOpacity
             style={{ flexDirection: 'row', flexGrow: 2 }}
             onPress={() =>
-              navigation.navigate('SitterProfile', { sitterId: item.userId, requestId: requestId })
+              navigation.navigate('SitterProfile', { sitterId: item.userId, requestId: requestId, onGoBack: () => this.props.callBack(item.userId), })
             }
           >
             <Image source={images.parent} style={styles.sitterImage} />
