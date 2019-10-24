@@ -9,7 +9,7 @@ const apiUrl = {
   login: `${url}/auth/login`,
   getRecommend: `${url}/sittingRequests/recommend/`,
   acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
-  cancelRequest: `${url}/sittingRequests/`,
+  updateRequestStatus: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
   registerExpoToken: `${url}/trackings/`,
   socketIo: `${url}/qr`,

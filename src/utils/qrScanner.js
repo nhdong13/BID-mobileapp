@@ -5,8 +5,9 @@ import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import apiUrl from './Connection';
+import { withNavigation } from 'react-navigation';
 
-export default class QRcodeScannerScreen extends React.Component {
+export class QRcodeScannerScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,10 +43,15 @@ export default class QRcodeScannerScreen extends React.Component {
   };
 
   handleBarCodeScanned = ({ type, data }) => {
-    this.setState({
-      scanned: true,
-      content: `Bar code with type ${type} and data ${data} has been scanned!`,
-    });
+    this.setState(
+      {
+        scanned: true,
+        content: `Bar code with type ${type} and data ${data} has been scanned!`,
+      },
+      () => {
+        if (this.state.scanned == true) this.props.navigation.goBack();
+      },
+    );
     console.log(
       `Bar code with type ${type} and data ${data} has been scanned!`,
     );
@@ -86,3 +92,5 @@ export default class QRcodeScannerScreen extends React.Component {
     );
   }
 }
+
+export default withNavigation(QRcodeScannerScreen);

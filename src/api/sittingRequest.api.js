@@ -50,13 +50,13 @@ export async function acceptBabysitter(requestId, sitterId) {
   return { message: 'error trying to get data from response' };
 }
 
-export async function cancelRequest(request) {
+export async function updateRequestStatus(request) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
   const options = {
     method: 'PUT',
-    url: `${apiUrl.cancelRequest}${request.id}`,
+    url: `${apiUrl.updateRequestStatus}${request.id}`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
