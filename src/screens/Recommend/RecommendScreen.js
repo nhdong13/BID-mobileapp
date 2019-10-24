@@ -57,7 +57,7 @@ export default class RecommendScreen extends Component {
     }));
   };
 
-  callFunc() {
+  callRecommend() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
     } else {
@@ -65,7 +65,7 @@ export default class RecommendScreen extends Component {
     }
   }
 
-  callFunc2() {
+  callRecommend2() {
     if (this.state.isModalVisible2) {
       this.setState({ isModalVisible2: false });
     } else {
@@ -77,7 +77,7 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.recommendList && this.state.recommendList.length > 0 && (
+        {this.state.recommendList && this.state.recommendList.length > 0 ? (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
               <Ionicons
@@ -88,43 +88,42 @@ export default class RecommendScreen extends Component {
                 style={{ marginBottom: -6, marginLeft: 20 }}
                 color="#315f61"
                 onPress={() => {
-                  this.callFunc();
+                  this.callRecommend();
                 }}
               />
               <MuliText
                 style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
               >
-                Đề nghị (Gần nhất) ({this.state.recommendCount})
+                Đề nghị ({this.state.recommendCount})
               </MuliText>
             </View>
             {this.state.isModalVisible && (
               <View>
                 {this.state.recommendList &&
-                this.state.recommendList.length > 0 ? (
-                  <FlatList
-                    data={this.state.recommendList}
-                    renderItem={({ item }) => (
-                      <Bsitter
-                        callBack={this.changeInviteStatus}
-                        requestId={this.state.requestId}
-                        item={item}
-                      />
-                    )}
-                    keyExtractor={(item) => item.user.id.toString()}
-                  />
-                ) : (
-                  <View>
-                    <MuliText>
-                      Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
-                      bạn
-                    </MuliText>
-                  </View>
-                )}
+                  this.state.recommendList.length > 0 && (
+                    <FlatList
+                      data={this.state.recommendList}
+                      renderItem={({ item }) => (
+                        <Bsitter
+                          callBack={this.changeInviteStatus}
+                          requestId={this.state.requestId}
+                          item={item}
+                        />
+                      )}
+                      keyExtractor={(item) => item.user.id.toString()}
+                    />
+                  )}
               </View>
             )}
           </View>
+        ) : (
+          <View>
+            <MuliText>
+              Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
+            </MuliText>
+          </View>
         )}
-
+        }
         <View style={styles.sectionContainer}>
           <View style={styles.headerSection}>
             <Ionicons
@@ -135,7 +134,7 @@ export default class RecommendScreen extends Component {
               style={{ marginBottom: -6, marginLeft: 20 }}
               color="#315f61"
               onPress={() => {
-                this.callFunc2();
+                this.callRecommend2();
               }}
             />
             <MuliText

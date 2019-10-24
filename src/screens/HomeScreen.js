@@ -197,13 +197,22 @@ class HomeScreen extends Component {
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
           >
-            <MuliText
-              style={roleId == 2 ? textParentRequest : textBsitterRequest}
+            <View
+              style={{
+                borderRadius: 1,
+                borderColor: colors.gray,
+                borderWidth: 1,
+                paddingHorizontal: 10,
+              }}
             >
-              {roleId && roleId == 2
-                ? 'Nhấn vào đây để tạo yêu cầu nhé'
-                : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
-            </MuliText>
+              <MuliText
+                style={roleId == 2 ? textParentRequest : textBsitterRequest}
+              >
+                {roleId && roleId == 2
+                  ? 'Nhấn vào đây để tạo yêu cầu nhé'
+                  : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
+              </MuliText>
+            </View>
           </TouchableOpacity>
         </View>
         {roleId && roleId == 2 ? (
@@ -233,11 +242,18 @@ class HomeScreen extends Component {
                     <MuliText style={noRequestText}>
                       Hiện tại bạn không có yêu cầu nào
                     </MuliText>
-
-                    <MuliText style={styles.textParentRequest}>
-                      Nhấn vào đây để tạo yêu cầu nhé
-                    </MuliText>
-
+                    <View
+                      style={{
+                        borderRadius: 1,
+                        borderColor: colors.gray,
+                        borderWidth: 1,
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <MuliText style={styles.textParentRequest}>
+                        Nhấn vào đây để tạo yêu cầu nhé
+                      </MuliText>
+                    </View>
                     <Image
                       source={require('assets/images/no-request.jpg')}
                       style={noRequestImage}
