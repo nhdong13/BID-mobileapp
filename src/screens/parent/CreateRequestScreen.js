@@ -83,9 +83,7 @@ class CreateRequestScreen extends Component {
 
   toggleHidden = (key) => {
     // eslint-disable-next-line no-unused-expressions
-    key.checked == null ?
-      key.checked = true :
-      key.checked = !key.checked;
+    key.checked == null ? (key.checked = true) : (key.checked = !key.checked);
     this.forceUpdate();
     this.calculate();
   };
@@ -290,6 +288,7 @@ class CreateRequestScreen extends Component {
                 <View style={styles.detailPictureContainer}>
                   {this.state.child.map((item) => (
                     // eslint-disable-next-line react/no-array-index-key
+
                     <TouchableOpacity
                       key={item.id}
                       onPress={() => {
@@ -303,14 +302,36 @@ class CreateRequestScreen extends Component {
                           marginLeft: 20,
                         }}
                       >
-                        <Image
-                          source={{ uri: item.image }}
-                          style={styles.profileImg}
-                        />
-                        <View style={styles.name}>
-                          <Text style={{ fontWeight: (item.checked == null || item.checked == false) ? "normal" : "bold" }}>
-                            {item.name} - {item.age}t
-                          </Text>
+                        <View>
+                          <Image
+                            source={{ uri: item.image }}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 140 / 2,
+                              overflow: 'hidden',
+                              borderWidth:
+                                item.checked == null || item.checked == false
+                                  ? 1
+                                  : 2,
+                              borderColor:
+                                item.checked == null || item.checked == false
+                                  ? colors.gray
+                                  : colors.done,
+                            }}
+                          />
+                          <View>
+                            <Text
+                              style={{
+                                color:
+                                  item.checked == null || item.checked == false
+                                    ? colors.gray
+                                    : colors.done,
+                              }}
+                            >
+                              {item.name} - {item.age}tuổi
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -353,12 +374,6 @@ CreateRequestScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  name: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    height: 50,
-    width: 50,
-  },
   price: {
     fontSize: 15,
     color: '#7edeb9',
@@ -391,7 +406,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 5,
     fontSize: 12,
-    color: colors.gray,
   },
   containerInformationRequest: {
     marginHorizontal: 15,

@@ -77,7 +77,7 @@ export default class InvitationDetail extends Component {
       .catch((error) => console.log(error));
   };
 
-  callFunc() {
+  callDetail() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
     } else {
@@ -182,12 +182,14 @@ export default class InvitationDetail extends Component {
           <View style={{ flex: 1, marginTop: 15, marginLeft: 10 }}>
             <TouchableOpacity
               onPress={() => {
-                this.callFunc();
+                this.callDetail();
               }}
               title="Show more detail"
               style={{ flex: 1 }}
             >
-              <MuliText style={{ color: colors.blueAqua }}>Xem thêm</MuliText>
+              <MuliText style={{ color: colors.blueAqua }}>
+                {this.state.isModalVisible ? 'Ẩn đi' : 'Xem thêm'}
+              </MuliText>
             </TouchableOpacity>
             {this.state.isModalVisible && (
               <View>
