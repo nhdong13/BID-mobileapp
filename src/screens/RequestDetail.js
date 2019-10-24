@@ -30,8 +30,10 @@ export default class RequestDetail extends Component {
       childrenNumber: 1,
       minAgeOfChildren: 1,
       isModalVisible: false,
+      canCheckIn: null,
+      canCheckOut: null,
     };
-    this.callFunc = this.callFunc.bind(this);
+    this.callDetail = this.callDetail.bind(this);
   }
 
   componentWillMount() {
@@ -50,6 +52,8 @@ export default class RequestDetail extends Component {
           childrenNumber: resp.childrenNumber,
           minAgeOfChildren: resp.minAgeOfChildren,
           bsitter: resp.bsitter,
+          canCheckIn: resp.canCheckIn,
+          canCheckOut: resp.canCheckOut,
         });
       },
     );
@@ -84,7 +88,7 @@ export default class RequestDetail extends Component {
     this.props.navigation.navigate('Home');
   };
 
-  callFunc() {
+  callDetail() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
     } else {
@@ -189,12 +193,14 @@ export default class RequestDetail extends Component {
           <View style={{ flex: 1, marginTop: 15, marginLeft: 10 }}>
             <TouchableOpacity
               onPress={() => {
-                this.callFunc();
+                this.callDetail();
               }}
               title="Show more detail"
               style={{ flex: 1 }}
             >
-              <MuliText style={{ color: colors.blueAqua }}>Xem thêm</MuliText>
+              <MuliText style={{ color: colors.blueAqua }}>
+                {this.state.isModalVisible ? ' Ẩn đi' : 'Xem thêm'}
+              </MuliText>
             </TouchableOpacity>
             {this.state.isModalVisible && (
               <View>
@@ -456,8 +462,8 @@ export default class RequestDetail extends Component {
                 </MuliText>
               </TouchableOpacity>
             )}
-
-            {this.state.status == 'CONFIRMED' && (
+            
+            { this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
@@ -471,7 +477,7 @@ export default class RequestDetail extends Component {
               </TouchableOpacity>
             )}
 
-            {this.state.status == 'ONGOING' && (
+            { this.state.canCheckOut && this.state.status == 'ONGOING' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
@@ -508,9 +514,9 @@ export default class RequestDetail extends Component {
                   });
                 }}
               >
-                {/* <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
+                <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
                   Danh sách người giữ trẻ
-                </MuliText> */}
+                </MuliText>
               </TouchableOpacity>
             </View>
           )}
