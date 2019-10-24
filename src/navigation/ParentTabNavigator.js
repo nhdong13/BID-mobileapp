@@ -13,8 +13,7 @@ import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
-
-// import MyNetwork from '../screens/circle/MyNetwork';
+import MyNetwork from 'screens/circle/MyNetwork';
 
 const config = Platform.select({
   default: {},
@@ -54,20 +53,20 @@ const HomeStack = createStackNavigator(
       navigationOptions: () => ({
         title: 'A',
         headerBackTitle: 'RecommendBabysitter',
-      })
+      }),
     },
     Recommend: {
       screen: RecommendBabysitter,
       navigationOptions: () => ({
         title: 'Người giữ trẻ phù hợp',
-      })
+      }),
     },
     SitterProfile: {
       screen: BsitterProfile,
       navigationOptions: () => ({
         title: 'Thông tin người giữ trẻ',
-      })
-    }
+      }),
+    },
   },
   config,
 );
@@ -84,24 +83,24 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-// const CircleStack = createStackNavigator(
-//   {
-//     Circles: SettingsScreen,
-//   },
-//   config,
-// );
+const CircleStack = createStackNavigator(
+  {
+    Circles: MyNetwork,
+  },
+  config,
+);
 
-// CircleStack.navigationOptions = {
-//   tabBarLabel: 'Vòng tròn tin tưởng',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
-//     />
-//   ),
-// };
+CircleStack.navigationOptions = {
+  tabBarLabel: 'Vòng tròn tin tưởng',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
+    />
+  ),
+};
 
-// CircleStack.path = '';
+CircleStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -124,8 +123,8 @@ SettingsStack.navigationOptions = {
 SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
+  CircleStack,
   HomeStack,
-  // CircleStack,
   SettingsStack,
 });
 

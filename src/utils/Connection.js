@@ -1,5 +1,7 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 
+console.log(HOST_ENDPOINT);
+
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
   baseUrl: `${url}/`,
@@ -11,6 +13,7 @@ const apiUrl = {
   cancelRequest: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
   registerExpoToken: `${url}/trackings/`,
+  socketIo: `${url}/socket`,
 };
 
 export const babysitterAPI = {
