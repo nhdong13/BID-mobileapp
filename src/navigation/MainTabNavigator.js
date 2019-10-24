@@ -27,7 +27,7 @@ const CreateRequestStack = createStackNavigator(
 );
 
 CreateRequestStack.navigationOptions = {
-  tabBarLabel: 'New Sitting',
+  tabBarLabel: 'Tạo mới yêu cầu',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
