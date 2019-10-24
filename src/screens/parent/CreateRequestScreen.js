@@ -9,6 +9,7 @@ import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
 import { ScrollView } from 'react-native-gesture-handler';
 import Api from 'api/api_helper';
+import colors from 'assets/Color';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -20,10 +21,11 @@ class CreateRequestScreen extends Component {
       startTime: null,
       endTime: null,
       sittingAddress: null,
-      price: '100',
+      price: 100,
       childrenNumber: 0,
       minAgeOfChildren: 99,
       child: null,
+      totalPrice: 0,
     };
   }
 
@@ -44,6 +46,9 @@ class CreateRequestScreen extends Component {
   }
 
   onCreateRequest = () => {
+    if (this.state.childrenNumber == 0) {
+      return;
+    }
     const request = {
       createdUser: this.state.userId,
       sittingDate: this.state.sittingDate,
@@ -53,8 +58,9 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
+      totalPrice: this.state.totalPrice,
     };
-    console.log(request);
+    // console.log(request);
     Api.post('sittingRequests', request)
       .then((res) => {
         if (res) {
@@ -77,12 +83,10 @@ class CreateRequestScreen extends Component {
 
   toggleHidden = (key) => {
     // eslint-disable-next-line no-unused-expressions
-    this.state.child[key.id - 1].checked == null ?
-      this.state.child[key.id - 1].checked = true :
-      this.state.child[key.id - 1].checked = !this.state.child[key.id - 1].checked;
+    key.checked == null ? (key.checked = true) : (key.checked = !key.checked);
     this.forceUpdate();
     this.calculate();
-  }
+  };
 
   calculate = () => {
     let childCounter = 0;
@@ -93,8 +97,8 @@ class CreateRequestScreen extends Component {
         if (minAge > element.age) minAge = element.age;
       }
     });
-    this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge, });
-  }
+    this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge });
+  };
 
   render() {
     return (
@@ -106,7 +110,7 @@ class CreateRequestScreen extends Component {
               <Ionicons
                 name="ios-calendar"
                 size={20}
-                color="#7edeb9"
+                color={colors.lightGreen}
                 style={{
                   marginTop: 10,
                 }}
@@ -115,7 +119,7 @@ class CreateRequestScreen extends Component {
                 style={styles.pickedDate}
                 date={this.state.sittingDate}
                 mode="date"
-                placeholder="Date"
+                placeholder="Ngày"
                 format="YYYY-MM-DD"
                 minDate={moment().format('YYYY-MM-DD')}
                 maxDate="2019-12-01"
@@ -127,12 +131,12 @@ class CreateRequestScreen extends Component {
                   },
                   placeholderText: {
                     fontSize: 15,
-                    color: '#C7C7C7',
-                    marginRight: 70,
+                    color: colors.lightGreen,
+                    marginRight: 75,
                   },
                   dateText: {
                     fontSize: 15,
-                    color: '#7edeb9',
+                    color: colors.lightGreen,
                   },
                 }}
                 onDateChange={(date) => {
@@ -148,7 +152,7 @@ class CreateRequestScreen extends Component {
                 <Ionicons
                   name="ios-timer"
                   size={20}
-                  color="#bdc3c7"
+                  color={colors.gray}
                   style={{
                     marginTop: 10,
                   }}
@@ -160,7 +164,7 @@ class CreateRequestScreen extends Component {
                   // minDate={moment().format()}
                   // maxDate={this.state.endTime}
                   mode="time"
-                  placeholder="Start time"
+                  placeholder="Giờ bắt đầu"
                   format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
@@ -170,7 +174,7 @@ class CreateRequestScreen extends Component {
                     },
                     placeholderText: {
                       fontSize: 15,
-                      color: '#C7C7C7',
+                      color: colors.gray,
                       marginRight: 30,
                     },
                     dateText: {
@@ -192,7 +196,7 @@ class CreateRequestScreen extends Component {
                 <Ionicons
                   name="ios-time"
                   size={20}
-                  color="#bdc3c7"
+                  color={colors.gray}
                   style={{
                     marginTop: 10,
                   }}
@@ -202,7 +206,7 @@ class CreateRequestScreen extends Component {
                   // minDate={this.state.startTime}
                   date={this.state.endTime}
                   mode="time"
-                  placeholder="End time"
+                  placeholder="Giờ kết thúc"
                   format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
@@ -212,7 +216,7 @@ class CreateRequestScreen extends Component {
                     },
                     placeholderText: {
                       fontSize: 15,
-                      color: '#C7C7C7',
+                      color: colors.gray,
                       marginRight: 30,
                     },
                     dateText: {
@@ -234,7 +238,7 @@ class CreateRequestScreen extends Component {
             <Ionicons
               name="ios-home"
               size={20}
-              color="#bdc3c7"
+              color={colors.gray}
               style={{
                 marginBottom: 5,
               }}
@@ -249,7 +253,7 @@ class CreateRequestScreen extends Component {
               <Ionicons
                 name="ios-happy"
                 size={20}
-                color="#bdc3c7"
+                color={colors.gray}
                 style={{
                   marginBottom: 5,
                 }}
@@ -262,47 +266,81 @@ class CreateRequestScreen extends Component {
               <Ionicons
                 name="ios-heart-empty"
                 size={20}
-                color="#bdc3c7"
+                color={colors.gray}
                 style={{
                   marginBottom: 5,
                 }}
               />
               <MuliText style={styles.contentInformation}>
-                Nhỏ tuổi nhất: { this.state.minAgeOfChildren == 99 ? 'N/A' : this.state.minAgeOfChildren }
+                Nhỏ tuổi nhất:{' '}
+                {this.state.minAgeOfChildren == 99
+                  ? 'N/A'
+                  : this.state.minAgeOfChildren}
               </MuliText>
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <View style={styles.detailContainer}>
-              {this.state.child != null ? (
-                <View>
-                  <MuliText style={styles.headerTitle}>
-                    Số lượng trẻ: {this.state.child.length}
-                  </MuliText>
-                  <View style={styles.detailPictureContainer}>
-                    {this.state.child.map((item) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <TouchableOpacity
-                        key={item.id}
-                        onPress={() => { this.toggleHidden(item); }}
+            {this.state.child != null ? (
+              <View style={styles.detailContainerChild}>
+                <MuliText style={styles.headerTitleChild}>
+                  Số lượng trẻ: {this.state.child.length}
+                </MuliText>
+                <View style={styles.detailPictureContainer}>
+                  {this.state.child.map((item) => (
+                    // eslint-disable-next-line react/no-array-index-key
+
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => {
+                        this.toggleHidden(item);
+                      }}
+                    >
+                      <View
+                        style={{
+                          alignContent: 'space-between',
+                          flexDirection: 'row',
+                          marginLeft: 20,
+                        }}
                       >
-                        <Image
-                          source={{ uri: item.image }}
-                          style={styles.profileImg}
-                        />
-                        <View style={styles.name}>
-                          <Text style={{ fontWeight: this.state.child[item.id - 1].checked ? "bold" : "normal" }}>
-                            {item.name} - {item.age}t
-                          </Text>
+                        <View>
+                          <Image
+                            source={{ uri: item.image }}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 140 / 2,
+                              overflow: 'hidden',
+                              borderWidth:
+                                item.checked == null || item.checked == false
+                                  ? 1
+                                  : 2,
+                              borderColor:
+                                item.checked == null || item.checked == false
+                                  ? colors.gray
+                                  : colors.done,
+                            }}
+                          />
+                          <View>
+                            <Text
+                              style={{
+                                color:
+                                  item.checked == null || item.checked == false
+                                    ? colors.gray
+                                    : colors.done,
+                              }}
+                            >
+                              {item.name} - {item.age}tuổi
+                            </Text>
+                          </View>
                         </View>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
                 </View>
-              ) : (
-                <View />
-              )}
-            </View>
+              </View>
+            ) : (
+              <View />
+            )}
           </View>
           <View>
             <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
@@ -332,7 +370,7 @@ class CreateRequestScreen extends Component {
 export default CreateRequestScreen;
 
 CreateRequestScreen.navigationOptions = {
-  header: null,
+  title: 'Tạo yêu cầu giữ trẻ',
 };
 
 const styles = StyleSheet.create({
@@ -373,6 +411,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 30,
   },
+  headerTitleChild: {
+    fontSize: 20,
+    color: '#315F61',
+    marginBottom: 10,
+    fontWeight: '800',
+  },
   headerTitle: {
     marginHorizontal: 15,
     marginTop: 30,
@@ -397,6 +441,10 @@ const styles = StyleSheet.create({
   detailPictureContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  detailContainerChild: {
+    marginHorizontal: 15,
+    marginTop: 20,
   },
   detailContainer: {
     marginHorizontal: 25,

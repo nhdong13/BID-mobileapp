@@ -52,6 +52,7 @@ export class Bsitter extends Component {
               navigation.navigate('SitterProfile', {
                 sitterId: item.userId,
                 requestId: requestId,
+                onGoBack: () => this.props.callBack(item.userId),
               })
             }
           >

@@ -4,8 +4,9 @@ import { StyleSheet, View } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { recommend } from 'api/sittingRequest.api';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Bsitter from 'screens/Recommend/BsitterItem';
+import colors from 'assets/Color';
 
 export default class RecommendScreen extends Component {
   constructor(props) {
@@ -57,7 +58,7 @@ export default class RecommendScreen extends Component {
     }));
   };
 
-  callFunc() {
+  callRecommend() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
     } else {
@@ -65,7 +66,7 @@ export default class RecommendScreen extends Component {
     }
   }
 
-  callFunc2() {
+  callRecommend2() {
     if (this.state.isModalVisible2) {
       this.setState({ isModalVisible2: false });
     } else {
@@ -77,7 +78,7 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.recommendList && this.state.recommendList.length > 0 && (
+        {this.state.recommendList && this.state.recommendList.length > 0 ? (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
               <Ionicons
@@ -88,95 +89,88 @@ export default class RecommendScreen extends Component {
                 style={{ marginBottom: -6, marginLeft: 20 }}
                 color="#315f61"
                 onPress={() => {
-                  this.callFunc();
+                  this.callRecommend();
                 }}
               />
               <MuliText
                 style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
               >
-                Đề nghị (Gần nhất) ({this.state.recommendCount})
+                Đề nghị ({this.state.recommendCount})
               </MuliText>
             </View>
             {this.state.isModalVisible && (
-              <View>
+              <ScrollView>
                 {this.state.recommendList &&
-                this.state.recommendList.length > 0 ? (
-                  <FlatList
-                    data={this.state.recommendList}
-                    renderItem={({ item }) => (
-                      <Bsitter
-                        callBack={this.changeInviteStatus}
-                        requestId={this.state.requestId}
-                        item={item}
-                      />
-                    )}
-                    keyExtractor={(item) => item.user.id.toString()}
-                  />
-                ) : (
-                  <View>
-                    <MuliText>
-                      Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
-                      bạn
-                    </MuliText>
-                  </View>
-                )}
-              </View>
+                  this.state.recommendList.length > 0 && (
+                    <FlatList
+                      data={this.state.recommendList}
+                      renderItem={({ item }) => (
+                        <Bsitter
+                          callBack={this.changeInviteStatus}
+                          requestId={this.state.requestId}
+                          item={item}
+                        />
+                      )}
+                      keyExtractor={(item) => item.user.id.toString()}
+                    />
+                  )}
+              </ScrollView>
             )}
+          </View>
+        ) : (
+          <View style={{ marginTop: 250 }}>
+            <MuliText
+              style={{ color: colors.gray, fontSize: 25, marginHorizontal: 30 }}
+            >
+              Không tìm thấy người giữ trẻ nào phù hợp với lịch giữ trẻ của bạn
+            </MuliText>
           </View>
         )}
 
-        <View style={styles.sectionContainer}>
-          <View style={styles.headerSection}>
-            <Ionicons
-              name={
-                this.state.isModalVisible2 ? 'ios-arrow-down' : 'ios-arrow-up'
-              }
-              size={24}
-              style={{ marginBottom: -6, marginLeft: 20 }}
-              color="#315f61"
-              onPress={() => {
-                this.callFunc2();
-              }}
-            />
-            <MuliText
-              style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-            >
-              Người giữ trẻ phù hợp ({this.state.matchedCount})
-            </MuliText>
-          </View>
-          {this.state.isModalVisible2 && (
-            <View>
-              {this.state.listMatched && this.state.listMatched.length != 0 ? (
-                <FlatList
-                  data={this.state.listMatched}
-                  renderItem={({ item }) => (
-                    <Bsitter
-                      callBack={this.changeInviteStatus}
-                      requestId={this.state.requestId}
-                      item={item}
+        {this.state.listMatched && this.state.listMatched.length != 0 && (
+          <View style={styles.sectionContainer}>
+            <View style={styles.headerSection}>
+              <Ionicons
+                name={
+                  this.state.isModalVisible2 ? 'ios-arrow-down' : 'ios-arrow-up'
+                }
+                size={24}
+                style={{ marginBottom: -6, marginLeft: 20 }}
+                color="#315f61"
+                onPress={() => {
+                  this.callRecommend2();
+                }}
+              />
+              <MuliText
+                style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+              >
+                Người giữ trẻ phù hợp ({this.state.matchedCount})
+              </MuliText>
+            </View>
+            {this.state.isModalVisible2 && (
+              <ScrollView>
+                {this.state.listMatched &&
+                  this.state.listMatched.length != 0 && (
+                    <FlatList
+                      data={this.state.listMatched}
+                      renderItem={({ item }) => (
+                        <Bsitter
+                          callBack={this.changeInviteStatus}
+                          requestId={this.state.requestId}
+                          item={item}
+                        />
+                      )}
+                      keyExtractor={(item) => item.user.id.toString()}
                     />
                   )}
-                  keyExtractor={(item) => item.user.id.toString()}
-                />
-              ) : (
-                <View>
-                  <MuliText>
-                    Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
-                    bạn
-                  </MuliText>
-                </View>
-              )}
-            </View>
-          )}
-        </View>
+              </ScrollView>
+            )}
+          </View>
+        )}
       </View>
     );
   }
 }
-
-// RecommendScreen.navigationOptions = {
-//   title: 'Đề nghị người giữ trẻ',
-// };
 
 const styles = StyleSheet.create({
   container: {

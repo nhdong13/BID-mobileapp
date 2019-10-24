@@ -52,7 +52,7 @@ const HomeStack = createStackNavigator(
     CreateRequest: {
       screen: CreateRequestScreen,
       navigationOptions: () => ({
-        title: 'A',
+        title: 'Tạo yêu cầu giữ trẻ',
         headerBackTitle: 'RecommendBabysitter',
       }),
     },

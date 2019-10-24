@@ -60,6 +60,7 @@ export default class BsitterProfile extends Component {
     await createInvitation(invitation)
       .then(() => {
         this.changeInviteStatus();
+        this.props.navigation.state.params.onGoBack();
       })
       .catch((error) => console.log(error));
   };
@@ -82,6 +83,8 @@ export default class BsitterProfile extends Component {
               >
                 Thông tin cơ bản
               </MuliText>
+            </View>
+            <View>
               <MuliText style={styles.textField}>
                 Tên: {this.state.user.nickname}
               </MuliText>
