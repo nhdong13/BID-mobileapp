@@ -21,11 +21,12 @@ class CreateRequestScreen extends Component {
       startTime: null,
       endTime: null,
       sittingAddress: null,
-      price: 100,
+      price: 0,
       childrenNumber: 0,
       minAgeOfChildren: 99,
       child: null,
       totalPrice: 0,
+      spPrice: null,
     };
   }
 
@@ -58,7 +59,7 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.totalPrice,
+      totalPrice: this.state.price,
     };
     // console.log(request);
     Api.post('sittingRequests', request)
@@ -100,6 +101,44 @@ class CreateRequestScreen extends Component {
     this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge });
   };
 
+  updatePrice = async () => {
+    if (this.state.startTime == null || this.state.endTime == null) return;
+    await Api.get('configuration/' + this.state.sittingDate.toString()).then(
+      (res) => {
+        this.setState({
+          spPrice: res,
+        });
+      },
+    );
+
+    // eslint-disable-next-line radix
+    const startP = parseInt(this.state.startTime[0] + this.state.startTime[1]);
+    // eslint-disable-next-line radix
+    const endP = parseInt(this.state.endTime[0] + this.state.endTime[1]);
+    //
+    // console.log(abc + 'aaaa');
+    let i;
+
+    let tempTotal = 0.0;
+    // eslint-disable-next-line no-plusplus
+    for (i = startP + 1; i < endP; i++) {
+      let temp = this.state.spPrice[i.toString()];
+      if (temp == null) tempTotal += this.state.spPrice['base'];
+      else tempTotal += temp;
+    }
+    let temp = 0.0;
+    temp =
+      (60 - parseInt(this.state.startTime[3] + this.state.startTime[4])) / 60.0;
+    let price = this.state.spPrice[startP.toString()];
+    if (price == null) tempTotal += this.state.spPrice['base'] * temp;
+    else tempTotal += temp * price;
+    temp = parseInt(this.state.endTime[3] + this.state.endTime[4]) / 60.0;
+    price = this.state.spPrice[endP.toString()];
+    if (price == null) tempTotal += this.state.spPrice['base'] * temp;
+    else tempTotal += temp * price;
+    this.setState({ price: tempTotal });
+  };
+
   render() {
     return (
       <ScrollView>
@@ -139,8 +178,9 @@ class CreateRequestScreen extends Component {
                     color: colors.lightGreen,
                   },
                 }}
-                onDateChange={(date) => {
-                  this.setState({ sittingDate: date });
+                onDateChange={async (date) => {
+                  await this.setState({ sittingDate: date });
+                  this.updatePrice();
                 }}
                 showIcon={false}
               />
@@ -183,9 +223,10 @@ class CreateRequestScreen extends Component {
                     },
                   }}
                   is24Hour
-                  onDateChange={(time) => {
-                    this.setState({ startTime: time });
+                  onDateChange={async (time) => {
+                    await this.setState({ startTime: time });
                     console.log(this.state.startTime);
+                    this.updatePrice();
                   }}
                   showIcon={false}
                 />
@@ -225,9 +266,10 @@ class CreateRequestScreen extends Component {
                     },
                   }}
                   is24Hour
-                  onDateChange={(time) => {
-                    this.setState({ endTime: time });
+                  onDateChange={async (time) => {
+                    await this.setState({ endTime: time });
                     console.log(this.state.endTime);
+                    this.updatePrice();
                   }}
                   showIcon={false}
                 />
@@ -346,9 +388,9 @@ class CreateRequestScreen extends Component {
             <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
             <View style={styles.priceContainer}>
               <MuliText style={styles.contentInformation}>
-                Số tiền dự kiến:
+                Tổng tiền thanh toán:
               </MuliText>
-              <MuliText style={styles.price}>{this.state.price}VND/h</MuliText>
+              <MuliText style={styles.price}>{this.state.price} VND</MuliText>
             </View>
           </View>
           <View style={styles.buttonContainer}>
