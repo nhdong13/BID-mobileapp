@@ -162,7 +162,7 @@ export default class InvitationDetail extends Component {
                     {this.state.status}
                   </MuliText>
                 )}
-                {this.state.status == 'CANCELED' && (
+                {this.state.status == 'EXPIRED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >

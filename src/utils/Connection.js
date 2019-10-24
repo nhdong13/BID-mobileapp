@@ -1,14 +1,13 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 
 console.log(HOST_ENDPOINT);
-
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
   baseUrl: `${url}/`,
   getRequests: `${url}/sittingRequests/listParent`,
   getInvitations: `${url}/invitations/`,
   login: `${url}/auth/login`,
-  getRecommend: `${url}/sittingRequests/recommend/`,
+  getRecommend: `${url}/sittingRequests/frecommend/`,
   acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
   cancelRequest: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
