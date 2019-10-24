@@ -44,7 +44,7 @@ _\*It's recommended that you install [React Native Debugger](https://github.com/
 
 ```bash
 # Clone the repo
-https://git.babysitinde.live/capstone-project/react-native-boilerplate.git
+git clone https://git.babysitinde.live/capstone-project/react-native-boilerplate.git
 
 # Install dependencies
 yarn install
