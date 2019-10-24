@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
-import { Gender } from 'utils/Enum'
+import { Gender } from 'utils/Enum';
 import { getProfileByRequest } from 'api/babysitter.api';
 import { createInvitation } from 'api/invitation.api';
 
@@ -14,7 +14,6 @@ export default class BsitterProfile extends Component {
       sitterId: 0,
       sitter: {},
       user: {},
-
     };
   }
 
@@ -23,7 +22,9 @@ export default class BsitterProfile extends Component {
     const requestId = this.props.navigation.getParam('requestId');
 
     if (sitterId && sitterId != 0) {
-      this.setState({ sitterId: sitterId, requestId: requestId }, () => this.getBabysitter());
+      this.setState({ sitterId: sitterId, requestId: requestId }, () =>
+        this.getBabysitter(),
+      );
     } else {
       console.log('Recommend/BsitterProfile - sitterId not found');
     }
@@ -31,7 +32,10 @@ export default class BsitterProfile extends Component {
 
   getBabysitter = async () => {
     if (this.state.sitterId != 0 && this.state.requestId != 0) {
-      const data = await getProfileByRequest(this.state.sitterId, this.state.requestId);
+      const data = await getProfileByRequest(
+        this.state.sitterId,
+        this.state.requestId,
+      );
       this.setState({
         sitter: data,
         user: data.user,
@@ -43,7 +47,10 @@ export default class BsitterProfile extends Component {
   };
 
   sendInvitation = async (sitterId, requestId) => {
-    console.log("Duong: BsitterProfile -> sendInvitation -> requestId", requestId)
+    console.log(
+      'Duong: BsitterProfile -> sendInvitation -> requestId',
+      requestId,
+    );
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
@@ -59,15 +66,12 @@ export default class BsitterProfile extends Component {
 
   changeInviteStatus = () => {
     this.setState((prevState) => ({
-      sitter: Object.assign(prevState.sitter, { isInvited: true })
+      sitter: Object.assign(prevState.sitter, { isInvited: true }),
     }));
   };
 
   // netstat -ano | findstr 3000
   render() {
-    const { sitter } = this.state;
-    const { user } = sitter;
-
     return (
       <View style={styles.container}>
         {this.state.sitter && (
@@ -78,11 +82,16 @@ export default class BsitterProfile extends Component {
               >
                 Thông tin cơ bản
               </MuliText>
-            </View>
-            <View>
-              <MuliText style={styles.textField}>Tên: {this.state.user.nickname}</MuliText>
-              <MuliText style={styles.textField}>Địa chỉ: {this.state.user.address}</MuliText>
-              <MuliText style={styles.textField}>Giới tính: {this.state.user.gender == 'MALE' ? Gender.MALE: Gender.FEMALE}</MuliText>
+              <MuliText style={styles.textField}>
+                Tên: {this.state.user.nickname}
+              </MuliText>
+              <MuliText style={styles.textField}>
+                Địa chỉ: {this.state.user.address}
+              </MuliText>
+              <MuliText style={styles.textField}>
+                Giới tính:{' '}
+                {this.state.user.gender == 'MALE' ? Gender.MALE : Gender.FEMALE}
+              </MuliText>
             </View>
           </View>
         )}
@@ -96,11 +105,18 @@ export default class BsitterProfile extends Component {
               </MuliText>
             </View>
             <View>
-              <MuliText style={styles.textField}>Lịch rảnh: {this.state.sitter.weeklySchedule}</MuliText>
-              <MuliText style={styles.textField}>Buổi sáng: {this.state.sitter.daytime}</MuliText>
-              <MuliText style={styles.textField}>Buổi tối: {this.state.sitter.evening}</MuliText>
               <MuliText style={styles.textField}>
-                Có thể trông trẻ tối thiểu: {this.state.sitter.minAgeOfChildren} tuổi
+                Lịch rảnh: {this.state.sitter.weeklySchedule}
+              </MuliText>
+              <MuliText style={styles.textField}>
+                Buổi sáng: {this.state.sitter.daytime}
+              </MuliText>
+              <MuliText style={styles.textField}>
+                Buổi tối: {this.state.sitter.evening}
+              </MuliText>
+              <MuliText style={styles.textField}>
+                Có thể trông trẻ tối thiểu: {this.state.sitter.minAgeOfChildren}{' '}
+                tuổi
               </MuliText>
               <MuliText style={styles.textField}>
                 Có thể trông tối đa: {this.state.sitter.maxNumOfChildren} trẻ
@@ -112,7 +128,10 @@ export default class BsitterProfile extends Component {
                   <TouchableOpacity
                     style={styles.inviteButton}
                     onPress={() =>
-                      this.sendInvitation(this.state.sitter.userId, this.state.requestId)
+                      this.sendInvitation(
+                        this.state.sitter.userId,
+                        this.state.requestId,
+                      )
                     }
                   >
                     <MuliText style={{ color: '#78ddb6', fontSize: 20 }}>
@@ -169,5 +188,5 @@ const styles = StyleSheet.create({
   textField: {
     marginBottom: 10,
     fontSize: 16,
-  }
+  },
 });

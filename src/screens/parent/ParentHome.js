@@ -30,31 +30,44 @@ class ParentHome extends Component {
               {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
               {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
             </MuliText>
-            <MuliText style={{ marginTop: 10 }}>
-              {request.sittingAddress}
-            </MuliText>
           </View>
           <View style={styles.rightInformation}>
-            {request.status == 'PENDING' ? (
+            {request.status == 'PENDING' && (
               <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: 'gray' }}>
-                  {request.status}
-                </MuliText>
-              </View>
-            ) : (
-              <View style={styles.statusBoxConfirm}>
-                <MuliText
-                  style={{
-                    fontWeight: '100',
-                    color: 'red',
-                    fontSize: 13,
-                  }}
-                >
+                <MuliText style={{ fontWeight: '100', color: colors.pending }}>
                   {request.status}
                 </MuliText>
               </View>
             )}
-            <MuliText>$100</MuliText>
+            {request.status == 'DONE' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.done }}>
+                  {request.status}
+                </MuliText>
+              </View>
+            )}
+            {request.status == 'ONGOING' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.ongoing }}>
+                  {request.status}
+                </MuliText>
+              </View>
+            )}
+            {request.status == 'CANCELED' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.canceled }}>
+                  {request.status}
+                </MuliText>
+              </View>
+            )}
+            {request.status == 'CONFIRMED' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.confirmed }}>
+                  {request.status}
+                </MuliText>
+              </View>
+            )}
+            <MuliText>100VND</MuliText>
           </View>
         </View>
       </TouchableOpacity>
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'green',
-    width: 90,
+    width: 120,
     height: 40,
     padding: 10,
   },
@@ -147,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 180,
+    height: 130,
     marginHorizontal: 30,
     alignItems: 'center',
     marginTop: 20,
