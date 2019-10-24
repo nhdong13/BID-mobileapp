@@ -98,7 +98,7 @@ class SitterHome extends Component {
                 </MuliText>
               </View>
             )}
-            <MuliText>100VND</MuliText>
+            <MuliText>{invitation.sittingRequest.totalPrice}VND</MuliText>
           </View>
         </View>
       </TouchableOpacity>
