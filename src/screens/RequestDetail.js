@@ -30,6 +30,8 @@ export default class RequestDetail extends Component {
       childrenNumber: 1,
       minAgeOfChildren: 1,
       isModalVisible: false,
+      canCheckIn: null,
+      canCheckOut: null,
     };
     this.callFunc = this.callFunc.bind(this);
   }
@@ -50,6 +52,8 @@ export default class RequestDetail extends Component {
           childrenNumber: resp.childrenNumber,
           minAgeOfChildren: resp.minAgeOfChildren,
           bsitter: resp.bsitter,
+          canCheckIn: resp.canCheckIn,
+          canCheckOut: resp.canCheckOut,
         });
       },
     );
@@ -456,8 +460,8 @@ export default class RequestDetail extends Component {
                 </MuliText>
               </TouchableOpacity>
             )}
-
-            {this.state.status == 'CONFIRMED' && (
+            
+            { this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
@@ -471,7 +475,7 @@ export default class RequestDetail extends Component {
               </TouchableOpacity>
             )}
 
-            {this.state.status == 'ONGOING' && (
+            { this.state.canCheckOut && this.state.status == 'ONGOING' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
