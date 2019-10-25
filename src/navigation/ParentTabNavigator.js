@@ -87,6 +87,7 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
+    QrScanner: QRcodeScannerScreen,
     Circles: MyNetwork,
   },
   config,

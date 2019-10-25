@@ -6,27 +6,24 @@ export default class qrBsitter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      qrtext: '12341234',
+      qrtext: 'dummies text here to take place',
     };
   }
 
   componentDidMount() {
-    this.setState({ qrtext: this.props.navigation.getParam('qrData') });
-    console.log('PHUC: qrBsitter -> constructor -> qrtext', this.state.qrtext);
+    this.setState({ qrtext: this.props.navigation.getParam('qrData') }, () => {
+      console.log(
+        'PHUC: qrBsitter -> constructor -> qrtext',
+        this.state.qrtext,
+      );
+    });
   }
 
   render() {
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderWidth: 1,
-        }}
-      >
+      <View style={styles.container}>
         <QRCode
-          value="con me may cai qr code chet tiet"
+          value={this.state.qrtext}
           size={250}
           bgColor="black"
           fgColor="white"

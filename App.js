@@ -3,7 +3,7 @@ import { retrieveToken } from 'utils/handleToken';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
@@ -12,6 +12,11 @@ import NavigationService from './NavigationService.js';
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App(props) {
+  console.ignoredYellowBox = ['Remote debugger'];
+
+  YellowBox.ignoreWarnings([
+    'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
+  ]);
   console.log('local ra cai coi ' + NavigationService);
   useEffect(() => {
     retrieveToken().then((res) => {
@@ -28,8 +33,11 @@ export default function App(props) {
         });
 
         bsitterSocket.on('qrTrigger', (qr) => {
-          console.log('PHUC: App -> qr', qr);
-          NavigationService.navigate('QrSitter', { qrData: qr });
+          if (qr != null) {
+            const { data } = qr.qr;
+            console.log('PHUC: App -> qr', data);
+            NavigationService.navigate('QrSitter', { qrData: data });
+          }
         });
 
         bsitterSocket.on('connect_error', (error) => {

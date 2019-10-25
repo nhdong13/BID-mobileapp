@@ -10,6 +10,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -26,6 +27,20 @@ import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
+const Toast = (props) => {
+  if (props.visible) {
+    ToastAndroid.showWithGravityAndOffset(
+      props.message,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50,
+    );
+    return null;
+  }
+  return null;
+};
+
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +54,7 @@ class HomeScreen extends Component {
       loading: false,
       notitfication: {},
       setVisible: false,
+      visible: false,
     };
   }
 
@@ -90,19 +106,44 @@ class HomeScreen extends Component {
     }
   }
 
+  handleButtonPress = () => {
+    this.setState(
+      {
+        visible: true,
+      },
+      () => {
+        this.hideToast();
+      },
+    );
+  };
+
+  hideToast = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   handleNotification = (notification) => {
     const { roleId } = this.state;
     if (roleId == 2) {
       this.setState({ notification: notification }, () => {
-        // const { notification } = this.state;
+        const { notification } = this.state;
         // this.props.navigation.navigate('RequestDetail', {
         //   requestId: notification.data.id,
         // });
+        this.handleButtonPress();
       });
       // this.confirmModalPopup();
     } else {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
+        ToastAndroid.showWithGravity(
+          'Status of your invitation has been updated',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+          25,
+          80,
+        );
         this.props.navigation.navigate('InvitationDetail', {
           invitationId: notification.data.id,
         });
@@ -174,13 +215,10 @@ class HomeScreen extends Component {
 
   render() {
     const { navigation } = this.props;
+    const { roleId, requests, invitations, refreshing } = this.state;
+
     const {
-      roleId,
-      requests,
-      invitations,
-      refreshing,
-    } = this.state;
-    const {
+      borderText,
       textBsitterRequest,
       textParentRequest,
       container,
@@ -198,6 +236,10 @@ class HomeScreen extends Component {
         key={this.state.agenda}
         style={roleId == 2 ? container : containerBsitter}
       >
+        <Toast
+          visible={this.state.visible}
+          message="Your sitter has confirmed the sitting"
+        />
         {/* <Loader loading={loading} /> */}
 
         {/* {setVisible == true && (
@@ -213,26 +255,19 @@ class HomeScreen extends Component {
           <MuliText style={roleId == 2 ? textParent : textBsitter}>
             {roleId && roleId == 2
               ? 'Khi nào bạn cần người giữ trẻ?'
-              : 'Chào bạn'}
+              : 'Lịch giữ trẻ của bạn'}
           </MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
           >
-            <View
-              style={{
-                borderRadius: 1,
-                borderColor: colors.gray,
-                borderWidth: 1,
-                paddingHorizontal: 10,
-              }}
-            >
+            <View style={roleId == 2 ? borderText : {}}>
               <MuliText
                 style={roleId == 2 ? textParentRequest : textBsitterRequest}
               >
                 {roleId && roleId == 2
                   ? 'Nhấn vào đây để tạo yêu cầu nhé'
-                  : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
+                  : null}
               </MuliText>
             </View>
           </TouchableOpacity>
@@ -351,6 +386,12 @@ HomeScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  borderText: {
+    borderRadius: 1,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+  },
   textParentRequest: {
     color: colors.gray,
   },

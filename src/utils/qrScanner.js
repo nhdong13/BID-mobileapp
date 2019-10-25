@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, ToastAndroid } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { withNavigation } from 'react-navigation';
 import io from 'socket.io-client';
@@ -21,9 +21,11 @@ export class QRcodeScannerScreen extends React.Component {
     const socket = io(apiUrl.socketIo, {
       transports: ['websocket'],
     });
+    // just hard code the passpharse for now, we will use a code generator later
     socket.on('connect', () => {
-      console.log('qrScanner -> does it go here');
-      socket.emit('qrscanning', { data: '12341234' });
+      socket.emit('qrscanning', {
+        data: 'babysitter in demand is the best capstone project',
+      });
     });
 
     socket.on('connect_error', (error) => {
@@ -31,7 +33,7 @@ export class QRcodeScannerScreen extends React.Component {
     });
 
     socket.on('error', (error) => {
-      console.log('jsut some normal error, error in general ', error);
+      console.log('just some normal error, error in general ', error);
     });
 
     this.getPermissionsAsync();
@@ -46,10 +48,19 @@ export class QRcodeScannerScreen extends React.Component {
     this.setState(
       {
         scanned: true,
-        content: `Bar code with type ${type} and data ${data} has been scanned!`,
+        content: `QRcode with type ${type} and data ${data}`,
       },
       () => {
-        if (this.state.scanned == true) this.props.navigation.goBack();
+        if (this.state.scanned == true) {
+          ToastAndroid.showWithGravity(
+            'QR scanned success',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            80,
+          );
+          this.props.navigation.navigate('Home');
+        }
       },
     );
     console.log(
@@ -81,7 +92,7 @@ export class QRcodeScannerScreen extends React.Component {
 
         {scanned && (
           <View>
-            <Text>{this.state.content}</Text>
+            <Text sytle={{ color: 'white' }}>{this.state.content}</Text>
             <Button
               title="Tap to Scan Again"
               onPress={() => this.setState({ scanned: false })}
