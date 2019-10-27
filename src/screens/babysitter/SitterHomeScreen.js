@@ -118,13 +118,12 @@ class SitterHomeScreen extends Component {
             'Status of your invitation has been updateed, Do you want to see?',
         },
         () => {
+          // console.log('test notification bsitter: ' + this.state.notification);
+          this.AlertPro.open();
           this.refs.toast.show(
             'Status of your invitation has been upadted',
             DURATION.LENGTH_LONG,
           );
-
-          // console.log('test notification bsitter: ' + this.state.notification);
-          this.AlertPro.open();
         },
       );
     } else {
@@ -137,13 +136,13 @@ class SitterHomeScreen extends Component {
         //   25,
         //   80,
         // );
+        this.props.navigation.navigate('InvitationDetail', {
+          invitationId: notification.data.id,
+        });
         this.refs.toast.show(
           'Status of your invitation has been upadted',
           DURATION.LENGTH_LONG,
         );
-        this.props.navigation.navigate('InvitationDetail', {
-          invitationId: notification.data.id,
-        });
       });
     }
   };
@@ -167,13 +166,6 @@ class SitterHomeScreen extends Component {
     } = styles;
     return (
       <View style={containerBsitter}>
-        <Toast
-          ref="toast"
-          position="top"
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-        />
         <Loader loading={this.state.loading} />
         <AlertPro
           ref={(ref) => {
@@ -201,6 +193,13 @@ class SitterHomeScreen extends Component {
               backgroundColor: '#4da6ff',
             },
           }}
+        />
+        <Toast
+          ref="toast"
+          position="top"
+          fadeInDuration={750}
+          fadeOutDuration={1000}
+          opacity={0.8}
         />
         <View style={scheduleContainerBsitter}>
           <MuliText style={textBsitter}>Lịch giữ trẻ của bạn test</MuliText>

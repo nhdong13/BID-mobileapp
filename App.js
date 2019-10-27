@@ -15,21 +15,23 @@ export default function App(props) {
   console.ignoredYellowBox = ['Remote debugger'];
 
   YellowBox.ignoreWarnings([
-    'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
+    'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, ' +
+      '`cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
   ]);
-  console.log('local ra cai coi ' + NavigationService);
   useEffect(() => {
     retrieveToken().then((res) => {
       const { roleId } = res;
 
       if (roleId == 3) {
-        console.log('useEffect react hook');
         const bsitterSocket = io(apiUrl.socketIo, {
           transports: ['websocket'],
         });
 
         bsitterSocket.on('connect', () => {
-          console.log('main app socket to recceiver');
+          console.log(
+            '%c Main app socket to recceiver ',
+            'background: #222; color: #bada55',
+          );
         });
 
         bsitterSocket.on('qrTrigger', (qr) => {
@@ -45,7 +47,7 @@ export default function App(props) {
         });
 
         bsitterSocket.on('error', (error) => {
-          console.log('jsut some normal error, error in general ', error);
+          console.log('error in general ', error);
         });
       }
     });
