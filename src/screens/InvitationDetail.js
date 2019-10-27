@@ -230,7 +230,7 @@ export default class InvitationDetail extends Component {
                               name="ios-happy"
                               size={22}
                               style={{ marginBottom: -5, marginLeft: 15 }}
-                              color="#2ecc71"
+                              color="#adffcb"
                             />
                             <View>
                               <MuliText
@@ -332,7 +332,7 @@ export default class InvitationDetail extends Component {
                       name="ios-chatbubbles"
                       size={22}
                       style={{ marginBottom: -5, marginLeft: 10 }}
-                      color="#2ecc71"
+                      color="#adffcb"
                     />
                   </TouchableOpacity>
                 </View>

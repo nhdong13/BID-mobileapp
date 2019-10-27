@@ -1,19 +1,41 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, ToastAndroid } from 'react-native';
 import * as Permissions from 'expo-permissions';
+import { withNavigation } from 'react-navigation';
+import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import apiUrl from './Connection';
 
-export default class BarcodeScannerExample extends React.Component {
+export class QRcodeScannerScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hasCameraPermission: null,
       scanned: false,
+      content: '',
     };
   }
 
   async componentDidMount() {
+    const socket = io(apiUrl.socketIo, {
+      transports: ['websocket'],
+    });
+    // just hard code the passpharse for now, we will use a code generator later
+    socket.on('connect', () => {
+      socket.emit('qrscanning', {
+        data: 'babysitter in demand is the best capstone project',
+      });
+    });
+
+    socket.on('connect_error', (error) => {
+      console.log('connection error  ', error);
+    });
+
+    socket.on('error', (error) => {
+      console.log('just some normal error, error in general ', error);
+    });
+
     this.getPermissionsAsync();
   }
 
@@ -23,7 +45,24 @@ export default class BarcodeScannerExample extends React.Component {
   };
 
   handleBarCodeScanned = ({ type, data }) => {
-    this.setState({ scanned: true });
+    this.setState(
+      {
+        scanned: true,
+        content: `QRcode with type ${type} and data ${data}`,
+      },
+      () => {
+        if (this.state.scanned == true) {
+          ToastAndroid.showWithGravity(
+            'QR scanned success',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            80,
+          );
+          this.props.navigation.navigate('Home');
+        }
+      },
+    );
     console.log(
       `Bar code with type ${type} and data ${data} has been scanned!`,
     );
@@ -52,12 +91,17 @@ export default class BarcodeScannerExample extends React.Component {
         />
 
         {scanned && (
-          <Button
-            title={'Tap to Scan Again'}
-            onPress={() => this.setState({ scanned: false })}
-          />
+          <View>
+            <Text sytle={{ color: 'white' }}>{this.state.content}</Text>
+            <Button
+              title="Tap to Scan Again"
+              onPress={() => this.setState({ scanned: false })}
+            />
+          </View>
         )}
       </View>
     );
   }
 }
+
+export default withNavigation(QRcodeScannerScreen);

@@ -12,9 +12,10 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { listByRequestAndStatus } from 'api/invitation.api';
-import { acceptBabysitter, cancelRequest } from 'api/sittingRequest.api';
+import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
+import { withNavigation } from 'react-navigation';
 
-export default class RequestDetail extends Component {
+export class RequestDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,9 +67,24 @@ export default class RequestDetail extends Component {
       status: targetStatus,
     };
 
-    cancelRequest(data)
+    updateRequestStatus(data)
       .then(() => {
         this.props.navigation.navigate('Home', { loading: false });
+      })
+      .catch((error) => console.log(error));
+  };
+
+  onOpenQR = (targetStatus) => {
+    const data = {
+      id: this.state.sittingRequestsID,
+      status: targetStatus,
+    };
+
+    this.props.navigation.navigate('QrScanner');
+
+    updateRequestStatus(data)
+      .then(() => {
+        // this.props.navigation.navigate('Home', { loading: false });
       })
       .catch((error) => console.log(error));
   };
@@ -463,13 +479,13 @@ export default class RequestDetail extends Component {
                 </MuliText>
               </TouchableOpacity>
             )}
-            
-            { this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
+
+            {this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
-                  this.onButtonClick('ONGOING');
-                  this.props.navigation.navigate('Home');
+                  this.onOpenQR('ONGOING');
+                  // this.props.navigation.navigate('Home');
                 }}
               >
                 <MuliText style={{ color: '#2ecc71', fontSize: 12 }}>
@@ -478,7 +494,7 @@ export default class RequestDetail extends Component {
               </TouchableOpacity>
             )}
 
-            { this.state.canCheckOut && this.state.status == 'ONGOING' && (
+            {this.state.canCheckOut && this.state.status == 'ONGOING' && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
@@ -528,6 +544,9 @@ export default class RequestDetail extends Component {
     );
   }
 }
+
+export default withNavigation(RequestDetail);
+
 RequestDetail.navigationOptions = {
   title: 'Yêu cầu chi tiết',
 };

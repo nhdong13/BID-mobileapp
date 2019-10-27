@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 import colors from 'assets/Color';
 
-class SitterHome extends Component {
+class SitterInvitation extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -106,7 +106,7 @@ class SitterHome extends Component {
   }
 }
 
-export default withNavigation(SitterHome);
+export default withNavigation(SitterInvitation);
 
 const styles = StyleSheet.create({
   container: {

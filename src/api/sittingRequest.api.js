@@ -50,13 +50,13 @@ export async function acceptBabysitter(requestId, sitterId) {
   return { message: 'error trying to get data from response' };
 }
 
-export async function cancelRequest(request) {
+export async function updateRequestStatus(request) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
   const options = {
     method: 'PUT',
-    url: `${apiUrl.cancelRequest}${request.id}`,
+    url: `${apiUrl.updateRequestStatus}${request.id}`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
@@ -87,8 +87,8 @@ export async function getRequests(userId) {
     data: qs.stringify(data),
   };
 
-  const response = await axios(options).catch(() => {
-    if (userId != 0) console.log('PHUC: getRequests -> error', userId);
+  const response = await axios(options).catch((error) => {
+    if (userId != 0) console.log('PHUC: getRequests -> error', error);
   });
   // // console.log('PHUC: getRequests -> response', response);
 
