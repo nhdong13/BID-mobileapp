@@ -11,6 +11,7 @@ import {
   FlatList,
   TouchableOpacity,
   ToastAndroid,
+  Text,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -25,6 +26,7 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
+import AlertPro from 'react-native-alert-pro';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
 const Toast = (props) => {
@@ -52,7 +54,7 @@ class HomeScreen extends Component {
       refreshing: false,
       agenda: 0,
       loading: false,
-      notitfication: {},
+      notification: {},
       setVisible: false,
       visible: false,
     };
@@ -125,45 +127,90 @@ class HomeScreen extends Component {
 
   handleNotification = (notification) => {
     const { roleId } = this.state;
-    if (roleId == 2) {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.props.navigation.navigate('RequestDetail', {
-          requestId: notification.data.id,
+    const { origin } = notification;
+    if (origin == 'selected') {
+      if (roleId == 2) {
+        this.setState({ notification: notification }, () => {
+          const { notification } = this.state;
+          this.props.navigation.navigate('RequestDetail', {
+            requestId: notification.data.id,
+          });
+          this.handleButtonPress();
         });
-        this.handleButtonPress();
-      });
-      // this.confirmModalPopup();
+        // this.confirmModalPopup();
+      } else {
+        this.setState({ notification: notification }, () => {
+          const { notification } = this.state;
+          ToastAndroid.showWithGravity(
+            'Status of your invitation has been updated',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            80,
+          );
+          this.props.navigation.navigate('InvitationDetail', {
+            invitationId: notification.data.id,
+          });
+        });
+      }
     } else {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        ToastAndroid.showWithGravity(
-          'Status of your invitation has been updated',
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-          25,
-          80,
+      // eslint-disable-next-line no-lonely-if
+      if (roleId == 2) {
+        this.setState(
+          {
+            notification: notification,
+            notificationMessage:
+              'Sitter had accepted your invitaion, Do you want to see?',
+          },
+          () => {
+            console.log('test notification: ' + this.state.notification);
+            this.AlertPro.open();
+          },
         );
-        this.props.navigation.navigate('InvitationDetail', {
-          invitationId: notification.data.id,
-        });
-      });
+      } else {
+        this.setState(
+          {
+            notification: notification,
+            notificationMessage:
+              'Status of your invitation has been updateed, Do you want to see?',
+          },
+          () => {
+            console.log(
+              'test notification bsitter: ' + this.state.notification,
+            );
+            this.AlertPro.open();
+          },
+        );
+      }
     }
   };
 
   confirmModalPopup = () => {
-    this.setState({ setVisible: !this.state.setVisible });
+    const { roleId } = this.state;
+    const { notification } = this.state;
+    console.log('PHUC: confirmModalPopup -> notification', notification);
+    if (roleId == 2) {
+      this.props.navigation.navigate('RequestDetail', {
+        requestId: notification.data.id,
+      });
+      this.AlertPro.close();
+    } else {
+      this.props.navigation.navigate('InvitationDetail', {
+        invitationId: notification.data.id,
+      });
+      this.AlertPro.close();
+    }
   };
 
   getDataAccordingToRole = async () => {
     // check role of user parent - 1, bsitter - 2
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
-      this.setState({ userId, roleId, setVisible: false });
+      this.setState({ userId, roleId });
       registerPushNotifications(userId).then((response) => {
         if (response) {
           console.log(
-            'PHUC: HomeScreen -> getDataAccordingToRole -> res',
+            'PHUC: HomeScreen -> registerPushNotifications -> response',
             response.data,
           );
         }
@@ -240,15 +287,33 @@ class HomeScreen extends Component {
           visible={this.state.visible}
           message="Your sitter has confirmed the sitting"
         />
-        {/* <Loader loading={loading} /> */}
-
-        {/* {setVisible == true && (
-          <ModalPushNotification
-            setVisible={setVisible}
-            notification={notification}
-          />
-        )} */}
-
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onConfirm={() => this.confirmModalPopup()}
+          onCancel={() => this.AlertPro.close()}
+          title="Request confirmation"
+          message={this.state.notificationMessage}
+          textCancel="Cancel"
+          textConfirm="Accept"
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+            buttonCancel: {
+              backgroundColor: '#e74c3c',
+            },
+            buttonConfirm: {
+              backgroundColor: '#4da6ff',
+            },
+          }}
+        />
         <View
           style={roleId == 2 ? scheduleContainer : scheduleContainerBsitter}
         >
@@ -271,19 +336,6 @@ class HomeScreen extends Component {
               </MuliText>
             </View>
           </TouchableOpacity>
-
-          {/* <TouchableOpacity
-            style={{ marginTop: 30, height: 50 }}
-            onPress={() => this.confirmModalPopup()}
-          >
-            <MuliText
-              style={roleId == 2 ? textParentRequest : textBsitterRequest}
-            >
-              {roleId && roleId == 2
-                ? 'touch here to see some surprise'
-                : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
-            </MuliText>
-          </TouchableOpacity> */}
         </View>
         {roleId && roleId == 2 ? (
           <Agenda
