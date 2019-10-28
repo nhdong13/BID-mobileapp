@@ -18,7 +18,7 @@ export class QRcodeScannerScreen extends React.Component {
   }
 
   async componentDidMount() {
-    const socket = io(apiUrl.socketIo, {
+    const socket = io(apiUrl.bsitter, {
       transports: ['websocket'],
     });
     // just hard code the passpharse for now, we will use a code generator later
@@ -29,11 +29,11 @@ export class QRcodeScannerScreen extends React.Component {
     });
 
     socket.on('connect_error', (error) => {
-      console.log('connection error  ', error);
+      console.log('QR connection error  ', error);
     });
 
     socket.on('error', (error) => {
-      console.log('just some normal error, error in general ', error);
+      console.log('QR just some normal error, error in general ', error);
     });
 
     this.getPermissionsAsync();

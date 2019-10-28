@@ -23,14 +23,13 @@ export default function App(props) {
       const { roleId } = res;
 
       if (roleId == 3) {
-        const bsitterSocket = io(apiUrl.socketIo, {
+        const bsitterSocket = io(apiUrl.bsitter, {
           transports: ['websocket'],
         });
 
         bsitterSocket.on('connect', () => {
           console.log(
-            '%c Main app socket to recceiver ',
-            'background: #222; color: #bada55',
+            'Bsitter Connected',
           );
         });
 
@@ -43,11 +42,28 @@ export default function App(props) {
         });
 
         bsitterSocket.on('connect_error', (error) => {
-          console.log('connection error  ', error);
+          console.log('Bsitter connection error  ', error);
         });
 
         bsitterSocket.on('error', (error) => {
-          console.log('error in general ', error);
+          console.log('Bsitter error in general ', error);
+        });
+      } else if (roleId == 2) {
+        const parentSocket = io(apiUrl.parent, {
+          transports: ['websocket'],
+        });
+        parentSocket.on('connect', () => {
+          console.log(
+            `Parent connected`,
+          );
+        });
+
+        parentSocket.on('connect_error', (error) => {
+          console.log('Parent connection error  ', error);
+        });
+
+        parentSocket.on('error', (error) => {
+          console.log('Parent error in general ', error);
         });
       }
     });
