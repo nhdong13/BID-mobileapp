@@ -10,6 +10,7 @@ import InvitationDetail from 'screens/InvitationDetail';
 import SitterHomeScreen from 'screens/babysitter/SitterHomeScreen';
 import TabBarIcon from '../components/TabBarIcon';
 import SettingsScreen from '../screens/SettingsScreen';
+import CalendarScreen from 'screens/babysitter/CalendarScreen';
 
 const config = Platform.select({
   default: {},
