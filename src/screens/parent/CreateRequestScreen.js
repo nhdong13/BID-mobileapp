@@ -195,7 +195,7 @@ class CreateRequestScreen extends Component {
       <ScrollView>
         <View style={styles.containerInformationRequest}>
           <MuliText style={styles.headerTitle}>
-            Trông trẻ {this.state.requestId}
+            Trông trẻ
           </MuliText>
           <View>
             <View style={styles.inputDay}>

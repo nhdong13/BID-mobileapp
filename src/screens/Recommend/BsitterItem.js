@@ -49,7 +49,7 @@ export class Bsitter extends Component {
   }
 
   render() {
-    const { item, navigation, requestId } = this.props;
+    const { item, navigation, requestId, request } = this.props;
     return (
       <View key={item.userId} style={styles.bsitterContainer}>
         <View style={styles.bsitterItem}>
@@ -59,6 +59,7 @@ export class Bsitter extends Component {
               navigation.navigate('SitterProfile', {
                 sitterId: item.userId,
                 requestId: requestId,
+                request: request,
                 onGoBack: (receiverId, requestId) => this.changeStateOnGoBack(receiverId, requestId),
               })
             }

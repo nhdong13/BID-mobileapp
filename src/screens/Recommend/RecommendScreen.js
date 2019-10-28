@@ -89,7 +89,6 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <MuliText>{this.state.requestId}</MuliText>
         {this.state.recommendList && this.state.recommendList.length > 0 ? (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
