@@ -4,7 +4,7 @@ import qs from 'qs';
 import apiUrl from 'utils/Connection';
 import moment from 'moment';
 
-export async function recommend(requestId) {
+export async function recommend(requestId, request) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
@@ -12,12 +12,13 @@ export async function recommend(requestId) {
   const url = apiUrl.getRecommend + requestId;
 
   const options = {
-    method: 'GET',
+    method: 'POST',
     url: url,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
     },
+    data: qs.stringify(request),
   };
 
   const response = await axios(options).catch((error) => console.log(error));
@@ -48,6 +49,26 @@ export async function acceptBabysitter(requestId, sitterId) {
     return response.data;
   }
   return { message: 'error trying to get data from response' };
+}
+
+export async function updateRequest(request) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+  const url = apiUrl.updateRequestStatus + request.id;
+  console.log(url);
+  const options = {
+    method: 'PUT',
+    url: url,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(request),
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
 }
 
 export async function updateRequestStatus(request) {
