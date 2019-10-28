@@ -13,6 +13,7 @@ import RequestDetail from 'screens/RequestDetail';
 import InvitationDetail from 'screens/InvitationDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import ProfileDetail from 'screens/ProfileDetail';
+import CalendarScreen from 'screens/babysitter/CalendarScreen';
 
 const config = Platform.select({
   default: {},

@@ -13,6 +13,7 @@ import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
+import CalendarScreen from 'screens/babysitter/CalendarScreen';
 
 // import MyNetwork from '../screens/circle/MyNetwork';
 
@@ -54,20 +55,20 @@ const HomeStack = createStackNavigator(
       navigationOptions: () => ({
         title: 'Tạo yêu cầu giữ trẻ',
         headerBackTitle: 'RecommendBabysitter',
-      })
+      }),
     },
     Recommend: {
       screen: RecommendBabysitter,
       navigationOptions: () => ({
         title: 'Người giữ trẻ phù hợp',
-      })
+      }),
     },
     SitterProfile: {
       screen: BsitterProfile,
       navigationOptions: () => ({
         title: 'Thông tin người giữ trẻ',
-      })
-    }
+      }),
+    },
   },
   config,
 );
@@ -107,6 +108,7 @@ const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
     Profile: ProfileDetail,
+    CalendarScreen: CalendarScreen,
   },
   config,
 );
