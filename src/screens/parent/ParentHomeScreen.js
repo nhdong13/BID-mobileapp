@@ -24,12 +24,14 @@ import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import CalendarStrip from 'react-native-calendar-strip';
 // import ModalPushNotification from 'components/ModalPushNotification';
+import { markDates } from 'utils/markedDates'
 
 class ParentHomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       requests: [],
+      sittingDates: [],
       userId: 0,
       roleId: 0,
       refreshing: false,
@@ -129,7 +131,8 @@ class ParentHomeScreen extends Component {
       // get data for parent (requests)
       await getRequests(this.state.userId)
         .then((res) => {
-          this.setState({ requests: res });
+          const markedDates = markDates(res);
+          this.setState({ requests: res, sittingDates: markedDates });
         })
         .catch((error) =>
           console.log('HomeScreen - getRequestData - Requests ' + error),
@@ -204,6 +207,7 @@ class ParentHomeScreen extends Component {
           </TouchableOpacity>
         </View>
         <CalendarStrip
+          markedDates={this.state.sittingDates.length > 0 ? this.state.sittingDates : [] }
           calendarAnimation={{
             type: 'sequence',
             duration: 30,
