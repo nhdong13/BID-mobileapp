@@ -55,17 +55,7 @@ class ParentHomeScreen extends Component {
     const data = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
-      if (data.userId != 0 && data.roleId == 2) {
-        await getRequests(data.userId)
-          .then((res) => {
-            // console.log('PHUC: componentDidUpdate -> res', res);
-            this.setState({ requests: res });
-          })
-
-          .catch((error) =>
-            console.log('HomeScreen - getRequestData - Requests ' + error),
-          );
-      }
+      await this.getRequestData();
     }
   }
 

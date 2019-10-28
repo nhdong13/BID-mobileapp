@@ -18,6 +18,5 @@ export const markDates = (requests) => {
     }
   });
 
-  console.log(markedDates);
   return markedDates;
 };

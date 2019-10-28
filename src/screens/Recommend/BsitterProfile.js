@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import { Gender } from 'utils/Enum';
-import { getProfileByRequest } from 'api/babysitter.api';
+import { getProfileByRequest, getProfile } from 'api/babysitter.api';
 import { createInvitation } from 'api/invitation.api';
 
 export default class BsitterProfile extends Component {
@@ -12,6 +12,7 @@ export default class BsitterProfile extends Component {
     this.state = {
       requestId: 0,
       sitterId: 0,
+      request: null,
       sitter: {},
       user: {},
     };
@@ -20,9 +21,10 @@ export default class BsitterProfile extends Component {
   componentWillMount() {
     const sitterId = this.props.navigation.getParam('sitterId');
     const requestId = this.props.navigation.getParam('requestId');
+    const request = this.props.navigation.getParam('request');
 
     if (sitterId && sitterId != 0) {
-      this.setState({ sitterId: sitterId, requestId: requestId }, () =>
+      this.setState({ sitterId: sitterId, requestId: requestId, request: request }, () =>
         this.getBabysitter(),
       );
     } else {
@@ -43,10 +45,21 @@ export default class BsitterProfile extends Component {
 
       return data;
     }
+
+    if (this.state.sitterId != 0) {
+      const data = await getProfile(this.state.sitterId);
+      this.setState({
+        sitter: data,
+        user: data.user,
+      });
+
+      return data;
+    }
+
     return [];
   };
 
-  sendInvitation = async (sitterId, requestId) => {
+  sendInvitation = async (sitterId, requestId, request) => {
     console.log(
       'Duong: BsitterProfile -> sendInvitation -> requestId',
       requestId,
@@ -57,10 +70,11 @@ export default class BsitterProfile extends Component {
       receiver: sitterId,
     };
     console.log(invitation);
-    await createInvitation(invitation)
-      .then(() => {
+    await createInvitation(requestId, invitation, request)
+      .then((response) => {
         this.changeInviteStatus();
-        this.props.navigation.state.params.onGoBack();
+        this.setState({ requestId: response.data.newRequest.id });
+        this.props.navigation.state.params.onGoBack(sitterId, response.data.newRequest.id);
       })
       .catch((error) => console.log(error));
   };
@@ -134,6 +148,7 @@ export default class BsitterProfile extends Component {
                       this.sendInvitation(
                         this.state.sitter.userId,
                         this.state.requestId,
+                        this.state.request
                       )
                     }
                   >
