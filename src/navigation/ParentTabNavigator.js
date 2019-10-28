@@ -6,7 +6,7 @@ import {
 } from 'react-navigation';
 
 import TabBarIcon from 'components/TabBarIcon';
-import HomeScreen from 'screens/HomeScreen';
+import ParentHomeScreen from 'screens/parent/ParentHomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
@@ -16,6 +16,8 @@ import ProfileDetail from 'screens/ProfileDetail';
 import CalendarScreen from 'screens/babysitter/CalendarScreen';
 
 // import MyNetwork from '../screens/circle/MyNetwork';
+import MyNetwork from 'screens/circle/MyNetwork';
+import QRcodeScannerScreen from 'utils/qrScanner';
 
 const config = Platform.select({
   default: {},
@@ -43,7 +45,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: ParentHomeScreen,
       // eslint-disable-next-line no-unused-vars
       navigationOptions: ({ navigation }) => ({
         header: null,
@@ -69,6 +71,7 @@ const HomeStack = createStackNavigator(
         title: 'Thông tin người giữ trẻ',
       }),
     },
+    QrScanner: QRcodeScannerScreen,
   },
   config,
 );
@@ -85,24 +88,25 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-// const CircleStack = createStackNavigator(
-//   {
-//     Circles: SettingsScreen,
-//   },
-//   config,
-// );
+const CircleStack = createStackNavigator(
+  {
+    QrScanner: QRcodeScannerScreen,
+    Circles: MyNetwork,
+  },
+  config,
+);
 
-// CircleStack.navigationOptions = {
-//   tabBarLabel: 'Vòng tròn tin tưởng',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
-//     />
-//   ),
-// };
+CircleStack.navigationOptions = {
+  tabBarLabel: 'Vòng tròn tin tưởng',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS == 'ios' ? 'ios-man' : 'md-man'}
+    />
+  ),
+};
 
-// CircleStack.path = '';
+CircleStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -127,7 +131,7 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  // CircleStack,
+  CircleStack,
   SettingsStack,
 });
 

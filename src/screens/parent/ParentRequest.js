@@ -5,7 +5,7 @@ import { MuliText } from 'components/StyledText';
 import moment from 'moment';
 import colors from 'assets/Color';
 
-class ParentHome extends Component {
+class ParentRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -20,6 +20,7 @@ class ParentHome extends Component {
             requestId: request.id,
           })
         }
+        style={styles.container}
       >
         <View style={styles.requestItem}>
           <View style={styles.leftInformation}>
@@ -75,16 +76,12 @@ class ParentHome extends Component {
   }
 }
 
-export default withNavigation(ParentHome);
+export default withNavigation(ParentRequest);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  containerBsitter: {
-    flex: 1,
-    backgroundColor: '#dfe6e9',
+    backgroundColor: '#ecf0f1',
   },
   createRequest: {
     width: 60,

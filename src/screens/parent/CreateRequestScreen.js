@@ -17,7 +17,7 @@ class CreateRequestScreen extends Component {
     this.state = {
       userId: null,
       loggedUser: null,
-      sittingDate: null,
+      sittingDate: null || this.props.navigation.getParam('selectedDate'),
       startTime: null,
       endTime: null,
       sittingAddress: null,
@@ -28,6 +28,7 @@ class CreateRequestScreen extends Component {
       totalPrice: 0,
       spPrice: null,
     };
+    console.log(this.props.navigation.getParam('selectedDate'));
   }
 
   async componentDidMount() {

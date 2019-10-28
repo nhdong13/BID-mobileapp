@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
@@ -9,21 +7,38 @@ import {
   RefreshControl,
   ScrollView,
   FlatList,
+  TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/sittingRequest.api';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { withNavigationFocus } from 'react-navigation';
-import Loader from 'utils/Loader';
-import SitterHome from 'screens/babysitter/SitterHome';
-import ParentHome from 'screens/parent/ParentHome';
+// import Loader from 'utils/Loader';
+import SitterInvitation from 'screens/babysitter/SitterInvitation';
+import ParentRequest from 'screens/parent/ParentRequest';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from 'api/api_helper';
 import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
+import AlertPro from 'react-native-alert-pro';
+// import ModalPushNotification from 'components/ModalPushNotification';
+
+const Toast = (props) => {
+  if (props.visible) {
+    ToastAndroid.showWithGravityAndOffset(
+      props.message,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50,
+    );
+    return null;
+  }
+  return null;
+};
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -35,16 +50,18 @@ class HomeScreen extends Component {
       roleId: 0,
       refreshing: false,
       agenda: 0,
-      loading: false,
-      notitfication: {},
+      // loading: false,
+      notification: {},
+      visible: false,
     };
   }
 
-  componentWillMount() {
-    this.getDataAccordingToRole();
-  }
+  // componentWillMount() {
+  //   this.getDataAccordingToRole();
+  // }
 
   componentDidMount() {
+    this.getDataAccordingToRole();
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
@@ -54,7 +71,6 @@ class HomeScreen extends Component {
     const data = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
-      this.setState({ loading: true });
       if (data.userId != 0 && data.roleId == 2) {
         await getRequests(data.userId)
           .then((res) => {
@@ -62,7 +78,6 @@ class HomeScreen extends Component {
             this.setState({ requests: res }, () =>
               this.setState({
                 agenda: Math.random(),
-                loading: false,
               }),
             );
           })
@@ -78,7 +93,7 @@ class HomeScreen extends Component {
         };
         await Api.post('invitations/sitterInvitation', requestBody)
           .then((res) => {
-            this.setState({ invitations: res, loading: false });
+            this.setState({ invitations: res });
           })
           .catch((error) =>
             console.log(
@@ -89,22 +104,97 @@ class HomeScreen extends Component {
     }
   }
 
+  handleButtonPress = () => {
+    this.setState(
+      {
+        visible: true,
+      },
+      () => {
+        this.hideToast();
+      },
+    );
+  };
+
+  hideToast = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   handleNotification = (notification) => {
     const { roleId } = this.state;
-    if (roleId == 2) {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.props.navigation.navigate('RequestDetail', {
-          requestId: notification.data.id,
+    const { origin } = notification;
+    if (origin == 'selected') {
+      if (roleId == 2) {
+        this.setState({ notification: notification }, () => {
+          const { notification } = this.state;
+          this.props.navigation.navigate('RequestDetail', {
+            requestId: notification.data.id,
+          });
+          this.handleButtonPress();
         });
-      });
+        // this.confirmModalPopup();
+      } else {
+        this.setState({ notification: notification }, () => {
+          const { notification } = this.state;
+          ToastAndroid.showWithGravity(
+            'Status of your invitation has been updated',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            80,
+          );
+          this.props.navigation.navigate('InvitationDetail', {
+            invitationId: notification.data.id,
+          });
+        });
+      }
     } else {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.props.navigation.navigate('InvitationDetail', {
-          invitationId: notification.data.id,
-        });
+      // eslint-disable-next-line no-lonely-if
+      if (roleId == 2) {
+        this.setState(
+          {
+            notification: notification,
+            notificationMessage:
+              'Sitter had accepted your invitaion, Do you want to see?',
+          },
+          () => {
+            console.log('test notification: ' + this.state.notification);
+            this.AlertPro.open();
+          },
+        );
+      } else {
+        this.setState(
+          {
+            notification: notification,
+            notificationMessage:
+              'Status of your invitation has been updateed, Do you want to see?',
+          },
+          () => {
+            console.log(
+              'test notification bsitter: ' + this.state.notification,
+            );
+            this.AlertPro.open();
+          },
+        );
+      }
+    }
+  };
+
+  confirmModalPopup = () => {
+    const { roleId } = this.state;
+    const { notification } = this.state;
+    console.log('PHUC: confirmModalPopup -> notification', notification);
+    if (roleId == 2) {
+      this.props.navigation.navigate('RequestDetail', {
+        requestId: notification.data.id,
       });
+      this.AlertPro.close();
+    } else {
+      this.props.navigation.navigate('InvitationDetail', {
+        invitationId: notification.data.id,
+      });
+      this.AlertPro.close();
     }
   };
 
@@ -116,7 +206,7 @@ class HomeScreen extends Component {
       registerPushNotifications(userId).then((response) => {
         if (response) {
           console.log(
-            'PHUC: HomeScreen -> getDataAccordingToRole -> res',
+            'PHUC: HomeScreen -> registerPushNotifications -> response',
             response.data,
           );
         }
@@ -127,10 +217,9 @@ class HomeScreen extends Component {
     if (this.state.roleId != 0) {
       if (this.state.roleId == 2) {
         // get data for parent (requests)
-        this.setState({ loading: true });
         await getRequests(this.state.userId)
           .then((res) => {
-            this.setState({ requests: res, loading: false });
+            this.setState({ requests: res });
           })
           .catch((error) =>
             console.log(
@@ -139,13 +228,15 @@ class HomeScreen extends Component {
           );
       } else {
         // get data for the babysitter (invitations)
-        this.setState({ loading: true });
+        // this.setState({ loading: true });
         const requestBody = {
           id: this.state.userId,
         };
         await Api.post('invitations/sitterInvitation', requestBody)
           .then((res) => {
-            this.setState({ invitations: res, loading: false });
+            this.setState({
+              invitations: res,
+            });
           })
           .catch((error) =>
             console.log(
@@ -157,16 +248,18 @@ class HomeScreen extends Component {
   };
 
   _onRefresh = () => {
-    this.setState({ refreshing: true });
+    // this.setState({ refreshing: true });
     this.getDataAccordingToRole().then(() => {
-      this.setState({ refreshing: false });
+      // this.setState({ refreshing: false });
     });
   };
 
   render() {
     const { navigation } = this.props;
-    const { roleId, requests, invitations, loading, refreshing } = this.state;
+    const { roleId, requests, invitations, refreshing } = this.state;
+
     const {
+      borderText,
       textBsitterRequest,
       textParentRequest,
       container,
@@ -184,33 +277,56 @@ class HomeScreen extends Component {
         key={this.state.agenda}
         style={roleId == 2 ? container : containerBsitter}
       >
-        <Loader loading={loading} />
+        <Toast
+          visible={this.state.visible}
+          message="Your sitter has confirmed the sitting"
+        />
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onConfirm={() => this.confirmModalPopup()}
+          onCancel={() => this.AlertPro.close()}
+          title="Request confirmation"
+          message={this.state.notificationMessage}
+          textCancel="Cancel"
+          textConfirm="Accept"
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+            buttonCancel: {
+              backgroundColor: '#e74c3c',
+            },
+            buttonConfirm: {
+              backgroundColor: '#4da6ff',
+            },
+          }}
+        />
         <View
           style={roleId == 2 ? scheduleContainer : scheduleContainerBsitter}
         >
           <MuliText style={roleId == 2 ? textParent : textBsitter}>
             {roleId && roleId == 2
               ? 'Khi nào bạn cần người giữ trẻ?'
-              : 'Chào bạn'}
+              : 'Lịch giữ trẻ của bạn'}
           </MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
           >
-            <View
-              style={{
-                borderRadius: 1,
-                borderColor: colors.gray,
-                borderWidth: 1,
-                paddingHorizontal: 10,
-              }}
-            >
+            <View style={roleId == 2 ? borderText : {}}>
               <MuliText
                 style={roleId == 2 ? textParentRequest : textBsitterRequest}
               >
                 {roleId && roleId == 2
                   ? 'Nhấn vào đây để tạo yêu cầu nhé'
-                  : 'Yêu cầu của phụ huynh sẽ được hiển thị ở đây'}
+                  : null}
               </MuliText>
             </View>
           </TouchableOpacity>
@@ -219,12 +335,19 @@ class HomeScreen extends Component {
           <Agenda
             items={requests}
             selected={new moment().format('YYYY-MM-DD')}
-            pastScrollRange={50}
-            futureScrollRange={50}
-            renderItem={(request) => <ParentHome request={request} />}
+            pastScrollRange={1}
+            futureScrollRange={1}
+            renderItem={(request) => <ParentRequest request={request} />}
             rowHasChanged={(r1, r2) => r1.text != r2.text}
             renderDay={() => <View />}
             renderEmptyDate={() => <View />}
+            renderKnob={() => {
+              return (
+                <View style={{ backgroundColor: 'red', flex: 1, height: 30 }}>
+                  <MuliText>tap here bro</MuliText>
+                </View>
+              );
+            }}
             renderEmptyData={() => (
               <ScrollView
                 refreshControl={
@@ -244,9 +367,9 @@ class HomeScreen extends Component {
                     </MuliText>
                     <View
                       style={{
-                        borderRadius: 1,
-                        borderColor: colors.gray,
-                        borderWidth: 1,
+                        // borderRadius: 1,
+                        // borderColor: colors.gray,
+                        // borderWidth: 1,
                         paddingHorizontal: 10,
                       }}
                     >
@@ -288,7 +411,9 @@ class HomeScreen extends Component {
                   />
                 }
                 data={invitations}
-                renderItem={({ item }) => <SitterHome invitation={item} />}
+                renderItem={({ item }) => (
+                  <SitterInvitation invitation={item} />
+                )}
                 keyExtractor={(item) => item.id.toString()}
               />
             ) : (
@@ -316,6 +441,12 @@ HomeScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  borderText: {
+    borderRadius: 1,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+  },
   textParentRequest: {
     color: colors.gray,
   },
