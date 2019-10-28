@@ -154,7 +154,9 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Circle')}
+            style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-contacts"

@@ -16,8 +16,8 @@ import ProfileDetail from 'screens/ProfileDetail';
 import CalendarScreen from 'screens/babysitter/CalendarScreen';
 
 // import MyNetwork from '../screens/circle/MyNetwork';
-import MyNetwork from 'screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
+import CircleScreens from 'screens/parent/CircleScreens';
 
 const config = Platform.select({
   default: {},
@@ -90,8 +90,8 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
-    QrScanner: QRcodeScannerScreen,
-    Circles: MyNetwork,
+    Circles: CircleScreens,
+    // QrScanner: QRcodeScannerScreen,
   },
   config,
 );

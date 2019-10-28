@@ -78,7 +78,7 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.recommendList && this.state.recommendList.length > 0 ? (
+        {this.state.recommendList && this.state.recommendList.length > 0 && (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
               <Ionicons
@@ -99,7 +99,7 @@ export default class RecommendScreen extends Component {
               </MuliText>
             </View>
             {this.state.isModalVisible && (
-              <ScrollView>
+              <ScrollView style={styles.sectionContainer2}>
                 {this.state.recommendList &&
                   this.state.recommendList.length > 0 && (
                     <FlatList
@@ -117,17 +117,9 @@ export default class RecommendScreen extends Component {
               </ScrollView>
             )}
           </View>
-        ) : (
-          <View style={{ marginTop: 250 }}>
-            <MuliText
-              style={{ color: colors.gray, fontSize: 25, marginHorizontal: 30 }}
-            >
-              Không tìm thấy người giữ trẻ nào phù hợp với lịch giữ trẻ của bạn
-            </MuliText>
-          </View>
         )}
 
-        {this.state.listMatched && this.state.listMatched.length != 0 && (
+        {this.state.listMatched && this.state.listMatched.length != 0 ? (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
               <Ionicons
@@ -148,7 +140,7 @@ export default class RecommendScreen extends Component {
               </MuliText>
             </View>
             {this.state.isModalVisible2 && (
-              <ScrollView>
+              <ScrollView style={styles.sectionContainer2}>
                 {this.state.listMatched &&
                   this.state.listMatched.length != 0 && (
                     <FlatList
@@ -166,6 +158,10 @@ export default class RecommendScreen extends Component {
               </ScrollView>
             )}
           </View>
+        ) : (
+          <MuliText style={{ marginTop: 50, color: colors.gray, fontSize: 25, marginHorizontal: 50 }}>
+            Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
+          </MuliText>
         )}
       </View>
     );
@@ -176,7 +172,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#dfe6e9',
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   textInput: {
     borderColor: '#EEEEEE',
@@ -187,9 +183,14 @@ const styles = StyleSheet.create({
     padding: 10,
     fontFamily: 'muli',
   },
+  sectionContainer2: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    marginTop: 10,
+    height: 300,
+  },
   sectionContainer: {
     backgroundColor: 'white',
-    flex: 1,
     paddingHorizontal: 20,
     marginTop: 10,
   },
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     borderColor: '#bdc3c7',
     height: 60,
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   notfoundMessage: {
     backgroundColor: 'white',

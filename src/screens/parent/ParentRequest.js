@@ -14,64 +14,73 @@ class ParentRequest extends Component {
   render() {
     const { request } = this.props;
     return (
-      <TouchableOpacity
-        onPress={() =>
-          this.props.navigation.navigate('RequestDetail', {
-            requestId: request.id,
-          })
-        }
-        style={styles.container}
-      >
-        <View style={styles.requestItem}>
-          <View style={styles.leftInformation}>
-            <MuliText style={styles.date}>
-              {moment(request.sittingDate).format('dddd Do MMMM')}
-            </MuliText>
-            <MuliText style={{ color: '#7edeb9' }}>
-              {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
-              {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
-            </MuliText>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate('RequestDetail', {
+              requestId: request.id,
+            })
+          }
+        >
+          <View style={styles.requestItem}>
+            <View style={styles.leftInformation}>
+              <MuliText style={styles.date}>
+                {moment(request.sittingDate).format('dddd Do MMMM')}
+              </MuliText>
+              <MuliText style={{ color: '#7edeb9' }}>
+                {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
+                {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
+              </MuliText>
+            </View>
+            <View style={styles.rightInformation}>
+              {request.status == 'PENDING' && (
+                <View style={styles.statusBoxPending}>
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.pending }}
+                  >
+                    {request.status}
+                  </MuliText>
+                </View>
+              )}
+              {request.status == 'DONE' && (
+                <View style={styles.statusBoxPending}>
+                  <MuliText style={{ fontWeight: '100', color: colors.done }}>
+                    {request.status}
+                  </MuliText>
+                </View>
+              )}
+              {request.status == 'ONGOING' && (
+                <View style={styles.statusBoxPending}>
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.ongoing }}
+                  >
+                    {request.status}
+                  </MuliText>
+                </View>
+              )}
+              {request.status == 'CANCELED' && (
+                <View style={styles.statusBoxPending}>
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {request.status}
+                  </MuliText>
+                </View>
+              )}
+              {request.status == 'CONFIRMED' && (
+                <View style={styles.statusBoxPending}>
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.confirmed }}
+                  >
+                    {request.status}
+                  </MuliText>
+                </View>
+              )}
+              <MuliText>{request.totalPrice} VND</MuliText>
+            </View>
           </View>
-          <View style={styles.rightInformation}>
-            {request.status == 'PENDING' && (
-              <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: colors.pending }}>
-                  {request.status}
-                </MuliText>
-              </View>
-            )}
-            {request.status == 'DONE' && (
-              <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                  {request.status}
-                </MuliText>
-              </View>
-            )}
-            {request.status == 'ONGOING' && (
-              <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: colors.ongoing }}>
-                  {request.status}
-                </MuliText>
-              </View>
-            )}
-            {request.status == 'CANCELED' && (
-              <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: colors.canceled }}>
-                  {request.status}
-                </MuliText>
-              </View>
-            )}
-            {request.status == 'CONFIRMED' && (
-              <View style={styles.statusBoxPending}>
-                <MuliText style={{ fontWeight: '100', color: colors.confirmed }}>
-                  {request.status}
-                </MuliText>
-              </View>
-            )}
-            <MuliText>{request.totalPrice} VND</MuliText>
-          </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

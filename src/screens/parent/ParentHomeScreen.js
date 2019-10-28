@@ -190,7 +190,7 @@ class ParentHomeScreen extends Component {
         />
         <View style={scheduleContainer}>
           <MuliText style={textParent}>
-            Khi nào bạn cần người giữ trẻ? test
+            Khi nào bạn cần người giữ trẻ?
           </MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
@@ -198,7 +198,7 @@ class ParentHomeScreen extends Component {
           >
             <View style={borderText}>
               <MuliText style={textParentRequest}>
-                Nhấn vào đây để tạo yêu cầu nhé
+                Nhấn vào đây để tạo yêu cầu 
               </MuliText>
             </View>
           </TouchableOpacity>
@@ -241,7 +241,7 @@ class ParentHomeScreen extends Component {
             })
           }
         />
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1}}>
           {requests != '' && requests ? (
             <FlatList
               data={requests}
@@ -259,7 +259,7 @@ class ParentHomeScreen extends Component {
                 }
               >
                 <TouchableOpacity
-                  style={{ marginTop: 20 }}
+                
                   onPress={() => navigation.navigate('CreateRequest')}
                 >
                   <View style={noRequest}>
@@ -272,7 +272,7 @@ class ParentHomeScreen extends Component {
                       }}
                     >
                       <MuliText style={styles.textParentRequest}>
-                        Nhấn vào đây để tạo yêu cầu nhé
+                        Nhấn vào đây để tạo yêu cầu
                       </MuliText>
                     </View>
                     <Image
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ecf0f1',
   },
   containerBsitter: {
     flex: 1,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 15,
     paddingHorizontal: 20,
     paddingTop: 30,
   },
@@ -358,7 +358,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 25,
     paddingVertical: 15,
-    marginBottom: 20,
     flex: 0.1,
     backgroundColor: '#fff',
   },

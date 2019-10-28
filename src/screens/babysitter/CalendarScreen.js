@@ -45,12 +45,12 @@ export default class CalendarScreen extends Component {
         <View style={{ flexDirection: 'row', marginTop: 15 }}>
           <View style={styles.hide} />
           <View style={{ flexDirection: 'row' }}>
-            <MuliText>Hai</MuliText>
-            <MuliText style={styles.dayText}>Ba</MuliText>
-            <MuliText style={styles.dayText}>Tư</MuliText>
-            <MuliText style={styles.dayText}>Năm</MuliText>
-            <MuliText style={styles.dayText}>Sáu</MuliText>
-            <MuliText style={styles.dayText}>Bảy</MuliText>
+            <MuliText>T2</MuliText>
+            <MuliText style={styles.dayText}>T3</MuliText>
+            <MuliText style={styles.dayText}>T4</MuliText>
+            <MuliText style={styles.dayText}>T5</MuliText>
+            <MuliText style={styles.dayText}>T6</MuliText>
+            <MuliText style={styles.dayText}>T7</MuliText>
           </View>
         </View>
         <View style={{ flexDirection: 'row', marginLeft: 10 }}>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   dayText: {
-    marginLeft: 15,
+    marginLeft: 20,
   },
   radioButton: {
     marginLeft: 20,
