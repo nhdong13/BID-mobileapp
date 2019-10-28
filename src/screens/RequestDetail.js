@@ -80,7 +80,9 @@ export class RequestDetail extends Component {
       status: targetStatus,
     };
 
-    this.props.navigation.navigate('QrScanner');
+    this.props.navigation.navigate('QrScanner', {
+      userId: this.state.bsitter.id,
+    });
 
     updateRequestStatus(data)
       .then(() => {

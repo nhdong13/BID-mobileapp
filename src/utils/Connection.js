@@ -11,8 +11,7 @@ const apiUrl = {
   updateRequestStatus: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
   registerExpoToken: `${url}/trackings/`,
-  bsitter: `${url}/sitterIO`,
-  parent: `${url}/parentIO`,
+  socket: `${url}/socket`,
 };
 
 export const babysitterAPI = {

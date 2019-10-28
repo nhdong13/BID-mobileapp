@@ -1,8 +1,10 @@
+/* eslint-disable no-self-assign */
 import { AppLoading } from 'expo';
 import { retrieveToken } from 'utils/handleToken';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
+import registerPushNotifications from 'utils/Notification';
 import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import apiUrl from 'utils/Connection';
@@ -20,52 +22,35 @@ export default function App(props) {
   ]);
   useEffect(() => {
     retrieveToken().then((res) => {
-      const { roleId } = res;
+      const { userId, roleId } = res;
 
-      if (roleId == 3) {
-        const bsitterSocket = io(apiUrl.bsitter, {
-          transports: ['websocket'],
-        });
+      registerPushNotifications(userId).then((response) => {
+        if (response) {
+          console.log('PHUC: App -> response', response.data);
+        }
+      });
 
-        bsitterSocket.on('connect', () => {
-          console.log(
-            'Bsitter Connected',
-          );
-        });
+      const socketIO = io(apiUrl.socket, {
+        transports: ['websocket'],
+      });
 
-        bsitterSocket.on('qrTrigger', (qr) => {
-          if (qr != null) {
-            const { data } = qr.qr;
-            console.log('PHUC: App -> qr', data);
-            NavigationService.navigate('QrSitter', { qrData: data });
-          }
-        });
+      socketIO.on('connect', () => {
+        socketIO.emit('userId', userId);
+      });
 
-        bsitterSocket.on('connect_error', (error) => {
-          console.log('Bsitter connection error  ', error);
-        });
+      socketIO.on('triggerQr', (data) => {
+        if (roleId == 3) {
+          NavigationService.navigate('QrSitter', { qrData: data.qr });
+        }
+      });
 
-        bsitterSocket.on('error', (error) => {
-          console.log('Bsitter error in general ', error);
-        });
-      } else if (roleId == 2) {
-        const parentSocket = io(apiUrl.parent, {
-          transports: ['websocket'],
-        });
-        parentSocket.on('connect', () => {
-          console.log(
-            `Parent connected`,
-          );
-        });
+      // socketIO.on('connect_error', (error) => {
+      //   console.log('Bsitter connection error  ', error);
+      // });
 
-        parentSocket.on('connect_error', (error) => {
-          console.log('Parent connection error  ', error);
-        });
-
-        parentSocket.on('error', (error) => {
-          console.log('Parent error in general ', error);
-        });
-      }
+      // socketIO.on('error', (error) => {
+      //   console.log('Bsitter error in general ', error);
+      // });
     });
   }, []);
   const [isLoadingComplete, setLoadingComplete] = useState(false);

@@ -19,12 +19,11 @@ import { withNavigationFocus } from 'react-navigation';
 import ParentRequest from 'screens/parent/ParentRequest';
 import colors from 'assets/Color';
 import moment from 'moment';
-import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import CalendarStrip from 'react-native-calendar-strip';
 // import ModalPushNotification from 'components/ModalPushNotification';
-import { markDates } from 'utils/markedDates'
+import { markDates } from 'utils/markedDates';
 
 class ParentHomeScreen extends Component {
   constructor(props) {
@@ -112,23 +111,11 @@ class ParentHomeScreen extends Component {
   };
 
   getRequestData = async () => {
-    // check role of user parent - 1, bsitter - 2
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      registerPushNotifications(userId).then((response) => {
-        if (response) {
-          console.log(
-            'PHUC: HomeScreen -> registerPushNotifications -> response',
-            response.data,
-          );
-        }
-      });
     });
-
-    // call api according to their role
     if (this.state.roleId != 0) {
-      // get data for parent (requests)
       await getRequests(this.state.userId)
         .then((res) => {
           const markedDates = markDates(res);
@@ -207,7 +194,9 @@ class ParentHomeScreen extends Component {
           </TouchableOpacity>
         </View>
         <CalendarStrip
-          markedDates={this.state.sittingDates.length > 0 ? this.state.sittingDates : [] }
+          markedDates={
+            this.state.sittingDates.length > 0 ? this.state.sittingDates : []
+          }
           calendarAnimation={{
             type: 'sequence',
             duration: 30,
@@ -230,7 +219,11 @@ class ParentHomeScreen extends Component {
             marginBottom: 20,
           }}
           calendarColor="white"
-          dateNumberStyle={{ color: '#315f61', fontFamily: 'muli', fontSize: 13 }}
+          dateNumberStyle={{
+            color: '#315f61',
+            fontFamily: 'muli',
+            fontSize: 13,
+          }}
           dateNameStyle={{ color: '#95a5a6', fontFamily: 'muli' }}
           highlightDateNumberStyle={{ color: 'white' }}
           highlightDateNameStyle={{ color: 'white' }}

@@ -16,7 +16,6 @@ import { withNavigationFocus } from 'react-navigation';
 import SitterInvitation from 'screens/babysitter/SitterInvitation';
 import colors from 'assets/Color';
 import Api from 'api/api_helper';
-import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import Loader from 'utils/Loader';
@@ -39,14 +38,6 @@ class SitterHomeScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId } = res;
       this.setState({ userId });
-      registerPushNotifications(userId).then((response) => {
-        if (response) {
-          console.log(
-            'PHUC: HomeScreen -> registerPushNotifications -> response',
-            response.data,
-          );
-        }
-      });
       this._notificationSubscription = Notifications.addListener(
         this.handleNotification,
       );
@@ -104,11 +95,6 @@ class SitterHomeScreen extends Component {
 
   handleNotification = (notification) => {
     const { origin } = notification;
-    console.log(
-      'PHUC: SitterHomeScreen -> handleNotification -> origin',
-      origin,
-    );
-
     if (origin == 'received') {
       this._onRefresh();
       this.setState(
@@ -129,13 +115,6 @@ class SitterHomeScreen extends Component {
     } else {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
-        // ToastAndroid.showWithGravity(
-        //   'Status of your invitation has been updated',
-        //   ToastAndroid.LONG,
-        //   ToastAndroid.TOP,
-        //   25,
-        //   80,
-        // );
         this.props.navigation.navigate('InvitationDetail', {
           invitationId: notification.data.id,
         });
