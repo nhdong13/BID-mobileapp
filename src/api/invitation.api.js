@@ -21,18 +21,21 @@ export async function getInvitations(userId) {
   return response;
 }
 
-export async function createInvitation(invitation) {
+export async function createInvitation(requestId, invitation, request) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const url = apiUrl.getInvitations + requestId;
+
   const options = {
     method: 'POST',
-    url: apiUrl.getInvitations,
+    url: url,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
     },
-    data: qs.stringify(invitation),
+    data: qs.stringify({ newInvite: JSON.stringify(invitation), newRequest: JSON.stringify(request) }),
   };
 
   const response = await axios(options).catch((error) => console.log(error));

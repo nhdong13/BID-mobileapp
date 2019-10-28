@@ -10,11 +10,13 @@ import { Ionicons } from '@expo/vector-icons/';
 import { ScrollView } from 'react-native-gesture-handler';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
+import { updateRequest } from 'api/sittingRequest.api';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      requestId: 0,
       userId: null,
       loggedUser: null,
       sittingDate: null || this.props.navigation.getParam('selectedDate'),
@@ -70,6 +72,54 @@ class CreateRequestScreen extends Component {
         }
       })
       .catch((error) => console.log(error));
+  };
+
+  toRecommendScreen = () => {
+    if (this.state.childrenNumber == 0) {
+      return;
+    }
+    const request = {
+      requestId: this.state.requestId != 0 ? this.state.requestId : 0,
+      createdUser: this.state.userId,
+      sittingDate: this.state.sittingDate,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      sittingAddress: this.state.sittingAddress,
+      childrenNumber: this.state.childrenNumber,
+      minAgeOfChildren: this.state.minAgeOfChildren,
+      status: 'PENDING',
+      totalPrice: this.state.price,
+    };
+
+    this.props.navigation.navigate('Recommend', {
+      requestId: this.state.requestId,
+      request: request,
+      onGoBack: (requestId) => this.setState({ requestId: requestId }),
+    });
+  };
+
+  updateRequest = async () => {
+    const request = {
+      id: this.state.requestId,
+      createdUser: this.state.userId,
+      sittingDate: this.state.sittingDate,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      sittingAddress: this.state.sittingAddress,
+      childrenNumber: this.state.childrenNumber,
+      minAgeOfChildren: this.state.minAgeOfChildren,
+      status: 'PENDING',
+      totalPrice: this.state.price,
+    };
+
+    console.log(request);
+    await updateRequest(request).then(() => {
+      this.props.navigation.navigate('Recommend', {
+        requestId: this.state.requestId,
+        request: request,
+        onGoBack: (requestId) => this.setState({ requestId: requestId }),
+      });
+    });
   };
 
   getDataAccordingToRole = async () => {
@@ -144,7 +194,9 @@ class CreateRequestScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.containerInformationRequest}>
-          <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
+          <MuliText style={styles.headerTitle}>
+            Trông trẻ {this.state.requestId}
+          </MuliText>
           <View>
             <View style={styles.inputDay}>
               <Ionicons
@@ -394,16 +446,30 @@ class CreateRequestScreen extends Component {
               <MuliText style={styles.price}>{this.state.price} VND</MuliText>
             </View>
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={this.onCreateRequest}
-            >
-              <MuliText style={{ color: 'white', fontSize: 16 }}>
-                Kế tiếp
-              </MuliText>
-            </TouchableOpacity>
-          </View>
+          {this.state.requestId != 0 && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={this.updateRequest}
+              >
+                <MuliText style={{ color: 'white', fontSize: 16 }}>
+                  Kế tiếp
+                </MuliText>
+              </TouchableOpacity>
+            </View>
+          )}
+          {this.state.requestId == 0 && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={this.toRecommendScreen}
+              >
+                <MuliText style={{ color: 'white', fontSize: 16 }}>
+                  Kế tiếp
+                </MuliText>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     );

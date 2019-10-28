@@ -26,7 +26,7 @@ export class Bsitter extends Component {
   };
 
   sendInvitation = async (receiverId) => {
-    const { requestId } = this.props;
+    const { requestId, request } = this.props;
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
@@ -34,12 +34,19 @@ export class Bsitter extends Component {
     };
 
     // console.log(invitation);
-    await createInvitation(invitation)
-      .then(() => {
-        this.props.callBack(receiverId);
+    await createInvitation(requestId, invitation, request)
+      .then((response) => {
+        console.log(response);
+        this.props.changeInviteStatus(receiverId);
+        this.props.setRequestId(response.data.newRequest.id);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log('aaa', error));
   };
+
+  changeStateOnGoBack(receiverId, requestId) {
+    this.props.changeInviteStatus(receiverId);
+    this.props.setRequestId(requestId);
+  }
 
   render() {
     const { item, navigation, requestId } = this.props;
@@ -52,7 +59,7 @@ export class Bsitter extends Component {
               navigation.navigate('SitterProfile', {
                 sitterId: item.userId,
                 requestId: requestId,
-                onGoBack: () => this.props.callBack(item.userId),
+                onGoBack: (receiverId, requestId) => this.changeStateOnGoBack(receiverId, requestId),
               })
             }
           >

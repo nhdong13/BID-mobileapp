@@ -17,6 +17,7 @@ export default class RecommendScreen extends Component {
       recommendCount: 0,
       recommendList: [],
       requestId: 0,
+      request: null,
       isModalVisible: true,
       isModalVisible2: true,
     };
@@ -24,16 +25,22 @@ export default class RecommendScreen extends Component {
 
   componentWillMount() {
     const requestId = this.props.navigation.getParam('requestId');
+    const request = this.props.navigation.getParam('request');
     if (requestId && requestId != 0) {
       this.setState({ requestId }, () => this.getRecommendation());
+    } else if (request !== undefined && request !== null) {
+      this.setState({ request }, () => this.getRecommendation());
     } else {
       console.log('requestId not found - RecommendScreen');
     }
   }
 
   getRecommendation = async () => {
-    if (this.state.requestId != 0) {
-      const data = await recommend(this.state.requestId);
+    if (
+      this.state.requestId != 0 ||
+      (this.state.request !== undefined && this.state.request != null)
+    ) {
+      const data = await recommend(this.state.requestId, this.state.request);
       this.setState({
         matchedCount: data.matchedCount,
         listMatched: data.listMatched,
@@ -43,7 +50,6 @@ export default class RecommendScreen extends Component {
 
       return data;
     }
-    console.log('RequestId not found - getRecommedation');
     return [];
   };
 
@@ -57,6 +63,11 @@ export default class RecommendScreen extends Component {
       ),
     }));
   };
+
+  setRequestId = (requestId) => {
+    this.setState({ requestId: requestId });
+    this.props.navigation.state.params.onGoBack(requestId);
+  }
 
   callRecommend() {
     if (this.state.isModalVisible) {
@@ -78,6 +89,7 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <MuliText>{this.state.requestId}</MuliText>
         {this.state.recommendList && this.state.recommendList.length > 0 ? (
           <View style={styles.sectionContainer}>
             <View style={styles.headerSection}>
@@ -106,8 +118,10 @@ export default class RecommendScreen extends Component {
                       data={this.state.recommendList}
                       renderItem={({ item }) => (
                         <Bsitter
-                          callBack={this.changeInviteStatus}
+                          changeInviteStatus={this.changeInviteStatus}
+                          setRequestId={this.setRequestId}
                           requestId={this.state.requestId}
+                          request={this.state.request}
                           item={item}
                         />
                       )}
@@ -155,8 +169,10 @@ export default class RecommendScreen extends Component {
                       data={this.state.listMatched}
                       renderItem={({ item }) => (
                         <Bsitter
-                          callBack={this.changeInviteStatus}
+                          changeInviteStatus={this.changeInviteStatus}
+                          setRequestId={this.setRequestId}
                           requestId={this.state.requestId}
+                          request={this.state.request}
                           item={item}
                         />
                       )}

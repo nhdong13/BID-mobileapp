@@ -60,7 +60,7 @@ export default class BsitterProfile extends Component {
     await createInvitation(invitation)
       .then(() => {
         this.changeInviteStatus();
-        this.props.navigation.state.params.onGoBack();
+        this.props.navigation.state.params.onGoBack(sitterId, requestId);
       })
       .catch((error) => console.log(error));
   };
