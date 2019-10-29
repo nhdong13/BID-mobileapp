@@ -135,7 +135,7 @@ export default class RecommendScreen extends Component {
                   </ScrollView>
                 )}
               </View>
-            ) }
+            )}
 
             {this.state.listMatched.length != 0 && (
               <View style={styles.sectionContainer}>
@@ -180,7 +180,7 @@ export default class RecommendScreen extends Component {
                   </ScrollView>
                 )}
               </View>
-            ) }
+            )}
           </View>
         ) : (
           <View>
