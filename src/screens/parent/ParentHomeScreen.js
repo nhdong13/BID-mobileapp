@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
@@ -7,9 +8,8 @@ import {
   RefreshControl,
   ScrollView,
   TouchableOpacity,
-  ToastAndroid,
 } from 'react-native';
-
+import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
 import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/sittingRequest.api';
@@ -23,20 +23,6 @@ import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
-const Toast = (props) => {
-  if (props.visible) {
-    ToastAndroid.showWithGravityAndOffset(
-      props.message,
-      ToastAndroid.LONG,
-      ToastAndroid.TOP,
-      25,
-      50,
-    );
-    return null;
-  }
-  return null;
-};
-
 class ParentHomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -48,16 +34,15 @@ class ParentHomeScreen extends Component {
       agenda: 0,
       // loading: false,
       notification: {},
-      visible: false,
     };
   }
 
   // componentWillMount() {
-  //   this.getDataAccordingToRole();
+  //   this.getRequestData();
   // }
 
-  componentDidMount() {
-    this.getDataAccordingToRole();
+  async componentDidMount() {
+    await this.getRequestData();
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
@@ -79,44 +64,15 @@ class ParentHomeScreen extends Component {
           })
 
           .catch((error) =>
-            console.log(
-              'HomeScreen - getDataAccordingToRole - Requests ' + error,
-            ),
+            console.log('HomeScreen - getRequestData - Requests ' + error),
           );
       }
     }
   }
 
-  handleButtonPress = () => {
-    this.setState(
-      {
-        visible: true,
-      },
-      () => {
-        this.hideToast();
-      },
-    );
-  };
-
-  hideToast = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
   handleNotification = (notification) => {
     const { origin } = notification;
-    if (origin == 'selected') {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.props.navigation.navigate('RequestDetail', {
-          requestId: notification.data.id,
-        });
-        this.handleButtonPress();
-      });
-      // this.confirmModalPopup();
-    } else {
-      // eslint-disable-next-line no-lonely-if
+    if (origin == 'received') {
       this.setState(
         {
           notification: notification,
@@ -124,31 +80,39 @@ class ParentHomeScreen extends Component {
             'Sitter had accepted your invitaion, Do you want to see?',
         },
         () => {
-          console.log('test notification: ' + this.state.notification);
+          this.refs.toast.show(
+            'Status of your invitation has been upadted',
+            DURATION.LENGTH_LONG,
+          );
+          // console.log('test notification: ' + this.state.notification);
           this.AlertPro.open();
         },
       );
+      // this.confirmModalPopup();
+    } else {
+      this.setState({ notification: notification }, () => {
+        const { notification } = this.state;
+        this.refs.toast.show(
+          'Babysitter had accepted your invitation',
+          DURATION.LENGTH_LONG,
+        );
+        this.props.navigation.navigate('RequestDetail', {
+          requestId: notification.data.id,
+        });
+      });
     }
   };
 
   confirmModalPopup = () => {
-    const { roleId } = this.state;
     const { notification } = this.state;
-    console.log('PHUC: confirmModalPopup -> notification', notification);
-    if (roleId == 2) {
-      this.props.navigation.navigate('RequestDetail', {
-        requestId: notification.data.id,
-      });
-      this.AlertPro.close();
-    } else {
-      this.props.navigation.navigate('InvitationDetail', {
-        invitationId: notification.data.id,
-      });
-      this.AlertPro.close();
-    }
+    // console.log('PHUC: confirmModalPopup -> notification', notification);
+    this.props.navigation.navigate('RequestDetail', {
+      requestId: notification.data.id,
+    });
+    this.AlertPro.close();
   };
 
-  getDataAccordingToRole = async () => {
+  getRequestData = async () => {
     // check role of user parent - 1, bsitter - 2
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
@@ -171,16 +135,14 @@ class ParentHomeScreen extends Component {
           this.setState({ requests: res });
         })
         .catch((error) =>
-          console.log(
-            'HomeScreen - getDataAccordingToRole - Requests ' + error,
-          ),
+          console.log('HomeScreen - getRequestData - Requests ' + error),
         );
     } else console.log('Something went wrong -- RoleId not found');
   };
 
   _onRefresh = () => {
     // this.setState({ refreshing: true });
-    this.getDataAccordingToRole().then(() => {
+    this.getRequestData().then(() => {
       // this.setState({ refreshing: false });
     });
   };
@@ -202,8 +164,8 @@ class ParentHomeScreen extends Component {
     return (
       <View key={this.state.agenda} style={container}>
         <Toast
-          visible={this.state.visible}
-          message="Your sitter has confirmed the sitting"
+          ref="toast"
+          position="top"
         />
         <AlertPro
           ref={(ref) => {
@@ -233,7 +195,7 @@ class ParentHomeScreen extends Component {
           }}
         />
         <View style={scheduleContainer}>
-          <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
+          <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ? test</MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
@@ -305,7 +267,7 @@ class ParentHomeScreen extends Component {
           style={{}}
           onRefresh={() => {
             this.setState({ refreshing: true });
-            this.getDataAccordingToRole().then(() => {
+            this.getRequestData().then(() => {
               this.setState({ refreshing: false });
             });
           }}

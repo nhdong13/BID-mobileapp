@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
@@ -7,8 +8,8 @@ import {
   RefreshControl,
   FlatList,
   // TouchableOpacity,
-  ToastAndroid,
 } from 'react-native';
+import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
 import { withNavigationFocus } from 'react-navigation';
 // import Loader from 'utils/Loader';
@@ -21,20 +22,6 @@ import AlertPro from 'react-native-alert-pro';
 import Loader from 'utils/Loader';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
-const Toast = (props) => {
-  if (props.visible) {
-    ToastAndroid.showWithGravityAndOffset(
-      props.message,
-      ToastAndroid.LONG,
-      ToastAndroid.TOP,
-      25,
-      50,
-    );
-    return null;
-  }
-  return null;
-};
-
 class SitterHomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +32,6 @@ class SitterHomeScreen extends Component {
       // agenda: 0,
       loading: false,
       notification: {},
-      visible: false,
     };
   }
 
@@ -109,7 +95,7 @@ class SitterHomeScreen extends Component {
 
   confirmModalPopup = () => {
     const { notification } = this.state;
-    console.log('PHUC: confirmModalPopup -> notification', notification);
+    // console.log('PHUC: confirmModalPopup -> notification', notification);
     this.props.navigation.navigate('InvitationDetail', {
       invitationId: notification.data.id,
     });
@@ -118,21 +104,12 @@ class SitterHomeScreen extends Component {
 
   handleNotification = (notification) => {
     const { origin } = notification;
-    if (origin == 'selected') {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        ToastAndroid.showWithGravity(
-          'Status of your invitation has been updated',
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-          25,
-          80,
-        );
-        this.props.navigation.navigate('InvitationDetail', {
-          invitationId: notification.data.id,
-        });
-      });
-    } else {
+    console.log(
+      'PHUC: SitterHomeScreen -> handleNotification -> origin',
+      origin,
+    );
+
+    if (origin == 'received') {
       this._onRefresh();
       this.setState(
         {
@@ -141,10 +118,33 @@ class SitterHomeScreen extends Component {
             'Status of your invitation has been updateed, Do you want to see?',
         },
         () => {
-          console.log('test notification bsitter: ' + this.state.notification);
+          this.refs.toast.show(
+            'Status of your invitation has been upadted',
+            DURATION.LENGTH_LONG,
+          );
+
+          // console.log('test notification bsitter: ' + this.state.notification);
           this.AlertPro.open();
         },
       );
+    } else {
+      this.setState({ notification: notification }, () => {
+        const { notification } = this.state;
+        // ToastAndroid.showWithGravity(
+        //   'Status of your invitation has been updated',
+        //   ToastAndroid.LONG,
+        //   ToastAndroid.TOP,
+        //   25,
+        //   80,
+        // );
+        this.refs.toast.show(
+          'Status of your invitation has been upadted',
+          DURATION.LENGTH_LONG,
+        );
+        this.props.navigation.navigate('InvitationDetail', {
+          invitationId: notification.data.id,
+        });
+      });
     }
   };
 
@@ -168,8 +168,11 @@ class SitterHomeScreen extends Component {
     return (
       <View style={containerBsitter}>
         <Toast
-          visible={this.state.visible}
-          message="Your sitter has confirmed the sitting"
+          ref="toast"
+          position="top"
+          fadeInDuration={750}
+          fadeOutDuration={1000}
+          opacity={0.8}
         />
         <Loader loading={this.state.loading} />
         <AlertPro
