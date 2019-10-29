@@ -1,5 +1,6 @@
 import * as React from 'react';
-import StripeCheckout from 'expo-stripe-checkout';
+import { View } from "react-native";
+// import StripeCheckout from 'expo-stripe-checkout';
 
 export class PaymentStripe extends React.Component {
   constructor(props) {
@@ -22,17 +23,18 @@ export class PaymentStripe extends React.Component {
 
   render() {
     return (
-      <StripeCheckout
-        publicKey="pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU"
-        amount={100000}
-        storeName="Tra tien cho tao, reeeeeee"
-        description="Test"
-        currency="VND"
-        allowRememberMe={true}
-        prepopulatedEmail="test@test.com"
-        onClose={this.onClose}
-        onPaymentSuccess={this.onPaymentSuccess}
-      />
+      // <StripeCheckout
+      //   publicKey="pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU"
+      //   amount={100000}
+      //   storeName="Tra tien cho tao, reeeeeee"
+      //   description="Test"
+      //   currency="VND"
+      //   allowRememberMe={true}
+      //   prepopulatedEmail="test@test.com"
+      //   onClose={this.onClose}
+      //   onPaymentSuccess={this.onPaymentSuccess}
+      // />
+      <View />
     );
   }
 }

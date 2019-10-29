@@ -188,7 +188,7 @@ class CreateRequestScreen extends Component {
     price = this.state.spPrice[endP.toString()];
     if (price == null) tempTotal += this.state.spPrice.base * temp;
     else tempTotal += temp * price;
-    this.setState({ price: tempTotal });
+    this.setState({ price: Math.floor(tempTotal) });
   };
 
   render() {
