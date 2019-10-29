@@ -55,44 +55,19 @@ export default class ReportScreen extends Component {
           <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>Ky</MuliText>
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity>
-              <Ionicons
-                name="ios-star"
-                size={24}
-                style={{ marginBottom: -4 }}
-                color={colors.lightGreen}
-              />
+              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons
-                name="ios-star"
-                size={24}
-                style={{ marginBottom: -4 }}
-                color={colors.lightGreen}
-              />
+              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons
-                name="ios-star"
-                size={24}
-                style={{ marginBottom: -4 }}
-                color={colors.lightGreen}
-              />
+              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons
-                name="ios-star"
-                size={24}
-                style={{ marginBottom: -4 }}
-                color={colors.lightGreen}
-              />
+              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons
-                name="ios-star"
-                size={24}
-                style={{ marginBottom: -4 }}
-                color={colors.lightGreen}
-              />
+              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
             </TouchableOpacity>
           </View>
           <View
@@ -104,7 +79,11 @@ export default class ReportScreen extends Component {
               marginHorizontal: 15,
             }}
           >
-            <TextInput style={{ paddingHorizontal: 15 }} />
+            <TextInput
+              multiline
+              maxLength={200}
+              style={{ paddingHorizontal: 15 }}
+            />
           </View>
           <TouchableOpacity>
             <Button
