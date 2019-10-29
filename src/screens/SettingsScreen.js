@@ -71,7 +71,10 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('ReportScreen')}
+              style={styles.detailInformationContainer}
+            >
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-home"
@@ -79,9 +82,7 @@ export default class SettingsScreen extends Component {
                   style={{ marginBottom: -5 }}
                   color="#bdc3c7"
                 />
-                <MuliText style={styles.contentInformation}>
-                  Đặc điểm ưu tiên
-                </MuliText>
+                <MuliText style={styles.contentInformation}>Report</MuliText>
               </View>
               <View>
                 <Ionicons
@@ -155,8 +156,9 @@ export default class SettingsScreen extends Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Circle')}
-            style={styles.detailInformationContainer}>
+              onPress={() => this.props.navigation.navigate('Circle')}
+              style={styles.detailInformationContainer}
+            >
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-contacts"
