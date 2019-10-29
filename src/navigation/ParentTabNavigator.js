@@ -6,7 +6,7 @@ import {
 } from 'react-navigation';
 
 import TabBarIcon from 'components/TabBarIcon';
-import HomeScreen from 'screens/HomeScreen';
+import ParentHomeScreen from 'screens/parent/ParentHomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
@@ -42,7 +42,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: ParentHomeScreen,
       // eslint-disable-next-line no-unused-vars
       navigationOptions: ({ navigation }) => ({
         header: null,

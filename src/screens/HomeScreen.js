@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import {
@@ -11,7 +9,6 @@ import {
   FlatList,
   TouchableOpacity,
   ToastAndroid,
-  Text,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -19,8 +16,8 @@ import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/sittingRequest.api';
 import { withNavigationFocus } from 'react-navigation';
 // import Loader from 'utils/Loader';
-import SitterHome from 'screens/babysitter/SitterHome';
-import ParentHome from 'screens/parent/ParentHome';
+import SitterInvitation from 'screens/babysitter/SitterInvitation';
+import ParentRequest from 'screens/parent/ParentRequest';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from 'api/api_helper';
@@ -53,18 +50,18 @@ class HomeScreen extends Component {
       roleId: 0,
       refreshing: false,
       agenda: 0,
-      loading: false,
+      // loading: false,
       notification: {},
-      setVisible: false,
       visible: false,
     };
   }
 
-  componentWillMount() {
-    this.getDataAccordingToRole();
-  }
+  // componentWillMount() {
+  //   this.getDataAccordingToRole();
+  // }
 
   componentDidMount() {
+    this.getDataAccordingToRole();
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
@@ -81,7 +78,6 @@ class HomeScreen extends Component {
             this.setState({ requests: res }, () =>
               this.setState({
                 agenda: Math.random(),
-                setVisible: false,
               }),
             );
           })
@@ -97,7 +93,7 @@ class HomeScreen extends Component {
         };
         await Api.post('invitations/sitterInvitation', requestBody)
           .then((res) => {
-            this.setState({ invitations: res, setVisible: false });
+            this.setState({ invitations: res });
           })
           .catch((error) =>
             console.log(
@@ -240,8 +236,6 @@ class HomeScreen extends Component {
           .then((res) => {
             this.setState({
               invitations: res,
-              loading: false,
-              setVisible: false,
             });
           })
           .catch((error) =>
@@ -341,12 +335,19 @@ class HomeScreen extends Component {
           <Agenda
             items={requests}
             selected={new moment().format('YYYY-MM-DD')}
-            pastScrollRange={50}
-            futureScrollRange={50}
-            renderItem={(request) => <ParentHome request={request} />}
+            pastScrollRange={1}
+            futureScrollRange={1}
+            renderItem={(request) => <ParentRequest request={request} />}
             rowHasChanged={(r1, r2) => r1.text != r2.text}
             renderDay={() => <View />}
             renderEmptyDate={() => <View />}
+            renderKnob={() => {
+              return (
+                <View style={{ backgroundColor: 'red', flex: 1, height: 30 }}>
+                  <MuliText>tap here bro</MuliText>
+                </View>
+              );
+            }}
             renderEmptyData={() => (
               <ScrollView
                 refreshControl={
@@ -410,7 +411,9 @@ class HomeScreen extends Component {
                   />
                 }
                 data={invitations}
-                renderItem={({ item }) => <SitterHome invitation={item} />}
+                renderItem={({ item }) => (
+                  <SitterInvitation invitation={item} />
+                )}
                 keyExtractor={(item) => item.id.toString()}
               />
             ) : (

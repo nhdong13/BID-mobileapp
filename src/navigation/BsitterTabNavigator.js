@@ -7,8 +7,8 @@ import {
 
 import qrBsitter from 'screens/qrBsitter';
 import InvitationDetail from 'screens/InvitationDetail';
+import SitterHomeScreen from 'screens/babysitter/SitterHomeScreen';
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -18,7 +18,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: SitterHomeScreen,
       // eslint-disable-next-line no-unused-vars
       navigationOptions: ({ navigation }) => ({
         header: null,
