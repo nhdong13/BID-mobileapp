@@ -3497,6 +3497,11 @@ expo-location@~7.0.0:
   dependencies:
     invariant "^2.2.4"
 
+expo-payments-stripe@~7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-payments-stripe/-/expo-payments-stripe-7.0.0.tgz#4f65c7afa732c1f79d6de5f5490c7c7862d51a33"
+  integrity sha512-GmM0kXy9qgigv5yzgE4kOlZnTOE28ZCYyR6pBXYf1zZyeuCXMppwij2fI2ovKyQS7Pc7O+91qqn405cQwnK0WA==
+
 expo-permissions@~7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-7.0.0.tgz#f4135c3cf8e49c673a9a714459a1eb2b40fe2092"
