@@ -92,17 +92,21 @@ export async function getRequests(userId) {
   });
   // // console.log('PHUC: getRequests -> response', response);
 
-  if (response) {
-    response.data.map(
-      (item) =>
-        (item.sittingDate = new moment(item.sittingDate).format('YYYY-MM-DD')),
-    );
-    const dataGroup = groupByDate(response.data, 'sittingDate');
-    return dataGroup;
+  if (response.data) {
+    // console.log('PHUC: getRequests -> response', response.data);
+    // response.data.map(
+    //   (item) =>
+    //     (item.sittingDate = new moment(item.sittingDate).format('YYYY-MM-DD')),
+    // );
+    // const dataGroup = groupByDate(response.data, 'sittingDate');
+    // return dataGroup;
+
+    return response.data;
   }
   return { message: 'error trying to get data from response' };
 }
 
+// eslint-disable-next-line no-unused-vars
 const groupByDate = (data, property) =>
   // group ngay tat ca request theo ngay
   data.reduce((acc, obj) => {

@@ -20,6 +20,7 @@ class ParentRequest extends Component {
             requestId: request.id,
           })
         }
+        style={styles.container}
       >
         <View style={styles.requestItem}>
           <View style={styles.leftInformation}>
@@ -80,11 +81,7 @@ export default withNavigation(ParentRequest);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  containerBsitter: {
-    flex: 1,
-    backgroundColor: '#dfe6e9',
+    backgroundColor: '#ecf0f1',
   },
   createRequest: {
     width: 60,

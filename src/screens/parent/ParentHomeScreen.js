@@ -6,12 +6,13 @@ import {
   View,
   Image,
   RefreshControl,
-  ScrollView,
+  FlatList,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
-import { Agenda } from 'react-native-calendars';
+// import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/sittingRequest.api';
 import { withNavigationFocus } from 'react-navigation';
 // import Loader from 'utils/Loader';
@@ -21,19 +22,19 @@ import moment from 'moment';
 import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
+import CalendarStrip from 'react-native-calendar-strip';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
 class ParentHomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      requests: null,
+      requests: [],
       userId: 0,
       roleId: 0,
       refreshing: false,
       agenda: 0,
-      // loading: false,
-      notification: {},
+      notification: [],
     };
   }
 
@@ -56,11 +57,7 @@ class ParentHomeScreen extends Component {
         await getRequests(data.userId)
           .then((res) => {
             // console.log('PHUC: componentDidUpdate -> res', res);
-            this.setState({ requests: res }, () =>
-              this.setState({
-                agenda: Math.random(),
-              }),
-            );
+            this.setState({ requests: res });
           })
 
           .catch((error) =>
@@ -163,10 +160,7 @@ class ParentHomeScreen extends Component {
     } = styles;
     return (
       <View key={this.state.agenda} style={container}>
-        <Toast
-          ref="toast"
-          position="top"
-        />
+        <Toast ref="toast" position="top" />
         <AlertPro
           ref={(ref) => {
             this.AlertPro = ref;
@@ -195,7 +189,9 @@ class ParentHomeScreen extends Component {
           }}
         />
         <View style={scheduleContainer}>
-          <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ? test</MuliText>
+          <MuliText style={textParent}>
+            Khi nào bạn cần người giữ trẻ? test
+          </MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
@@ -207,72 +203,88 @@ class ParentHomeScreen extends Component {
             </View>
           </TouchableOpacity>
         </View>
-        <Agenda
-          items={requests}
-          selected={new moment().format('YYYY-MM-DD')}
-          pastScrollRange={1}
-          futureScrollRange={1}
-          renderItem={(request) => <ParentRequest request={request} />}
-          rowHasChanged={(r1, r2) => r1.text != r2.text}
-          renderDay={() => <View />}
-          renderEmptyDate={() => <View />}
-          renderKnob={() => (
-            <View>
-              <MuliText>tap here bro</MuliText>
+        <CalendarStrip
+          calendarAnimation={{
+            type: 'sequence',
+            duration: 30,
+            fontFamily: 'muli',
+          }}
+          innerStyle={{ fontFamily: 'muli' }}
+          daySelectionAnimation={{
+            type: 'background',
+            duration: 200,
+            highlightColor: '#1edcb7',
+          }}
+          style={{
+            flex: 0.2,
+            paddingTop: 10,
+            paddingBottom: 10,
+            marginBottom: 10,
+          }}
+          calendarHeaderStyle={{
+            color: '#527395',
+            marginBottom: 20,
+          }}
+          calendarColor="white"
+          dateNumberStyle={{ color: '#315f61', fontFamily: 'muli', fontSize: 13 }}
+          dateNameStyle={{ color: '#95a5a6', fontFamily: 'muli' }}
+          highlightDateNumberStyle={{ color: 'white' }}
+          highlightDateNameStyle={{ color: 'white' }}
+          disabledDateNameStyle={{ color: '#bdc3c7' }}
+          disabledDateNumberStyle={{ color: '#bdc3c7' }}
+          weekendDateNameStyle={{ color: '#e74c3c', fontFamily: 'muli' }}
+          weekendDateNumberStyle={{ color: '#bdc3c7', fontFamily: 'muli' }}
+          iconContainer={{ flex: 0.1 }}
+          onDateSelected={(date) =>
+            this.props.navigation.navigate('CreateRequest', {
+              selectedDate: moment(date).format('YYYY-MM-DD'),
+            })
+          }
+        />
+        <View style={{ flex: 1 }}>
+          {requests != '' && requests ? (
+            <FlatList
+              data={requests}
+              renderItem={({ item }) => <ParentRequest request={item} />}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          ) : (
+            <View style={noRequest}>
+              <ScrollView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={this._onRefresh}
+                  />
+                }
+              >
+                <TouchableOpacity
+                  style={{ marginTop: 20 }}
+                  onPress={() => navigation.navigate('CreateRequest')}
+                >
+                  <View style={noRequest}>
+                    <MuliText style={noRequestText}>
+                      Hiện tại bạn không có yêu cầu nào
+                    </MuliText>
+                    <View
+                      style={{
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <MuliText style={styles.textParentRequest}>
+                        Nhấn vào đây để tạo yêu cầu nhé
+                      </MuliText>
+                    </View>
+                    <Image
+                      source={require('assets/images/no-request.jpg')}
+                      style={noRequestImage}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </ScrollView>
             </View>
           )}
-          renderEmptyData={() => (
-            <ScrollView
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={this._onRefresh}
-                />
-              }
-            >
-              <TouchableOpacity
-                style={{ marginTop: 20 }}
-                onPress={() => navigation.navigate('CreateRequest')}
-              >
-                <View style={noRequest}>
-                  <MuliText style={noRequestText}>
-                    Hiện tại bạn không có yêu cầu nào
-                  </MuliText>
-                  <View
-                    style={{
-                      // borderRadius: 1,
-                      // borderColor: colors.gray,
-                      // borderWidth: 1,
-                      paddingHorizontal: 10,
-                    }}
-                  >
-                    <MuliText style={styles.textParentRequest}>
-                      Nhấn vào đây để tạo yêu cầu nhé
-                    </MuliText>
-                  </View>
-                  <Image
-                    source={require('assets/images/no-request.jpg')}
-                    style={noRequestImage}
-                  />
-                </View>
-              </TouchableOpacity>
-            </ScrollView>
-          )}
-          hideKnob={false}
-          theme={{
-            textDayFontFamily: 'muli',
-            textDayHeaderFontFamily: 'muli',
-            textDayHeaderFontSize: 11,
-          }}
-          style={{}}
-          onRefresh={() => {
-            this.setState({ refreshing: true });
-            this.getRequestData().then(() => {
-              this.setState({ refreshing: false });
-            });
-          }}
-          refreshing={refreshing}
-        />
+        </View>
       </View>
     );
   }
