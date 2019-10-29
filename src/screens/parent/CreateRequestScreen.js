@@ -123,19 +123,20 @@ class CreateRequestScreen extends Component {
     let tempTotal = 0.0;
     // eslint-disable-next-line no-plusplus
     for (i = startP + 1; i < endP; i++) {
-      let temp = this.state.spPrice[i.toString()];
-      if (temp == null) tempTotal += this.state.spPrice['base'];
+      const temp = this.state.spPrice[i.toString()];
+      if (temp == null) tempTotal += this.state.spPrice.base;
       else tempTotal += temp;
     }
     let temp = 0.0;
     temp =
-      (60 - parseInt(this.state.startTime[3] + this.state.startTime[4])) / 60.0;
+      (60 - parseInt(this.state.startTime[3] + this.state.startTime[4], 10)) /
+      60.0;
     let price = this.state.spPrice[startP.toString()];
-    if (price == null) tempTotal += this.state.spPrice['base'] * temp;
+    if (price == null) tempTotal += this.state.spPrice.base * temp;
     else tempTotal += temp * price;
-    temp = parseInt(this.state.endTime[3] + this.state.endTime[4]) / 60.0;
+    temp = parseInt(this.state.endTime[3] + this.state.endTime[4], 10) / 60.0;
     price = this.state.spPrice[endP.toString()];
-    if (price == null) tempTotal += this.state.spPrice['base'] * temp;
+    if (price == null) tempTotal += this.state.spPrice.base * temp;
     else tempTotal += temp * price;
     this.setState({ price: tempTotal });
   };
