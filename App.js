@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 import { AppLoading } from 'expo';
 import { retrieveToken } from 'utils/handleToken';
 import { Asset } from 'expo-asset';
@@ -5,7 +6,6 @@ import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
 import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
 import NavigationService from './NavigationService.js';
 
@@ -18,40 +18,19 @@ export default function App(props) {
     'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, ' +
       '`cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
   ]);
-  useEffect(() => {
-    retrieveToken().then((res) => {
-      const { roleId } = res;
+  // useEffect(() => {
+  //   retrieveToken().then((res) => {
+  //     // const { userId, roleId } = res;
 
-      if (roleId == 3) {
-        const bsitterSocket = io(apiUrl.socketIo, {
-          transports: ['websocket'],
-        });
+  //     // socketIO.on('connect_error', (error) => {
+  //     //   console.log('Bsitter connection error  ', error);
+  //     // });
 
-        bsitterSocket.on('connect', () => {
-          console.log(
-            '%c Main app socket to recceiver ',
-            'background: #222; color: #bada55',
-          );
-        });
-
-        bsitterSocket.on('qrTrigger', (qr) => {
-          if (qr != null) {
-            const { data } = qr.qr;
-            console.log('PHUC: App -> qr', data);
-            NavigationService.navigate('QrSitter', { qrData: data });
-          }
-        });
-
-        bsitterSocket.on('connect_error', (error) => {
-          console.log('connection error  ', error);
-        });
-
-        bsitterSocket.on('error', (error) => {
-          console.log('error in general ', error);
-        });
-      }
-    });
-  }, []);
+  //     // socketIO.on('error', (error) => {
+  //     //   console.log('Bsitter error in general ', error);
+  //     // });
+  //   });
+  // }, []);
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {

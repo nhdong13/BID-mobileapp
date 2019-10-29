@@ -80,7 +80,9 @@ export class RequestDetail extends Component {
       status: targetStatus,
     };
 
-    this.props.navigation.navigate('QrScanner');
+    this.props.navigation.navigate('QrScanner', {
+      userId: this.state.bsitter.id,
+    });
 
     updateRequestStatus(data)
       .then(() => {
@@ -485,7 +487,6 @@ export class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={() => {
                   this.onOpenQR('ONGOING');
-                  // this.props.navigation.navigate('Home');
                 }}
               >
                 <MuliText style={{ color: '#2ecc71', fontSize: 12 }}>
@@ -498,8 +499,7 @@ export class RequestDetail extends Component {
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
-                  this.onButtonClick('DONE');
-                  this.props.navigation.navigate('Home');
+                  this.onOpenQR('DONE');
                 }}
               >
                 <MuliText style={{ color: '#8e44ad', fontSize: 11 }}>

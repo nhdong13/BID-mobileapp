@@ -33,5 +33,5 @@ export default async function registerPushNotifications(userId) {
 
   registerExpoToken(request)
     .then((res) => res)
-    .catch((error) => console.error(error));
+    .catch((error) => console.log(error));
 }

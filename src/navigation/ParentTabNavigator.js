@@ -14,6 +14,7 @@ import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
 import CalendarScreen from 'screens/babysitter/CalendarScreen';
+import PaymentStripe from 'utils/PaymentStripe';
 
 // import MyNetwork from '../screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
@@ -115,6 +116,7 @@ const SettingsStack = createStackNavigator(
     Profile: ProfileDetail,
     CalendarScreen: CalendarScreen,
     ReportScreen: ReportScreen,
+    Payment: PaymentStripe,
   },
   config,
 );
