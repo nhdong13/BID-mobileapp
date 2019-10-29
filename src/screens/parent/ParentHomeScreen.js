@@ -19,12 +19,14 @@ import { withNavigationFocus } from 'react-navigation';
 import ParentRequest from 'screens/parent/ParentRequest';
 import colors from 'assets/Color';
 import moment from 'moment';
-import registerPushNotifications from 'utils/Notification';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import CalendarStrip from 'react-native-calendar-strip';
+import registerPushNotifications from 'utils/Notification';
 // import ModalPushNotification from 'components/ModalPushNotification';
-import { markDates } from 'utils/markedDates'
+import { markDates } from 'utils/markedDates';
+import apiUrl from 'utils/Connection';
+import io from 'socket.io-client';
 
 class ParentHomeScreen extends Component {
   constructor(props) {
@@ -49,10 +51,23 @@ class ParentHomeScreen extends Component {
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
+
+    const socketIO = io(apiUrl.socket, {
+      transports: ['websocket'],
+    });
+
+    socketIO.on('connect', () => {
+      socketIO.emit('userId', this.state.userId);
+    });
+
+    // socketIO.on('triggerQr', (data) => {
+    //   if (this.state.roleId == 3) {
+    //     this.props.navigation.navigate('QrSitter', { qrData: data.qr });
+    //   }
+    // });
   }
 
   async componentDidUpdate(prevProps) {
-    const data = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
       await this.getRequestData();
@@ -102,23 +117,16 @@ class ParentHomeScreen extends Component {
   };
 
   getRequestData = async () => {
-    // check role of user parent - 1, bsitter - 2
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
       registerPushNotifications(userId).then((response) => {
         if (response) {
-          console.log(
-            'PHUC: HomeScreen -> registerPushNotifications -> response',
-            response.data,
-          );
+          console.log('PHUC: App -> response', response.data);
         }
       });
     });
-
-    // call api according to their role
     if (this.state.roleId != 0) {
-      // get data for parent (requests)
       await getRequests(this.state.userId)
         .then((res) => {
           const markedDates = markDates(res);
@@ -162,8 +170,8 @@ class ParentHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title="Request confirmation"
           message={this.state.notificationMessage}
-          textCancel="Cancel"
-          textConfirm="Accept"
+          textCancel="No"
+          textConfirm="Yes"
           customStyles={{
             mask: {
               backgroundColor: 'transparent',
@@ -182,22 +190,22 @@ class ParentHomeScreen extends Component {
           }}
         />
         <View style={scheduleContainer}>
-          <MuliText style={textParent}>
-            Khi nào bạn cần người giữ trẻ?
-          </MuliText>
+          <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
           >
             <View style={borderText}>
               <MuliText style={textParentRequest}>
-                Nhấn vào đây để tạo yêu cầu 
+                Nhấn vào đây để tạo yêu cầu
               </MuliText>
             </View>
           </TouchableOpacity>
         </View>
         <CalendarStrip
-          markedDates={this.state.sittingDates.length > 0 ? this.state.sittingDates : [] }
+          markedDates={
+            this.state.sittingDates.length > 0 ? this.state.sittingDates : []
+          }
           calendarAnimation={{
             type: 'sequence',
             duration: 30,
@@ -220,7 +228,11 @@ class ParentHomeScreen extends Component {
             marginBottom: 20,
           }}
           calendarColor="white"
-          dateNumberStyle={{ color: '#315f61', fontFamily: 'muli', fontSize: 13 }}
+          dateNumberStyle={{
+            color: '#315f61',
+            fontFamily: 'muli',
+            fontSize: 13,
+          }}
           dateNameStyle={{ color: '#95a5a6', fontFamily: 'muli' }}
           highlightDateNumberStyle={{ color: 'white' }}
           highlightDateNameStyle={{ color: 'white' }}
@@ -235,7 +247,7 @@ class ParentHomeScreen extends Component {
             })
           }
         />
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1 }}>
           {requests != '' && requests ? (
             <FlatList
               data={requests}
@@ -253,7 +265,6 @@ class ParentHomeScreen extends Component {
                 }
               >
                 <TouchableOpacity
-                
                   onPress={() => navigation.navigate('CreateRequest')}
                 >
                   <View style={noRequest}>

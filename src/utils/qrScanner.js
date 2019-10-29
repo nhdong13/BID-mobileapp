@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Button, ToastAndroid } from 'react-native';
 import * as Permissions from 'expo-permissions';
-import { withNavigation } from 'react-navigation';
+import { withNavigationFocus } from 'react-navigation';
 import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -14,30 +14,43 @@ export class QRcodeScannerScreen extends React.Component {
       hasCameraPermission: null,
       scanned: false,
       content: '',
+      userId: 0 || this.props.navigation.getParam('userId'),
     };
+    console.log(
+      'PHUC: QRcodeScannerScreen -> constructor -> userId',
+      this.props.navigation.getParam('userId'),
+    );
   }
 
   async componentDidMount() {
-    const socket = io(apiUrl.socketIo, {
+    this.triggerQr();
+    this.getPermissionsAsync();
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.isFocused != this.props.isFocused) {
+      this.triggerQr();
+    }
+  }
+
+  triggerQr = () => {
+    const socket = io(apiUrl.socket, {
       transports: ['websocket'],
     });
     // just hard code the passpharse for now, we will use a code generator later
-    socket.on('connect', () => {
-      socket.emit('qrscanning', {
-        data: 'babysitter in demand is the best capstone project',
-      });
+    socket.emit('scanQr', {
+      qr: 'babysitter in demand is the best capstone project',
+      userId: this.state.userId,
     });
 
     socket.on('connect_error', (error) => {
-      console.log('connection error  ', error);
+      console.log('QR connection error  ', error);
     });
 
     socket.on('error', (error) => {
-      console.log('just some normal error, error in general ', error);
+      console.log('QR just some normal error, error in general ', error);
     });
-
-    this.getPermissionsAsync();
-  }
+  };
 
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -104,4 +117,4 @@ export class QRcodeScannerScreen extends React.Component {
   }
 }
 
-export default withNavigation(QRcodeScannerScreen);
+export default withNavigationFocus(QRcodeScannerScreen);

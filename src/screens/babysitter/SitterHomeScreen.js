@@ -16,10 +16,12 @@ import { withNavigationFocus } from 'react-navigation';
 import SitterInvitation from 'screens/babysitter/SitterInvitation';
 import colors from 'assets/Color';
 import Api from 'api/api_helper';
-import registerPushNotifications from 'utils/Notification';
+import apiUrl from 'utils/Connection';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import Loader from 'utils/Loader';
+import registerPushNotifications from 'utils/Notification';
+import io from 'socket.io-client';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
 class SitterHomeScreen extends Component {
@@ -39,19 +41,23 @@ class SitterHomeScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId } = res;
       this.setState({ userId });
-      registerPushNotifications(userId).then((response) => {
-        if (response) {
-          console.log(
-            'PHUC: HomeScreen -> registerPushNotifications -> response',
-            response.data,
-          );
-        }
-      });
       this._notificationSubscription = Notifications.addListener(
         this.handleNotification,
       );
     });
     await this.getInvitationData();
+
+    const socketIO = io(apiUrl.socket, {
+      transports: ['websocket'],
+    });
+
+    socketIO.on('connect', () => {
+      socketIO.emit('userId', this.state.userId);
+    });
+
+    socketIO.on('triggerQr', (data) => {
+      this.props.navigation.navigate('QrSitter', { qrData: data.qr });
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -79,6 +85,11 @@ class SitterHomeScreen extends Component {
     const requestBody = {
       id: this.state.userId,
     };
+    registerPushNotifications(requestBody.id).then((response) => {
+      if (response) {
+        console.log('PHUC: App -> response', response.data);
+      }
+    });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((res) => {
         this.setState({
@@ -104,11 +115,6 @@ class SitterHomeScreen extends Component {
 
   handleNotification = (notification) => {
     const { origin } = notification;
-    console.log(
-      'PHUC: SitterHomeScreen -> handleNotification -> origin',
-      origin,
-    );
-
     if (origin == 'received') {
       this._onRefresh();
       this.setState(
@@ -129,13 +135,6 @@ class SitterHomeScreen extends Component {
     } else {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
-        // ToastAndroid.showWithGravity(
-        //   'Status of your invitation has been updated',
-        //   ToastAndroid.LONG,
-        //   ToastAndroid.TOP,
-        //   25,
-        //   80,
-        // );
         this.props.navigation.navigate('InvitationDetail', {
           invitationId: notification.data.id,
         });
@@ -175,8 +174,8 @@ class SitterHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title="Request confirmation"
           message={this.state.notificationMessage}
-          textCancel="Cancel"
-          textConfirm="Accept"
+          textCancel="No"
+          textConfirm="Yes"
           customStyles={{
             mask: {
               backgroundColor: 'transparent',

@@ -155,8 +155,9 @@ export default class SettingsScreen extends Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Circle')}
-            style={styles.detailInformationContainer}>
+              onPress={() => this.props.navigation.navigate('Circle')}
+              style={styles.detailInformationContainer}
+            >
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-contacts"
@@ -177,7 +178,10 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+              style={styles.detailInformationContainer}
+              onPress={() => this.props.navigation.navigate('Payment')}
+            >
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-cash"
