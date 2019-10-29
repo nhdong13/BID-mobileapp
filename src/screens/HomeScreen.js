@@ -128,9 +128,9 @@ class HomeScreen extends Component {
     if (roleId == 2) {
       this.setState({ notification: notification }, () => {
         const { notification } = this.state;
-        // this.props.navigation.navigate('RequestDetail', {
-        //   requestId: notification.data.id,
-        // });
+        this.props.navigation.navigate('RequestDetail', {
+          requestId: notification.data.id,
+        });
         this.handleButtonPress();
       });
       // this.confirmModalPopup();
