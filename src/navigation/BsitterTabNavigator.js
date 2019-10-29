@@ -8,9 +8,10 @@ import {
 import qrBsitter from 'screens/qrBsitter';
 import InvitationDetail from 'screens/InvitationDetail';
 import SitterHomeScreen from 'screens/babysitter/SitterHomeScreen';
-import TabBarIcon from '../components/TabBarIcon';
+import PaymentStripe from 'utils/PaymentStripe';
+import ProfileDetail from 'screens/ProfileDetail';
 import SettingsScreen from '../screens/SettingsScreen';
-import CalendarScreen from 'screens/babysitter/CalendarScreen';
+import TabBarIcon from '../components/TabBarIcon';
 
 const config = Platform.select({
   default: {},
@@ -46,6 +47,8 @@ HomeStack.path = '';
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    Profile: ProfileDetail,
+    Payment: PaymentStripe,
   },
   config,
 );

@@ -22,8 +22,11 @@ import moment from 'moment';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import CalendarStrip from 'react-native-calendar-strip';
+import registerPushNotifications from 'utils/Notification';
 // import ModalPushNotification from 'components/ModalPushNotification';
 import { markDates } from 'utils/markedDates';
+import apiUrl from 'utils/Connection';
+import io from 'socket.io-client';
 
 class ParentHomeScreen extends Component {
   constructor(props) {
@@ -48,6 +51,20 @@ class ParentHomeScreen extends Component {
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
+
+    const socketIO = io(apiUrl.socket, {
+      transports: ['websocket'],
+    });
+
+    socketIO.on('connect', () => {
+      socketIO.emit('userId', this.state.userId);
+    });
+
+    // socketIO.on('triggerQr', (data) => {
+    //   if (this.state.roleId == 3) {
+    //     this.props.navigation.navigate('QrSitter', { qrData: data.qr });
+    //   }
+    // });
   }
 
   async componentDidUpdate(prevProps) {
@@ -103,6 +120,11 @@ class ParentHomeScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
+      registerPushNotifications(userId).then((response) => {
+        if (response) {
+          console.log('PHUC: App -> response', response.data);
+        }
+      });
     });
     if (this.state.roleId != 0) {
       await getRequests(this.state.userId)
@@ -148,8 +170,8 @@ class ParentHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title="Request confirmation"
           message={this.state.notificationMessage}
-          textCancel="Cancel"
-          textConfirm="Accept"
+          textCancel="No"
+          textConfirm="Yes"
           customStyles={{
             mask: {
               backgroundColor: 'transparent',
@@ -168,16 +190,14 @@ class ParentHomeScreen extends Component {
           }}
         />
         <View style={scheduleContainer}>
-          <MuliText style={textParent}>
-            Khi nào bạn cần người giữ trẻ?
-          </MuliText>
+          <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => navigation.navigate('CreateRequest')}
           >
             <View style={borderText}>
               <MuliText style={textParentRequest}>
-                Nhấn vào đây để tạo yêu cầu 
+                Nhấn vào đây để tạo yêu cầu
               </MuliText>
             </View>
           </TouchableOpacity>
@@ -227,7 +247,7 @@ class ParentHomeScreen extends Component {
             })
           }
         />
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1 }}>
           {requests != '' && requests ? (
             <FlatList
               data={requests}
@@ -245,7 +265,6 @@ class ParentHomeScreen extends Component {
                 }
               >
                 <TouchableOpacity
-                
                   onPress={() => navigation.navigate('CreateRequest')}
                 >
                   <View style={noRequest}>

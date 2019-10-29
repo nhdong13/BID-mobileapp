@@ -16,9 +16,12 @@ import { withNavigationFocus } from 'react-navigation';
 import SitterInvitation from 'screens/babysitter/SitterInvitation';
 import colors from 'assets/Color';
 import Api from 'api/api_helper';
+import apiUrl from 'utils/Connection';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import Loader from 'utils/Loader';
+import registerPushNotifications from 'utils/Notification';
+import io from 'socket.io-client';
 // import ModalPushNotification from 'components/ModalPushNotification';
 
 class SitterHomeScreen extends Component {
@@ -43,6 +46,18 @@ class SitterHomeScreen extends Component {
       );
     });
     await this.getInvitationData();
+
+    const socketIO = io(apiUrl.socket, {
+      transports: ['websocket'],
+    });
+
+    socketIO.on('connect', () => {
+      socketIO.emit('userId', this.state.userId);
+    });
+
+    socketIO.on('triggerQr', (data) => {
+      this.props.navigation.navigate('QrSitter', { qrData: data.qr });
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -70,6 +85,11 @@ class SitterHomeScreen extends Component {
     const requestBody = {
       id: this.state.userId,
     };
+    registerPushNotifications(requestBody.id).then((response) => {
+      if (response) {
+        console.log('PHUC: App -> response', response.data);
+      }
+    });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((res) => {
         this.setState({
@@ -154,8 +174,8 @@ class SitterHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title="Request confirmation"
           message={this.state.notificationMessage}
-          textCancel="Cancel"
-          textConfirm="Accept"
+          textCancel="No"
+          textConfirm="Yes"
           customStyles={{
             mask: {
               backgroundColor: 'transparent',

@@ -4,10 +4,8 @@ import { retrieveToken } from 'utils/handleToken';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
-import registerPushNotifications from 'utils/Notification';
 import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
 import NavigationService from './NavigationService.js';
 
@@ -20,39 +18,19 @@ export default function App(props) {
     'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, ' +
       '`cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
   ]);
-  useEffect(() => {
-    retrieveToken().then((res) => {
-      const { userId, roleId } = res;
+  // useEffect(() => {
+  //   retrieveToken().then((res) => {
+  //     // const { userId, roleId } = res;
 
-      registerPushNotifications(userId).then((response) => {
-        if (response) {
-          console.log('PHUC: App -> response', response.data);
-        }
-      });
+  //     // socketIO.on('connect_error', (error) => {
+  //     //   console.log('Bsitter connection error  ', error);
+  //     // });
 
-      const socketIO = io(apiUrl.socket, {
-        transports: ['websocket'],
-      });
-
-      socketIO.on('connect', () => {
-        socketIO.emit('userId', userId);
-      });
-
-      socketIO.on('triggerQr', (data) => {
-        if (roleId == 3) {
-          NavigationService.navigate('QrSitter', { qrData: data.qr });
-        }
-      });
-
-      // socketIO.on('connect_error', (error) => {
-      //   console.log('Bsitter connection error  ', error);
-      // });
-
-      // socketIO.on('error', (error) => {
-      //   console.log('Bsitter error in general ', error);
-      // });
-    });
-  }, []);
+  //     // socketIO.on('error', (error) => {
+  //     //   console.log('Bsitter error in general ', error);
+  //     // });
+  //   });
+  // }, []);
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
