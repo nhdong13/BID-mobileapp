@@ -38,7 +38,7 @@ export default class CircleScreens extends Component {
       this.setState({ friend: true });
     }
   }
- nearBabySitter() {
+  nearBabySitter() {
     if (this.state.nearBabySitter) {
       this.setState({ nearBabySitter: false });
     } else {
@@ -47,15 +47,9 @@ export default class CircleScreens extends Component {
   }
   render() {
     return (
-      <ScrollView>
-        {/* Vòng tròn tin tưởng của tôi */}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 35,
-          }}
-        >
+      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
+        {/* Header vòng tròn tin tưởng của tôi */}
+        <View style={styles.firstHeaderContainer}>
           <TouchableOpacity
             onPress={() => {
               this.circle();
@@ -76,10 +70,12 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End */}
+        {/* End header */}
+
+        {/* Item vòng tròn tin tưởng của tôi */}
         {this.state.circle && (
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            {/* Item */}
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
             <View style={styles.bsitterItem}>
               <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
                 <Image
@@ -178,17 +174,13 @@ export default class CircleScreens extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* End Item */}
+            {/* End Item chi tiết */}
           </View>
         )}
-        {/* Người giữ trẻ bạn đã chọn*/}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 20,
-          }}
-        >
+        {/* End item */}
+
+        {/* Header người giữ trẻ bạn đã chọn*/}
+        <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
               this.chooseBabySitter();
@@ -209,9 +201,11 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End */}
+        {/* End header*/}
+
+        {/* Item của người giữ trẻ bạn đã chọn */}
         {this.state.chooseBabySitter && (
-          <View style={{ marginHorizontal: 15, marginTop: 15 }}>
+          <View style={styles.itemContainer}>
             <View
               style={{
                 alignItems: 'center',
@@ -219,7 +213,7 @@ export default class CircleScreens extends Component {
                 flexDirection: 'row',
               }}
             >
-              {/* Item 2 */}
+              {/* Item chi tiết */}
               <View style={{ alignItems: 'center', marginLeft: 10 }}>
                 <Image
                   source={require('assets/images/Phuc.png')}
@@ -334,18 +328,14 @@ export default class CircleScreens extends Component {
                   />
                 </View>
               </View>
-              {/* End item 2*/}
+              {/* End Item chi tiết */}
             </View>
           </View>
         )}
-        {/* Bạn bè */}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 20,
-          }}
-        >
+        {/* End item */}
+
+        {/* Header bạn bè */}
+        <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
               this.friend();
@@ -364,11 +354,12 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End  */}
+        {/* End header */}
 
+        {/* Item bạn bè */}
         {this.state.friend && (
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            {/* Item 3 */}
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
             <View style={styles.bsitterItem}>
               <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
                 <Image
@@ -467,17 +458,13 @@ export default class CircleScreens extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* End item 3 */}
+            {/* End item chi tiết */}
           </View>
         )}
-        {/* Người giữ trẻ ở gần*/}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 20,
-          }}
-        >
+        {/* End item*/}
+
+        {/* Header người giữ trẻ ở gần*/}
+        <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
               this.nearBabySitter();
@@ -498,10 +485,12 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End */}
+        {/* End header */}
+
+        {/* Item người giữ trẻ ở gần */}
         {this.state.nearBabySitter && (
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            {/* Item 4 */}
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
             <View style={styles.bsitterItem}>
               <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
                 <Image
@@ -600,9 +589,10 @@ export default class CircleScreens extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* End item 4 */}
+            {/* End item chi tiết */}
           </View>
         )}
+        {/* End item */}
       </ScrollView>
     );
   }
@@ -611,11 +601,31 @@ CircleScreens.navigationOptions = {
   header: null,
 };
 const styles = StyleSheet.create({
+  itemContainer: {
+    marginHorizontal: 15,
+    backgroundColor: '#fff',
+  },
+  firstHeaderContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+    marginTop: 35,
+    backgroundColor: '#fff',
+    height: 30,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+    marginTop: 6,
+    backgroundColor: '#fff',
+    height: 30,
+  },
   headerText: {
+    fontSize: 15,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },
   textDeselect: {
+    fontSize: 15,
     color: colors.lightGreen,
   },
   container: {
