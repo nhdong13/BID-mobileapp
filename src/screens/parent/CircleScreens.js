@@ -10,45 +10,45 @@ export default class CircleScreens extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: true,
-      isModalVisible2: true,
-      isModalVisible3: true,
-      isModalVisible4: true,
+      circle: true,
+      chooseBabySitter: true,
+      friend: true,
+      nearBabySitter: true,
     };
   }
-  callItem() {
-    if (this.state.isModalVisible) {
-      this.setState({ isModalVisible: false });
+  circle() {
+    if (this.state.circle) {
+      this.setState({ circle: false });
     } else {
-      this.setState({ isModalVisible: true });
+      this.setState({ circle: true });
     }
   }
 
-  callItem2() {
-    if (this.state.isModalVisible2) {
-      this.setState({ isModalVisible2: false });
+  chooseBabySitter() {
+    if (this.state.chooseBabySitter) {
+      this.setState({ chooseBabySitter: false });
     } else {
-      this.setState({ isModalVisible2: true });
+      this.setState({ chooseBabySitter: true });
     }
   }
-  callItem3() {
-    if (this.state.isModalVisible3) {
-      this.setState({ isModalVisible3: false });
+  friend() {
+    if (this.state.friend) {
+      this.setState({ friend: false });
     } else {
-      this.setState({ isModalVisible3: true });
+      this.setState({ friend: true });
     }
   }
-  callItem4() {
-    if (this.state.isModalVisible4) {
-      this.setState({ isModalVisible4: false });
+ nearBabySitter() {
+    if (this.state.nearBabySitter) {
+      this.setState({ nearBabySitter: false });
     } else {
-      this.setState({ isModalVisible4: true });
+      this.setState({ nearBabySitter: true });
     }
   }
   render() {
     return (
       <ScrollView>
-        {/* Header */}
+        {/* Vòng tròn tin tưởng của tôi */}
         <View
           style={{
             flexDirection: 'row',
@@ -58,7 +58,7 @@ export default class CircleScreens extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.callItem();
+              this.circle();
             }}
             style={{ flexDirection: 'row' }}
           >
@@ -76,8 +76,8 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End Header */}
-        {this.state.isModalVisible && (
+        {/* End */}
+        {this.state.circle && (
           <View style={{ marginHorizontal: 15, marginTop: 10 }}>
             {/* Item */}
             <View style={styles.bsitterItem}>
@@ -181,7 +181,7 @@ export default class CircleScreens extends Component {
             {/* End Item */}
           </View>
         )}
-        {/* Header 2*/}
+        {/* Người giữ trẻ bạn đã chọn*/}
         <View
           style={{
             flexDirection: 'row',
@@ -191,7 +191,7 @@ export default class CircleScreens extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.callItem2();
+              this.chooseBabySitter();
             }}
             style={{ flexDirection: 'row' }}
           >
@@ -209,8 +209,8 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End header 2*/}
-        {this.state.isModalVisible2 && (
+        {/* End */}
+        {this.state.chooseBabySitter && (
           <View style={{ marginHorizontal: 15, marginTop: 15 }}>
             <View
               style={{
@@ -338,7 +338,7 @@ export default class CircleScreens extends Component {
             </View>
           </View>
         )}
-        {/* Header 3 */}
+        {/* Bạn bè */}
         <View
           style={{
             flexDirection: 'row',
@@ -348,7 +348,7 @@ export default class CircleScreens extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.callItem3();
+              this.friend();
             }}
             style={{ flexDirection: 'row' }}
           >
@@ -364,9 +364,9 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End header 3 */}
+        {/* End  */}
 
-        {this.state.isModalVisible3 && (
+        {this.state.friend && (
           <View style={{ marginHorizontal: 15, marginTop: 10 }}>
             {/* Item 3 */}
             <View style={styles.bsitterItem}>
@@ -470,7 +470,7 @@ export default class CircleScreens extends Component {
             {/* End item 3 */}
           </View>
         )}
-        {/* Header 4 */}
+        {/* Người giữ trẻ ở gần*/}
         <View
           style={{
             flexDirection: 'row',
@@ -480,7 +480,7 @@ export default class CircleScreens extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              this.callItem4();
+              this.nearBabySitter();
             }}
             style={{ flexDirection: 'row' }}
           >
@@ -498,8 +498,8 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End header 4 */}
-        {this.state.isModalVisible4 && (
+        {/* End */}
+        {this.state.nearBabySitter && (
           <View style={{ marginHorizontal: 15, marginTop: 10 }}>
             {/* Item 4 */}
             <View style={styles.bsitterItem}>

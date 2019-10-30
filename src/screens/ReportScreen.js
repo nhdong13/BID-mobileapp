@@ -27,6 +27,7 @@ export default class ReportScreen extends Component {
       starCount: rating,
     });
   }
+  
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
@@ -53,6 +54,7 @@ export default class ReportScreen extends Component {
               multiline
               maxLength={200}
               style={{ paddingHorizontal: 15 }}
+              value=''
             />
           </View>
           <View style={styles.buttonContainer}>
@@ -107,11 +109,9 @@ const styles = StyleSheet.create({
   pictureReport: {
     width: 120,
     height: 120,
-    marginTop: SCREEN_HEIGHT / 5,
+    marginTop: SCREEN_HEIGHT / 5.5,
     borderRadius: 120 / 2,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
   },
   colorTop: {
     width: SCREEN_WIDTH,

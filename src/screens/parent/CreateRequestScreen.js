@@ -543,7 +543,6 @@ const styles = StyleSheet.create({
     borderColor: '#7edeb9',
   },
   inputAddress: {
-    borderColor: colors.gray,
     flex: 1,
     flexDirection: 'row',
     borderWidth: 0,
