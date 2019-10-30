@@ -487,7 +487,6 @@ export class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={() => {
                   this.onOpenQR('ONGOING');
-                  // this.props.navigation.navigate('Home');
                 }}
               >
                 <MuliText style={{ color: '#2ecc71', fontSize: 12 }}>
@@ -501,7 +500,6 @@ export class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={() => {
                   this.onOpenQR('DONE');
-                  this.props.navigation.navigate('Home');
                 }}
               >
                 <MuliText style={{ color: '#8e44ad', fontSize: 11 }}>
