@@ -397,7 +397,7 @@ class CreateRequestScreen extends Component {
                           marginLeft: 40,
                         }}
                       >
-                        <View style={{ alignItems: 'center' }}>
+                        <View>
                           <Image
                             source={{ uri: item.image }}
                             style={{
@@ -412,11 +412,7 @@ class CreateRequestScreen extends Component {
                             }}
                           />
                           <View>
-                            <View
-                              style={{
-                                alignItems: 'center',
-                              }}
-                            >
+                            <View style={{ alignItems: 'center' }}>
                               <MuliText
                                 style={{
                                   color:
@@ -428,42 +424,47 @@ class CreateRequestScreen extends Component {
                               >
                                 {item.name}
                               </MuliText>
-                              <MuliText
-                                style={{
-                                  color:
+                              <View style={{ alignContent: 'center' }}>
+                                <MuliText
+                                  style={{
+                                    color:
+                                      item.checked == null ||
+                                      item.checked == false
+                                        ? colors.gray
+                                        : (color = 'black'),
+                                  }}
+                                >
+                                  {item.age} tuổi
+                                </MuliText>
+                                <CheckBox
+                                  onPress={() => {
+                                    this.toggleHidden(item);
+                                  }}
+                                  style={{
+                                    marginTop: 5,
+                                    width: 18,
+                                    height: 18,
+                                    borderRadius: 20 / 2,
+                                    borderColor:
+                                      item.checked == null ||
+                                      item.checked == false
+                                        ? colors.gray
+                                        : 'black',
+                                    backgroundColor:
+                                      item.checked == null ||
+                                      item.checked == false
+                                        ? 'white'
+                                        : 'black',
+                                  }}
+                                  checked={
                                     item.checked == null ||
                                     item.checked == false
-                                      ? colors.gray
-                                      : (color = 'black'),
-                                }}
-                              >
-                                {item.age} tuổi
-                              </MuliText>
+                                      ? false
+                                      : true
+                                  }
+                                />
+                              </View>
                             </View>
-                            <CheckBox
-                              onPress={() => {
-                                this.toggleHidden(item);
-                              }}
-                              style={{
-                                marginTop: 5,
-                                width: 18,
-                                height: 18,
-                                borderRadius: 20 / 2,
-                                borderColor:
-                                  item.checked == null || item.checked == false
-                                    ? colors.gray
-                                    : (color = 'black'),
-                                backgroundColor:
-                                  item.checked == null || item.checked == false
-                                    ? (color = 'white')
-                                    : (color = 'black'),
-                              }}
-                              checked={
-                                item.checked == null || item.checked == false
-                                  ? false
-                                  : true
-                              }
-                            />
                           </View>
                         </View>
                       </View>
