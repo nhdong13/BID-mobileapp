@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import images from 'assets/images/images';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import colors from 'assets/Color';
 import { CheckBox } from 'native-base';
 export default class CircleScreens extends Component {
@@ -59,7 +58,7 @@ export default class CircleScreens extends Component {
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>
@@ -190,7 +189,7 @@ export default class CircleScreens extends Component {
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>
@@ -345,7 +344,7 @@ export default class CircleScreens extends Component {
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>Bạn bè (2)</MuliText>
@@ -474,7 +473,7 @@ export default class CircleScreens extends Component {
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>
@@ -620,11 +619,13 @@ const styles = StyleSheet.create({
     height: 30,
   },
   headerText: {
+    marginTop: 5,
     fontSize: 15,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },
   textDeselect: {
+    marginTop: 5,
     fontSize: 15,
     color: colors.lightGreen,
   },

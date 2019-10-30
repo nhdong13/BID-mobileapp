@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
-  Container,
-  Header,
-  Content,
-  ListItem,
-  Text,
   Radio,
-  Right,
-  Left,
 } from 'native-base';
 
 import { MuliText } from 'components/StyledText';
