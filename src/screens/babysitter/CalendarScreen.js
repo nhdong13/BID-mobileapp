@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   radioButton: {
     marginLeft: 20,
-    marginTop: 18,
+    marginTop: 20,
   },
   hide: {
     marginLeft: 10,

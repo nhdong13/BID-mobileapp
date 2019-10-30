@@ -60,7 +60,8 @@ export class Bsitter extends Component {
                 sitterId: item.userId,
                 requestId: requestId,
                 request: request,
-                onGoBack: (receiverId, requestId) => this.changeStateOnGoBack(receiverId, requestId),
+                onGoBack: (receiverId, requestId) =>
+                  this.changeStateOnGoBack(receiverId, requestId),
               })
             }
           >
