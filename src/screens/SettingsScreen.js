@@ -16,7 +16,6 @@ export default class SettingsScreen extends Component {
     this.getDataAccordingToRole();
   }
 
-
   onLogout = async () => {
     logout()
       .then((res) => {
@@ -46,9 +45,7 @@ export default class SettingsScreen extends Component {
       <ScrollView>
         <View style={styles.informationContainer} />
         <View style={{ marginHorizontal: 25, marginTop: 10 }}>
-          <MuliText style={styles.headerTitle}>
-            {this.state.name}
-          </MuliText>
+          <MuliText style={styles.headerTitle}>{this.state.name}</MuliText>
           <View>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Profile')}
@@ -116,7 +113,10 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('CalendarScreen')}
+              style={styles.detailInformationContainer}
+            >
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-calendar"
@@ -154,7 +154,9 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Circle')}
+            style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-contacts"

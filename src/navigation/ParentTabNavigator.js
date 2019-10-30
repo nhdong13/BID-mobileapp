@@ -13,8 +13,11 @@ import RequestDetail from 'screens/RequestDetail';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
-import MyNetwork from 'screens/circle/MyNetwork';
+import CalendarScreen from 'screens/babysitter/CalendarScreen';
+
+// import MyNetwork from '../screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
+import CircleScreens from 'screens/parent/CircleScreens';
 
 const config = Platform.select({
   default: {},
@@ -87,8 +90,8 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
-    QrScanner: QRcodeScannerScreen,
-    Circles: MyNetwork,
+    Circles: CircleScreens,
+    // QrScanner: QRcodeScannerScreen,
   },
   config,
 );
@@ -109,6 +112,7 @@ const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
     Profile: ProfileDetail,
+    CalendarScreen: CalendarScreen,
   },
   config,
 );

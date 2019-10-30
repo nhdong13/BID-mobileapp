@@ -67,7 +67,7 @@ export default class RecommendScreen extends Component {
   setRequestId = (requestId) => {
     this.setState({ requestId: requestId });
     this.props.navigation.state.params.onGoBack(requestId);
-  }
+  };
 
   callRecommend() {
     if (this.state.isModalVisible) {
@@ -89,97 +89,111 @@ export default class RecommendScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.recommendList && this.state.recommendList.length > 0 ? (
-          <View style={styles.sectionContainer}>
-            <View style={styles.headerSection}>
-              <Ionicons
-                name={
-                  this.state.isModalVisible ? 'ios-arrow-down' : 'ios-arrow-up'
-                }
-                size={24}
-                style={{ marginBottom: -6, marginLeft: 20 }}
-                color="#315f61"
-                onPress={() => {
-                  this.callRecommend();
-                }}
-              />
-              <MuliText
-                style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-              >
-                Đề nghị ({this.state.recommendCount})
-              </MuliText>
-            </View>
-            {this.state.isModalVisible && (
-              <ScrollView>
-                {this.state.recommendList &&
-                  this.state.recommendList.length > 0 && (
-                    <FlatList
-                      data={this.state.recommendList}
-                      renderItem={({ item }) => (
-                        <Bsitter
-                          changeInviteStatus={this.changeInviteStatus}
-                          setRequestId={this.setRequestId}
-                          requestId={this.state.requestId}
-                          request={this.state.request}
-                          item={item}
+        {this.state.recommendList.length > 0 ||
+        this.state.listMatched.length > 0 ? (
+          <View>
+            {this.state.recommendList.length > 0 && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.headerSection}>
+                  <Ionicons
+                    name={
+                      this.state.isModalVisible
+                        ? 'ios-arrow-down'
+                        : 'ios-arrow-up'
+                    }
+                    size={24}
+                    style={{ marginBottom: -6, marginLeft: 20 }}
+                    color="#315f61"
+                    onPress={() => {
+                      this.callRecommend();
+                    }}
+                  />
+                  <MuliText
+                    style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+                  >
+                    Đề nghị ({this.state.recommendCount})
+                  </MuliText>
+                </View>
+                {this.state.isModalVisible && (
+                  <ScrollView style={styles.sectionContainer2}>
+                    {this.state.recommendList &&
+                      this.state.recommendList.length > 0 && (
+                        <FlatList
+                          data={this.state.recommendList}
+                          renderItem={({ item }) => (
+                            <Bsitter
+                              changeInviteStatus={this.changeInviteStatus}
+                              setRequestId={this.setRequestId}
+                              requestId={this.state.requestId}
+                              request={this.state.request}
+                              item={item}
+                            />
+                          )}
+                          keyExtractor={(item) => item.user.id.toString()}
                         />
                       )}
-                      keyExtractor={(item) => item.user.id.toString()}
-                    />
-                  )}
-              </ScrollView>
-            )}
+                  </ScrollView>
+                )}
+              </View>
+            ) }
+
+            {this.state.listMatched.length != 0 && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.headerSection}>
+                  <Ionicons
+                    name={
+                      this.state.isModalVisible2
+                        ? 'ios-arrow-down'
+                        : 'ios-arrow-up'
+                    }
+                    size={24}
+                    style={{ marginBottom: -6, marginLeft: 20 }}
+                    color="#315f61"
+                    onPress={() => {
+                      this.callRecommend2();
+                    }}
+                  />
+                  <MuliText
+                    style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+                  >
+                    Người giữ trẻ phù hợp ({this.state.matchedCount})
+                  </MuliText>
+                </View>
+                {this.state.isModalVisible2 && (
+                  <ScrollView style={styles.sectionContainer2}>
+                    {this.state.listMatched &&
+                      this.state.listMatched.length != 0 && (
+                        <FlatList
+                          data={this.state.listMatched}
+                          renderItem={({ item }) => (
+                            <Bsitter
+                              changeInviteStatus={this.changeInviteStatus}
+                              setRequestId={this.setRequestId}
+                              requestId={this.state.requestId}
+                              request={this.state.request}
+                              item={item}
+                            />
+                          )}
+                          keyExtractor={(item) => item.user.id.toString()}
+                        />
+                      )}
+                  </ScrollView>
+                )}
+              </View>
+            ) }
           </View>
         ) : (
-          <View style={{ marginTop: 250 }}>
+          <View>
             <MuliText
-              style={{ color: colors.gray, fontSize: 25, marginHorizontal: 30 }}
+              style={{
+                marginTop: 50,
+                color: colors.gray,
+                fontSize: 25,
+                marginHorizontal: 50,
+              }}
             >
-              Không tìm thấy người giữ trẻ nào phù hợp với lịch giữ trẻ của bạn
+              Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
             </MuliText>
-          </View>
-        )}
-
-        {this.state.listMatched && this.state.listMatched.length != 0 && (
-          <View style={styles.sectionContainer}>
-            <View style={styles.headerSection}>
-              <Ionicons
-                name={
-                  this.state.isModalVisible2 ? 'ios-arrow-down' : 'ios-arrow-up'
-                }
-                size={24}
-                style={{ marginBottom: -6, marginLeft: 20 }}
-                color="#315f61"
-                onPress={() => {
-                  this.callRecommend2();
-                }}
-              />
-              <MuliText
-                style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-              >
-                Người giữ trẻ phù hợp ({this.state.matchedCount})
-              </MuliText>
-            </View>
-            {this.state.isModalVisible2 && (
-              <ScrollView>
-                {this.state.listMatched &&
-                  this.state.listMatched.length != 0 && (
-                    <FlatList
-                      data={this.state.listMatched}
-                      renderItem={({ item }) => (
-                        <Bsitter
-                          changeInviteStatus={this.changeInviteStatus}
-                          setRequestId={this.setRequestId}
-                          requestId={this.state.requestId}
-                          request={this.state.request}
-                          item={item}
-                        />
-                      )}
-                      keyExtractor={(item) => item.user.id.toString()}
-                    />
-                  )}
-              </ScrollView>
-            )}
           </View>
         )}
       </View>
@@ -191,7 +205,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#dfe6e9',
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   textInput: {
     borderColor: '#EEEEEE',
@@ -202,9 +216,14 @@ const styles = StyleSheet.create({
     padding: 10,
     fontFamily: 'muli',
   },
+  sectionContainer2: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    marginTop: 10,
+    height: 300,
+  },
   sectionContainer: {
     backgroundColor: 'white',
-    flex: 1,
     paddingHorizontal: 20,
     marginTop: 10,
   },
@@ -214,7 +233,7 @@ const styles = StyleSheet.create({
     borderColor: '#bdc3c7',
     height: 60,
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   notfoundMessage: {
     backgroundColor: 'white',

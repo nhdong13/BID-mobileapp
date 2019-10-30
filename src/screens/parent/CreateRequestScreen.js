@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
 import { StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native';
-
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
@@ -11,6 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateRequest } from 'api/sittingRequest.api';
+import { CheckBox } from 'native-base';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -195,9 +195,7 @@ class CreateRequestScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.containerInformationRequest}>
-          <MuliText style={styles.headerTitle}>
-            Trông trẻ
-          </MuliText>
+          <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
           <View>
             <View style={styles.inputDay}>
               <Ionicons
@@ -330,7 +328,7 @@ class CreateRequestScreen extends Component {
               </View>
             </View>
           </View>
-          <View style={styles.input}>
+          <View style={styles.inputAddress}>
             <Ionicons
               name="ios-home"
               size={20}
@@ -379,7 +377,8 @@ class CreateRequestScreen extends Component {
             {this.state.child != null ? (
               <View style={styles.detailContainerChild}>
                 <MuliText style={styles.headerTitleChild}>
-                  Số lượng trẻ: {this.state.child.length}
+                  Trẻ của bạn:
+                  {/* {this.state.child.length} */}
                 </MuliText>
                 <View style={styles.detailPictureContainer}>
                   {this.state.child.map((item) => (
@@ -395,38 +394,73 @@ class CreateRequestScreen extends Component {
                         style={{
                           alignContent: 'space-between',
                           flexDirection: 'row',
-                          marginLeft: 20,
+                          marginLeft: 40,
                         }}
                       >
-                        <View>
+                        <View style={{ alignItems: 'center' }}>
                           <Image
                             source={{ uri: item.image }}
                             style={{
-                              width: 80,
-                              height: 80,
-                              borderRadius: 140 / 2,
+                              opacity:
+                                item.checked == null || item.checked == false
+                                  ? 0.1
+                                  : null,
+                              width: 60,
+                              height: 60,
+                              borderRadius: 120 / 2,
                               overflow: 'hidden',
-                              borderWidth:
-                                item.checked == null || item.checked == false
-                                  ? 1
-                                  : 2,
-                              borderColor:
-                                item.checked == null || item.checked == false
-                                  ? colors.gray
-                                  : colors.done,
                             }}
                           />
                           <View>
-                            <Text
+                            <View
                               style={{
-                                color:
-                                  item.checked == null || item.checked == false
-                                    ? colors.gray
-                                    : colors.done,
+                                alignItems: 'center',
                               }}
                             >
-                              {item.name} - {item.age}tuổi
-                            </Text>
+                              <MuliText
+                                style={{
+                                  color:
+                                    item.checked == null ||
+                                    item.checked == false
+                                      ? colors.gray
+                                      : (color = 'black'),
+                                }}
+                              >
+                                {item.name}
+                              </MuliText>
+                              <MuliText
+                                style={{
+                                  color:
+                                    item.checked == null ||
+                                    item.checked == false
+                                      ? colors.gray
+                                      : (color = 'black'),
+                                }}
+                              >
+                                {item.age} tuổi
+                              </MuliText>
+                            </View>
+                            <CheckBox
+                              style={{
+                                marginTop: 5,
+                                width: 18,
+                                height: 18,
+                                borderRadius: 20 / 2,
+                                borderColor:
+                                  item.checked == null || item.checked == false
+                                    ? colors.gray
+                                    : (color = 'black'),
+                                backgroundColor:
+                                  item.checked == null || item.checked == false
+                                    ? (color = 'white')
+                                    : (color = 'black'),
+                              }}
+                              checked={
+                                item.checked == null || item.checked == false
+                                  ? false
+                                  : true
+                              }
+                            />
                           </View>
                         </View>
                       </View>
@@ -504,6 +538,15 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderColor: '#7edeb9',
   },
+  inputAddress: {
+    borderColor: colors.gray,
+    flex: 1,
+    flexDirection: 'row',
+    borderWidth: 0,
+    borderBottomWidth: 2,
+    marginHorizontal: 15,
+    marginTop: 15,
+  },
   input: {
     flex: 1,
     flexDirection: 'row',
@@ -513,6 +556,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   contentInformation: {
+    color: colors.gray,
     marginHorizontal: 15,
     marginBottom: 5,
     fontSize: 12,
