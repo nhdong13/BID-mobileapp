@@ -500,7 +500,7 @@ export class RequestDetail extends Component {
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
-                  this.onButtonClick('DONE');
+                  this.onOpenQR('DONE');
                   this.props.navigation.navigate('Home');
                 }}
               >

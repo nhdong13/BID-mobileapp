@@ -16,10 +16,14 @@ export class QRcodeScannerScreen extends React.Component {
       content: '',
       userId: 0 || this.props.navigation.getParam('userId'),
     };
-    console.log('PHUC: QRcodeScannerScreen -> constructor -> userId', this.props.navigation.getParam('userId'));
+    console.log(
+      'PHUC: QRcodeScannerScreen -> constructor -> userId',
+      this.props.navigation.getParam('userId'),
+    );
   }
 
   async componentDidMount() {
+    this.triggerQr();
     this.getPermissionsAsync();
   }
 
