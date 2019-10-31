@@ -1,71 +1,64 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import images from 'assets/images/images';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import colors from 'assets/Color';
 import { CheckBox } from 'native-base';
 export default class CircleScreens extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: true,
-      isModalVisible2: true,
-      isModalVisible3: true,
-      isModalVisible4: true,
+      circle: true,
+      chooseBabySitter: true,
+      friend: true,
+      nearBabySitter: true,
     };
   }
-  callItem() {
-    if (this.state.isModalVisible) {
-      this.setState({ isModalVisible: false });
+  circle() {
+    if (this.state.circle) {
+      this.setState({ circle: false });
     } else {
-      this.setState({ isModalVisible: true });
+      this.setState({ circle: true });
     }
   }
 
-  callItem2() {
-    if (this.state.isModalVisible2) {
-      this.setState({ isModalVisible2: false });
+  chooseBabySitter() {
+    if (this.state.chooseBabySitter) {
+      this.setState({ chooseBabySitter: false });
     } else {
-      this.setState({ isModalVisible2: true });
+      this.setState({ chooseBabySitter: true });
     }
   }
-  callItem3() {
-    if (this.state.isModalVisible3) {
-      this.setState({ isModalVisible3: false });
+  friend() {
+    if (this.state.friend) {
+      this.setState({ friend: false });
     } else {
-      this.setState({ isModalVisible3: true });
+      this.setState({ friend: true });
     }
   }
-  callItem4() {
-    if (this.state.isModalVisible4) {
-      this.setState({ isModalVisible4: false });
+  nearBabySitter() {
+    if (this.state.nearBabySitter) {
+      this.setState({ nearBabySitter: false });
     } else {
-      this.setState({ isModalVisible4: true });
+      this.setState({ nearBabySitter: true });
     }
   }
   render() {
     return (
-      <ScrollView>
-        {/* Header */}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 35,
-          }}
-        >
+      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
+        {/* Header vòng tròn tin tưởng của tôi */}
+        <View style={styles.firstHeaderContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.callItem();
+              this.circle();
             }}
             style={{ flexDirection: 'row' }}
           >
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>
@@ -76,10 +69,12 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End Header */}
-        {this.state.isModalVisible && (
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            {/* Item */}
+        {/* End header */}
+
+        {/* Item vòng tròn tin tưởng của tôi */}
+        {this.state.circle && (
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
             <View style={styles.bsitterItem}>
               <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
                 <Image
@@ -178,27 +173,23 @@ export default class CircleScreens extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* End Item */}
+            {/* End Item chi tiết */}
           </View>
         )}
-        {/* Header 2*/}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 20,
-          }}
-        >
+        {/* End item */}
+
+        {/* Header người giữ trẻ bạn đã chọn*/}
+        <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.callItem2();
+              this.chooseBabySitter();
             }}
             style={{ flexDirection: 'row' }}
           >
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>
@@ -209,9 +200,11 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End header 2*/}
-        {this.state.isModalVisible2 && (
-          <View style={{ marginHorizontal: 15, marginTop: 15 }}>
+        {/* End header*/}
+
+        {/* Item của người giữ trẻ bạn đã chọn */}
+        {this.state.chooseBabySitter && (
+          <View style={styles.itemContainer}>
             <View
               style={{
                 alignItems: 'center',
@@ -219,7 +212,7 @@ export default class CircleScreens extends Component {
                 flexDirection: 'row',
               }}
             >
-              {/* Item 2 */}
+              {/* Item chi tiết */}
               <View style={{ alignItems: 'center', marginLeft: 10 }}>
                 <Image
                   source={require('assets/images/Phuc.png')}
@@ -334,28 +327,24 @@ export default class CircleScreens extends Component {
                   />
                 </View>
               </View>
-              {/* End item 2*/}
+              {/* End Item chi tiết */}
             </View>
           </View>
         )}
-        {/* Header 3 */}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 20,
-          }}
-        >
+        {/* End item */}
+
+        {/* Header bạn bè */}
+        <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.callItem3();
+              this.friend();
             }}
             style={{ flexDirection: 'row' }}
           >
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>Bạn bè (2)</MuliText>
@@ -364,11 +353,12 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End header 3 */}
+        {/* End header */}
 
-        {this.state.isModalVisible3 && (
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            {/* Item 3 */}
+        {/* Item bạn bè */}
+        {this.state.friend && (
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
             <View style={styles.bsitterItem}>
               <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
                 <Image
@@ -467,27 +457,23 @@ export default class CircleScreens extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* End item 3 */}
+            {/* End item chi tiết */}
           </View>
         )}
-        {/* Header 4 */}
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginTop: 20,
-          }}
-        >
+        {/* End item*/}
+
+        {/* Header người giữ trẻ ở gần*/}
+        <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.callItem4();
+              this.nearBabySitter();
             }}
             style={{ flexDirection: 'row' }}
           >
             <Ionicons
               name="ios-man"
               size={24}
-              style={{ marginBottom: -4, marginLeft: 20 }}
+              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
               color={colors.darkGreenTitle}
             />
             <MuliText style={styles.headerText}>
@@ -498,10 +484,12 @@ export default class CircleScreens extends Component {
             <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
           </TouchableOpacity>
         </View>
-        {/* End header 4 */}
-        {this.state.isModalVisible4 && (
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            {/* Item 4 */}
+        {/* End header */}
+
+        {/* Item người giữ trẻ ở gần */}
+        {this.state.nearBabySitter && (
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
             <View style={styles.bsitterItem}>
               <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
                 <Image
@@ -600,9 +588,10 @@ export default class CircleScreens extends Component {
                 />
               </TouchableOpacity>
             </View>
-            {/* End item 4 */}
+            {/* End item chi tiết */}
           </View>
         )}
+        {/* End item */}
       </ScrollView>
     );
   }
@@ -611,11 +600,33 @@ CircleScreens.navigationOptions = {
   header: null,
 };
 const styles = StyleSheet.create({
+  itemContainer: {
+    marginHorizontal: 15,
+    backgroundColor: '#fff',
+  },
+  firstHeaderContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+    marginTop: 35,
+    backgroundColor: '#fff',
+    height: 30,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+    marginTop: 6,
+    backgroundColor: '#fff',
+    height: 30,
+  },
   headerText: {
+    marginTop: 5,
+    fontSize: 15,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },
   textDeselect: {
+    marginTop: 5,
+    fontSize: 15,
     color: colors.lightGreen,
   },
   container: {
