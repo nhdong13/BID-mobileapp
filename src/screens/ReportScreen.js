@@ -4,98 +4,77 @@ import {
   StyleSheet,
   View,
   Image,
-  ScrollView,
   TextInput,
   // TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
-import moment from 'moment';
-import Api from 'api/api_helper';
 import colors from 'assets/Color';
-import { Button } from 'native-base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import StarRating from 'react-native-star-rating';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default class ReportScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      starCount: 5,
+    };
   }
-
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating,
+    });
+  }
+  
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <View
-          style={{
-            width: SCREEN_WIDTH,
-            height: 0,
-            borderTopColor: colors.done,
-            borderTopWidth: SCREEN_HEIGHT / 4,
-            borderRightWidth: SCREEN_WIDTH,
-            borderRightColor: colors.done,
-            position: 'absolute',
-            alignItems: 'center',
-          }}
-        />
+        <View style={styles.colorTop} />
         <View style={{ alignItems: 'center' }}>
           <Image
             source={require('assets/images/Phuc.png')}
-            style={{
-              width: 120,
-              height: 120,
-              marginTop: SCREEN_HEIGHT / 5,
-              borderRadius: 120 / 2,
-              overflow: 'hidden',
-              borderWidth: 2,
-              borderColor: 'black',
-            }}
+            style={styles.pictureReport}
           />
           <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>Ky</MuliText>
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity>
-              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              marginTop: 10,
-              borderWidth: 2,
-              width: 300,
-              height: 300,
-              marginHorizontal: 15,
+          <StarRating
+            starStyle={{
+              marginLeft: 10,
             }}
-          >
+            fullStarColor={colors.done}
+            starSize={30}
+            disabled={false}
+            maxStars={5}
+            rating={this.state.starCount}
+            selectedStar={(rating) => this.onStarRatingPress(rating)}
+          />
+          <View style={styles.reportContainer}>
             <TextInput
               multiline
               maxLength={200}
               style={{ paddingHorizontal: 15 }}
+              value=''
             />
           </View>
-          <TouchableOpacity>
-            <Button
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
               style={{
-                marginTop: 15,
-                borderColor: 'black',
-                borderWidth: 1,
-                width: 100,
-                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-            ></Button>
-          </TouchableOpacity>
+            >
+              <MuliText
+                style={{
+                  color: 'white',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                Gửi
+              </MuliText>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -106,6 +85,44 @@ ReportScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+    borderColor: 'black',
+    borderWidth: 1,
+    height: 30,
+    width: 100,
+    backgroundColor: colors.darkGreenTitle,
+    borderRadius: 6,
+  },
+  reportContainer: {
+    marginTop: 10,
+    borderWidth: 2,
+    width: 300,
+    height: 300,
+    marginHorizontal: 15,
+  },
+  star: {
+    marginLeft: 10,
+  },
+  pictureReport: {
+    width: 120,
+    height: 120,
+    marginTop: SCREEN_HEIGHT / 5.5,
+    borderRadius: 120 / 2,
+    overflow: 'hidden',
+  },
+  colorTop: {
+    width: SCREEN_WIDTH,
+    height: 0,
+    borderTopColor: colors.done,
+    borderTopWidth: SCREEN_HEIGHT / 4,
+    borderRightWidth: SCREEN_WIDTH,
+    borderRightColor: colors.done,
+    position: 'absolute',
+    alignItems: 'center',
+  },
   name: {
     alignItems: 'center',
   },
