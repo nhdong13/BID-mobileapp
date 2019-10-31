@@ -19,6 +19,7 @@ import PaymentStripe from 'utils/PaymentStripe';
 // import MyNetwork from '../screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
 import CircleScreens from 'screens/parent/CircleScreens';
+import ReportScreen from 'screens/ReportScreen';
 
 const config = Platform.select({
   default: {},
@@ -114,6 +115,7 @@ const SettingsStack = createStackNavigator(
     Settings: SettingsScreen,
     Profile: ProfileDetail,
     CalendarScreen: CalendarScreen,
+    ReportScreen: ReportScreen,
     Payment: PaymentStripe,
   },
   config,
