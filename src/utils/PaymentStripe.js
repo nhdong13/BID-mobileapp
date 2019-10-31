@@ -40,6 +40,7 @@ export class PaymentStripe extends React.Component {
     ).catch((error) => {
       console.log('PHUC: PaymentStripe -> componentWillMount -> error', error);
     });
+    console.log('PHUC: PaymentStripe -> openStripe -> token', token);
 
     this.setState(token);
   };

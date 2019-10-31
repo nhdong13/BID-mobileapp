@@ -1,12 +1,10 @@
 /* eslint-disable no-self-assign */
 import { AppLoading } from 'expo';
-import { retrieveToken } from 'utils/handleToken';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import io from 'socket.io-client';
 import NavigationService from './NavigationService.js';
 
 import AppNavigator from './src/navigation/AppNavigator';
