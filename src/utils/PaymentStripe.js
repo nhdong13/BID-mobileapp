@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { View } from "react-native";
-// import StripeCheckout from 'expo-stripe-checkout';
+import { Platform, View, TouchableOpacity } from 'react-native';
+import { MuliText } from 'components/StyledText';
+import { PaymentsStripe } from 'expo-payments-stripe';
 
 export class PaymentStripe extends React.Component {
   constructor(props) {
@@ -10,31 +11,46 @@ export class PaymentStripe extends React.Component {
     };
   }
 
-  onPaymentSuccess = (token) => {
-    console.log('PHUC: PaymentStripe -> onPaymentSuccess -> token', token);
+  componentWillMount() {
+    console.log('Test if it go in here');
+    PaymentsStripe.setOptionsAsync({
+      publishableKey: 'pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU', // Your key
+      androidPayMode: 'test',
+    });
+  }
 
-    this.setState({ token });
-    console.log(this.state.token);
-  };
+  openStripe = async () => {
+    const options = {
+      requiredBillingAddressFields: 'full',
+      prefilledInformation: {
+        billingAddress: {
+          name: 'Gunilla Haugeh',
+          line1: 'Canary Place',
+          line2: '3',
+          city: 'Macon',
+          state: 'Georgia',
+          country: 'US',
+          postalCode: '31217',
+        },
+      },
+    };
 
-  onClose = () => {
-    // maybe navigate to other screen here?
+    const token = await PaymentsStripe.paymentRequestWithCardFormAsync(
+      options,
+    ).catch((error) => {
+      console.log('PHUC: PaymentStripe -> componentWillMount -> error', error);
+    });
+
+    this.setState(token);
   };
 
   render() {
     return (
-      // <StripeCheckout
-      //   publicKey="pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU"
-      //   amount={100000}
-      //   storeName="Tra tien cho tao, reeeeeee"
-      //   description="Test"
-      //   currency="VND"
-      //   allowRememberMe={true}
-      //   prepopulatedEmail="test@test.com"
-      //   onClose={this.onClose}
-      //   onPaymentSuccess={this.onPaymentSuccess}
-      // />
-      <View />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => this.openStripe()}>
+          <MuliText>tap here to trigger the payment{this.state.token}</MuliText>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

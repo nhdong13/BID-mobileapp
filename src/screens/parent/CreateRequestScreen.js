@@ -441,6 +441,9 @@ class CreateRequestScreen extends Component {
                               </MuliText>
                             </View>
                             <CheckBox
+                              onPress={() => {
+                                this.toggleHidden(item);
+                              }}
                               style={{
                                 marginTop: 5,
                                 width: 18,
@@ -556,7 +559,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   contentInformation: {
-    color: colors.gray,
     marginHorizontal: 15,
     marginBottom: 5,
     fontSize: 12,
