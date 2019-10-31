@@ -51,6 +51,13 @@ class SitterInvitation extends Component {
             </MuliText>
           </View>
           <View style={styles.rightInformation}>
+            {invitation.status == 'OVERLAP' && (
+              <View style={styles.statusBoxPending}>
+                <MuliText style={{ fontWeight: '100', color: colors.overlap }}>
+                  {invitation.status}
+                </MuliText>
+              </View>
+            )}
             {invitation.status == 'ACCEPTED' && (
               <View style={styles.statusBoxPending}>
                 <MuliText
