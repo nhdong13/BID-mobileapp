@@ -260,6 +260,7 @@ class CreateRequestScreen extends Component {
                   format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
+                  androidMode="spinner"
                   customStyles={{
                     dateInput: {
                       borderWidth: 0,
@@ -303,6 +304,7 @@ class CreateRequestScreen extends Component {
                   format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
+                  androidMode="spinner"
                   customStyles={{
                     dateInput: {
                       borderWidth: 0,
@@ -423,7 +425,7 @@ class CreateRequestScreen extends Component {
                                     item.checked == null ||
                                     item.checked == false
                                       ? colors.gray
-                                      : (color = 'black'),
+                                      : 'black',
                                 }}
                               >
                                 {item.name}
@@ -434,7 +436,7 @@ class CreateRequestScreen extends Component {
                                     item.checked == null ||
                                     item.checked == false
                                       ? colors.gray
-                                      : (color = 'black'),
+                                      : 'black',
                                 }}
                               >
                                 {item.age} tuổi
@@ -449,11 +451,11 @@ class CreateRequestScreen extends Component {
                                 borderColor:
                                   item.checked == null || item.checked == false
                                     ? colors.gray
-                                    : (color = 'black'),
+                                    : 'black',
                                 backgroundColor:
                                   item.checked == null || item.checked == false
-                                    ? (color = 'white')
-                                    : (color = 'black'),
+                                    ? 'white'
+                                    : 'black',
                               }}
                               checked={
                                 item.checked == null || item.checked == false

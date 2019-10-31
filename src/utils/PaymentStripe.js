@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { PaymentsStripe } from 'expo-payments-stripe';
 
