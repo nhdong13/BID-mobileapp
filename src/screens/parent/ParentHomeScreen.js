@@ -42,10 +42,6 @@ class ParentHomeScreen extends Component {
     };
   }
 
-  // componentWillMount() {
-  //   this.getRequestData();
-  // }
-
   async componentDidMount() {
     await this.getRequestData();
     this._notificationSubscription = Notifications.addListener(
@@ -59,16 +55,10 @@ class ParentHomeScreen extends Component {
     socketIO.on('connect', () => {
       socketIO.emit('userId', this.state.userId);
     });
-
-    // socketIO.on('triggerQr', (data) => {
-    //   if (this.state.roleId == 3) {
-    //     this.props.navigation.navigate('QrSitter', { qrData: data.qr });
-    //   }
-    // });
   }
 
   async componentDidUpdate(prevProps) {
-    // console.log('PHUC: componentDidUpdate -> data', data);
+    // console.log('PHUC: componif (res) entDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
       await this.getRequestData();
     }

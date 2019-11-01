@@ -81,7 +81,6 @@ class SitterHomeScreen extends Component {
 
   getInvitationData = async () => {
     // get data for the babysitter (invitations)
-    this.setState({ loading: true });
     const requestBody = {
       id: this.state.userId,
     };
@@ -94,7 +93,6 @@ class SitterHomeScreen extends Component {
       .then((res) => {
         this.setState({
           invitations: res,
-          loading: false,
         });
       })
       .catch((error) =>

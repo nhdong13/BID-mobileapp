@@ -132,8 +132,29 @@ export class PaymentStripe extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <Toast ref="toast" position="top" />
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onCancel={() => this.AlertPro.close()}
+          title={this.state.title}
+          message={this.state.message}
+          showConfirm={false}
+          closeOnPressMask={false}
+          onClose={() => LocalAuthentication.cancelAuthenticate()}
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+          }}
+        />
 
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flex: 0.6 }}>
           <CreditCardInput
             requiresCVC
             labelStyle={styles.label}
@@ -145,37 +166,18 @@ export class PaymentStripe extends React.Component {
             onChange={this._onChange}
           />
         </View>
-        <View style={{ flex: 0.5, alignItems: 'center' }}>
-          <TouchableOpacity
-            onPress={() => this.openStripe()}
-            style={{ marginHorizontal: 20, flex: 1 }}
-          >
-            <MuliText>
-              tap here to trigger the payment{this.state.token}
-            </MuliText>
-          </TouchableOpacity>
-          <AlertPro
-            ref={(ref) => {
-              this.AlertPro = ref;
-            }}
-            onCancel={() => this.AlertPro.close()}
-            title={this.state.title}
-            message={this.state.message}
-            showConfirm={false}
-            closeOnPressMask={false}
-            onClose={() => LocalAuthentication.cancelAuthenticate()}
-            customStyles={{
-              mask: {
-                backgroundColor: 'transparent',
-              },
-              container: {
-                shadowColor: '#000000',
-                shadowOpacity: 0.1,
-                shadowRadius: 10,
-              },
-            }}
-          />
 
+        <View style={{ alignItems: 'center', flex: 0.4 }}>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              onPress={() => this.openStripe()}
+              style={{ marginHorizontal: 10 }}
+            >
+              <MuliText>
+                tap here to trigger the payment{this.state.token}
+              </MuliText>
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               marginTop: 20,
