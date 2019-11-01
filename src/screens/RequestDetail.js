@@ -14,6 +14,7 @@ import colors from 'assets/Color';
 import { listByRequestAndStatus } from 'api/invitation.api';
 import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
 import { withNavigation } from 'react-navigation';
+import Toast, { DURATION } from 'react-native-easy-toast';
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -102,9 +103,18 @@ export class RequestDetail extends Component {
     });
   };
 
-  acceptBabysitter = async (sitterId) => {
-    await acceptBabysitter(this.state.sittingRequestsID, sitterId);
-    this.props.navigation.navigate('Home');
+  acceptBabysitter = (sitterId) => {
+    acceptBabysitter(this.state.sittingRequestsID, sitterId)
+    .then((result) => {
+      this.props.navigation.navigate('Home');
+    }).catch((error) => {
+      if (error.response.status == 409) {
+        this.refs.toast.show(
+          'Đã có lỗi xảy ra khi chấp nhận người giữ trẻ này',
+          DURATION.LENGTH_LONG,
+        );
+      }
+    });
   };
 
   callDetail() {
@@ -118,6 +128,7 @@ export class RequestDetail extends Component {
   render() {
     return (
       <ScrollView>
+        <Toast ref="toast" position="top" />
         <View style={{ marginHorizontal: 30, backgroundColor: 'white' }}>
           <View style={styles.detailInformationContainer}>
             <View style={styles.informationText}>
