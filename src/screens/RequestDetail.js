@@ -103,16 +103,14 @@ export class RequestDetail extends Component {
     });
   };
 
-  acceptBabysitter = async (sitterId) => {
-    await acceptBabysitter(this.state.sittingRequestsID, sitterId)
-    .then((response) => {
-      console.log(response);
+  acceptBabysitter = (sitterId) => {
+    acceptBabysitter(this.state.sittingRequestsID, sitterId)
+    .then((result) => {
       this.props.navigation.navigate('Home');
-    }).catch((response) => {
-      console.log(response);
-      if (response.status == 409) {
+    }).catch((error) => {
+      if (error.response.status == 409) {
         this.refs.toast.show(
-          'Fuck',
+          'Đã có lỗi xảy ra khi chấp nhận người giữ trẻ này',
           DURATION.LENGTH_LONG,
         );
       }

@@ -45,16 +45,6 @@ export async function acceptBabysitter(requestId, sitterId) {
   };
 
   const response = await axios(options);
-  // .catch((error) => {
-  //   console.log(error);
-  //   if (error.status == 409) {
-  //     return { message: 'This babysitter is unavailable right now.' };
-  //   }
-  // });
-  // if (response) {
-  //   return response.data;
-  // }
-  // return { message: 'error trying to get data from response' };
 
   return response;
 }
