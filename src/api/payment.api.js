@@ -1,17 +1,19 @@
 import axios from 'axios';
 import qs from 'qs';
-import apiUrl from 'utils/Connection';
+import { paymentAPI } from 'utils/Connection';
 
-export async function createCustomer(email, token, id, name) {
+export async function createCustomer(email, token, userId, name, cardId) {
+  console.log('payment api -> createUser');
   const data = {
     email,
     token,
-    id,
+    userId,
     name,
+    cardId,
   };
   const options = {
     method: 'PUT',
-    url: apiUrl.createCustomer,
+    url: paymentAPI.createCustomer,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -29,14 +31,14 @@ export async function createCustomer(email, token, id, name) {
   return response;
 }
 
-export async function getCustomer(id) {
+export async function getCustomer(userId) {
   const options = {
     method: 'POST',
-    url: apiUrl.getCustomer,
+    url: paymentAPI.getCustomer,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: qs.stringify(id),
+    data: qs.stringify(userId),
   };
 
   const response = await axios(options)
@@ -50,14 +52,14 @@ export async function getCustomer(id) {
   return response;
 }
 
-export async function createCharge(amount, id) {
+export async function createCharge(amount, userId) {
   const data = {
     amount,
-    id,
+    userId,
   };
   const options = {
     method: 'POST',
-    url: apiUrl.createCharge,
+    url: paymentAPI.createCharge,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },

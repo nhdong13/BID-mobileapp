@@ -20,10 +20,14 @@ export const babysitterAPI = {
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
 };
 
+export const userAPI = {
+  getUser: `${url}/users/`,
+}
+
 export const paymentAPI = {
-  createCustomer: `${url}/payment/customer`,
-  getCustomer: `${url}/payment/customer`,
-  createCharge: `${url}/payment/charge`,
+  createCustomer: `${url}/payment/customer/`,
+  getCustomer: `${url}/payment/customer/`,
+  createCharge: `${url}/payment/charge/`,
 };
 
 export default apiUrl;

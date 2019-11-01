@@ -7,7 +7,9 @@ import { CreditCardInput } from 'react-native-credit-card-input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import AlertPro from 'react-native-alert-pro';
 import Toast, { DURATION } from 'react-native-easy-toast';
+import { getUser } from 'api/user.api';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { createCustomer, createCharge } from 'api/payment.api';
 
 const styles = StyleSheet.create({
   switch: {
@@ -37,6 +39,9 @@ export class PaymentStripe extends React.Component {
       message: '',
       title: '',
       formData: null,
+      name: null,
+      email: null,
+      userId: null,
       options: {
         promptMessage: 'Finger Print Scanner',
       },
@@ -44,6 +49,12 @@ export class PaymentStripe extends React.Component {
   }
 
   componentDidMount() {
+    getUser().then((res) => {
+      if (res.data) {
+        const { nickname: name, email, id: userId } = res.data;
+        this.setState({ name, email, userId });
+      }
+    });
     Stripe.setOptionsAsync({
       publishableKey: 'pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU', // Your key
       androidPayMode: 'test',
@@ -63,7 +74,7 @@ export class PaymentStripe extends React.Component {
     console.log('go to start scanning');
     this.setState({
       title: 'Finger scanning',
-      message: 'put your finger on the sensor to start scanning',
+      message: 'put your finger on the sensor to lose $10, yeeeh yeeh',
     });
     this.AlertPro.open();
     const result = await LocalAuthentication.authenticateAsync(
@@ -71,17 +82,14 @@ export class PaymentStripe extends React.Component {
     );
     if (result.success) {
       // eslint-disable-next-line react/no-string-refs
+      const { userId } = this.state;
+      const charge = await createCharge(100000, userId);
+      console.log('PHUC: PaymentStripe -> startScanning -> charge', charge);
       this.refs.toast.show(
-        'Fingerprint scanned, authentication success',
+        'Payment successful, you have lost $10',
         DURATION.LENGTH_LONG,
       );
       this.AlertPro.close();
-    } else if (result.error) {
-      this.refs.toast.show(
-        'Please clear the sensor and try again',
-        DURATION.LENGTH_LONG,
-      );
-      await LocalAuthentication.authenticateAsync(this.state.options);
     } else {
       this.refs.toast.show(
         'Scan failed, please clean the sensor and try again',
@@ -112,19 +120,69 @@ export class PaymentStripe extends React.Component {
 
   _onFocus = (field) => console.log('focusing', field);
 
-  openStripe = async () => {
+  createStripeCustomer = async () => {
     if (this.state.formData != null) {
       const params = {
-        // mandatory
+        // mandatory fields
         number: this.state.formData.values.number,
         expMonth: 11,
         expYear: 20,
         cvc: this.state.formData.values.cvc,
+        // optional fields
+        currency: 'vnd',
       };
       console.log('PHUC: PaymentStripe -> openStripe -> params', params);
 
-      const token = await Stripe.createTokenWithCardAsync(params);
-      console.log('PHUC: PaymentStripe -> openStripe -> token', token);
+      const result = await Stripe.createTokenWithCardAsync(params).catch(
+        (error) =>
+          console.log(
+            'PHUC: PaymentStripe -> createStripeCustomer -> error',
+            error,
+          ),
+      );
+      console.log(
+        'PHUC: PaymentStripe -> createStripeCustomer -> result',
+        result,
+      );
+
+      const {
+        card: { cardId },
+        tokenId: token,
+      } = result;
+      // console.log(
+      //   'PHUC: PaymentStripe -> createStripeCustomer -> cardId',
+      //   cardId,
+      // );
+      // console.log(
+      //   'PHUC: PaymentStripe -> createStripeCustomer -> token',
+      //   token,
+      // );
+
+      if (token) {
+        console.log('PHUC: PaymentStripe -> openStripe -> token', token);
+        const { email, userId, name } = this.state;
+        console.log(
+          'PHUC: PaymentStripe -> createStripeCustomer -> userId',
+          userId,
+        );
+        console.log(
+          'PHUC: PaymentStripe -> createStripeCustomer -> email',
+          email,
+        );
+        if (email != null && userId != null && name != null) {
+          const customer = await createCustomer(
+            email,
+            token,
+            userId,
+            name,
+            cardId,
+          );
+          console.log(
+            'PHUC: PaymentStripe -> createStripeCustomer -> customer',
+            customer,
+          );
+        }
+      }
     }
   };
 
@@ -170,7 +228,7 @@ export class PaymentStripe extends React.Component {
         <View style={{ alignItems: 'center', flex: 0.4 }}>
           <View style={{ flex: 1 }}>
             <TouchableOpacity
-              onPress={() => this.openStripe()}
+              onPress={() => this.createStripeCustomer()}
               style={{ marginHorizontal: 10 }}
             >
               <MuliText>
