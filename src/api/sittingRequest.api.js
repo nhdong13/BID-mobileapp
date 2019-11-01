@@ -44,11 +44,9 @@ export async function acceptBabysitter(requestId, sitterId) {
     },
   };
 
-  const response = await axios(options).catch((error) => console.log(error));
-  if (response) {
-    return response.data;
-  }
-  return { message: 'error trying to get data from response' };
+  const response = await axios(options);
+
+  return response;
 }
 
 export async function updateRequest(request) {

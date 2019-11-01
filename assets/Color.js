@@ -9,6 +9,7 @@ const colors = {
   done: '#2ecc71',
   ongoing: '#3498db',
   confirmed: '#e67e22',
+  overlap: '#9b59b6',
 };
 
 export default colors;
