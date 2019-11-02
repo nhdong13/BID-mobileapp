@@ -1,6 +1,6 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 
-console.log(HOST_ENDPOINT);
+console.log(HOST_ENDPOINT)
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
   baseUrl: `${url}/`,
@@ -18,6 +18,7 @@ const apiUrl = {
 export const babysitterAPI = {
   getProfile: `${url}/babysitters/`,
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
+  updateProfile: `${url}/babysitters/`,
 };
 
 export default apiUrl;
