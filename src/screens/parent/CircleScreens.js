@@ -78,14 +78,24 @@ export default class CircleScreens extends Component {
               style={{ flexDirection: 'row' }}
             >
               <Ionicons
-                name="ios-man"
+                name="ios-person"
                 size={24}
-                style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
                 Những phụ huynh mà tôi biết ({this.state.circle.length})
               </MuliText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginLeft: 'auto',
+                marginTop: 18,
+                color: colors.done,
+                marginRight: 10,
+              }}
+            >
+              <MuliText>Thêm</MuliText>
             </TouchableOpacity>
           </View>
         )}
@@ -118,9 +128,9 @@ export default class CircleScreens extends Component {
               style={{ flexDirection: 'row' }}
             >
               <Ionicons
-                name="ios-man"
+                name="ios-person"
                 size={24}
-                style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
@@ -158,9 +168,9 @@ export default class CircleScreens extends Component {
               style={{ flexDirection: 'row' }}
             >
               <Ionicons
-                name="ios-man"
+                name="ios-person"
                 size={24}
-                style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
@@ -193,29 +203,33 @@ export default class CircleScreens extends Component {
   }
 }
 CircleScreens.navigationOptions = {
-  header: null,
+  title: 'Vòng tròn tin tưởng',
 };
 const styles = StyleSheet.create({
   itemContainer: {
-    marginHorizontal: 15,
+    marginBottom: 10,
     backgroundColor: '#fff',
   },
   firstHeaderContainer: {
+    borderWidth: 0,
+    borderBottomWidth: 2,
+    borderColor: colors.gray,
     flexDirection: 'row',
-    marginHorizontal: 15,
-    marginTop: 35,
+    marginTop: 10,
     backgroundColor: '#fff',
-    height: 30,
+    height: 60,
   },
   headerContainer: {
+    borderColor: colors.gray,
+    borderWidth: 0,
+    borderBottomWidth: 2,
     flexDirection: 'row',
-    marginHorizontal: 15,
     marginTop: 6,
     backgroundColor: '#fff',
-    height: 30,
+    height: 60,
   },
   headerText: {
-    marginTop: 5,
+    marginTop: 18,
     fontSize: 15,
     color: colors.darkGreenTitle,
     marginLeft: 10,

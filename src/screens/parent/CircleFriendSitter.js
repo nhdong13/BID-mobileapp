@@ -63,14 +63,20 @@ export class CircleFriendSitter extends Component {
                   style={styles.icon}
                   color={colors.lightGreen}
                 />
-                <MuliText style={styles.bsitterName}> {item.distance} km </MuliText>
+                <MuliText style={styles.bsitterName}>
+                  {' '}
+                  {item.distance} km{' '}
+                </MuliText>
                 <Ionicons
                   name="ios-star"
                   size={24}
                   style={styles.icon}
                   color={colors.lightGreen}
                 />
-                <MuliText style={styles.bsitterName}> {item.averageRating} </MuliText>
+                <MuliText style={styles.bsitterName}>
+                  {' '}
+                  {item.averageRating}{' '}
+                </MuliText>
               </View>
             </View>
           </TouchableOpacity>
@@ -84,12 +90,14 @@ export default withNavigation(CircleFriendSitter);
 
 const styles = StyleSheet.create({
   bsitterContainer: {
-    marginVertical: 13,
+    marginVertical: 8,
+    marginLeft: 10,
   },
   bsitterItem: {
     flexDirection: 'row',
   },
   upperText: {
+    marginTop: 10,
     flexDirection: 'row',
     marginHorizontal: 10,
     marginLeft: 15,
@@ -104,18 +112,18 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   icon: {
-    marginBottom: -10,
+    marginTop: 3,
   },
   bsitterName: {
     fontSize: 18,
     fontWeight: '400',
     color: '#315F61',
-    marginRight: 10,
+    marginRight: 5,
   },
   sitterImage: {
-    width: 65,
-    height: 65,
-    borderRadius: 20,
-    resizeMode: 'contain',
+    width: 80,
+    height: 80,
+    borderRadius: 160 / 2,
+    overflow: 'hidden',
   },
 });

@@ -28,31 +28,34 @@ export class CircleItem extends Component {
   render() {
     const { item } = this.props;
     return (
-      <View key={item.userId} style={{ alignItems: 'center', marginLeft: 10 }}>
+      <View
+        key={item.userId}
+        style={{
+          alignItems: 'center',
+          marginHorizontal: 10,
+          marginVertical: 10,
+        }}
+      >
         <Image
           source={require('assets/images/Phuc.png')}
           style={{
             opacity: null,
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
+            marginBottom: 5,
             borderRadius: 120 / 2,
             overflow: 'hidden',
           }}
         />
         <View>
-          <View
+          <MuliText
             style={{
-              alignItems: 'center',
+              color: 'black',
             }}
           >
-            <MuliText
-              style={{
-                color: 'black',
-              }}
-            >
-              {item.friend.user.nickname}
-            </MuliText>
-          </View>
+            {item.friend.user.nickname}
+          </MuliText>
+
           {/* <CheckBox
             style={{
               marginTop: 5,
@@ -72,6 +75,4 @@ export class CircleItem extends Component {
 
 export default withNavigation(CircleItem);
 
-const styles = StyleSheet.create({
-  
-});
+const styles = StyleSheet.create({});
