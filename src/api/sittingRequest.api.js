@@ -124,6 +124,30 @@ export async function getRequests(userId) {
   return { message: 'error trying to get data from response' };
 }
 
+export async function getSitting(body) {
+  const userId = body.userId;
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+  const options = {
+    method: 'POST',
+    url: apiUrl.getSitting,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(body),
+  };
+
+  const response = await axios(options).catch((error) => {
+    if (userId != 0) console.log('PHUC: getRequests -> error', error);
+  });
+
+  if (response.data) {
+    return response.data;
+  }
+  return { message: 'error trying to get data from response' };
+}
 // eslint-disable-next-line no-unused-vars
 const groupByDate = (data, property) =>
   // group ngay tat ca request theo ngay

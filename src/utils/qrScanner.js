@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import apiUrl from './Connection';
+import { Platform } from '@unimodules/core';
 
 export class QRcodeScannerScreen extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export class QRcodeScannerScreen extends React.Component {
       scanned: false,
       content: '',
       userId: 0 || this.props.navigation.getParam('userId'),
+      isDone: false || this.props.navigation.getParam('isDone'),
     };
     console.log(
       'PHUC: QRcodeScannerScreen -> constructor -> userId',
@@ -67,6 +69,7 @@ export class QRcodeScannerScreen extends React.Component {
       },
       () => {
         if (this.state.scanned == true) {
+          if (Platform.OS != 'ios') {
           ToastAndroid.showWithGravity(
             'QR scanned success',
             ToastAndroid.LONG,
@@ -74,7 +77,12 @@ export class QRcodeScannerScreen extends React.Component {
             25,
             80,
           );
-          this.props.navigation.navigate('Home');
+          }
+          if (this.state.isDone) {
+            this.props.navigation.navigate('Feedback', {requestId: this.props.navigation.getParam('sittingId')});
+          } else {
+            this.props.navigation.navigate('Home');
+          }
         }
       },
     );

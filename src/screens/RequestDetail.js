@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -15,6 +16,7 @@ import { listByRequestAndStatus } from 'api/invitation.api';
 import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
 import { withNavigation } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast';
+import { createCharge } from 'api/payment.api';
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -57,6 +59,7 @@ export class RequestDetail extends Component {
           canCheckIn: resp.canCheckIn,
           canCheckOut: resp.canCheckOut,
           price: resp.totalPrice,
+          createUserId: resp.createdUser,
         });
       },
     );
@@ -92,6 +95,25 @@ export class RequestDetail extends Component {
       .catch((error) => console.log(error));
   };
 
+  onOpenQRwhenDone = (targetStatus) => {
+    const data = {
+      id: this.state.sittingRequestsID,
+      status: targetStatus,
+    };
+
+    this.props.navigation.navigate('QrScanner', {
+      userId: this.state.bsitter.id,
+      isDone: true,
+      sittingId: this.state.sittingRequestsID,
+    });
+
+    updateRequestStatus(data)
+      .then(() => {
+        // this.props.navigation.navigate('Home', { loading: false });
+      })
+      .catch((error) => console.log(error));
+  };
+
   getAcceptedInvitations = async () => {
     const data = await listByRequestAndStatus(
       this.state.sittingRequestsID,
@@ -103,18 +125,39 @@ export class RequestDetail extends Component {
     });
   };
 
-  acceptBabysitter = (sitterId) => {
-    acceptBabysitter(this.state.sittingRequestsID, sitterId)
-    .then((result) => {
-      this.props.navigation.navigate('Home');
-    }).catch((error) => {
-      if (error.response.status == 409) {
-        this.refs.toast.show(
-          'Đã có lỗi xảy ra khi chấp nhận người giữ trẻ này',
-          DURATION.LENGTH_LONG,
-        );
-      }
-    });
+  acceptBabysitter = (sitterId, name) => {
+    let msg = 'Bạn có chắc chắn chọn ' + name + ' không? \nBạn sẽ bị trừ ' + this.state.price + ' VND';
+    Alert.alert(
+      'Xác nhận thanh toán',
+      msg,
+      [
+        {
+          text: 'Hủy bỏ',
+          style: 'cancel',
+        },
+        {
+          text: 'Xác nhận',
+          onPress: () => {
+            // xác nhận thanh toán + accept babysitter
+            acceptBabysitter(this.state.sittingRequestsID, sitterId)
+              .then((result) => {
+                this.props.navigation.navigate('Home');
+                createCharge(this.state.price, this.state.createUserId);
+              }).catch((error) => {
+                if (error.response.status == 409) {
+                  // eslint-disable-next-line react/no-string-refs
+                  this.refs.toast.show(
+                    'Đã có lỗi xảy ra khi chấp nhận người giữ trẻ này',
+                    DURATION.LENGTH_LONG,
+                  );
+                }
+              });
+          }
+        },
+      ],
+      {cancelable: false},
+    );
+    
   };
 
   callDetail() {
@@ -439,7 +482,7 @@ export class RequestDetail extends Component {
                         </TouchableOpacity> */}
                           <TouchableOpacity
                             style={styles.inviteButton}
-                            onPress={() => this.acceptBabysitter(item.user.id)}
+                            onPress={() => this.acceptBabysitter(item.user.id, item.user.nickname)}
                           >
                             <MuliText
                               style={{ color: '#78ddb6', fontSize: 11 }}
@@ -510,7 +553,7 @@ export class RequestDetail extends Component {
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
-                  this.onOpenQR('DONE');
+                  this.onOpenQRwhenDone('DONE');
                 }}
               >
                 <MuliText style={{ color: '#8e44ad', fontSize: 11 }}>

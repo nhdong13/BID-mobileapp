@@ -13,6 +13,8 @@ import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App(props) {
   console.ignoredYellowBox = ['Remote debugger'];
+  console.ignoredYellowBox = true;
+  console.disableYellowBox = true;
 
   YellowBox.ignoreWarnings([
     'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, ' +

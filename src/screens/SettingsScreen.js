@@ -136,7 +136,9 @@ export default class SettingsScreen extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
+            <TouchableOpacity
+              style={styles.detailInformationContainer}
+              onPress={() => this.props.navigation.navigate('GetSitting')}>
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-timer"
