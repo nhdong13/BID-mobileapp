@@ -9,7 +9,7 @@ import AlertPro from 'react-native-alert-pro';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { getUser } from 'api/user.api';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { createCustomer, createCharge } from 'api/payment.api';
+import { createCustomer, createCharge, getCustomer } from 'api/payment.api';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 
 const styles = StyleSheet.create({
@@ -53,7 +53,9 @@ export class PaymentStripe extends React.Component {
     getUser().then((res) => {
       if (res.data) {
         const { nickname: name, email, id: userId } = res.data;
-        this.setState({ name, email, userId });
+        this.setState({ name, email, userId }, () => {
+          // this.getStripeCustomer();
+        });
       }
     });
     Stripe.setOptionsAsync({
@@ -151,13 +153,10 @@ export class PaymentStripe extends React.Component {
         tokenId: token,
       } = result;
 
-      if (token) {
+      if (token && cardId) {
+        console.log("PHUC: PaymentStripe -> createStripeCustomer -> cardId", cardId)
         console.log('PHUC: PaymentStripe -> openStripe -> token', token);
         const { email, userId, name } = this.state;
-        console.log(
-          'PHUC: PaymentStripe -> createStripeCustomer -> userId',
-          userId,
-        );
         console.log(
           'PHUC: PaymentStripe -> createStripeCustomer -> email',
           email,
@@ -180,7 +179,14 @@ export class PaymentStripe extends React.Component {
   };
 
   getStripeCustomer = async () => {
-
+    const { userId } = this.state;
+    if (userId != null) {
+      const customer = await getCustomer(userId);
+      console.log(
+        'PHUC: PaymentStripe -> getStripeCustomer -> customer',
+        customer,
+      );
+    }
   };
 
   render() {
@@ -236,7 +242,6 @@ export class PaymentStripe extends React.Component {
           <View
             style={{
               marginTop: 20,
-              // backgroundColor: 'green',
               flex: 1,
             }}
           >
