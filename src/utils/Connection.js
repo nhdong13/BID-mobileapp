@@ -20,4 +20,8 @@ export const babysitterAPI = {
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
 };
 
+export const circleAPI = {
+  getCircle: `${url}/circles/`,
+}
+
 export default apiUrl;
