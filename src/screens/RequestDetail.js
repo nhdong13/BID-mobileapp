@@ -15,6 +15,7 @@ import { listByRequestAndStatus } from 'api/invitation.api';
 import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
 import { withNavigation } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast';
+import { createCharge } from 'api/payment.api';
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -57,6 +58,7 @@ export class RequestDetail extends Component {
           canCheckIn: resp.canCheckIn,
           canCheckOut: resp.canCheckOut,
           price: resp.totalPrice,
+          createUserId: resp.createdUser,
         });
       },
     );
@@ -107,6 +109,7 @@ export class RequestDetail extends Component {
     acceptBabysitter(this.state.sittingRequestsID, sitterId)
     .then((result) => {
       this.props.navigation.navigate('Home');
+      createCharge(this.state.price, this.state.createUserId);
     }).catch((error) => {
       if (error.response.status == 409) {
         this.refs.toast.show(

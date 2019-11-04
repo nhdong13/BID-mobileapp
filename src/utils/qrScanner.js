@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import apiUrl from './Connection';
+import { Platform } from '@unimodules/core';
 
 export class QRcodeScannerScreen extends React.Component {
   constructor(props) {
@@ -67,6 +68,7 @@ export class QRcodeScannerScreen extends React.Component {
       },
       () => {
         if (this.state.scanned == true) {
+          if (Platform.OS != 'ios')
           ToastAndroid.showWithGravity(
             'QR scanned success',
             ToastAndroid.LONG,

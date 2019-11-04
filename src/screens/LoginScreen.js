@@ -43,6 +43,7 @@ class LoginScreen extends Component {
             });
           }
         } else {
+          if (Platform.OS != 'ios') 
           ToastAndroid.showWithGravity(
             'Wrong Username or Password',
             ToastAndroid.LONG,
