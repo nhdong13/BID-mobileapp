@@ -2,7 +2,6 @@ import axios from 'axios';
 import { retrieveToken } from 'utils/handleToken';
 import qs from 'qs';
 import apiUrl from 'utils/Connection';
-import moment from 'moment';
 
 export async function recommend(requestId, request) {
   const { token } = await retrieveToken();

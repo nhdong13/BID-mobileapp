@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
-import { StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
@@ -260,6 +260,7 @@ class CreateRequestScreen extends Component {
                   format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
+                  androidMode="spinner"
                   customStyles={{
                     dateInput: {
                       borderWidth: 0,
@@ -303,6 +304,7 @@ class CreateRequestScreen extends Component {
                   format="HH:mm"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
+                  androidMode="spinner"
                   customStyles={{
                     dateInput: {
                       borderWidth: 0,
@@ -419,7 +421,7 @@ class CreateRequestScreen extends Component {
                                     item.checked == null ||
                                     item.checked == false
                                       ? colors.gray
-                                      : (color = 'black'),
+                                      : 'black',
                                 }}
                               >
                                 {item.name}
@@ -431,7 +433,7 @@ class CreateRequestScreen extends Component {
                                       item.checked == null ||
                                       item.checked == false
                                         ? colors.gray
-                                        : (color = 'black'),
+                                        : 'black',
                                   }}
                                 >
                                   {item.age} tuổi
@@ -457,10 +459,10 @@ class CreateRequestScreen extends Component {
                                         : 'black',
                                   }}
                                   checked={
-                                    item.checked == null ||
-                                    item.checked == false
-                                      ? false
-                                      : true
+                                    !(
+                                      item.checked == null ||
+                                      item.checked == false
+                                    )
                                   }
                                 />
                               </View>
