@@ -64,24 +64,25 @@ class SitterHomeScreen extends Component {
     const data = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
-      const requestBody = {
-        id: data.userId,
-      };
-      Api.post('invitations/sitterInvitation', requestBody)
-        .then((res) => {
-          this.setState({ invitations: res });
-        })
-        .catch((error) =>
-          console.log(
-            'HomeScreen - getDataAccordingToRole - Invitations ' + error,
-          ),
-        );
+      if (this.props.isFocused) {
+        const requestBody = {
+          id: data.userId,
+        };
+        Api.post('invitations/sitterInvitation', requestBody)
+          .then((res) => {
+            this.setState({ invitations: res });
+          })
+          .catch((error) =>
+            console.log(
+              'HomeScreen - getDataAccordingToRole - Invitations ' + error,
+            ),
+          );
+      }
     }
   }
 
   getInvitationData = async () => {
     // get data for the babysitter (invitations)
-    this.setState({ loading: true });
     const requestBody = {
       id: this.state.userId,
     };
@@ -94,7 +95,6 @@ class SitterHomeScreen extends Component {
       .then((res) => {
         this.setState({
           invitations: res,
-          loading: false,
         });
       })
       .catch((error) =>

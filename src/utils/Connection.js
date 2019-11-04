@@ -21,4 +21,14 @@ export const babysitterAPI = {
   updateProfile: `${url}/babysitters/`,
 };
 
+export const userAPI = {
+  getUser: `${url}/users/`,
+};
+
+export const paymentAPI = {
+  createCustomer: `${url}/payment/customer/`,
+  getCustomer: `${url}/payment/customer/`,
+  createCharge: `${url}/payment/charge/`,
+};
+
 export default apiUrl;

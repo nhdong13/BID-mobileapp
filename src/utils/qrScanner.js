@@ -29,7 +29,9 @@ export class QRcodeScannerScreen extends React.Component {
 
   async componentDidUpdate(prevProps) {
     if (prevProps.isFocused != this.props.isFocused) {
-      this.triggerQr();
+      if (this.props.isFocused) {
+        this.triggerQr();
+      }
     }
   }
 
