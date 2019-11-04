@@ -55,7 +55,12 @@ const HomeStack = createStackNavigator(
         header: null,
       }),
     },
-    RequestDetail: RequestDetail,
+    RequestDetail: {
+      screen: RequestDetail,
+      navigationOptions: () => ({
+        title: 'Yêu cầu chi tiết',
+      }),
+    },
     CreateRequest: {
       screen: CreateRequestScreen,
       navigationOptions: () => ({
