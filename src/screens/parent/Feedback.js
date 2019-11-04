@@ -11,8 +11,9 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import { withNavigation } from 'react-navigation';
 import StarRating from 'react-native-star-rating';
+import colors from 'assets/Color';
 
-export class SittingDetail extends Component {
+export class Feedback extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,7 +58,7 @@ export class SittingDetail extends Component {
     };
     if (!this.state.isRated) {
       Api.post('feedback/', body);
-      this.setState({ starCount: rating });
+      this.setState({ starCount: rating, isRated: true });
     }
   }
 
@@ -144,7 +145,7 @@ export class SittingDetail extends Component {
             starStyle={{
               marginLeft: 10,
             }}
-            fullStarColor="#f6ff00"
+            fullStarColor={colors.lightGreen}
             starSize={30}
             disabled={false}
             maxStars={5}
@@ -157,9 +158,9 @@ export class SittingDetail extends Component {
   }
 }
 
-export default withNavigation(SittingDetail);
+export default withNavigation(Feedback);
 
-SittingDetail.navigationOptions = {
+Feedback.navigationOptions = {
   title: 'Yêu cầu chi tiết',
 };
 

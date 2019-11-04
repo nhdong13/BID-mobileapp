@@ -22,6 +22,9 @@ export const babysitterAPI = {
   updateProfile: `${url}/babysitters/`,
 };
 
+export const circleAPI = {
+  getCircle: `${url}/circles/`,
+}
 export const userAPI = {
   getUser: `${url}/users/`,
 };

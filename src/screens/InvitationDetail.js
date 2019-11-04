@@ -76,7 +76,6 @@ export default class InvitationDetail extends Component {
       id: this.state.invitationID,
       status: targetStatus,
     };
-    createCharge();
     updateInvitation(ivBody)
       .then(() => {
         this.props.navigation.navigate('Home', { loading: false });

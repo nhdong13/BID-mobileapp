@@ -69,7 +69,7 @@ export default class SittingList extends Component {
                     marginHorizontal: 20,
                     borderRadius: 20,
                   }}
-                  onPress={() => this.props.navigation.navigate('SittingDetail', { requestId: request.id })}
+                  onPress={() => this.props.navigation.navigate('Feedback', { requestId: request.id })}
                 >
                   <View style={{ height: 135 }}>
                     <View

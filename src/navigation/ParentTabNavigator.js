@@ -10,7 +10,7 @@ import ParentHomeScreen from 'screens/parent/ParentHomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
-import SittingDetail from 'screens/parent/RequestDetail';
+import Feedback from 'screens/parent/Feedback';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
@@ -120,7 +120,7 @@ const SettingsStack = createStackNavigator(
     ReportScreen: ReportScreen,
     Payment: PaymentStripe,
     GetSitting: SittingList,
-    SittingDetail: SittingDetail
+    Feedback: Feedback
 
   },
   config,
