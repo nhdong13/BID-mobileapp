@@ -20,6 +20,9 @@ export const babysitterAPI = {
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
 };
 
+export const circleAPI = {
+  getCircle: `${url}/circles/`,
+}
 export const userAPI = {
   getUser: `${url}/users/`,
 };
