@@ -4,12 +4,12 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
 import { CreditCardInput, CardView } from 'react-native-credit-card-input';
-import { FontAwesome5 } from '@expo/vector-icons';
 import AlertPro from 'react-native-alert-pro';
+// eslint-disable-next-line no-unused-vars
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { getUser } from 'api/user.api';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { createCustomer, createCharge, getCustomer } from 'api/payment.api';
+import { createCustomer, getCustomer } from 'api/payment.api';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 import Loader from 'utils/Loader';
 
@@ -49,15 +49,12 @@ export class PaymentStripe extends React.Component {
       expMonth: null,
       expYear: null,
       loading: false,
-      options: {
-        promptMessage: 'Finger Print Scanner',
-      },
+      textCancel: 'No',
     };
   }
 
   componentDidMount() {
     getUser().then((res) => {
-      this.setState({ loading: true });
       if (res.data) {
         const { nickname: name, email, id: userId } = res.data;
         this.setState({ name, email, userId }, () => {
@@ -76,57 +73,6 @@ export class PaymentStripe extends React.Component {
       androidPayMode: 'test',
     });
   }
-
-  checkDeviceForHardware = async () => {
-    const compatible = await LocalAuthentication.hasHardwareAsync();
-    if (!compatible) {
-      this.setState({ message: 'Your device does not supported finger scan' });
-      this.AlertPro.open();
-    } else {
-      this.startScanning();
-    }
-  };
-
-  startScanning = async () => {
-    this.setState({
-      title: 'Finger scanning',
-      message: 'put your finger on the sensor to lose $10, yeeeh yeeh',
-    });
-    this.AlertPro.open();
-    const result = await LocalAuthentication.authenticateAsync(
-      this.state.options,
-    );
-    if (result.success) {
-      // eslint-disable-next-line react/no-string-refs
-      const { userId } = this.state;
-      const charge = await createCharge(100000, userId);
-      console.log('PHUC: PaymentStripe -> startScanning -> charge', charge);
-      this.refs.toast.show(
-        'Payment successful, you have lost $10',
-        DURATION.LENGTH_LONG,
-      );
-      this.AlertPro.close();
-    } else {
-      this.refs.toast.show(
-        'Scan failed, please clean the sensor and try again',
-        DURATION.LENGTH_LONG,
-      );
-      this.AlertPro.close();
-    }
-  };
-
-  checkForBiometrics = async () => {
-    const records = await LocalAuthentication.isEnrolledAsync();
-    if (!records) {
-      this.setState({
-        title: 'FingerPrint not found',
-        message: 'Please try again or use password to proceed',
-      });
-      this.AlertPro.open();
-    } else {
-      this.startScanning();
-    }
-  };
 
   _onChange = (formData) => {
     if (formData.valid == true) {
@@ -182,27 +128,40 @@ export class PaymentStripe extends React.Component {
             cardId,
           );
 
-          if (customer) {
+          if (customer.code) {
             console.log(
               'PHUC: PaymentStripe -> createStripeCustomer -> customer',
               customer,
             );
+            this.setState({
+              title: customer.code,
+              message: customer.message,
+              textCancel: 'Try Again',
+            });
+            this.AlertPro.open();
+          } else {
+            this.setState({
+              title: 'Add Success',
+              message: 'your card have been added',
+              textCancel: 'Ok',
+            });
+            this.AlertPro.open();
           }
         }
       }
       this.setState({ loading: false });
     }
+    this.setState({ loading: false });
   };
 
   getStripeCustomer = async () => {
     const { userId } = this.state;
     if (userId != null) {
-      this.setState({ loading: true });
-      const { data: customer } = await getCustomer(userId).catch((error) =>
-        console.log('PHUC: getStripeCustomer -> error', error),
-      );
+      const { data: customer } = await getCustomer(userId).catch((error) => {
+        console.log('PHUC: getStripeCustomer -> error', error);
+        this.setState({ loading: false });
+      });
       if (customer) {
-        console.log('PHUC: getStripeCustomer -> customer', customer);
         const {
           id: cardId,
           brand,
@@ -220,6 +179,7 @@ export class PaymentStripe extends React.Component {
         });
       }
     }
+    this.setState({ loading: false });
   };
 
   render() {
@@ -236,6 +196,7 @@ export class PaymentStripe extends React.Component {
           showConfirm={false}
           closeOnPressMask={false}
           onClose={() => LocalAuthentication.cancelAuthenticate()}
+          textCancel={this.state.textCancel}
           customStyles={{
             mask: {
               backgroundColor: 'transparent',
@@ -280,7 +241,6 @@ export class PaymentStripe extends React.Component {
                   height: 150,
                   marginHorizontal: 30,
                   alignItems: 'center',
-                  backgroundColor: 'red',
                 }}
               >
                 <TouchableOpacity
@@ -292,23 +252,6 @@ export class PaymentStripe extends React.Component {
               </View>
             </View>
           )}
-        </View>
-
-        <View style={{ alignItems: 'center', flex: 0.4 }}>
-          <View
-            style={{
-              marginTop: 20,
-              flex: 1,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => this.checkDeviceForHardware()}
-              style={{ alignItems: 'center' }}
-            >
-              <FontAwesome5 name="fingerprint" size={30} color="black" />
-              <MuliText>Tap here to Scan finger print</MuliText>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     );

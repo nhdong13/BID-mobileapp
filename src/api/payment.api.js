@@ -23,10 +23,11 @@ export async function createCustomer(email, token, userId, name, cardId) {
   const response = await axios(options)
     .then((res) => res)
     .catch((error) => {
-      if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-      } else console.log('Create Customer error' + error);
+      console.log(error.response.data.raw);
+      return {
+        message: error.response.data.raw.message,
+        code: error.response.data.raw.code,
+      };
     });
   return response;
 }
