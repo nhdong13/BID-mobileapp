@@ -33,7 +33,7 @@ class LoginScreen extends Component {
       },
       message: '',
       title: '',
-      cancelText: 'No',
+      textCancel: 'Close',
     };
   }
 
@@ -88,7 +88,11 @@ class LoginScreen extends Component {
   checkDeviceForHardware = async () => {
     const compatible = await LocalAuthentication.hasHardwareAsync();
     if (!compatible) {
-      this.setState({ message: 'Your device does not supported finger scan' });
+      this.setState({
+        title: 'Hardware not found',
+        message: 'Your device does not supported finger scan',
+        textCancel: 'Close',
+      });
       this.AlertPro.open();
     } else {
       this.startScanning();
@@ -99,6 +103,7 @@ class LoginScreen extends Component {
     this.setState({
       title: 'Quét vân tay',
       message: 'Chạm tay vào cảm biến để thực hiện đăng nhập',
+      textCancel: 'Quay lại'
     });
     this.AlertPro.open();
     const result = await LocalAuthentication.authenticateAsync(
@@ -123,6 +128,7 @@ class LoginScreen extends Component {
       this.setState({
         title: 'FingerPrint not found',
         message: 'Please try again or use password to proceed',
+        textCancel: 'Try Again'
       });
       this.AlertPro.open();
     } else {
