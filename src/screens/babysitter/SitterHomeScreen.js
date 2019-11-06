@@ -64,18 +64,20 @@ class SitterHomeScreen extends Component {
     const data = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
-      const requestBody = {
-        id: data.userId,
-      };
-      Api.post('invitations/sitterInvitation', requestBody)
-        .then((res) => {
-          this.setState({ invitations: res });
-        })
-        .catch((error) =>
-          console.log(
-            'HomeScreen - getDataAccordingToRole - Invitations ' + error,
-          ),
-        );
+      if (this.props.isFocused) {
+        const requestBody = {
+          id: data.userId,
+        };
+        Api.post('invitations/sitterInvitation', requestBody)
+          .then((res) => {
+            this.setState({ invitations: res });
+          })
+          .catch((error) =>
+            console.log(
+              'HomeScreen - getDataAccordingToRole - Invitations ' + error,
+            ),
+          );
+      }
     }
   }
 

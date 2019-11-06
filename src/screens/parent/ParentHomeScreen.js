@@ -58,9 +58,10 @@ class ParentHomeScreen extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    // console.log('PHUC: componif (res) entDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
-      await this.getRequestData();
+      if (this.props.isFocused) {
+        await this.getRequestData();
+      }
     }
   }
 

@@ -32,13 +32,16 @@ export async function createCustomer(email, token, userId, name, cardId) {
 }
 
 export async function getCustomer(userId) {
+  const data = {
+    userId,
+  };
   const options = {
     method: 'POST',
     url: paymentAPI.getCustomer,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: qs.stringify(userId),
+    data: qs.stringify(data),
   };
 
   const response = await axios(options)

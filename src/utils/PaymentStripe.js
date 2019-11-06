@@ -56,10 +56,9 @@ export class PaymentStripe extends React.Component {
       }
     });
     Stripe.setOptionsAsync({
-      publishableKey: 'pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU', // Your key
+      publishableKey: 'pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU',
       androidPayMode: 'test',
     });
-    this.checkDeviceForHardware();
   }
 
   checkDeviceForHardware = async () => {
@@ -67,11 +66,12 @@ export class PaymentStripe extends React.Component {
     if (!compatible) {
       this.setState({ message: 'Your device does not supported finger scan' });
       this.AlertPro.open();
+    } else {
+      this.startScanning();
     }
   };
 
   startScanning = async () => {
-    console.log('go to start scanning');
     this.setState({
       title: 'Finger scanning',
       message: 'put your finger on the sensor to lose $10, yeeeh yeeh',
@@ -149,14 +149,6 @@ export class PaymentStripe extends React.Component {
         card: { cardId },
         tokenId: token,
       } = result;
-      // console.log(
-      //   'PHUC: PaymentStripe -> createStripeCustomer -> cardId',
-      //   cardId,
-      // );
-      // console.log(
-      //   'PHUC: PaymentStripe -> createStripeCustomer -> token',
-      //   token,
-      // );
 
       if (token) {
         console.log('PHUC: PaymentStripe -> openStripe -> token', token);
@@ -185,6 +177,10 @@ export class PaymentStripe extends React.Component {
       }
     }
   };
+
+  getStripeCustomer = async () => {
+    
+  }
 
   render() {
     return (
@@ -244,7 +240,7 @@ export class PaymentStripe extends React.Component {
             }}
           >
             <TouchableOpacity
-              onPress={() => this.startScanning()}
+              onPress={() => this.checkDeviceForHardware()}
               style={{ alignItems: 'center' }}
             >
               <FontAwesome5 name="fingerprint" size={30} color="black" />
