@@ -50,7 +50,7 @@ export async function getCustomer(userId) {
       if (error.response) {
         console.log(error.response.data);
         console.log(error.response.status);
-      } else console.log('Create Customer error' + error);
+      } else console.log('Get Customer error' + error);
     });
   return response;
 }

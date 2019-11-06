@@ -11,6 +11,7 @@ import { getUser } from 'api/user.api';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { createCustomer, createCharge, getCustomer } from 'api/payment.api';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
+import Loader from 'utils/Loader';
 
 const styles = StyleSheet.create({
   switch: {
@@ -43,6 +44,12 @@ export class PaymentStripe extends React.Component {
       name: null,
       email: null,
       userId: null,
+      cardId: null,
+      brand: null,
+      last4: null,
+      expMonth: null,
+      expYear: null,
+      loading: false,
       options: {
         promptMessage: 'Finger Print Scanner',
       },
@@ -51,10 +58,11 @@ export class PaymentStripe extends React.Component {
 
   componentDidMount() {
     getUser().then((res) => {
+      this.setState({ loading: true });
       if (res.data) {
         const { nickname: name, email, id: userId } = res.data;
         this.setState({ name, email, userId }, () => {
-          // this.getStripeCustomer();
+          this.getStripeCustomer();
         });
       }
     });
@@ -125,12 +133,16 @@ export class PaymentStripe extends React.Component {
 
   createStripeCustomer = async () => {
     if (this.state.formData != null) {
+      const {
+        values: { number, cvc, expiry },
+      } = this.state.formData;
+
       const params = {
         // mandatory fields
-        number: this.state.formData.values.number,
-        expMonth: 11,
-        expYear: 20,
-        cvc: this.state.formData.values.cvc,
+        number: number,
+        expMonth: parseInt(expiry.split('/')[0], 10),
+        expYear: parseInt(expiry.split('/')[1], 10),
+        cvc: cvc,
         // optional fields
         currency: 'vnd',
       };
@@ -143,10 +155,6 @@ export class PaymentStripe extends React.Component {
             error,
           ),
       );
-      console.log(
-        'PHUC: PaymentStripe -> createStripeCustomer -> result',
-        result,
-      );
 
       const {
         card: { cardId },
@@ -154,13 +162,12 @@ export class PaymentStripe extends React.Component {
       } = result;
 
       if (token && cardId) {
-        console.log("PHUC: PaymentStripe -> createStripeCustomer -> cardId", cardId)
-        console.log('PHUC: PaymentStripe -> openStripe -> token', token);
+        // console.log(
+        //   'PHUC: PaymentStripe -> createStripeCustomer -> cardId',
+        //   cardId,
+        // );
+        // console.log('PHUC: PaymentStripe -> openStripe -> token', token);
         const { email, userId, name } = this.state;
-        console.log(
-          'PHUC: PaymentStripe -> createStripeCustomer -> email',
-          email,
-        );
         if (email != null && userId != null && name != null) {
           const customer = await createCustomer(
             email,
@@ -181,11 +188,25 @@ export class PaymentStripe extends React.Component {
   getStripeCustomer = async () => {
     const { userId } = this.state;
     if (userId != null) {
-      const customer = await getCustomer(userId);
-      console.log(
-        'PHUC: PaymentStripe -> getStripeCustomer -> customer',
-        customer,
+      const { data: customer } = await getCustomer(userId).catch((error) =>
+        console.log('PHUC: getStripeCustomer -> error', error),
       );
+      console.log('PHUC: getStripeCustomer -> customer', customer);
+      const {
+        id: cardId,
+        brand,
+        last4,
+        exp_year: expYear,
+        exp_month: expMonth,
+      } = customer;
+      this.setState({
+        cardId,
+        brand,
+        last4,
+        expYear,
+        expMonth,
+        loading: false,
+      });
     }
   };
 
@@ -214,18 +235,35 @@ export class PaymentStripe extends React.Component {
             },
           }}
         />
-
+        <Loader loading={this.state.loading} />
         <View style={{ flex: 0.6 }}>
-          <CreditCardInput
-            requiresCVC
-            labelStyle={styles.label}
-            inputStyle={styles.input}
-            validColor="black"
-            invalidColor="red"
-            placeholderColor="darkgray"
-            onFocus={this._onFocus}
-            onChange={this._onChange}
-          />
+          {this.state.cardId != null ? (
+            <View>
+              <MuliText>Thẻ tín dụng của bạn</MuliText>
+              <CardView
+                number={`**** **** **** ${this.state.last4}`}
+                brand={this.state.brand}
+                name="."
+                expiry={`${this.state.expMonth}/${this.state.expYear}`}
+              />
+            </View>
+          ) : (
+            <View>
+              <MuliText style={{ marginHorizontal: 10 }}>
+                Liên kết thẻ tín dụng để thực hiện thanh toán
+              </MuliText>
+              <CreditCardInput
+                requiresCVC
+                labelStyle={styles.label}
+                inputStyle={styles.input}
+                validColor="black"
+                invalidColor="red"
+                placeholderColor="darkgray"
+                onFocus={this._onFocus}
+                onChange={this._onChange}
+              />
+            </View>
+          )}
         </View>
 
         <View style={{ alignItems: 'center', flex: 0.4 }}>
