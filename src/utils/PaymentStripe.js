@@ -3,13 +3,14 @@ import * as React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
-import { CreditCardInput } from 'react-native-credit-card-input';
+import { CreditCardInput, CardView } from 'react-native-credit-card-input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import AlertPro from 'react-native-alert-pro';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { getUser } from 'api/user.api';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { createCustomer, createCharge } from 'api/payment.api';
+import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 
 const styles = StyleSheet.create({
   switch: {
@@ -56,7 +57,7 @@ export class PaymentStripe extends React.Component {
       }
     });
     Stripe.setOptionsAsync({
-      publishableKey: 'pk_test_HkQGKLlxWS5HRfm9YhXEuXU100bBNr5ikU',
+      publishableKey: stripeKey,
       androidPayMode: 'test',
     });
   }
@@ -179,8 +180,8 @@ export class PaymentStripe extends React.Component {
   };
 
   getStripeCustomer = async () => {
-    
-  }
+
+  };
 
   render() {
     return (
