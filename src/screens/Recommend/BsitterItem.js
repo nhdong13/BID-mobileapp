@@ -4,14 +4,23 @@ import moment from 'moment';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { createInvitation } from 'api/invitation.api';
+import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
 import images from 'assets/images/images';
 import colors from 'assets/Color';
 import { withNavigation } from 'react-navigation';
+import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 
 export class Bsitter extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    Stripe.setOptionsAsync({
+      publishableKey: stripeKey,
+      androidPayMode: 'test',
+    });
   }
 
   calAge = (dateOfBirth) => {
@@ -26,21 +35,27 @@ export class Bsitter extends Component {
   };
 
   sendInvitation = async (receiverId) => {
+    console.log('it go here');
     const { requestId, request } = this.props;
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
       receiver: receiverId,
     };
-
-    // console.log(invitation);
-    await createInvitation(requestId, invitation, request)
-      .then((response) => {
-        console.log(response);
-        this.props.changeInviteStatus(receiverId);
-        this.props.setRequestId(response.data.newRequest.id);
-      })
-      .catch((error) => console.log('aaa', error));
+    const token = await Stripe.paymentRequestWithCardFormAsync().catch(
+      (error) => console.log(error),
+    );
+    console.log('PHUC: Bsitter -> sendInvitation -> token', token);
+    // if (token) {
+    //   console.log(invitation);
+    //   await createInvitation(requestId, invitation, request)
+    //     .then((response) => {
+    //       console.log(response);
+    //       this.props.changeInviteStatus(receiverId);
+    //       this.props.setRequestId(response.data.newRequest.id);
+    //     })
+    //     .catch((error) => console.log('aaa', error));
+    // }
   };
 
   changeStateOnGoBack(receiverId, requestId) {
