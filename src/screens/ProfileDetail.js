@@ -62,29 +62,19 @@ export default class ProfileDetail extends Component {
   render() {
     return (
       <ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 25,
-            marginTop: 25,
-          }}
-        >
-          <View>
-            <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              <MuliText style={{ marginLeft: 10 }}>
-                {this.state.name} - {moment().diff(this.state.dob, 'years')} -
-              </MuliText>
-              <Ionicons
-                name={this.state.gender == 'MALE' ? 'ios-male' : 'ios-female'}
-                size={20}
-                style={{ marginLeft: 5 }}
-                color={
-                  this.state.gender == 'MALE'
-                    ? colors.blueAqua
-                    : colors.pinkLight
-                }
-              />
-            </View>
+        <View>
+          <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <MuliText style={{ marginLeft: 25 }}>
+              {this.state.name} - {moment().diff(this.state.dob, 'years')} -
+            </MuliText>
+            <Ionicons
+              name={this.state.gender == 'MALE' ? 'ios-male' : 'ios-female'}
+              size={20}
+              style={{ marginLeft: 5 }}
+              color={
+                this.state.gender == 'MALE' ? colors.blueAqua : colors.pinkLight
+              }
+            />
           </View>
         </View>
         <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>
@@ -103,7 +93,6 @@ export default class ProfileDetail extends Component {
         ) : (
           <View />
         )}
-
         {this.state.roleId == 2 && (
           <View style={styles.detailContainer}>
             {this.state.child != null ? (
@@ -119,9 +108,8 @@ export default class ProfileDetail extends Component {
                         style={styles.profileImg}
                       />
                       <View style={styles.name}>
-                        <MuliText>
-                          {item.name} - {item.age} year olds
-                        </MuliText>
+                        <MuliText>{item.name}</MuliText>
+                        <MuliText>{item.age} tuổi</MuliText>
                       </View>
                     </View>
                   ))}
