@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
@@ -88,33 +88,40 @@ export default class RecommendScreen extends Component {
   // netstat -ano | findstr 3000
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
         <View style={styles.container}>
           {this.state.recommendList.length > 0 ||
           this.state.listMatched.length > 0 ? (
             <View>
               {this.state.recommendList.length > 0 && (
                 <View style={styles.sectionContainer}>
-                  <View style={styles.headerSection}>
-                    <Ionicons
-                      name={
-                        this.state.isModalVisible
-                          ? 'ios-arrow-down'
-                          : 'ios-arrow-up'
-                      }
-                      size={24}
-                      style={{ marginBottom: -6, marginLeft: 20 }}
-                      color="#315f61"
-                      onPress={() => {
-                        this.callRecommend();
-                      }}
-                    />
-                    <MuliText
-                      style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-                    >
-                      Đề nghị ({this.state.recommendCount})
-                    </MuliText>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.callRecommend();
+                    }}
+                  >
+                    <View style={styles.headerSection}>
+                      <Ionicons
+                        name={
+                          this.state.isModalVisible
+                            ? 'ios-arrow-down'
+                            : 'ios-arrow-up'
+                        }
+                        size={24}
+                        style={{ marginBottom: -6, marginLeft: 20 }}
+                        color="#315f61"
+                      />
+                      <MuliText
+                        style={{
+                          fontSize: 18,
+                          color: '#315f61',
+                          marginLeft: 10,
+                        }}
+                      >
+                        Đề nghị ({this.state.recommendCount})
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
                   {this.state.isModalVisible && (
                     <ScrollView style={styles.sectionContainer2}>
                       {this.state.recommendList &&
@@ -140,26 +147,33 @@ export default class RecommendScreen extends Component {
 
               {this.state.listMatched.length != 0 && (
                 <View style={styles.sectionContainer}>
-                  <View style={styles.headerSection}>
-                    <Ionicons
-                      name={
-                        this.state.isModalVisible2
-                          ? 'ios-arrow-down'
-                          : 'ios-arrow-up'
-                      }
-                      size={24}
-                      style={{ marginBottom: -6, marginLeft: 20 }}
-                      color="#315f61"
-                      onPress={() => {
-                        this.callRecommend2();
-                      }}
-                    />
-                    <MuliText
-                      style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-                    >
-                      Người giữ trẻ phù hợp ({this.state.matchedCount})
-                    </MuliText>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.callRecommend2();
+                    }}
+                  >
+                    <View style={styles.headerSection}>
+                      <Ionicons
+                        name={
+                          this.state.isModalVisible2
+                            ? 'ios-arrow-down'
+                            : 'ios-arrow-up'
+                        }
+                        size={24}
+                        style={{ marginBottom: -6, marginLeft: 20 }}
+                        color="#315f61"
+                      />
+                      <MuliText
+                        style={{
+                          fontSize: 18,
+                          color: '#315f61',
+                          marginLeft: 10,
+                        }}
+                      >
+                        Người giữ trẻ phù hợp ({this.state.matchedCount})
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
                   {this.state.isModalVisible2 && (
                     <ScrollView style={styles.sectionContainer2}>
                       {this.state.listMatched &&
@@ -207,6 +221,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 10,
+    backgroundColor: '#dfe6e9',
   },
   textInput: {
     borderColor: '#EEEEEE',
@@ -229,6 +244,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   headerSection: {
+    backgroundColor: 'white',
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: '#bdc3c7',
