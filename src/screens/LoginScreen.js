@@ -13,6 +13,10 @@ import {
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
+import { FontAwesome5 } from '@expo/vector-icons';
+import colors from 'assets/Color';
+import * as LocalAuthentication from 'expo-local-authentication';
+import AlertPro from 'react-native-alert-pro';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -24,6 +28,12 @@ class LoginScreen extends Component {
       isModalVisible: false,
       roleId: null,
       userId: null,
+      options: {
+        promptMessage: 'Finger Print Scanner',
+      },
+      message: '',
+      title: '',
+      textCancel: 'Close',
     };
   }
 
@@ -42,8 +52,7 @@ class LoginScreen extends Component {
               userId: this.state.userId,
             });
           }
-        } else {
-          if (Platform.OS != 'ios') 
+        } else if (Platform.OS != 'ios') {
           ToastAndroid.showWithGravity(
             'Wrong Username or Password',
             ToastAndroid.LONG,
@@ -76,6 +85,57 @@ class LoginScreen extends Component {
     }
   };
 
+  checkDeviceForHardware = async () => {
+    const compatible = await LocalAuthentication.hasHardwareAsync();
+    if (!compatible) {
+      this.setState({
+        title: 'Hardware not found',
+        message: 'Your device does not supported finger scan',
+        textCancel: 'Close',
+      });
+      this.AlertPro.open();
+    } else {
+      this.startScanning();
+    }
+  };
+
+  startScanning = async () => {
+    this.setState({
+      title: 'Quét vân tay',
+      message: 'Chạm tay vào cảm biến để thực hiện đăng nhập',
+      textCancel: 'Quay lại'
+    });
+    this.AlertPro.open();
+    const result = await LocalAuthentication.authenticateAsync(
+      this.state.options,
+    );
+    if (result.success) {
+      // eslint-disable-next-line react/no-string-refs
+      this.props.navigation.navigate('AuthLoading', {
+        roleId: this.state.roleId,
+        userId: this.state.userId,
+      });
+
+      this.AlertPro.close();
+    } else {
+      this.AlertPro.close();
+    }
+  };
+
+  checkForBiometrics = async () => {
+    const records = await LocalAuthentication.isEnrolledAsync();
+    if (!records) {
+      this.setState({
+        title: 'FingerPrint not found',
+        message: 'Please try again or use password to proceed',
+        textCancel: 'Try Again'
+      });
+      this.AlertPro.open();
+    } else {
+      this.startScanning();
+    }
+  };
+
   render() {
     return (
       <KeyboardAvoidingView
@@ -83,6 +143,28 @@ class LoginScreen extends Component {
         keyboardVerticalOffset={60}
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       >
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onCancel={() => this.AlertPro.close()}
+          title={this.state.title}
+          message={this.state.message}
+          showConfirm={false}
+          closeOnPressMask={false}
+          onClose={() => LocalAuthentication.cancelAuthenticate()}
+          textCancel={this.state.textCancel}
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+          }}
+        />
         <View style={styles.welcomeContainer}>
           <Image
             source={require('assets/images/logo.png')}
@@ -125,6 +207,7 @@ class LoginScreen extends Component {
             </MuliText>
           </TouchableOpacity>
         </View>
+
         {this.state.isModalVisible ? (
           <Modal
             isVisible={this.state.isModalVisible}
@@ -157,12 +240,22 @@ class LoginScreen extends Component {
               </View>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  style={styles.submitButton}
+                  style={styles.submitOTPButton}
                   onPress={this.onSubmitOTP}
                 >
                   <MuliText style={{ color: 'white', fontSize: 16 }}>
                     Gửi
                   </MuliText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.checkDeviceForHardware()}
+                  style={{ alignItems: 'center' }}
+                >
+                  <FontAwesome5
+                    name="fingerprint"
+                    size={30}
+                    color={colors.darkGreenTitle}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -202,9 +295,19 @@ const styles = StyleSheet.create({
     fontFamily: 'muli',
   },
   submitButton: {
-    width: 300,
+    width: 250,
     height: 60,
     padding: 10,
+    backgroundColor: '#315F61',
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  submitOTPButton: {
+    width: 250,
+    height: 60,
+    padding: 10,
+    marginRight: 10,
     backgroundColor: '#315F61',
     borderRadius: 30,
     alignItems: 'center',
@@ -216,6 +319,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingTop: 30,
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
   welcomeContainer: {
     alignItems: 'center',

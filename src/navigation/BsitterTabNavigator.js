@@ -12,6 +12,8 @@ import PaymentStripe from 'utils/PaymentStripe';
 import ProfileDetail from 'screens/ProfileDetail';
 import SettingsScreen from '../screens/SettingsScreen';
 import TabBarIcon from '../components/TabBarIcon';
+import SittingList from 'screens/parent/SittingList';
+
 
 const config = Platform.select({
   default: {},
@@ -49,6 +51,7 @@ const SettingsStack = createStackNavigator(
     Settings: SettingsScreen,
     Profile: ProfileDetail,
     Payment: PaymentStripe,
+    GetSitting: SittingList
   },
   config,
 );
