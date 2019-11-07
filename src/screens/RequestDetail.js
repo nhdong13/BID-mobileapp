@@ -507,7 +507,7 @@ export class RequestDetail extends Component {
                             }
                           >
                             <MuliText
-                              style={{ color: '#78ddb6', fontSize: 11 }}
+                              style={{ color: 'white', fontSize: 11 }}
                             >
                               Chấp nhận
                             </MuliText>
