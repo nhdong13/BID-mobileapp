@@ -206,7 +206,6 @@ export default class RecommendScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#dfe6e9',
     paddingBottom: 10,
   },
   textInput: {
@@ -222,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 20,
     marginTop: 10,
-    height: 300,
+    marginBottom: 10,
   },
   sectionContainer: {
     backgroundColor: 'white',
