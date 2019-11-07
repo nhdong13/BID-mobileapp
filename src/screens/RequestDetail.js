@@ -5,7 +5,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -127,7 +127,12 @@ export class RequestDetail extends Component {
   };
 
   acceptBabysitter = (sitterId, name) => {
-    let msg = 'Bạn có chắc chắn chọn ' + name + ' không? \nBạn sẽ bị trừ ' + formater(this.state.price) + ' VND';
+    let msg =
+      'Bạn có chắc chắn chọn ' +
+      name +
+      ' không? \nBạn sẽ bị trừ ' +
+      formater(this.state.price) +
+      ' VND';
     Alert.alert(
       'Xác nhận thanh toán',
       msg,
@@ -144,21 +149,29 @@ export class RequestDetail extends Component {
               .then((result) => {
                 this.props.navigation.navigate('Home');
                 createCharge(this.state.price, this.state.createUserId);
-              }).catch((error) => {
+              })
+              .catch((error) => {
                 if (error.response.status == 409) {
                   // eslint-disable-next-line react/no-string-refs
                   this.refs.toast.show(
-                    'Đã có lỗi xảy ra khi chấp nhận người giữ trẻ này',
+                    'Người giữ trẻ này không còn phù hợp với yêu cầu của bạn.',
                     DURATION.LENGTH_LONG,
                   );
+
+                  const errorSitterId = error.response.data;
+
+                  this.setState((prevState) => ({
+                    invitations: prevState.invitations.filter(
+                      (el) => el.receiver != errorSitterId,
+                    )
+                  }));
                 }
               });
-          }
+          },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
-    
   };
 
   callDetail() {
@@ -483,7 +496,12 @@ export class RequestDetail extends Component {
                         </TouchableOpacity> */}
                           <TouchableOpacity
                             style={styles.inviteButton}
-                            onPress={() => this.acceptBabysitter(item.user.id, item.user.nickname)}
+                            onPress={() =>
+                              this.acceptBabysitter(
+                                item.user.id,
+                                item.user.nickname,
+                              )
+                            }
                           >
                             <MuliText
                               style={{ color: '#78ddb6', fontSize: 11 }}
