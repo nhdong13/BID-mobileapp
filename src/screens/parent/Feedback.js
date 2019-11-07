@@ -12,6 +12,7 @@ import Api from 'api/api_helper';
 import { withNavigation } from 'react-navigation';
 import StarRating from 'react-native-star-rating';
 import colors from 'assets/Color';
+import { formater } from 'utils/MoneyFormater';
 
 export class Feedback extends Component {
   constructor(props) {
@@ -94,7 +95,7 @@ export class Feedback extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.price} VND
+                {formater(this.state.price)} VND
               </MuliText>
             </View>
             <View style={styles.informationText}>

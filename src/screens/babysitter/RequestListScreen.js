@@ -13,6 +13,7 @@ import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../../api/api_helper';
+import {formater} from 'utils/MoneyFormater';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -111,7 +112,7 @@ class HomeScreen extends Component {
                             {request.status}
                           </MuliText>
                         </View>
-                        <MuliText>{request.totalPrice} VND</MuliText>
+                        <MuliText>{formater(request.totalPrice)} VND</MuliText>
                       </View>
                     </View>
                   </View>
