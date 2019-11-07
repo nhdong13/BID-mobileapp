@@ -446,7 +446,6 @@ class CreateRequestScreen extends Component {
               <View />
             )}
           </View>
-          <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.input}>
               <Ionicons
