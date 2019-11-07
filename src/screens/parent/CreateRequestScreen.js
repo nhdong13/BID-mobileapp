@@ -344,7 +344,6 @@ class CreateRequestScreen extends Component {
               Địa chỉ: {this.state.sittingAddress}
             </MuliText>
           </View>
-          <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
           <View style={{ flexDirection: 'row' }}>
             {this.state.child != null ? (
               <View style={styles.detailContainerChild}>
