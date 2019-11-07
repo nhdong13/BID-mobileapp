@@ -9,17 +9,38 @@ import images from 'assets/images/images';
 import colors from 'assets/Color';
 import { withNavigation } from 'react-navigation';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
+import Api from 'api/api_helper';
+import { retrieveToken } from 'utils/handleToken';
+import {createCustomer, createCharge} from 'api/payment.api';
 
 export class Bsitter extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userId: 0,
+      email: '',
+      name: '',
+      isCreated: false,
+      price: 0,
+    };
   }
 
   componentDidMount() {
     Stripe.setOptionsAsync({
       publishableKey: stripeKey,
       androidPayMode: 'test',
+    });
+    this.getUserData();
+  }
+
+  getUserData() {
+    retrieveToken().then(res => {
+      const { userId } = res;
+      this.setState({ userId });
+
+      Api.get('users/' + userId.toString()).then(res => {
+        this.setState({ email: res.email, name: res.nickname });
+      });
     });
   }
 
@@ -42,21 +63,47 @@ export class Bsitter extends Component {
       status: 'PENDING',
       receiver: receiverId,
     };
+    // console.log(request);
+    await Api.get('trackings/' + this.state.userId).then(res => {
+      // console.log(res.customerId);
+      if (res.customerId == null || res.cardId == null) {
+        this.createCard().then(res => {
+          if (res) {
+            createInvitation(requestId, invitation, request)
+              .then((response) => {
+                console.log(response);
+                this.props.changeInviteStatus(receiverId);
+                this.props.setRequestId(response.data.newRequest.id);
+            }).catch((error) => console.log('aaa', error));
+          }
+        });
+      } else {
+        createInvitation(requestId, invitation, request)
+          .then((response) => {
+            console.log(response);
+            this.props.changeInviteStatus(receiverId);
+            this.props.setRequestId(response.data.newRequest.id);
+        }).catch((error) => console.log('aaa', error));
+      }
+    });
+  };
+
+  createCard = async () => {
     const token = await Stripe.paymentRequestWithCardFormAsync().catch(
       (error) => console.log(error),
     );
-    console.log('PHUC: Bsitter -> sendInvitation -> token', token);
-    // if (token) {
-    //   console.log(invitation);
-    //   await createInvitation(requestId, invitation, request)
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.props.changeInviteStatus(receiverId);
-    //       this.props.setRequestId(response.data.newRequest.id);
-    //     })
-    //     .catch((error) => console.log('aaa', error));
-    // }
-  };
+    // console.log('PHUC: Bsitter -> sendInvitation -> token', token);
+    if (token) {
+      // console.log(invitation);
+      // console.log(this.state.email,
+      //   token.tokenId, this.state.userId, this.state.name, token.card.cardId);
+      createCustomer(this.state.email,
+        token.tokenId, this.state.userId, this.state.name, token.card.cardId).then(res => {
+
+        });
+    }
+    return token;
+  }
 
   changeStateOnGoBack(receiverId, requestId) {
     this.props.changeInviteStatus(receiverId);

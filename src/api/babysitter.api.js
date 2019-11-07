@@ -49,3 +49,23 @@ export async function getProfile(sitterId) {
   }
   return { message: 'error trying to get data from response' };
 }
+
+export async function updateBsProfile(sitterId, body) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const url = babysitterAPI.getProfile + sitterId;
+  const options = {
+    method: 'PUT',
+    url: url,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(body),
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}

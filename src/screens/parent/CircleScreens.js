@@ -2,593 +2,199 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import colors from 'assets/Color';
-import { CheckBox } from 'native-base';
+import { getCircle } from 'api/circle.api';
+import CircleItem from 'screens/parent/CircleItem';
+import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
+import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
+
 export default class CircleScreens extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      circle: true,
-      chooseBabySitter: true,
-      friend: true,
-      nearBabySitter: true,
+      userId: 0,
+      circle: [],
+      hiredSitter: [],
+      friendSitter: [],
+      hidedCircle: true,
+      hidedHiredSitter: true,
+      hidedFriendSitter: true,
     };
   }
-  circle() {
-    if (this.state.circle) {
-      this.setState({ circle: false });
+
+  componentWillMount() {
+    this.getCircle();
+  }
+
+  getCircle() {
+    getCircle()
+      .then((result) => {
+        this.setState({
+          circle: result.data.circle,
+          hiredSitter: result.data.hiredSitter,
+          friendSitter: result.data.friendSitter,
+        });
+      })
+      .catch((error) => {
+        console.log('Duong: CircleScreens -> getCircle -> error', error);
+      });
+  }
+
+  hidedCircle() {
+    if (this.state.hidedCircle) {
+      this.setState({ hidedCircle: false });
     } else {
-      this.setState({ circle: true });
+      this.setState({ hidedCircle: true });
     }
   }
 
-  chooseBabySitter() {
-    if (this.state.chooseBabySitter) {
-      this.setState({ chooseBabySitter: false });
+  hidedHiredSitter() {
+    if (this.state.hidedHiredSitter) {
+      this.setState({ hidedHiredSitter: false });
     } else {
-      this.setState({ chooseBabySitter: true });
+      this.setState({ hidedHiredSitter: true });
     }
   }
-  friend() {
-    if (this.state.friend) {
-      this.setState({ friend: false });
+
+  hidedFriendSitter() {
+    if (this.state.hidedFriendSitter) {
+      this.setState({ hidedFriendSitter: false });
     } else {
-      this.setState({ friend: true });
+      this.setState({ hidedFriendSitter: true });
     }
   }
-  nearBabySitter() {
-    if (this.state.nearBabySitter) {
-      this.setState({ nearBabySitter: false });
-    } else {
-      this.setState({ nearBabySitter: true });
-    }
-  }
+
   render() {
     return (
       <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
         {/* Header vòng tròn tin tưởng của tôi */}
-        <View style={styles.firstHeaderContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              this.circle();
-            }}
-            style={{ flexDirection: 'row' }}
-          >
-            <Ionicons
-              name="ios-man"
-              size={24}
-              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
-              color={colors.darkGreenTitle}
-            />
-            <MuliText style={styles.headerText}>
-              Vòng tròn tin tưởng của tôi (2)
-            </MuliText>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ marginLeft: 'auto' }}>
-            <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
-          </TouchableOpacity>
-        </View>
+        {this.state.circle.length > 0 && (
+          <View style={styles.firstHeaderContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                this.hidedCircle();
+              }}
+              style={{ flexDirection: 'row' }}
+            >
+              <Ionicons
+                name="ios-person"
+                size={24}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Những phụ huynh mà tôi biết ({this.state.circle.length})
+              </MuliText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginLeft: 'auto',
+                marginTop: 18,
+                color: colors.done,
+                marginRight: 10,
+              }}
+            >
+              <MuliText>Thêm</MuliText>
+            </TouchableOpacity>
+          </View>
+        )}
         {/* End header */}
 
         {/* Item vòng tròn tin tưởng của tôi */}
-        {this.state.circle && (
+        {this.state.hidedCircle && this.state.circle.length > 0 && (
           <View style={styles.itemContainer}>
             {/* Item chi tiết */}
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={styles.sitterImage}
-                />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>Ky - 23</MuliText>
-                    <Ionicons
-                      name="ios-male"
-                      size={20}
-                      style={{ marginBottom: -2, marginLeft: 10 }}
-                      color={colors.blueAqua}
-                    />
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>5 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>4 </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View />
-              <TouchableOpacity style={styles.inviteButton}>
-                <CheckBox
-                  style={{
-                    marginTop: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 20 / 2,
-                    borderColor: 'black',
-                    backgroundColor: 'black',
-                  }}
-                  checked={true}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={styles.sitterImage}
-                />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>Ky - 23</MuliText>
-                    <Ionicons
-                      name="ios-male"
-                      size={20}
-                      style={{ marginBottom: -2, marginLeft: 10 }}
-                      color={colors.blueAqua}
-                    />
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>5 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>4 </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View />
-              <TouchableOpacity style={styles.inviteButton}>
-                <CheckBox
-                  style={{
-                    marginTop: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 20 / 2,
-                    borderColor: 'black',
-                    backgroundColor: 'black',
-                  }}
-                  checked={true}
-                />
-              </TouchableOpacity>
-            </View>
+            {this.state.circle.length > 0 && (
+              <FlatList
+                horizontal={true}
+                data={this.state.circle}
+                renderItem={({ item }) => <CircleItem item={item} />}
+                keyExtractor={(item) => item.friend.user.id.toString()}
+              />
+            )}
             {/* End Item chi tiết */}
           </View>
         )}
         {/* End item */}
 
-        {/* Header người giữ trẻ bạn đã chọn*/}
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              this.chooseBabySitter();
-            }}
-            style={{ flexDirection: 'row' }}
-          >
-            <Ionicons
-              name="ios-man"
-              size={24}
-              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
-              color={colors.darkGreenTitle}
-            />
-            <MuliText style={styles.headerText}>
-              Người giữ trẻ bạn đã chọn (2)
-            </MuliText>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ marginLeft: 'auto' }}>
-            <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
-          </TouchableOpacity>
-        </View>
-        {/* End header*/}
-
-        {/* Item của người giữ trẻ bạn đã chọn */}
-        {this.state.chooseBabySitter && (
-          <View style={styles.itemContainer}>
-            <View
-              style={{
-                alignItems: 'center',
-                alignContent: 'space-between',
-                flexDirection: 'row',
+        {/* Header người giữ trẻ đã thuê */}
+        {this.state.hiredSitter.length > 0 && (
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                this.hidedHiredSitter();
               }}
+              style={{ flexDirection: 'row' }}
             >
-              {/* Item chi tiết */}
-              <View style={{ alignItems: 'center', marginLeft: 10 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={{
-                    opacity: null,
-                    width: 60,
-                    height: 60,
-                    borderRadius: 120 / 2,
-                    overflow: 'hidden',
-                  }}
-                />
-                <View>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                    }}
-                  >
-                    <MuliText
-                      style={{
-                        color: 'black',
-                      }}
-                    >
-                      Ky
-                    </MuliText>
-                  </View>
-                  <CheckBox
-                    style={{
-                      marginTop: 5,
-                      width: 18,
-                      height: 18,
-                      borderRadius: 20 / 2,
-                      borderColor: 'black',
-                      backgroundColor: 'black',
-                    }}
-                    checked={true}
-                  />
-                </View>
-              </View>
-              <View style={{ alignItems: 'center', marginLeft: 10 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={{
-                    opacity: null,
-                    width: 60,
-                    height: 60,
-                    borderRadius: 120 / 2,
-                    overflow: 'hidden',
-                  }}
-                />
-                <View>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                    }}
-                  >
-                    <MuliText
-                      style={{
-                        color: 'black',
-                      }}
-                    >
-                      Ky
-                    </MuliText>
-                  </View>
-                  <CheckBox
-                    style={{
-                      marginTop: 5,
-                      width: 18,
-                      height: 18,
-                      borderRadius: 20 / 2,
-                      borderColor: 'black',
-                      backgroundColor: 'black',
-                    }}
-                    checked={true}
-                  />
-                </View>
-              </View>
-              <View style={{ alignItems: 'center', marginLeft: 10 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={{
-                    opacity: null,
-                    width: 60,
-                    height: 60,
-                    borderRadius: 120 / 2,
-                    overflow: 'hidden',
-                  }}
-                />
-                <View>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                    }}
-                  >
-                    <MuliText
-                      style={{
-                        color: 'black',
-                      }}
-                    >
-                      Ky
-                    </MuliText>
-                  </View>
-                  <CheckBox
-                    style={{
-                      marginTop: 5,
-                      width: 18,
-                      height: 18,
-                      borderRadius: 20 / 2,
-                      borderColor: 'black',
-                      backgroundColor: 'black',
-                    }}
-                    checked={true}
-                  />
-                </View>
-              </View>
-              {/* End Item chi tiết */}
-            </View>
+              <Ionicons
+                name="ios-person"
+                size={24}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Người giữ trẻ đã thuê ({this.state.hiredSitter.length})
+              </MuliText>
+            </TouchableOpacity>
+          </View>
+        )}
+        {/* End header */}
+
+        {/* Item của người giữ trẻ đã thuê */}
+        {this.state.hidedHiredSitter && this.state.hiredSitter.length > 0 && (
+          <View>
+            {/* Item chi tiết */}
+            {this.state.hiredSitter.length > 0 && (
+              <FlatList
+                style={styles.itemContainer}
+                data={this.state.hiredSitter}
+                renderItem={({ item }) => <CircleHiredSitter item={item} />}
+                keyExtractor={(item) => item.userId.toString()}
+              />
+            )}
+            {/* End Item chi tiết */}
           </View>
         )}
         {/* End item */}
 
         {/* Header bạn bè */}
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              this.friend();
-            }}
-            style={{ flexDirection: 'row' }}
-          >
-            <Ionicons
-              name="ios-man"
-              size={24}
-              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
-              color={colors.darkGreenTitle}
-            />
-            <MuliText style={styles.headerText}>Bạn bè (2)</MuliText>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ marginLeft: 'auto' }}>
-            <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
-          </TouchableOpacity>
-        </View>
+        {this.state.friendSitter.length > 0 && (
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                this.hidedFriendSitter();
+              }}
+              style={{ flexDirection: 'row' }}
+            >
+              <Ionicons
+                name="ios-person"
+                size={24}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Người trông trẻ bạn bè đã thuê ({this.state.friendSitter.length}
+                )
+              </MuliText>
+            </TouchableOpacity>
+          </View>
+        )}
         {/* End header */}
 
         {/* Item bạn bè */}
-        {this.state.friend && (
-          <View style={styles.itemContainer}>
+        {this.state.hidedFriendSitter && this.state.friendSitter.length > 0 && (
+          <View>
             {/* Item chi tiết */}
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={styles.sitterImage}
-                />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>Ky - 23</MuliText>
-                    <Ionicons
-                      name="ios-male"
-                      size={20}
-                      style={{ marginBottom: -2, marginLeft: 10 }}
-                      color={colors.blueAqua}
-                    />
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>5 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>4 </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View />
-              <TouchableOpacity style={styles.inviteButton}>
-                <CheckBox
-                  style={{
-                    marginTop: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 20 / 2,
-                    borderColor: 'black',
-                    backgroundColor: 'black',
-                  }}
-                  checked={true}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={styles.sitterImage}
-                />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>Ky - 23</MuliText>
-                    <Ionicons
-                      name="ios-male"
-                      size={20}
-                      style={{ marginBottom: -2, marginLeft: 10 }}
-                      color={colors.blueAqua}
-                    />
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>5 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>4 </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View />
-              <TouchableOpacity style={styles.inviteButton}>
-                <CheckBox
-                  style={{
-                    marginTop: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 20 / 2,
-                    borderColor: 'black',
-                    backgroundColor: 'black',
-                  }}
-                  checked={true}
-                />
-              </TouchableOpacity>
-            </View>
-            {/* End item chi tiết */}
-          </View>
-        )}
-        {/* End item*/}
-
-        {/* Header người giữ trẻ ở gần*/}
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              this.nearBabySitter();
-            }}
-            style={{ flexDirection: 'row' }}
-          >
-            <Ionicons
-              name="ios-man"
-              size={24}
-              style={{ marginBottom: -4, marginLeft: 20, marginTop: 5 }}
-              color={colors.darkGreenTitle}
-            />
-            <MuliText style={styles.headerText}>
-              Người giữ trẻ ở gần (2)
-            </MuliText>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ marginLeft: 'auto' }}>
-            <MuliText style={styles.textDeselect}>Bỏ chọn tất cả</MuliText>
-          </TouchableOpacity>
-        </View>
-        {/* End header */}
-
-        {/* Item người giữ trẻ ở gần */}
-        {this.state.nearBabySitter && (
-          <View style={styles.itemContainer}>
-            {/* Item chi tiết */}
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={styles.sitterImage}
-                />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>Ky - 23</MuliText>
-                    <Ionicons
-                      name="ios-male"
-                      size={20}
-                      style={{ marginBottom: -2, marginLeft: 10 }}
-                      color={colors.blueAqua}
-                    />
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>5 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>4 </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View />
-              <TouchableOpacity style={styles.inviteButton}>
-                <CheckBox
-                  style={{
-                    marginTop: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 20 / 2,
-                    borderColor: 'black',
-                    backgroundColor: 'black',
-                  }}
-                  checked={true}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.bsitterItem}>
-              <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
-                <Image
-                  source={require('assets/images/Phuc.png')}
-                  style={styles.sitterImage}
-                />
-                <View>
-                  <View style={styles.upperText}>
-                    <MuliText style={styles.bsitterName}>Ky - 23</MuliText>
-                    <Ionicons
-                      name="ios-male"
-                      size={20}
-                      style={{ marginBottom: -2, marginLeft: 10 }}
-                      color={colors.blueAqua}
-                    />
-                  </View>
-                  <View style={styles.lowerText}>
-                    <Ionicons
-                      name="ios-pin"
-                      size={24}
-                      style={{ marginBottom: -4 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>5 km </MuliText>
-                    <Ionicons
-                      name="ios-star"
-                      size={24}
-                      style={{ marginBottom: -4, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                    <MuliText style={{ marginLeft: 5 }}>4 </MuliText>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View />
-              <TouchableOpacity style={styles.inviteButton}>
-                <CheckBox
-                  style={{
-                    marginTop: 5,
-                    width: 18,
-                    height: 18,
-                    borderRadius: 20 / 2,
-                    borderColor: 'black',
-                    backgroundColor: 'black',
-                  }}
-                  checked={true}
-                />
-              </TouchableOpacity>
-            </View>
-            {/* End item chi tiết */}
+            {this.state.friendSitter.length > 0 && (
+              <FlatList
+                style={styles.itemContainer}
+                data={this.state.friendSitter}
+                renderItem={({ item }) => <CircleFriendSitter item={item} />}
+                keyExtractor={(item) => item.userId.toString()}
+              />
+            )}
+            {/* End Item chi tiết */}
           </View>
         )}
         {/* End item */}
@@ -597,29 +203,33 @@ export default class CircleScreens extends Component {
   }
 }
 CircleScreens.navigationOptions = {
-  header: null,
+  title: 'Vòng tròn tin tưởng',
 };
 const styles = StyleSheet.create({
   itemContainer: {
-    marginHorizontal: 15,
+    marginBottom: 10,
     backgroundColor: '#fff',
   },
   firstHeaderContainer: {
+    borderWidth: 0,
+    borderBottomWidth: 2,
+    borderColor: colors.gray,
     flexDirection: 'row',
-    marginHorizontal: 15,
-    marginTop: 35,
+    marginTop: 10,
     backgroundColor: '#fff',
-    height: 30,
+    height: 60,
   },
   headerContainer: {
+    borderColor: colors.gray,
+    borderWidth: 0,
+    borderBottomWidth: 2,
     flexDirection: 'row',
-    marginHorizontal: 15,
     marginTop: 6,
     backgroundColor: '#fff',
-    height: 30,
+    height: 60,
   },
   headerText: {
-    marginTop: 5,
+    marginTop: 18,
     fontSize: 15,
     color: colors.darkGreenTitle,
     marginLeft: 10,

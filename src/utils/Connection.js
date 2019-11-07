@@ -4,22 +4,27 @@ import { HOST_ENDPOINT } from 'react-native-dotenv';
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
   baseUrl: `${url}/`,
-  getRequests: `${url}/sittingRequests/listParent`,
-  getInvitations: `${url}/invitations/`,
   login: `${url}/auth/login`,
-  getRecommend: `${url}/sittingRequests/recommend/`,
-  acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
-  updateRequestStatus: `${url}/sittingRequests/`,
-  updateInvitation: `${url}/invitations/`,
   registerExpoToken: `${url}/trackings/`,
   socket: `${url}/socket`,
+  getRequests: `${url}/sittingRequests/listParent`,
+  getRecommend: `${url}/sittingRequests/recommend/`,
+  acceptBabysitter: `${url}/sittingRequests/acceptBabysitter/`,
+  getSitting: `${url}/sittingRequests/listByStatus`,
+  updateRequestStatus: `${url}/sittingRequests/`,
+  updateInvitation: `${url}/invitations/`,
+  getInvitations: `${url}/invitations/`,
 };
 
 export const babysitterAPI = {
   getProfile: `${url}/babysitters/`,
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
+  updateProfile: `${url}/babysitters/`,
 };
 
+export const circleAPI = {
+  getCircle: `${url}/circles/`,
+}
 export const userAPI = {
   getUser: `${url}/users/`,
 };

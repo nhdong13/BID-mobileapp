@@ -10,11 +10,13 @@ import ParentHomeScreen from 'screens/parent/ParentHomeScreen';
 import SettingsScreen from 'screens/SettingsScreen';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
+import Feedback from 'screens/parent/Feedback';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
 import CalendarScreen from 'screens/babysitter/CalendarScreen';
 import PaymentStripe from 'utils/PaymentStripe';
+import SittingList from 'screens/parent/SittingList';
 
 // import MyNetwork from '../screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
@@ -53,7 +55,12 @@ const HomeStack = createStackNavigator(
         header: null,
       }),
     },
-    RequestDetail: RequestDetail,
+    RequestDetail: {
+      screen: RequestDetail,
+      navigationOptions: () => ({
+        title: 'Yêu cầu chi tiết',
+      }),
+    },
     CreateRequest: {
       screen: CreateRequestScreen,
       navigationOptions: () => ({
@@ -117,6 +124,9 @@ const SettingsStack = createStackNavigator(
     CalendarScreen: CalendarScreen,
     ReportScreen: ReportScreen,
     Payment: PaymentStripe,
+    GetSitting: SittingList,
+    Feedback: Feedback
+
   },
   config,
 );

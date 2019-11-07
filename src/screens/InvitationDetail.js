@@ -12,6 +12,7 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateInvitation } from 'api/invitation.api';
+import { createCharge } from 'api/payment.api';
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class InvitationDetail extends Component {
       invitationStatus: 'PENDING',
       childrenNumber: 1,
       minAgeOfChildren: 1,
+      createUserId: 0,
     };
     console.log(
       'PHUC: InvitationDetail -> constructor -> invitationID',
@@ -45,6 +47,7 @@ export default class InvitationDetail extends Component {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(
       (resp) => {
         this.setState({
+          createUserId: resp.sittingRequest.user.id,
           parentName: resp.sittingRequest.user.nickname,
           invitationStatus: resp.status,
           date: resp.sittingRequest.sittingDate,
