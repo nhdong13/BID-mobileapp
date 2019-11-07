@@ -7,7 +7,6 @@ import {
   TextInput,
   // TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -19,15 +18,61 @@ export default class ReportScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      starCount: 5,
+      sittingRequestsID: this.props.navigation.state.params.requestId,
+      date: null,
+      startTime: null,
+      endTime: null,
+      address: null,
+      price: 0,
+      bsitter: null,
+      isModalVisible: false,
+      starCount: 0,
+      isRated: false,
     };
+    this.callDetail = this.callDetail.bind(this);
   }
+
+  componentDidMount() {
+    Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(
+      (resp) => {
+        this.setState({
+          date: resp.sittingDate,
+          startTime: resp.startTime,
+          endTime: resp.endTime,
+          address: resp.sittingAddress,
+          bsitter: resp.bsitter,
+          price: resp.totalPrice,
+        });
+      },
+    );
+    Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
+      (res) => {
+        if (res != null) {
+          this.setState({ starCount: res[0].rating, isRated: true });
+        }
+      },
+    );
+  }
+
   onStarRatingPress(rating) {
-    this.setState({
-      starCount: rating,
-    });
+    const body = {
+      rating: rating,
+      requestId: this.state.sittingRequestsID,
+    };
+    if (!this.state.isRated) {
+      Api.post('feedback/', body);
+      this.setState({ starCount: rating, isRated: true });
+    }
   }
-  
+
+  callDetail() {
+    if (this.state.isModalVisible) {
+      this.setState({ isModalVisible: false });
+    } else {
+      this.setState({ isModalVisible: true });
+    }
+  }
+
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
@@ -37,7 +82,9 @@ export default class ReportScreen extends Component {
             source={require('assets/images/Phuc.png')}
             style={styles.pictureReport}
           />
-          <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>Ky</MuliText>
+          <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
+            {this.state.bsitter.nickname}
+          </MuliText>
           <StarRating
             starStyle={{
               marginLeft: 10,
@@ -54,7 +101,7 @@ export default class ReportScreen extends Component {
               multiline
               maxLength={200}
               style={{ paddingHorizontal: 15 }}
-              value=''
+              value=""
             />
           </View>
           <View style={styles.buttonContainer}>
