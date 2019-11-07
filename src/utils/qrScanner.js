@@ -36,19 +36,19 @@ export class QRcodeScannerScreen extends React.Component {
   }
 
   async componentDidMount() {
-    this.triggerQr('');
+    this.triggerQr();
     this.getPermissionsAsync();
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
-        this.triggerQr('');
+        this.triggerQr();
       }
     }
   }
 
-  triggerQr = (type) => {
+  triggerQr = () => {
     const socket = io(apiUrl.socket, {
       transports: ['websocket'],
     });
@@ -60,14 +60,26 @@ export class QRcodeScannerScreen extends React.Component {
       userId: userId,
     });
 
-    console.log("PHUC: QRcodeScannerScreen -> triggerQr -> type", type)
-    if (type == 'success') {
-      socket.emit('success', {
-        qr: qr,
-        message: message,
-        userId: userId,
-      });
-    }
+    socket.on('connect_error', (error) => {
+      console.log('QR connection error  ', error);
+    });
+
+    socket.on('error', (error) => {
+      console.log('QR just some normal error, error in general ', error);
+    });
+  };
+
+  onSuccess = () => {
+    const socket = io(apiUrl.socket, {
+      transports: ['websocket'],
+    });
+    // just hard code the passpharse for now, we will use a code generator later
+    const { qr, message, userId } = this.state;
+    socket.emit('scanned', {
+      qr: qr,
+      message: message,
+      userId: userId,
+    });
 
     socket.on('connect_error', (error) => {
       console.log('QR connection error  ', error);

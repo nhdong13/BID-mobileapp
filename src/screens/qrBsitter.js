@@ -20,15 +20,17 @@ export default class qrBsitter extends Component {
       );
     });
 
-    const socketIO = io(apiUrl.socket, {
+    const successSocket = io(apiUrl.socket, {
       transports: ['websocket'],
     });
 
-    socketIO.on('connect', () => {
-      socketIO.emit('userId', this.state.userId);
+    successSocket.on('connect', () => {
+      successSocket.emit('userId', this.state.userId);
+      console.log('PHUC: qrBsitter -> userId', this.state.userId);
     });
 
-    socketIO.on('scanned', () => {
+    successSocket.on('scanned', () => {
+      console.log('it come to socket');
       this.props.navigation.navigate('Home');
     });
   }
