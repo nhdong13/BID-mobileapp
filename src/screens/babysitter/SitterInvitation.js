@@ -4,6 +4,7 @@ import { MuliText } from 'components/StyledText';
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 import colors from 'assets/Color';
+import { formater } from 'utils/MoneyFormater';
 
 class SitterInvitation extends Component {
   constructor(props) {
@@ -105,7 +106,7 @@ class SitterInvitation extends Component {
                 </MuliText>
               </View>
             )}
-            <MuliText>{invitation.sittingRequest.totalPrice}VND</MuliText>
+            <MuliText>{formater(invitation.sittingRequest.totalPrice)}VND</MuliText>
           </View>
         </View>
       </TouchableOpacity>

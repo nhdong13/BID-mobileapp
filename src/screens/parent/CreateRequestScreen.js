@@ -11,6 +11,7 @@ import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateRequest } from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
+import { formater } from 'utils/MoneyFormater';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -483,7 +484,7 @@ class CreateRequestScreen extends Component {
               <MuliText style={styles.contentInformation}>
                 Tổng tiền thanh toán:
               </MuliText>
-              <MuliText style={styles.price}>{this.state.price} VND</MuliText>
+              <MuliText style={styles.price}>{formater(this.state.price)} VND</MuliText>
             </View>
           </View>
           {this.state.requestId != 0 && (

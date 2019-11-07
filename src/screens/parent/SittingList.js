@@ -14,6 +14,7 @@ import colors from 'assets/Color';
 import moment from 'moment';
 import Api from '../../api/api_helper';
 import {getSitting} from '../../api/sittingRequest.api';
+import { formater } from 'utils/MoneyFormater';
 
 export default class SittingList extends Component {
   constructor(props) {
@@ -108,7 +109,7 @@ export default class SittingList extends Component {
                             {request.status}
                           </MuliText>
                         </View>
-                        <MuliText>{request.totalPrice} VND</MuliText>
+                        <MuliText>{formater(request.totalPrice)} VND</MuliText>
                       </View>
                     </View>
                   </View>
