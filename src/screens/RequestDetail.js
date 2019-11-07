@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -5,7 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -86,13 +87,14 @@ export class RequestDetail extends Component {
 
     this.props.navigation.navigate('QrScanner', {
       userId: this.state.bsitter.id,
+      data: data,
     });
 
-    updateRequestStatus(data)
-      .then(() => {
-        // this.props.navigation.navigate('Home', { loading: false });
-      })
-      .catch((error) => console.log(error));
+    // updateRequestStatus(data)
+    //   .then(() => {
+    //     // this.props.navigation.navigate('Home', { loading: false });
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
   onOpenQRwhenDone = (targetStatus) => {
@@ -105,13 +107,14 @@ export class RequestDetail extends Component {
       userId: this.state.bsitter.id,
       isDone: true,
       sittingId: this.state.sittingRequestsID,
+      data: data,
     });
 
-    updateRequestStatus(data)
-      .then(() => {
-        // this.props.navigation.navigate('Home', { loading: false });
-      })
-      .catch((error) => console.log(error));
+    // updateRequestStatus(data)
+    //   .then(() => {
+    //     // this.props.navigation.navigate('Home', { loading: false });
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
   getAcceptedInvitations = async () => {
@@ -126,7 +129,12 @@ export class RequestDetail extends Component {
   };
 
   acceptBabysitter = (sitterId, name) => {
-    let msg = 'Bạn có chắc chắn chọn ' + name + ' không? \nBạn sẽ bị trừ ' + this.state.price + ' VND';
+    const msg =
+      'Bạn có chắc chắn chọn ' +
+      name +
+      ' không? \nBạn sẽ bị trừ ' +
+      this.state.price +
+      ' VND';
     Alert.alert(
       'Xác nhận thanh toán',
       msg,
@@ -140,10 +148,11 @@ export class RequestDetail extends Component {
           onPress: () => {
             // xác nhận thanh toán + accept babysitter
             acceptBabysitter(this.state.sittingRequestsID, sitterId)
-              .then((result) => {
+              .then(() => {
                 this.props.navigation.navigate('Home');
                 createCharge(this.state.price, this.state.createUserId);
-              }).catch((error) => {
+              })
+              .catch((error) => {
                 if (error.response.status == 409) {
                   // eslint-disable-next-line react/no-string-refs
                   this.refs.toast.show(
@@ -152,12 +161,11 @@ export class RequestDetail extends Component {
                   );
                 }
               });
-          }
+          },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
-    
   };
 
   callDetail() {
@@ -482,7 +490,12 @@ export class RequestDetail extends Component {
                         </TouchableOpacity> */}
                           <TouchableOpacity
                             style={styles.inviteButton}
-                            onPress={() => this.acceptBabysitter(item.user.id, item.user.nickname)}
+                            onPress={() =>
+                              this.acceptBabysitter(
+                                item.user.id,
+                                item.user.nickname,
+                              )
+                            }
                           >
                             <MuliText
                               style={{ color: '#78ddb6', fontSize: 11 }}

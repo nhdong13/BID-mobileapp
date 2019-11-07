@@ -1,12 +1,20 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Button, ToastAndroid } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  ToastAndroid,
+  Platform,
+} from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { withNavigationFocus } from 'react-navigation';
+import { updateRequestStatus } from 'api/sittingRequest.api';
+
 import io from 'socket.io-client';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import apiUrl from './Connection';
-import { Platform } from '@unimodules/core';
 
 export class QRcodeScannerScreen extends React.Component {
   constructor(props) {
@@ -17,6 +25,9 @@ export class QRcodeScannerScreen extends React.Component {
       content: '',
       userId: 0 || this.props.navigation.getParam('userId'),
       isDone: false || this.props.navigation.getParam('isDone'),
+      qr: 'babysitter in demand is the best capstone project',
+      message: 'Request to scan QR',
+      dataInvitation: null || this.props.navigation.getParam('data'),
     };
     console.log(
       'PHUC: QRcodeScannerScreen -> constructor -> userId',
@@ -25,27 +36,38 @@ export class QRcodeScannerScreen extends React.Component {
   }
 
   async componentDidMount() {
-    this.triggerQr();
+    this.triggerQr('');
     this.getPermissionsAsync();
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
-        this.triggerQr();
+        this.triggerQr('');
       }
     }
   }
 
-  triggerQr = () => {
+  triggerQr = (type) => {
     const socket = io(apiUrl.socket, {
       transports: ['websocket'],
     });
     // just hard code the passpharse for now, we will use a code generator later
+    const { qr, message, userId } = this.state;
     socket.emit('scanQr', {
-      qr: 'babysitter in demand is the best capstone project',
-      userId: this.state.userId,
+      qr: qr,
+      message: message,
+      userId: userId,
     });
+
+    console.log("PHUC: QRcodeScannerScreen -> triggerQr -> type", type)
+    if (type == 'success') {
+      socket.emit('success', {
+        qr: qr,
+        message: message,
+        userId: userId,
+      });
+    }
 
     socket.on('connect_error', (error) => {
       console.log('QR connection error  ', error);
@@ -61,34 +83,46 @@ export class QRcodeScannerScreen extends React.Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   };
 
-  handleBarCodeScanned = ({ type, data }) => {
-    this.setState(
-      {
-        scanned: true,
-        content: `QRcode with type ${type} and data ${data}`,
-      },
-      () => {
-        if (this.state.scanned == true) {
-          if (Platform.OS != 'ios') {
-          ToastAndroid.showWithGravity(
-            'QR scanned success',
-            ToastAndroid.LONG,
-            ToastAndroid.TOP,
-            25,
-            80,
-          );
+  handleBarCodeScanned = ({ data }) => {
+    if (this.state.qr == data) {
+      this.setState(
+        {
+          scanned: true,
+          content: `QRcode with data ${data}`,
+        },
+        () => {
+          if (this.state.scanned == true) {
+            if (Platform.OS != 'ios') {
+              ToastAndroid.showWithGravity(
+                'QR scanned success',
+                ToastAndroid.LONG,
+                ToastAndroid.TOP,
+                25,
+                80,
+              );
+              this.triggerQr('success');
+              const { dataInvitation } = this.state;
+              if (dataInvitation != null) {
+                updateRequestStatus(dataInvitation)
+                  .then(() => {
+                    // this.props.navigation.navigate('Home', { loading: false });
+                  })
+                  .catch((error) => console.log(error));
+              }
+            }
+            if (this.state.isDone) {
+              this.props.navigation.navigate('Feedback', {
+                requestId: this.props.navigation.getParam('sittingId'),
+              });
+            } else {
+              this.props.navigation.navigate('Home');
+            }
           }
-          if (this.state.isDone) {
-            this.props.navigation.navigate('Feedback', {requestId: this.props.navigation.getParam('sittingId')});
-          } else {
-            this.props.navigation.navigate('Home');
-          }
-        }
-      },
-    );
-    console.log(
-      `Bar code with type ${type} and data ${data} has been scanned!`,
-    );
+        },
+      );
+    }
+
+    console.log(`Bar code with data ${data} has been scanned!`);
   };
 
   render() {
