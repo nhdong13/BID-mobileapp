@@ -23,7 +23,7 @@ export const babysitterAPI = {
 
 export const circleAPI = {
   getCircle: `${url}/circles/`,
-}
+};
 export const userAPI = {
   getUser: `${url}/users/`,
 };

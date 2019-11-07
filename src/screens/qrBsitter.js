@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode';
+import apiUrl from 'utils/Connection';
+import io from 'socket.io-client';
 
 export default class qrBsitter extends Component {
   constructor(props) {
@@ -16,6 +18,20 @@ export default class qrBsitter extends Component {
         'PHUC: qrBsitter -> constructor -> qrtext',
         this.state.qrtext,
       );
+    });
+
+    const successSocket = io(apiUrl.socket, {
+      transports: ['websocket'],
+    });
+
+    successSocket.on('connect', () => {
+      successSocket.emit('userId', this.state.userId);
+      console.log('PHUC: qrBsitter -> userId', this.state.userId);
+    });
+
+    successSocket.on('scanned', () => {
+      console.log('it come to socket');
+      this.props.navigation.navigate('Home');
     });
   }
 
