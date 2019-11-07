@@ -29,10 +29,6 @@ export class QRcodeScannerScreen extends React.Component {
       message: 'Request to scan QR',
       dataInvitation: null || this.props.navigation.getParam('data'),
     };
-    console.log(
-      'PHUC: QRcodeScannerScreen -> constructor -> userId',
-      this.props.navigation.getParam('userId'),
-    );
   }
 
   async componentDidMount() {
@@ -75,7 +71,6 @@ export class QRcodeScannerScreen extends React.Component {
     });
     // just hard code the passpharse for now, we will use a code generator later
     const { qr, message, userId } = this.state;
-    // console.log('PHUC: QRcodeScannerScreen -> onSuccess -> userId', userId);
 
     socket.emit('success', {
       qr: qr,
