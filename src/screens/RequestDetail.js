@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -87,13 +88,14 @@ export class RequestDetail extends Component {
 
     this.props.navigation.navigate('QrScanner', {
       userId: this.state.bsitter.id,
+      data: data,
     });
 
-    updateRequestStatus(data)
-      .then(() => {
-        // this.props.navigation.navigate('Home', { loading: false });
-      })
-      .catch((error) => console.log(error));
+    // updateRequestStatus(data)
+    //   .then(() => {
+    //     // this.props.navigation.navigate('Home', { loading: false });
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
   onOpenQRwhenDone = (targetStatus) => {
@@ -106,13 +108,14 @@ export class RequestDetail extends Component {
       userId: this.state.bsitter.id,
       isDone: true,
       sittingId: this.state.sittingRequestsID,
+      data: data,
     });
 
-    updateRequestStatus(data)
-      .then(() => {
-        // this.props.navigation.navigate('Home', { loading: false });
-      })
-      .catch((error) => console.log(error));
+    // updateRequestStatus(data)
+    //   .then(() => {
+    //     // this.props.navigation.navigate('Home', { loading: false });
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
   getAcceptedInvitations = async () => {
@@ -127,7 +130,7 @@ export class RequestDetail extends Component {
   };
 
   acceptBabysitter = (sitterId, name) => {
-    let msg =
+    const msg =
       'Bạn có chắc chắn chọn ' +
       name +
       ' không? \nBạn sẽ bị trừ ' +
@@ -146,7 +149,7 @@ export class RequestDetail extends Component {
           onPress: () => {
             // xác nhận thanh toán + accept babysitter
             acceptBabysitter(this.state.sittingRequestsID, sitterId)
-              .then((result) => {
+              .then(() => {
                 this.props.navigation.navigate('Home');
                 createCharge(this.state.price, this.state.createUserId);
               })

@@ -27,6 +27,7 @@ import registerPushNotifications from 'utils/Notification';
 import { markDates } from 'utils/markedDates';
 import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
+import Loader from 'utils/Loader';
 
 class ParentHomeScreen extends Component {
   constructor(props) {
@@ -39,10 +40,12 @@ class ParentHomeScreen extends Component {
       refreshing: false,
       agenda: 0,
       notification: [],
+      loading: false,
     };
   }
 
   async componentDidMount() {
+    this.setState({ loading: true });
     await this.getRequestData();
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
@@ -121,7 +124,7 @@ class ParentHomeScreen extends Component {
       await getRequests(this.state.userId)
         .then((res) => {
           const markedDates = markDates(res);
-          this.setState({ requests: res, sittingDates: markedDates });
+          this.setState({ requests: res, sittingDates: markedDates, loading: false });
         })
         .catch((error) =>
           console.log('HomeScreen - getRequestData - Requests ' + error),
@@ -130,7 +133,7 @@ class ParentHomeScreen extends Component {
   };
 
   _onRefresh = () => {
-    // this.setState({ refreshing: true });
+    this.setState({ loading: true });
     this.getRequestData().then(() => {
       // this.setState({ refreshing: false });
     });
@@ -153,6 +156,7 @@ class ParentHomeScreen extends Component {
     return (
       <View key={this.state.agenda} style={container}>
         <Toast ref="toast" position="top" />
+        <Loader loading={this.state.loading} />
         <AlertPro
           ref={(ref) => {
             this.AlertPro = ref;
@@ -242,6 +246,12 @@ class ParentHomeScreen extends Component {
           {requests != '' && requests ? (
             <FlatList
               data={requests}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={this._onRefresh}
+                />
+              }
               renderItem={({ item }) => <ParentRequest request={item} />}
               keyExtractor={(item) => item.id.toString()}
             />
