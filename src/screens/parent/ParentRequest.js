@@ -4,6 +4,7 @@ import { withNavigation } from 'react-navigation';
 import { MuliText } from 'components/StyledText';
 import moment from 'moment';
 import colors from 'assets/Color';
+import { formater } from 'utils/MoneyFormater';
 
 class ParentRequest extends Component {
   constructor(props) {
@@ -76,7 +77,7 @@ class ParentRequest extends Component {
                   </MuliText>
                 </View>
               )}
-              <MuliText>{request.totalPrice} VND</MuliText>
+              <MuliText>{formater(request.totalPrice)} VND</MuliText>
             </View>
           </View>
         </TouchableOpacity>
