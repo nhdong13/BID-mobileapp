@@ -345,37 +345,6 @@ class CreateRequestScreen extends Component {
           </View>
           <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
           <View style={{ flexDirection: 'row' }}>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-happy"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginBottom: 5,
-                }}
-              />
-              <MuliText style={styles.contentInformation}>
-                Số trẻ: {this.state.childrenNumber}{' '}
-              </MuliText>
-            </View>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-heart-empty"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginBottom: 5,
-                }}
-              />
-              <MuliText style={styles.contentInformation}>
-                Nhỏ tuổi nhất:{' '}
-                {this.state.minAgeOfChildren == 99
-                  ? 'N/A'
-                  : this.state.minAgeOfChildren}
-              </MuliText>
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
             {this.state.child != null ? (
               <View style={styles.detailContainerChild}>
                 <MuliText style={styles.headerTitleChild}>
@@ -477,6 +446,37 @@ class CreateRequestScreen extends Component {
             ) : (
               <View />
             )}
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-happy"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginBottom: 5,
+                }}
+              />
+              <MuliText style={styles.contentInformation}>
+                Số trẻ: {this.state.childrenNumber}{' '}
+              </MuliText>
+            </View>
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-heart-empty"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginBottom: 5,
+                }}
+              />
+              <MuliText style={styles.contentInformation}>
+                Nhỏ tuổi nhất:{' '}
+                {this.state.minAgeOfChildren == 99
+                  ? 'N/A'
+                  : this.state.minAgeOfChildren}
+              </MuliText>
+            </View>
           </View>
           <View>
             <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
