@@ -157,9 +157,17 @@ export class RequestDetail extends Component {
                 if (error.response.status == 409) {
                   // eslint-disable-next-line react/no-string-refs
                   this.refs.toast.show(
-                    'Đã có lỗi xảy ra khi chấp nhận người giữ trẻ này',
+                    'Người giữ trẻ này không còn phù hợp với yêu cầu của bạn.',
                     DURATION.LENGTH_LONG,
                   );
+
+                  const errorSitterId = error.response.data;
+
+                  this.setState((prevState) => ({
+                    invitations: prevState.invitations.filter(
+                      (el) => el.receiver != errorSitterId,
+                    )
+                  }));
                 }
               });
           },

@@ -169,7 +169,7 @@ export class Bsitter extends Component {
                   style={{ marginBottom: -4, marginLeft: 20 }}
                   color={colors.lightGreen}
                 />
-                <MuliText> {item.averageRating} </MuliText>
+                <MuliText> {item.averageRating} ({item.totalFeedback} lượt đánh giá) </MuliText>
               </View>
             </View>
           </TouchableOpacity>
