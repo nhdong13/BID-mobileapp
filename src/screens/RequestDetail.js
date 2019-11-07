@@ -18,6 +18,7 @@ import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
 import { withNavigation } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
+import { formater } from 'utils/MoneyFormater';
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -133,7 +134,7 @@ export class RequestDetail extends Component {
       'Bạn có chắc chắn chọn ' +
       name +
       ' không? \nBạn sẽ bị trừ ' +
-      this.state.price +
+      formater(this.state.price) +
       ' VND';
     Alert.alert(
       'Xác nhận thanh toán',
@@ -201,7 +202,7 @@ export class RequestDetail extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.price} VND
+                {formater(this.state.price)} VND
               </MuliText>
             </View>
             <View style={styles.informationText}>

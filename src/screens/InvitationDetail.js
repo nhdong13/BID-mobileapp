@@ -13,6 +13,7 @@ import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateInvitation } from 'api/invitation.api';
 import { createCharge } from 'api/payment.api';
+import { formater } from 'utils/MoneyFormater';
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -115,7 +116,7 @@ export default class InvitationDetail extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.price} VND
+                {formater(this.state.price)} VND
               </MuliText>
             </View>
             <View style={styles.informationText}>
