@@ -11,6 +11,7 @@ import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateRequest } from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
+import { formater } from 'utils/MoneyFormater';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -345,37 +346,6 @@ class CreateRequestScreen extends Component {
           </View>
           <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
           <View style={{ flexDirection: 'row' }}>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-happy"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginBottom: 5,
-                }}
-              />
-              <MuliText style={styles.contentInformation}>
-                Số trẻ: {this.state.childrenNumber}{' '}
-              </MuliText>
-            </View>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-heart-empty"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginBottom: 5,
-                }}
-              />
-              <MuliText style={styles.contentInformation}>
-                Nhỏ tuổi nhất:{' '}
-                {this.state.minAgeOfChildren == 99
-                  ? 'N/A'
-                  : this.state.minAgeOfChildren}
-              </MuliText>
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
             {this.state.child != null ? (
               <View style={styles.detailContainerChild}>
                 <MuliText style={styles.headerTitleChild}>
@@ -478,13 +448,44 @@ class CreateRequestScreen extends Component {
               <View />
             )}
           </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-happy"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginBottom: 5,
+                }}
+              />
+              <MuliText style={styles.contentInformation}>
+                Số trẻ: {this.state.childrenNumber}{' '}
+              </MuliText>
+            </View>
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-heart-empty"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginBottom: 5,
+                }}
+              />
+              <MuliText style={styles.contentInformation}>
+                Nhỏ tuổi nhất:{' '}
+                {this.state.minAgeOfChildren == 99
+                  ? 'N/A'
+                  : this.state.minAgeOfChildren}
+              </MuliText>
+            </View>
+          </View>
           <View>
             <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
             <View style={styles.priceContainer}>
               <MuliText style={styles.contentInformation}>
                 Tổng tiền thanh toán:
               </MuliText>
-              <MuliText style={styles.price}>{this.state.price} VND</MuliText>
+              <MuliText style={styles.price}>{formater(this.state.price)} VND</MuliText>
             </View>
           </View>
           {this.state.requestId != 0 && (
