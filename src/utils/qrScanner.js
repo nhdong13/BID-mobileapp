@@ -75,7 +75,9 @@ export class QRcodeScannerScreen extends React.Component {
     });
     // just hard code the passpharse for now, we will use a code generator later
     const { qr, message, userId } = this.state;
-    socket.emit('scanned', {
+    // console.log('PHUC: QRcodeScannerScreen -> onSuccess -> userId', userId);
+
+    socket.emit('success', {
       qr: qr,
       message: message,
       userId: userId,
@@ -112,7 +114,7 @@ export class QRcodeScannerScreen extends React.Component {
                 25,
                 80,
               );
-              this.triggerQr('success');
+              this.onSuccess();
               const { dataInvitation } = this.state;
               if (dataInvitation != null) {
                 updateRequestStatus(dataInvitation)

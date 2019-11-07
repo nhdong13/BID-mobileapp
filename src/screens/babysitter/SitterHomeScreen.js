@@ -56,7 +56,12 @@ class SitterHomeScreen extends Component {
     });
 
     socketIO.on('triggerQr', (data) => {
-      this.props.navigation.navigate('QrSitter', { qrData: data.qr });
+      if (data.qr && this.state.userId != 0) {
+        this.props.navigation.navigate('QrSitter', {
+          qrData: data.qr,
+          userId: this.state.userId,
+        });
+      }
     });
   }
 
