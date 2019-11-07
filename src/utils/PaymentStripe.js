@@ -37,7 +37,6 @@ export class PaymentStripe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: '',
       message: '',
       title: '',
       formData: null,
@@ -62,7 +61,13 @@ export class PaymentStripe extends React.Component {
       if (res.data) {
         const { nickname: name, email, id: userId } = res.data;
         this.setState({ name, email, userId }, () => {
-          this.getStripeCustomer();
+          this.getStripeCustomer().catch((error) => {
+            console.log(
+              'PHUC: PaymentStripe -> componentDidMount -> error',
+              error,
+            );
+            this.setState({ loading: false });
+          });
         });
       }
     });
@@ -147,7 +152,7 @@ export class PaymentStripe extends React.Component {
         currency: 'vnd',
       };
       console.log('PHUC: PaymentStripe -> openStripe -> params', params);
-
+      this.setState({ loading: true });
       const result = await Stripe.createTokenWithCardAsync(params).catch(
         (error) =>
           console.log(
@@ -176,37 +181,44 @@ export class PaymentStripe extends React.Component {
             name,
             cardId,
           );
-          console.log(
-            'PHUC: PaymentStripe -> createStripeCustomer -> customer',
-            customer,
-          );
+
+          if (customer) {
+            console.log(
+              'PHUC: PaymentStripe -> createStripeCustomer -> customer',
+              customer,
+            );
+          }
         }
       }
+      this.setState({ loading: false });
     }
   };
 
   getStripeCustomer = async () => {
     const { userId } = this.state;
     if (userId != null) {
+      this.setState({ loading: true });
       const { data: customer } = await getCustomer(userId).catch((error) =>
         console.log('PHUC: getStripeCustomer -> error', error),
       );
-      console.log('PHUC: getStripeCustomer -> customer', customer);
-      const {
-        id: cardId,
-        brand,
-        last4,
-        exp_year: expYear,
-        exp_month: expMonth,
-      } = customer;
-      this.setState({
-        cardId,
-        brand,
-        last4,
-        expYear,
-        expMonth,
-        loading: false,
-      });
+      if (customer) {
+        console.log('PHUC: getStripeCustomer -> customer', customer);
+        const {
+          id: cardId,
+          brand,
+          last4,
+          exp_year: expYear,
+          exp_month: expMonth,
+        } = customer;
+        this.setState({
+          cardId,
+          brand,
+          last4,
+          expYear,
+          expMonth,
+          loading: false,
+        });
+      }
     }
   };
 
@@ -262,21 +274,27 @@ export class PaymentStripe extends React.Component {
                 onFocus={this._onFocus}
                 onChange={this._onChange}
               />
+              <View
+                style={{
+                  marginTop: 20,
+                  height: 150,
+                  marginHorizontal: 30,
+                  alignItems: 'center',
+                  backgroundColor: 'red',
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => this.createStripeCustomer()}
+                  style={{ marginHorizontal: 10 }}
+                >
+                  <MuliText style={{ color: 'white' }}>Lưu thẻ</MuliText>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </View>
 
         <View style={{ alignItems: 'center', flex: 0.4 }}>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              onPress={() => this.createStripeCustomer()}
-              style={{ marginHorizontal: 10 }}
-            >
-              <MuliText>
-                tap here to trigger the payment{this.state.token}
-              </MuliText>
-            </TouchableOpacity>
-          </View>
           <View
             style={{
               marginTop: 20,
