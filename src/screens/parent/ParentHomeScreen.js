@@ -40,6 +40,8 @@ class ParentHomeScreen extends Component {
       refreshing: false,
       agenda: 0,
       notification: [],
+      notificationMessage: '',
+      title: '',
       loading: false,
     };
   }
@@ -74,36 +76,34 @@ class ParentHomeScreen extends Component {
       this.setState(
         {
           notification: notification,
-          notificationMessage:
-            'Sitter had accepted your invitaion, Do you want to see?',
+          notificationMessage: notification.data.message,
+          title: notification.data.title,
         },
         () => {
-          this.refs.toast.show(
-            'Status of your invitation has been upadted',
-            DURATION.LENGTH_LONG,
-          );
-          // console.log('test notification: ' + this.state.notification);
+          this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
           this.AlertPro.open();
         },
       );
-      // this.confirmModalPopup();
     } else {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.refs.toast.show(
-          'Babysitter had accepted your invitation',
-          DURATION.LENGTH_LONG,
-        );
-        this.props.navigation.navigate('RequestDetail', {
-          requestId: notification.data.id,
-        });
-      });
+      this.setState(
+        {
+          notification: notification,
+          notificationMessage: notification.data.message,
+          title: notification.data.title,
+        },
+        () => {
+          const { notification } = this.state;
+          this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
+          this.props.navigation.navigate('RequestDetail', {
+            requestId: notification.data.id,
+          });
+        },
+      );
     }
   };
 
   confirmModalPopup = () => {
     const { notification } = this.state;
-    // console.log('PHUC: confirmModalPopup -> notification', notification);
     this.props.navigation.navigate('RequestDetail', {
       requestId: notification.data.id,
     });
@@ -124,7 +124,11 @@ class ParentHomeScreen extends Component {
       await getRequests(this.state.userId)
         .then((res) => {
           const markedDates = markDates(res);
-          this.setState({ requests: res, sittingDates: markedDates, loading: false });
+          this.setState({
+            requests: res,
+            sittingDates: markedDates,
+            loading: false,
+          });
         })
         .catch((error) =>
           console.log('HomeScreen - getRequestData - Requests ' + error),
@@ -141,7 +145,7 @@ class ParentHomeScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { requests, refreshing } = this.state;
+    const { requests, refreshing, notificationMessage, title } = this.state;
 
     const {
       borderText,
@@ -163,10 +167,10 @@ class ParentHomeScreen extends Component {
           }}
           onConfirm={() => this.confirmModalPopup()}
           onCancel={() => this.AlertPro.close()}
-          title="Request confirmation"
-          message={this.state.notificationMessage}
-          textCancel="No"
-          textConfirm="Yes"
+          title={title}
+          message={notificationMessage}
+          textCancel="Không"
+          textConfirm="Có"
           customStyles={{
             mask: {
               backgroundColor: 'transparent',

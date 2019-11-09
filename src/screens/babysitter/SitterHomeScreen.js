@@ -31,7 +31,8 @@ class SitterHomeScreen extends Component {
       invitations: null,
       userId: 0,
       refreshing: false,
-      // agenda: 0,
+      notificationMessage: 'Your request have been accepted',
+      title: 'Request confirmation',
       loading: false,
       notification: {},
     };
@@ -119,35 +120,39 @@ class SitterHomeScreen extends Component {
   };
 
   handleNotification = (notification) => {
+    console.log(
+      'PHUC: SitterHomeScreen -> handleNotification -> notification',
+      notification,
+    );
     const { origin } = notification;
     if (origin == 'received') {
       this._onRefresh();
       this.setState(
         {
           notification: notification,
-          notificationMessage:
-            'Status of your invitation has been updateed, Do you want to see?',
+          notificationMessage: notification.data.message,
+          title: notification.data.title,
         },
         () => {
-          // console.log('test notification bsitter: ' + this.state.notification);
           this.AlertPro.open();
-          this.refs.toast.show(
-            'Status of your invitation has been upadted',
-            DURATION.LENGTH_LONG,
-          );
+          this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
         },
       );
     } else {
-      this.setState({ notification: notification }, () => {
-        const { notification } = this.state;
-        this.props.navigation.navigate('InvitationDetail', {
-          invitationId: notification.data.id,
-        });
-        this.refs.toast.show(
-          'Status of your invitation has been upadted',
-          DURATION.LENGTH_LONG,
-        );
-      });
+      this.setState(
+        {
+          notification: notification,
+          notificationMessage: notification.data.message,
+          title: notification.data.title,
+        },
+        () => {
+          const { notification } = this.state;
+          this.props.navigation.navigate('InvitationDetail', {
+            invitationId: notification.data.id,
+          });
+          this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
+        },
+      );
     }
   };
 
@@ -159,7 +164,7 @@ class SitterHomeScreen extends Component {
   };
 
   render() {
-    const { invitations, refreshing } = this.state;
+    const { invitations, refreshing, title, notificationMessage } = this.state;
     const {
       containerBsitter,
       textBsitter,
@@ -177,10 +182,10 @@ class SitterHomeScreen extends Component {
           }}
           onConfirm={() => this.confirmModalPopup()}
           onCancel={() => this.AlertPro.close()}
-          title="Request confirmation"
-          message={this.state.notificationMessage}
-          textCancel="No"
-          textConfirm="Yes"
+          title={title}
+          message={notificationMessage}
+          textCancel="Không"
+          textConfirm="Có"
           customStyles={{
             mask: {
               backgroundColor: 'transparent',

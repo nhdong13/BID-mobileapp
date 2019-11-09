@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -38,6 +39,7 @@ export class RequestDetail extends Component {
       isModalVisible: false,
       canCheckIn: null,
       canCheckOut: null,
+      loading: false,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -166,7 +168,7 @@ export class RequestDetail extends Component {
                   this.setState((prevState) => ({
                     invitations: prevState.invitations.filter(
                       (el) => el.receiver != errorSitterId,
-                    )
+                    ),
                   }));
                 }
               });
@@ -450,8 +452,7 @@ export class RequestDetail extends Component {
                 </MuliText>
               </View>
               <ScrollView>
-                {this.state.invitations &&
-                  this.state.invitations != [] &&
+                {this.state.invitations && this.state.invitations != [] ? (
                   this.state.invitations.map((item) => (
                     <View key={item.id} style={styles.detailPictureContainer}>
                       <Image
@@ -493,10 +494,10 @@ export class RequestDetail extends Component {
                       <View style={styles.rightInformationSitter}>
                         <View>
                           {/* <TouchableOpacity style={styles.inviteButton} >
-                          <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                            Decline
-                          </MuliText>
-                        </TouchableOpacity> */}
+                            <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                              Decline
+                            </MuliText>
+                          </TouchableOpacity> */}
                           <TouchableOpacity
                             style={styles.inviteButton}
                             onPress={() =>
@@ -506,16 +507,20 @@ export class RequestDetail extends Component {
                               )
                             }
                           >
-                            <MuliText
-                              style={{ color: 'white', fontSize: 11 }}
-                            >
+                            <MuliText style={{ color: 'white', fontSize: 11 }}>
                               Chấp nhận
                             </MuliText>
                           </TouchableOpacity>
                         </View>
                       </View>
                     </View>
-                  ))}
+                  ))
+                ) : (
+                  <ActivityIndicator
+                    size="large"
+                    animating={this.state.loading}
+                  />
+                )}
               </ScrollView>
             </View>
           )}

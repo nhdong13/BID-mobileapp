@@ -11,7 +11,7 @@ import { withNavigation } from 'react-navigation';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 import Api from 'api/api_helper';
 import { retrieveToken } from 'utils/handleToken';
-import { createCustomer, createCharge } from 'api/payment.api';
+import { createCustomer } from 'api/payment.api';
 
 export class Bsitter extends Component {
   constructor(props) {
@@ -20,8 +20,6 @@ export class Bsitter extends Component {
       userId: 0,
       email: '',
       name: '',
-      isCreated: false,
-      price: 0,
     };
   }
 
@@ -56,7 +54,7 @@ export class Bsitter extends Component {
   };
 
   sendInvitation = async (receiverId) => {
-    console.log('it go here');
+    // console.log('it go here');
     const { requestId, request } = this.props;
     const invitation = {
       requestId: requestId,
@@ -71,7 +69,7 @@ export class Bsitter extends Component {
           if (res) {
             createInvitation(requestId, invitation, request)
               .then((response) => {
-                console.log(response);
+                // console.log(response);
                 this.props.changeInviteStatus(receiverId);
                 this.props.setRequestId(response.data.newRequest.id);
               })
@@ -81,7 +79,7 @@ export class Bsitter extends Component {
       } else {
         createInvitation(requestId, invitation, request)
           .then((response) => {
-            console.log(response);
+            // console.log(response);
             this.props.changeInviteStatus(receiverId);
             this.props.setRequestId(response.data.newRequest.id);
           })
@@ -105,7 +103,7 @@ export class Bsitter extends Component {
         this.state.userId,
         this.state.name,
         token.card.cardId,
-      ).then((res) => {});
+      );
     }
     return token;
   };
