@@ -6,7 +6,7 @@ import logout from 'api/logout';
 import Api from 'api/api_helper';
 import { retrieveToken } from 'utils/handleToken';
 
-export default class SettingsScreen extends Component {
+export default class ParentSetting extends Component {
   constructor(props) {
     super(props);
     this.state = { name: '' };
@@ -60,116 +60,6 @@ export default class SettingsScreen extends Component {
                 />
                 <MuliText style={styles.contentInformation}>
                   Chi tiết tài khoản
-                </MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('ReportScreen')}
-              style={styles.detailInformationContainer}
-            >
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-home"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-                <MuliText style={styles.contentInformation}>Report</MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-home"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-                <MuliText style={styles.contentInformation}>
-                  Lịch trông trẻ
-                </MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('CalendarScreen')}
-              style={styles.detailInformationContainer}
-            >
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-calendar"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-                <MuliText style={styles.contentInformation}>Lịch nghỉ</MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.detailInformationContainer}
-              onPress={() => this.props.navigation.navigate('GetSitting')}>
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-timer"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-                <MuliText style={styles.contentInformation}>Lịch sử</MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Circle')}
-              style={styles.detailInformationContainer}
-            >
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-contacts"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
-                />
-                <MuliText style={styles.contentInformation}>
-                  Vòng tròn tin tưởng
                 </MuliText>
               </View>
               <View>
@@ -279,7 +169,7 @@ export default class SettingsScreen extends Component {
   }
 }
 
-SettingsScreen.navigationOptions = {
+ParentSetting.navigationOptions = {
   header: null,
 };
 

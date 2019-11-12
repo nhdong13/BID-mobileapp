@@ -5,6 +5,7 @@ import { MuliText } from 'components/StyledText';
 import { Gender } from 'utils/Enum';
 import { getProfileByRequest, getProfile } from 'api/babysitter.api';
 import { createInvitation } from 'api/invitation.api';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class BsitterProfile extends Component {
   constructor(props) {
@@ -88,6 +89,7 @@ export default class BsitterProfile extends Component {
   // netstat -ano | findstr 3000
   render() {
     return (
+      <ScrollView>
       <View style={styles.container}>
         {this.state.sitter && (
           <View style={styles.sectionContainer}>
@@ -167,6 +169,7 @@ export default class BsitterProfile extends Component {
           </View>
         )}
       </View>
+      </ScrollView>
     );
   }
 }
