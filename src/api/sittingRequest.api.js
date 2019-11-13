@@ -125,7 +125,7 @@ export async function getRequests(userId) {
 }
 
 export async function getSitting(body) {
-  const userId = body.userId;
+  const { userId } = body;
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');

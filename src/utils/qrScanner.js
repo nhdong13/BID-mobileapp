@@ -93,7 +93,7 @@ export class QRcodeScannerScreen extends React.Component {
   };
 
   handleBarCodeScanned = ({ data }) => {
-    if (this.state.qr == data) {
+    if (`${this.state.qr}${this.state.userId}` == data) {
       this.setState(
         {
           scanned: true,

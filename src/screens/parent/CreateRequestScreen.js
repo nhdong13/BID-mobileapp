@@ -113,7 +113,7 @@ class CreateRequestScreen extends Component {
       totalPrice: this.state.price,
     };
 
-    console.log(request);
+    // console.log(request);
     await updateRequest(request).then(() => {
       this.props.navigation.navigate('Recommend', {
         requestId: this.state.requestId,
@@ -163,12 +163,11 @@ class CreateRequestScreen extends Component {
       },
     );
 
-    // eslint-disable-next-line radix
-    const startP = parseInt(this.state.startTime[0] + this.state.startTime[1]);
-    // eslint-disable-next-line radix
-    const endP = parseInt(this.state.endTime[0] + this.state.endTime[1]);
-    //
-    // console.log(abc + 'aaaa');
+    const startP = parseInt(
+      this.state.startTime[0] + this.state.startTime[1],
+      10,
+    );
+    const endP = parseInt(this.state.endTime[0] + this.state.endTime[1], 10);
     let i;
 
     let tempTotal = 0.0;
@@ -484,7 +483,9 @@ class CreateRequestScreen extends Component {
               <MuliText style={styles.contentInformation}>
                 Tổng tiền thanh toán:
               </MuliText>
-              <MuliText style={styles.price}>{formater(this.state.price)} VND</MuliText>
+              <MuliText style={styles.price}>
+                {formater(this.state.price)} VND
+              </MuliText>
             </View>
           </View>
           {this.state.requestId != 0 && (

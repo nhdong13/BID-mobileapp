@@ -67,13 +67,21 @@ class SitterHomeScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const data = this.state;
+    const { userId } = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
         const requestBody = {
-          id: data.userId,
+          id: userId,
         };
+        if (userId != 0) {
+          registerPushNotifications(requestBody.id).then((response) => {
+            if (response) {
+              console.log('PHUC: App -> response', response.data);
+            }
+          });
+        }
+
         Api.post('invitations/sitterInvitation', requestBody)
           .then((res) => {
             this.setState({ invitations: res });

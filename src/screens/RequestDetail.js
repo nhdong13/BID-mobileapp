@@ -25,7 +25,8 @@ export class RequestDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sittingRequestsID: this.props.navigation.state.params.requestId,
+      sittingRequestsID: this.props.navigation.state.params.requestId || 0,
+      createUserId: 0,
       date: null,
       startTime: null,
       endTime: null,
@@ -92,12 +93,6 @@ export class RequestDetail extends Component {
       userId: this.state.bsitter.id,
       data: data,
     });
-
-    // updateRequestStatus(data)
-    //   .then(() => {
-    //     // this.props.navigation.navigate('Home', { loading: false });
-    //   })
-    //   .catch((error) => console.log(error));
   };
 
   onOpenQRwhenDone = (targetStatus) => {
@@ -112,12 +107,6 @@ export class RequestDetail extends Component {
       sittingId: this.state.sittingRequestsID,
       data: data,
     });
-
-    // updateRequestStatus(data)
-    //   .then(() => {
-    //     // this.props.navigation.navigate('Home', { loading: false });
-    //   })
-    //   .catch((error) => console.log(error));
   };
 
   getAcceptedInvitations = async () => {
@@ -152,8 +141,18 @@ export class RequestDetail extends Component {
             // xác nhận thanh toán + accept babysitter
             acceptBabysitter(this.state.sittingRequestsID, sitterId)
               .then(() => {
-                this.props.navigation.navigate('Home');
-                createCharge(this.state.price, this.state.createUserId);
+                const {
+                  sittingRequestsID: requestId,
+                  price,
+                  createUserId: userId,
+                } = this.state;
+                if (requestId != 0 && price != 0 && userId != 0) {
+                  createCharge(price, userId, requestId).then((res) => {
+                    if (res) {
+                      this.props.navigation.navigate('Home');
+                    }
+                  });
+                }
               })
               .catch((error) => {
                 if (error.response.status == 409) {
@@ -552,16 +551,17 @@ export class RequestDetail extends Component {
             </View>
           )}
           <View style={styles.buttonContainer}>
-            {this.state.status == 'PENDING' && (
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={() => this.onButtonClick('CANCELED')}
-              >
-                <MuliText style={{ color: '#e74c3c', fontSize: 15 }}>
-                  Hủy
-                </MuliText>
-              </TouchableOpacity>
-            )}
+            {this.state.status == 'PENDING' ||
+              (this.state.status == 'CONFIRMED' && (
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={() => this.onButtonClick('CANCELED')}
+                >
+                  <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
+                    Hủy
+                  </MuliText>
+                </TouchableOpacity>
+              ))}
 
             {this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
               <TouchableOpacity
@@ -604,18 +604,20 @@ export class RequestDetail extends Component {
             </View>
           ) : (
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.listBabySitterButton}
-                onPress={() => {
-                  this.props.navigation.navigate('Recommend', {
-                    requestId: this.state.sittingRequestsID,
-                  });
-                }}
-              >
-                <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
-                  Danh sách người giữ trẻ
-                </MuliText>
-              </TouchableOpacity>
+              {this.state.status == 'PENDING' && (
+                <TouchableOpacity
+                  style={styles.listBabySitterButton}
+                  onPress={() => {
+                    this.props.navigation.navigate('Recommend', {
+                      requestId: this.state.sittingRequestsID,
+                    });
+                  }}
+                >
+                  <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
+                    Danh sách người giữ trẻ
+                  </MuliText>
+                </TouchableOpacity>
+              )}
             </View>
           )}
 
