@@ -21,6 +21,8 @@ import SittingList from 'screens/parent/SittingList';
 import QRcodeScannerScreen from 'utils/qrScanner';
 import CircleScreens from 'screens/parent/CircleScreens';
 import ReportScreen from 'screens/ReportScreen';
+import CreateCodeScreen from 'screens/parent/CreateCodeScreen';
+import AddToCircle from 'screens/parent/AddToCircle';
 
 const config = Platform.select({
   default: {},
@@ -99,6 +101,12 @@ HomeStack.path = '';
 const CircleStack = createStackNavigator(
   {
     Circles: CircleScreens,
+    AddToCircle: {
+      screen: AddToCircle,
+      navigationOptions: () => ({
+        title: 'Thêm phụ huynh mà bạn biết',
+      }),
+    },
     // QrScanner: QRcodeScannerScreen,
   },
   config,
@@ -122,7 +130,14 @@ const SettingsStack = createStackNavigator(
     Profile: ProfileDetail,
     ReportScreen: ReportScreen,
     Payment: PaymentStripe,
+    GetSitting: SittingList,
     Feedback: Feedback,
+    CreateCodeScreen: {
+      screen: CreateCodeScreen,
+      navigationOptions: () => ({
+        title: 'Tạo mã cá nhân',
+      }),
+    },
   },
   config,
 );
