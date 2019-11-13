@@ -15,8 +15,13 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { listByRequestAndStatus } from 'api/invitation.api';
-import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
-import { withNavigation } from 'react-navigation';
+import {
+  acceptBabysitter,
+  updateRequestStatus,
+  cancelRequest,
+} from 'api/sittingRequest.api';
+import { getRequestTransaction } from 'api/transaction.api';
+import { withNavigationFocus } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
@@ -41,33 +46,64 @@ export class RequestDetail extends Component {
       canCheckIn: null,
       canCheckOut: null,
       loading: false,
+      chargeId: 0,
+      amount: 0,
     };
     this.callDetail = this.callDetail.bind(this);
   }
 
-  componentWillMount() {
+  async componentDidMount() {
     this.getAcceptedInvitations();
+
+    const { sittingRequestsID: requestId } = this.state;
+    Api.get('sittingRequests/' + requestId.toString()).then((resp) => {
+      this.setState({
+        date: resp.sittingDate,
+        startTime: resp.startTime,
+        endTime: resp.endTime,
+        address: resp.sittingAddress,
+        status: resp.status,
+        childrenNumber: resp.childrenNumber,
+        minAgeOfChildren: resp.minAgeOfChildren,
+        bsitter: resp.bsitter,
+        canCheckIn: resp.canCheckIn,
+        canCheckOut: resp.canCheckOut,
+        price: resp.totalPrice,
+        createUserId: resp.createdUser,
+      });
+    });
+
+    const trans = await getRequestTransaction(requestId).then();
+    console.log(
+      'PHUC: RequestDetail -> componentDidMount -> requestId',
+      requestId,
+    );
+    if (trans) {
+      const { chargeId, amount } = trans;
+      if (chargeId && amount) {
+        this.setState({ chargeId, amount });
+      }
+    }
   }
 
-  componentDidMount() {
-    Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(
-      (resp) => {
-        this.setState({
-          date: resp.sittingDate,
-          startTime: resp.startTime,
-          endTime: resp.endTime,
-          address: resp.sittingAddress,
-          status: resp.status,
-          childrenNumber: resp.childrenNumber,
-          minAgeOfChildren: resp.minAgeOfChildren,
-          bsitter: resp.bsitter,
-          canCheckIn: resp.canCheckIn,
-          canCheckOut: resp.canCheckOut,
-          price: resp.totalPrice,
-          createUserId: resp.createdUser,
-        });
-      },
-    );
+  async componentDidUpdate(prevProps) {
+    if (prevProps.isFocused != this.props.isFocused) {
+      if (this.props.isFocused) {
+        const { sittingRequestsID: requestId } = this.state;
+
+        const trans = await getRequestTransaction(requestId);
+        if (trans) {
+          console.log(
+            'PHUC: RequestDetail -> componentDidUpdate -> trans',
+            trans,
+          );
+          const { chargeId, amount } = trans;
+          if (chargeId && amount) {
+            this.setState({ chargeId, amount });
+          }
+        }
+      }
+    }
   }
 
   onButtonClick = (targetStatus) => {
@@ -81,6 +117,21 @@ export class RequestDetail extends Component {
         this.props.navigation.navigate('Home', { loading: false });
       })
       .catch((error) => console.log(error));
+  };
+
+  onCancel = async (status) => {
+    const { sittingRequestsID: requestId, chargeId, amount } = this.state;
+    console.log('PHUC: RequestDetail -> onCancel -> amount', amount);
+    console.log('PHUC: RequestDetail -> onCancel -> chargeId', chargeId);
+    console.log('PHUC: RequestDetail -> onCancel -> requestId', requestId);
+    console.log('PHUC: RequestDetail -> onCancel -> status', status);
+    if (requestId != 0 && chargeId != 0 && amount != 0) {
+      await cancelRequest(requestId, status, chargeId, amount).then((res) => {
+        if (res) {
+          this.props.navigation.navigate('Home');
+        }
+      });
+    }
   };
 
   onOpenQR = (targetStatus) => {
@@ -555,7 +606,7 @@ export class RequestDetail extends Component {
               (this.state.status == 'CONFIRMED' && (
                 <TouchableOpacity
                   style={styles.submitButton}
-                  onPress={() => this.onButtonClick('CANCELED')}
+                  onPress={() => this.onCancel('CANCELED')}
                 >
                   <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
                     Hủy
@@ -628,7 +679,7 @@ export class RequestDetail extends Component {
   }
 }
 
-export default withNavigation(RequestDetail);
+export default withNavigationFocus(RequestDetail);
 
 RequestDetail.navigationOptions = {
   title: 'Yêu cầu chi tiết',

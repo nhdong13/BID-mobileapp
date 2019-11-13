@@ -48,12 +48,41 @@ export async function acceptBabysitter(requestId, sitterId) {
   return response;
 }
 
+export async function cancelRequest(requestId, status, chargeId, amount) {
+  console.log('came to cancel api');
+  const data = {
+    requestId,
+    status,
+    chargeId,
+    amount,
+  };
+
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const options = {
+    method: 'PUT',
+    url: apiUrl.cancelSittingRequest,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(data),
+  };
+
+  const response = await axios(options)
+    .then((res) => res)
+    .catch((error) => console.log(error));
+  console.log('PHUC: cancelRequest -> response', response);
+  return response;
+}
+
 export async function updateRequest(request) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
   const url = apiUrl.updateRequestStatus + request.id;
-  console.log(url);
   const options = {
     method: 'PUT',
     url: url,
@@ -90,7 +119,6 @@ export async function getRequests(userId) {
   const data = {
     userId: userId,
   };
-  // console.log('PHUC: getRequests -> data chac t danh may qua', data);
 
   const { token } = await retrieveToken();
   let trimpedToken = '';
@@ -108,17 +136,8 @@ export async function getRequests(userId) {
   const response = await axios(options).catch((error) => {
     if (userId != 0) console.log('PHUC: getRequests -> error', error);
   });
-  // // console.log('PHUC: getRequests -> response', response);
 
   if (response.data) {
-    // console.log('PHUC: getRequests -> response', response.data);
-    // response.data.map(
-    //   (item) =>
-    //     (item.sittingDate = new moment(item.sittingDate).format('YYYY-MM-DD')),
-    // );
-    // const dataGroup = groupByDate(response.data, 'sittingDate');
-    // return dataGroup;
-
     return response.data;
   }
   return { message: 'error trying to get data from response' };
@@ -148,13 +167,3 @@ export async function getSitting(body) {
   }
   return { message: 'error trying to get data from response' };
 }
-// eslint-disable-next-line no-unused-vars
-const groupByDate = (data, property) =>
-  // group ngay tat ca request theo ngay
-  data.reduce((acc, obj) => {
-    const key = obj[property];
-    if (!acc[key]) acc[key] = [];
-
-    acc[key].push(obj);
-    return acc;
-  }, {});
