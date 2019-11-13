@@ -5,7 +5,6 @@ import { MuliText } from 'components/StyledText';
 import { Gender } from 'utils/Enum';
 import { getProfileByRequest, getProfile } from 'api/babysitter.api';
 import { createInvitation } from 'api/invitation.api';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default class BsitterProfile extends Component {
   constructor(props) {
@@ -94,89 +93,90 @@ export default class BsitterProfile extends Component {
   render() {
     return (
       <ScrollView>
-      <View style={styles.container}>
-        <ScrollView>
-          {this.state.sitter && (
-            <View style={styles.sectionContainer}>
-              <View style={styles.headerSection}>
-                <MuliText
-                  style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-                >
-                  Thông tin cơ bản
-                </MuliText>
-              </View>
-              <View>
-                <MuliText style={styles.textField}>
-                  Tên: {this.state.user.nickname}
-                </MuliText>
-                <MuliText style={styles.textField}>
-                  Địa chỉ: {this.state.user.address}
-                </MuliText>
-                <MuliText style={styles.textField}>
-                  Giới tính:{' '}
-                  {this.state.user.gender == 'MALE'
-                    ? Gender.MALE
-                    : Gender.FEMALE}
-                </MuliText>
-              </View>
-            </View>
-          )}
-          {this.state.sitter && (
-            <View style={styles.sectionContainer}>
-              <View style={styles.headerSection}>
-                <MuliText
-                  style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
-                >
-                  Yêu cầu làm việc
-                </MuliText>
-              </View>
-              <View>
-                <MuliText style={styles.textField}>
-                  Lịch rảnh: {this.state.sitter.weeklySchedule}
-                </MuliText>
-                <MuliText style={styles.textField}>
-                  Buổi sáng: {this.state.sitter.daytime}
-                </MuliText>
-                <MuliText style={styles.textField}>
-                  Buổi tối: {this.state.sitter.evening}
-                </MuliText>
-                <MuliText style={styles.textField}>
-                  Có thể trông trẻ tối thiểu:{' '}
-                  {this.state.sitter.minAgeOfChildren} tuổi
-                </MuliText>
-                <MuliText style={styles.textField}>
-                  Có thể trông tối đa: {this.state.sitter.maxNumOfChildren} trẻ
-                </MuliText>
-              </View>
-              {this.state.sitter && (
-                <View style={styles.buttonContainer}>
-                  {!this.state.sitter.isInvited && (
-                    <TouchableOpacity
-                      style={styles.inviteButton}
-                      onPress={() =>
-                        this.sendInvitation(
-                          this.state.sitter.userId,
-                          this.state.requestId,
-                          this.state.request,
-                        )
-                      }
-                    >
-                      <MuliText style={{ color: '#78ddb6', fontSize: 20 }}>
-                        Mời
-                      </MuliText>
-                    </TouchableOpacity>
-                  )}
-                  {this.state.sitter.isInvited && (
-                    <MuliText style={{ color: '#B81A1A', fontSize: 20 }}>
-                      Đã mời
-                    </MuliText>
-                  )}
+        <View style={styles.container}>
+          <ScrollView>
+            {this.state.sitter && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.headerSection}>
+                  <MuliText
+                    style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+                  >
+                    Thông tin cơ bản
+                  </MuliText>
                 </View>
-              )}
-            </View>
-          )}
-        </ScrollView>
-      </View>
+                <View>
+                  <MuliText style={styles.textField}>
+                    Tên: {this.state.user.nickname}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Địa chỉ: {this.state.user.address}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Giới tính:{' '}
+                    {this.state.user.gender == 'MALE'
+                      ? Gender.MALE
+                      : Gender.FEMALE}
+                  </MuliText>
+                </View>
+              </View>
+            )}
+            {this.state.sitter && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.headerSection}>
+                  <MuliText
+                    style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+                  >
+                    Yêu cầu làm việc
+                  </MuliText>
+                </View>
+                <View>
+                  <MuliText style={styles.textField}>
+                    Lịch rảnh: {this.state.sitter.weeklySchedule}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Buổi sáng: {this.state.sitter.daytime}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Buổi tối: {this.state.sitter.evening}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Có thể trông trẻ tối thiểu:{' '}
+                    {this.state.sitter.minAgeOfChildren} tuổi
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Có thể trông tối đa: {this.state.sitter.maxNumOfChildren}{' '}
+                    trẻ
+                  </MuliText>
+                </View>
+                {this.state.sitter && (
+                  <View style={styles.buttonContainer}>
+                    {!this.state.sitter.isInvited && (
+                      <TouchableOpacity
+                        style={styles.inviteButton}
+                        onPress={() =>
+                          this.sendInvitation(
+                            this.state.sitter.userId,
+                            this.state.requestId,
+                            this.state.request,
+                          )
+                        }
+                      >
+                        <MuliText style={{ color: '#78ddb6', fontSize: 20 }}>
+                          Mời
+                        </MuliText>
+                      </TouchableOpacity>
+                    )}
+                    {this.state.sitter.isInvited && (
+                      <MuliText style={{ color: '#B81A1A', fontSize: 20 }}>
+                        Đã mời
+                      </MuliText>
+                    )}
+                  </View>
+                )}
+              </View>
+            )}
+          </ScrollView>
+        </View>
       </ScrollView>
     );
   }
