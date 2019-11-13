@@ -11,6 +11,7 @@ import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import StarRating from 'react-native-star-rating';
+import Api from 'api/api_helper';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -19,17 +20,11 @@ export default class Feedback extends Component {
     super(props);
     this.state = {
       sittingRequestsID: this.props.navigation.state.params.requestId,
-      date: null,
-      startTime: null,
-      endTime: null,
-      address: null,
-      price: 0,
       bsitter: null,
       isModalVisible: false,
-      starCount: 0,
+      starCount: 5,
       isRated: false,
     };
-    this.callDetail = this.callDetail.bind(this);
   }
 
   componentDidMount() {
@@ -82,9 +77,11 @@ export default class Feedback extends Component {
             source={require('assets/images/Phuc.png')}
             style={styles.pictureReport}
           />
-          <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
-            {this.state.bsitter.nickname}
-          </MuliText>
+          {this.state.bsitter && (
+            <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
+              {this.state.bsitter.nickname}
+            </MuliText>
+          )}
           <StarRating
             starStyle={{
               marginLeft: 10,
@@ -100,13 +97,18 @@ export default class Feedback extends Component {
             <TextInput
               multiline
               maxLength={200}
-              style={{ paddingHorizontal: 15 }}
-              value=""
+              underlineColorAndroid="white"
+              style={{
+                textAlignVertical: 'top',
+                marginHorizontal: 15,
+                width: 300,
+                height: 200,
+              }}
             />
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-            
+              onPress={() => this.props.navigation.navigate('Home')}
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -147,9 +149,8 @@ const styles = StyleSheet.create({
   reportContainer: {
     marginTop: 10,
     borderWidth: 2,
-    width: 300,
-    height: 300,
-    marginHorizontal: 15,
+    width: 350,
+    height: 200,
   },
   star: {
     marginLeft: 10,

@@ -3,36 +3,45 @@ import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode';
 import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
+import { withNavigation } from 'react-navigation';
 
-export default class qrBsitter extends Component {
+class qrBsitter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      qrtext: 'dummies text here to take place',
+      qrtext:
+        'dummies text here to take place' ||
+        this.props.navigation.getParam('qrData'),
+      userId: null || this.props.navigation.getParam('userId'),
     };
   }
 
   componentDidMount() {
-    this.setState({ qrtext: this.props.navigation.getParam('qrData') }, () => {
-      console.log(
-        'PHUC: qrBsitter -> constructor -> qrtext',
-        this.state.qrtext,
-      );
-    });
+    const { qrData, userId } = this.props.navigation.state.params;
+    if (qrData && userId) {
+      console.log('PHUC: qrBsitter -> componentDidMount -> userId', userId);
+      console.log('PHUC: qrBsitter -> componentDidMount -> qrData', qrData);
+      this.setState({ qrtext: qrData, userId: userId }, () => {
+        console.log(
+          'PHUC: qrBsitter -> constructor -> qrtext',
+          this.state.qrtext,
+        );
+      });
 
-    const successSocket = io(apiUrl.socket, {
-      transports: ['websocket'],
-    });
+      const successSocket = io(apiUrl.socket, {
+        transports: ['websocket'],
+      });
 
-    successSocket.on('connect', () => {
-      successSocket.emit('userId', this.state.userId);
-      console.log('PHUC: qrBsitter -> userId', this.state.userId);
-    });
+      successSocket.on('connect', () => {
+        successSocket.emit('userId', this.state.userId);
+        console.log('PHUC: qrBsitter -> userId', this.state.userId);
+      });
 
-    successSocket.on('scanned', () => {
-      console.log('it come to socket');
-      this.props.navigation.navigate('Home');
-    });
+      successSocket.on('scanned', () => {
+        console.log('it come to socket');
+        this.props.navigation.navigate('Home');
+      });
+    }
   }
 
   render() {
@@ -48,6 +57,8 @@ export default class qrBsitter extends Component {
     );
   }
 }
+
+export default withNavigation(qrBsitter);
 
 qrBsitter.navigationOptions = {
   title: 'quét qr',

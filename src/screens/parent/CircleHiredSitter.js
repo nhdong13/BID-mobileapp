@@ -75,7 +75,7 @@ export class CircleHiredSitter extends Component {
                 />
                 <MuliText style={styles.bsitterName}>
                   {' '}
-                  {item.averageRating}{' '}
+                  {item.averageRating.toFixed(0)}{' '}
                 </MuliText>
               </View>
             </View>
