@@ -97,7 +97,7 @@ export class PaymentStripe extends React.Component {
         // optional fields
         currency: 'vnd',
       };
-      console.log('PHUC: PaymentStripe -> openStripe -> params', params);
+      // console.log('PHUC: PaymentStripe -> openStripe -> params', params);
       this.setState({ loading: true });
       const result = await Stripe.createTokenWithCardAsync(params).catch(
         (error) =>
@@ -129,10 +129,10 @@ export class PaymentStripe extends React.Component {
           );
 
           if (customer.code) {
-            console.log(
-              'PHUC: PaymentStripe -> createStripeCustomer -> customer',
-              customer,
-            );
+            // console.log(
+            //   'PHUC: PaymentStripe -> createStripeCustomer -> customer',
+            //   customer,
+            // );
             this.setState({
               title: customer.code,
               message: customer.message,

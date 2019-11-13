@@ -1,7 +1,7 @@
 import colors from 'assets/Color';
 
 export const markDates = (requests) => {
-  let markedDates = [];
+  const markedDates = [];
   requests.forEach((request, index) => {
     if (request.sittingDate !== undefined && request.sittingDate !== null) {
       const markedDateFormat = {
@@ -9,8 +9,8 @@ export const markDates = (requests) => {
         dots: [
           {
             key: index,
-            color: colors.blueAqua,
-            selectedDotColor: colors.lightGreen,
+            color: colors.dot,
+            selectedDotColor: colors.white,
           },
         ],
       };

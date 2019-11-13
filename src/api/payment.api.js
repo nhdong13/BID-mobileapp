@@ -3,7 +3,7 @@ import qs from 'qs';
 import { paymentAPI } from 'utils/Connection';
 
 export async function createCustomer(email, token, userId, name, cardId) {
-  console.log('payment api -> createUser');
+  console.log('payment api -> createCustomer');
   const data = {
     email,
     token,
@@ -56,10 +56,11 @@ export async function getCustomer(userId) {
   return response;
 }
 
-export async function createCharge(amount, userId) {
+export async function createCharge(amount, userId, requestId) {
   const data = {
     amount,
     userId,
+    requestId,
   };
   const options = {
     method: 'POST',

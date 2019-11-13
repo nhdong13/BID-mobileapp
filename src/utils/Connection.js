@@ -1,4 +1,5 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
+
 console.log(HOST_ENDPOINT);
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
@@ -13,6 +14,7 @@ const apiUrl = {
   updateRequestStatus: `${url}/sittingRequests/`,
   updateInvitation: `${url}/invitations/`,
   getInvitations: `${url}/invitations/`,
+  cancelSittingRequest: `${url}/sittingRequests/cancelSittingRequest`,
 };
 
 export const babysitterAPI = {
@@ -32,6 +34,10 @@ export const paymentAPI = {
   createCustomer: `${url}/payment/customer/`,
   getCustomer: `${url}/payment/customer/`,
   createCharge: `${url}/payment/charge/`,
+};
+
+export const transactionAPI = {
+  getRequestTransaction: `${url}/transactions/`,
 };
 
 export default apiUrl;

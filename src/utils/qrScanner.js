@@ -25,7 +25,7 @@ export class QRcodeScannerScreen extends React.Component {
       content: '',
       userId: 0 || this.props.navigation.getParam('userId'),
       isDone: false || this.props.navigation.getParam('isDone'),
-      qr: 'babysitter in demand is the best capstone project',
+      qr: 'babysitter in demand is the best capstone project ',
       message: 'Request to scan QR',
       dataInvitation: null || this.props.navigation.getParam('data'),
     };
@@ -51,7 +51,7 @@ export class QRcodeScannerScreen extends React.Component {
     // just hard code the passpharse for now, we will use a code generator later
     const { qr, message, userId } = this.state;
     socket.emit('scanQr', {
-      qr: qr,
+      qr: qr + userId,
       message: message,
       userId: userId,
     });
@@ -93,7 +93,7 @@ export class QRcodeScannerScreen extends React.Component {
   };
 
   handleBarCodeScanned = ({ data }) => {
-    if (this.state.qr == data) {
+    if (`${this.state.qr}${this.state.userId}` == data) {
       this.setState(
         {
           scanned: true,
