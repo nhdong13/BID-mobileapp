@@ -68,7 +68,7 @@ export default class ProfileDetail extends Component {
     return (
       <ScrollView>
         <View>
-          <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <MuliText style={{ marginLeft: 25 }}>
               {this.state.name} - {moment().diff(this.state.dob, 'years')} -
             </MuliText>
@@ -80,20 +80,20 @@ export default class ProfileDetail extends Component {
                 this.state.gender == 'MALE' ? colors.blueAqua : colors.pinkLight
               }
             />
-            <MuliText style={{ marginLeft: 25 }}>
-              Mã cá nhân: {this.state.code ? this.state.code : 'Chưa có'}
-            </MuliText>
           </View>
+          <MuliText style={{ marginTop: 20, marginHorizontal: 25 }}>
+            Mã cá nhân: {this.state.code ? this.state.code : 'Chưa có'}
+          </MuliText>
         </View>
-        <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>
+        <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
           Địa chỉ: {this.state.address}
         </MuliText>
         {this.state.bsitter != null ? (
           <View>
-            <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>
+            <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
               Ngày làm việc: {this.state.bsitter.weeklySchedule}
             </MuliText>
-            <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>
+            <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
               Thời gian làm việc: {this.state.bsitter.daytime} and{' '}
               {this.state.bsitter.evening}
             </MuliText>
@@ -122,25 +122,28 @@ export default class ProfileDetail extends Component {
                     </View>
                   ))}
                 </View>
+                {/* {!this.state.code && ( */}
+                <View style={{ alignItems: 'center', marginTop: 20 }}>
+                  <TouchableOpacity
+                    style={styles.barcode}
+                    onPress={() =>
+                      this.props.navigation.navigate('CreateCodeScreen', {
+                        userId: this.state.userId,
+                      })
+                    }
+                  >
+                    <MuliText style={{ color: colors.done }}>
+                      Tạo mã cá nhân
+                    </MuliText>
+                  </TouchableOpacity>
+                </View>
+                {/* )} */}
               </View>
             ) : (
               <View />
             )}
           </View>
         )}
-        {/* {!this.state.code && ( */}
-        <View>
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.navigate('CreateCodeScreen', {
-                userId: this.state.userId,
-              })
-            }
-          >
-            <MuliText>Tạo mã cá nhân</MuliText>
-          </TouchableOpacity>
-        </View>
-        {/* )} */}
       </ScrollView>
     );
   }
@@ -150,10 +153,22 @@ ProfileDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  barcode: {
+    width: 150,
+    height: 35,
+    padding: 5,
+    borderRadius: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#2ecc71',
+    borderWidth: 1,
+    backgroundColor: 'white',
+  },
   name: {
     alignItems: 'center',
   },
   detailPictureContainer: {
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
