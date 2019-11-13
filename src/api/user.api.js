@@ -25,5 +25,9 @@ export async function getUser() {
         console.log(error.response.headers);
       } else console.log('onLogin error' + error);
     });
-  return response;
+
+  if (response.data) {
+    return response.data;
+  }
+  return { message: 'Error in userApi' };
 }

@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -14,8 +15,13 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { listByRequestAndStatus } from 'api/invitation.api';
-import { acceptBabysitter, updateRequestStatus } from 'api/sittingRequest.api';
-import { withNavigation } from 'react-navigation';
+import {
+  acceptBabysitter,
+  updateRequestStatus,
+  cancelRequest,
+} from 'api/sittingRequest.api';
+import { getRequestTransaction } from 'api/transaction.api';
+import { withNavigationFocus } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
@@ -24,7 +30,8 @@ export class RequestDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sittingRequestsID: this.props.navigation.state.params.requestId,
+      sittingRequestsID: this.props.navigation.state.params.requestId || 0,
+      createUserId: 0,
       date: null,
       startTime: null,
       endTime: null,
@@ -38,33 +45,65 @@ export class RequestDetail extends Component {
       isModalVisible: false,
       canCheckIn: null,
       canCheckOut: null,
+      loading: false,
+      chargeId: 0,
+      amount: 0,
     };
     this.callDetail = this.callDetail.bind(this);
   }
 
-  componentWillMount() {
+  async componentDidMount() {
     this.getAcceptedInvitations();
+
+    const { sittingRequestsID: requestId } = this.state;
+    Api.get('sittingRequests/' + requestId.toString()).then((resp) => {
+      this.setState({
+        date: resp.sittingDate,
+        startTime: resp.startTime,
+        endTime: resp.endTime,
+        address: resp.sittingAddress,
+        status: resp.status,
+        childrenNumber: resp.childrenNumber,
+        minAgeOfChildren: resp.minAgeOfChildren,
+        bsitter: resp.bsitter,
+        canCheckIn: resp.canCheckIn,
+        canCheckOut: resp.canCheckOut,
+        price: resp.totalPrice,
+        createUserId: resp.createdUser,
+      });
+    });
+
+    const trans = await getRequestTransaction(requestId).then();
+    console.log(
+      'PHUC: RequestDetail -> componentDidMount -> requestId',
+      requestId,
+    );
+    if (trans) {
+      const { chargeId, amount } = trans;
+      if (chargeId && amount) {
+        this.setState({ chargeId, amount });
+      }
+    }
   }
 
-  componentDidMount() {
-    Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(
-      (resp) => {
-        this.setState({
-          date: resp.sittingDate,
-          startTime: resp.startTime,
-          endTime: resp.endTime,
-          address: resp.sittingAddress,
-          status: resp.status,
-          childrenNumber: resp.childrenNumber,
-          minAgeOfChildren: resp.minAgeOfChildren,
-          bsitter: resp.bsitter,
-          canCheckIn: resp.canCheckIn,
-          canCheckOut: resp.canCheckOut,
-          price: resp.totalPrice,
-          createUserId: resp.createdUser,
-        });
-      },
-    );
+  async componentDidUpdate(prevProps) {
+    if (prevProps.isFocused != this.props.isFocused) {
+      if (this.props.isFocused) {
+        const { sittingRequestsID: requestId } = this.state;
+
+        const trans = await getRequestTransaction(requestId);
+        if (trans) {
+          console.log(
+            'PHUC: RequestDetail -> componentDidUpdate -> trans',
+            trans,
+          );
+          const { chargeId, amount } = trans;
+          if (chargeId && amount) {
+            this.setState({ chargeId, amount });
+          }
+        }
+      }
+    }
   }
 
   onButtonClick = (targetStatus) => {
@@ -80,6 +119,21 @@ export class RequestDetail extends Component {
       .catch((error) => console.log(error));
   };
 
+  onCancel = async (status) => {
+    const { sittingRequestsID: requestId, chargeId, amount } = this.state;
+    console.log('PHUC: RequestDetail -> onCancel -> amount', amount);
+    console.log('PHUC: RequestDetail -> onCancel -> chargeId', chargeId);
+    console.log('PHUC: RequestDetail -> onCancel -> requestId', requestId);
+    console.log('PHUC: RequestDetail -> onCancel -> status', status);
+    if (requestId != 0 && chargeId != 0 && amount != 0) {
+      await cancelRequest(requestId, status, chargeId, amount).then((res) => {
+        if (res) {
+          this.props.navigation.navigate('Home');
+        }
+      });
+    }
+  };
+
   onOpenQR = (targetStatus) => {
     const data = {
       id: this.state.sittingRequestsID,
@@ -90,12 +144,6 @@ export class RequestDetail extends Component {
       userId: this.state.bsitter.id,
       data: data,
     });
-
-    // updateRequestStatus(data)
-    //   .then(() => {
-    //     // this.props.navigation.navigate('Home', { loading: false });
-    //   })
-    //   .catch((error) => console.log(error));
   };
 
   onOpenQRwhenDone = (targetStatus) => {
@@ -110,12 +158,6 @@ export class RequestDetail extends Component {
       sittingId: this.state.sittingRequestsID,
       data: data,
     });
-
-    // updateRequestStatus(data)
-    //   .then(() => {
-    //     // this.props.navigation.navigate('Home', { loading: false });
-    //   })
-    //   .catch((error) => console.log(error));
   };
 
   getAcceptedInvitations = async () => {
@@ -150,8 +192,18 @@ export class RequestDetail extends Component {
             // xác nhận thanh toán + accept babysitter
             acceptBabysitter(this.state.sittingRequestsID, sitterId)
               .then(() => {
-                this.props.navigation.navigate('Home');
-                createCharge(this.state.price, this.state.createUserId);
+                const {
+                  sittingRequestsID: requestId,
+                  price,
+                  createUserId: userId,
+                } = this.state;
+                if (requestId != 0 && price != 0 && userId != 0) {
+                  createCharge(price, userId, requestId).then((res) => {
+                    if (res) {
+                      this.props.navigation.navigate('Home');
+                    }
+                  });
+                }
               })
               .catch((error) => {
                 if (error.response.status == 409) {
@@ -166,7 +218,7 @@ export class RequestDetail extends Component {
                   this.setState((prevState) => ({
                     invitations: prevState.invitations.filter(
                       (el) => el.receiver != errorSitterId,
-                    )
+                    ),
                   }));
                 }
               });
@@ -450,8 +502,7 @@ export class RequestDetail extends Component {
                 </MuliText>
               </View>
               <ScrollView>
-                {this.state.invitations &&
-                  this.state.invitations != [] &&
+                {this.state.invitations && this.state.invitations != [] ? (
                   this.state.invitations.map((item) => (
                     <View key={item.id} style={styles.detailPictureContainer}>
                       <Image
@@ -493,10 +544,10 @@ export class RequestDetail extends Component {
                       <View style={styles.rightInformationSitter}>
                         <View>
                           {/* <TouchableOpacity style={styles.inviteButton} >
-                          <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                            Decline
-                          </MuliText>
-                        </TouchableOpacity> */}
+                            <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
+                              Decline
+                            </MuliText>
+                          </TouchableOpacity> */}
                           <TouchableOpacity
                             style={styles.inviteButton}
                             onPress={() =>
@@ -506,16 +557,20 @@ export class RequestDetail extends Component {
                               )
                             }
                           >
-                            <MuliText
-                              style={{ color: 'white', fontSize: 11 }}
-                            >
+                            <MuliText style={{ color: 'white', fontSize: 11 }}>
                               Chấp nhận
                             </MuliText>
                           </TouchableOpacity>
                         </View>
                       </View>
                     </View>
-                  ))}
+                  ))
+                ) : (
+                  <ActivityIndicator
+                    size="large"
+                    animating={this.state.loading}
+                  />
+                )}
               </ScrollView>
             </View>
           )}
@@ -547,16 +602,17 @@ export class RequestDetail extends Component {
             </View>
           )}
           <View style={styles.buttonContainer}>
-            {this.state.status == 'PENDING' && (
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={() => this.onButtonClick('CANCELED')}
-              >
-                <MuliText style={{ color: '#e74c3c', fontSize: 15 }}>
-                  Hủy
-                </MuliText>
-              </TouchableOpacity>
-            )}
+            {this.state.status == 'PENDING' ||
+              (this.state.status == 'CONFIRMED' && (
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={() => this.onCancel('CANCELED')}
+                >
+                  <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
+                    Hủy
+                  </MuliText>
+                </TouchableOpacity>
+              ))}
 
             {this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
               <TouchableOpacity
@@ -599,18 +655,20 @@ export class RequestDetail extends Component {
             </View>
           ) : (
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.listBabySitterButton}
-                onPress={() => {
-                  this.props.navigation.navigate('Recommend', {
-                    requestId: this.state.sittingRequestsID,
-                  });
-                }}
-              >
-                <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
-                  Danh sách người giữ trẻ
-                </MuliText>
-              </TouchableOpacity>
+              {this.state.status == 'PENDING' && (
+                <TouchableOpacity
+                  style={styles.listBabySitterButton}
+                  onPress={() => {
+                    this.props.navigation.navigate('Recommend', {
+                      requestId: this.state.sittingRequestsID,
+                    });
+                  }}
+                >
+                  <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
+                    Danh sách người giữ trẻ
+                  </MuliText>
+                </TouchableOpacity>
+              )}
             </View>
           )}
 
@@ -621,7 +679,7 @@ export class RequestDetail extends Component {
   }
 }
 
-export default withNavigation(RequestDetail);
+export default withNavigationFocus(RequestDetail);
 
 RequestDetail.navigationOptions = {
   title: 'Yêu cầu chi tiết',
