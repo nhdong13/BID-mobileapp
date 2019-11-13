@@ -7,14 +7,13 @@ import {
 
 import TabBarIcon from 'components/TabBarIcon';
 import ParentHomeScreen from 'screens/parent/ParentHomeScreen';
-import SettingsScreen from 'screens/SettingsScreen';
+import ParentSetting from 'screens/ParentSetting';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import Feedback from 'screens/parent/Feedback';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
-import CalendarScreen from 'screens/babysitter/CalendarScreen';
 import PaymentStripe from 'utils/PaymentStripe';
 import SittingList from 'screens/parent/SittingList';
 
@@ -127,9 +126,8 @@ CircleStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settings: ParentSetting,
     Profile: ProfileDetail,
-    CalendarScreen: CalendarScreen,
     ReportScreen: ReportScreen,
     Payment: PaymentStripe,
     GetSitting: SittingList,
