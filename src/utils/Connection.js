@@ -1,5 +1,6 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 console.log(HOST_ENDPOINT);
+
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 const apiUrl = {
   baseUrl: `${url}/`,
@@ -15,6 +16,11 @@ const apiUrl = {
   getInvitations: `${url}/invitations/`,
 };
 
+export const parentAPI = {
+  findByCode: `${url}/parents/findByCode/`,
+  createCode: `${url}/parents/createCode/`,
+};
+
 export const babysitterAPI = {
   getProfile: `${url}/babysitters/`,
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
@@ -23,6 +29,7 @@ export const babysitterAPI = {
 
 export const circleAPI = {
   getCircle: `${url}/circles/`,
+  addToCircle: `${url}/circles/`,
 };
 export const userAPI = {
   getUser: `${url}/users/`,
