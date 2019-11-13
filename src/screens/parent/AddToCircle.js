@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import {
@@ -13,6 +14,8 @@ import { create } from 'api/circle.api';
 import { findByCode } from 'api/parent.api';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import colors from 'assets/Color';
+import { Ionicons } from '@expo/vector-icons/';
+import images from 'assets/images/images';
 
 export default class AddToCircle extends Component {
   constructor(props) {
@@ -59,54 +62,84 @@ export default class AddToCircle extends Component {
   render() {
     return (
       <ScrollView>
-        <View>
-          <Toast ref="toast" position="top" />
-          <TextInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            value={this.state.code}
-            onChangeText={(code) => this.setState({ code })}
-            placeholder="Nhập mã cần tìm"
-          />
+        <View style={{ flexDirection: 'row', marginTop: 40 }}>
+          <Toast ref="toast" />
+          <View
+            style={{
+              width: 350,
+              borderColor: 'gray',
+              borderWidth: 1,
+              marginHorizontal: 10,
+            }}
+          >
+            <TextInput
+              style={{
+                width: 300,
+                marginHorizontal: 10,
+              }}
+              value={this.state.code}
+              onChangeText={(code) => this.setState({ code })}
+              placeholder="Nhập mã cần tìm"
+            />
+          </View>
           {/* {this.state.disableCreate && ( */}
-          <TouchableOpacity>
-            <MuliText onPress={() => this.findParent()}>Tìm kiếm</MuliText>
+          <TouchableOpacity onPress={() => this.findParent()}>
+            <Ionicons
+              name="ios-search"
+              size={25}
+              style={{ marginLeft: 5 }}
+              color="#315f61"
+            />
           </TouchableOpacity>
           {/* )} */}
         </View>
-        {this.state.friend != null && (
-          <View style={styles.detailPictureContainer}>
-            <Image
-              source={this.state.detailPictureSitter}
-              style={styles.profileImg}
-            />
-            <View style={styles.leftInformation}>
-              <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
-              <MuliText style={{ fontSize: 15 }}>
-                {this.state.friend.user.nickname}
-              </MuliText>
+        <View style={styles.detailContainer}>
+          {this.state.friend != null && (
+            <View style={styles.detailPictureContainer}>
+              <Image source={images.parent} style={styles.sitterImage} />
+              <View style={styles.leftInformation}>
+                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
+                <MuliText style={{ fontSize: 15 }}>
+                  {this.state.friend.user.nickname}
+                </MuliText>
+              </View>
             </View>
+          )}
+          <View style={styles.rightInformation}>
+            {this.state.friend != null && !this.state.friend.isInvited && (
+              <TouchableOpacity
+                style={styles.inviteButton}
+                onPress={() => this.addToCircle()}
+              >
+                <MuliText style={{ color: '#78ddb6', fontSize: 16 }}>
+                  Thêm
+                </MuliText>
+              </TouchableOpacity>
+            )}
+            {this.state.friend != null && this.state.friend.isInvited && (
+              <MuliText style={{ color: '#B81A1A', fontSize: 16 }}>
+                Đã thêm
+              </MuliText>
+            )}
           </View>
-        )}
-        {this.state.friend != null && !this.state.friend.isInvited && (
-          <TouchableOpacity
-            style={styles.inviteButton}
-            onPress={() => this.addToCircle()}
-          >
-            <MuliText style={{ color: '#78ddb6', fontSize: 16 }}>Mời</MuliText>
-          </TouchableOpacity>
-        )}
-        {this.state.friend != null && this.state.friend.isInvited && (
-          <MuliText style={{ color: '#B81A1A', fontSize: 16 }}>Đã mời</MuliText>
-        )}
+        </View>
       </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  detailContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 15,
+  },
   detailPictureContainer: {
     flexDirection: 'row',
     marginTop: 15,
+  },
+  rightInformation: {
+    marginLeft: 'auto',
+    marginTop: 30,
   },
   leftInformation: {
     marginTop: 5,
@@ -116,5 +149,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '400',
     color: '#bdc3c7',
+  },
+  sitterImage: {
+    width: 65,
+    height: 65,
+    borderRadius: 20,
+    resizeMode: 'contain',
   },
 });

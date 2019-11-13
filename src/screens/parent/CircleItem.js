@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, View } from 'react-native';
 import moment from 'moment';
 import { MuliText } from 'components/StyledText';
-import { Ionicons } from '@expo/vector-icons';
-import { CheckBox } from 'native-base';
-import images from 'assets/images/images';
-import colors from 'assets/Color';
 import { withNavigation } from 'react-navigation';
 
 export class CircleItem extends Component {
@@ -55,18 +51,6 @@ export class CircleItem extends Component {
           >
             {item.friend.user.nickname}
           </MuliText>
-
-          {/* <CheckBox
-            style={{
-              marginTop: 5,
-              width: 18,
-              height: 18,
-              borderRadius: 20 / 2,
-              borderColor: 'black',
-              backgroundColor: 'black',
-            }}
-            checked={true}
-          /> */}
         </View>
       </View>
     );
@@ -74,5 +58,3 @@ export class CircleItem extends Component {
 }
 
 export default withNavigation(CircleItem);
-
-const styles = StyleSheet.create({});

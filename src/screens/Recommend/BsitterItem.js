@@ -134,7 +134,8 @@ export class Bsitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.bsitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)} tuổi
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
+                  tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
                   <Ionicons
@@ -164,7 +165,7 @@ export class Bsitter extends Component {
                 <Ionicons
                   name="ios-star"
                   size={24}
-                  style={{marginLeft: 10 }}
+                  style={{ marginLeft: 10 }}
                   color={colors.lightGreen}
                 />
 

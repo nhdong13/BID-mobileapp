@@ -332,13 +332,13 @@ export class RequestDetail extends Component {
               </MuliText>
             </View>
           </View>
-          <View style={{ flex: 1, marginTop: 15, marginLeft: 10 }}>
+          <View style={{ marginTop: 20 }}>
             <TouchableOpacity
               onPress={() => {
                 this.callDetail();
               }}
               title="Show more detail"
-              style={{ flex: 1 }}
+              style={{ marginLeft: 10 }}
             >
               <MuliText style={{ color: colors.blueAqua }}>
                 {this.state.isModalVisible ? ' Ẩn đi' : 'Xem thêm'}
@@ -731,7 +731,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     backgroundColor: 'white',
     flex: 1,
-    marginTop: 5,
+    marginTop: 20,
   },
   headerSection: {
     flexDirection: 'row',

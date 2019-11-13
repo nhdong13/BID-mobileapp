@@ -167,7 +167,13 @@ export default class BsitterProfile extends Component {
                       </TouchableOpacity>
                     )}
                     {this.state.sitter.isInvited && (
-                      <MuliText style={{ color: '#B81A1A', fontSize: 20 }}>
+                      <MuliText
+                        style={{
+                          marginTop: 10,
+                          color: '#B81A1A',
+                          fontSize: 20,
+                        }}
+                      >
                         Đã mời
                       </MuliText>
                     )}
