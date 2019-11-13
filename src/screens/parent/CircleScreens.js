@@ -91,9 +91,14 @@ export default class CircleScreens extends Component {
               style={{
                 marginLeft: 'auto',
                 marginTop: 18,
-                color: colors.done,
+                color: colors.lightGreen,
                 marginRight: 10,
               }}
+              onPress={() =>
+                this.props.navigation.navigate('AddToCircle', {
+                  ownerId: this.state.userId,
+                })
+              }
             >
               <MuliText>Thêm</MuliText>
             </TouchableOpacity>
