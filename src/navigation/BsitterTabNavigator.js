@@ -10,10 +10,10 @@ import InvitationDetail from 'screens/InvitationDetail';
 import SitterHomeScreen from 'screens/babysitter/SitterHomeScreen';
 import PaymentStripe from 'utils/PaymentStripe';
 import ProfileDetail from 'screens/ProfileDetail';
-import SettingsScreen from '../screens/SettingsScreen';
+import SettingsScreen from '../screens/SitterSetting';
 import TabBarIcon from '../components/TabBarIcon';
 import SittingList from 'screens/parent/SittingList';
-
+import CalendarScreen from 'screens/babysitter/CalendarScreen';
 
 const config = Platform.select({
   default: {},
@@ -51,7 +51,8 @@ const SettingsStack = createStackNavigator(
     Settings: SettingsScreen,
     Profile: ProfileDetail,
     Payment: PaymentStripe,
-    GetSitting: SittingList
+    GetSitting: SittingList,
+    CalendarScreen: CalendarScreen,
   },
   config,
 );

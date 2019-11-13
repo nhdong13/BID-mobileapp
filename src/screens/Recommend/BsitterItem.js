@@ -134,13 +134,13 @@ export class Bsitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.bsitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)} tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
                   <Ionicons
                     name="ios-male"
                     size={20}
-                    style={{ marginBottom: -2, marginLeft: 20 }}
+                    style={{ marginBottom: -2, marginLeft: 10 }}
                     color={colors.blueAqua}
                   />
                 )}
@@ -148,7 +148,7 @@ export class Bsitter extends Component {
                   <Ionicons
                     name="ios-female"
                     size={20}
-                    style={{ marginBottom: -2, marginLeft: 20 }}
+                    style={{ marginBottom: -2, marginLeft: 10 }}
                     color={colors.pinkLight}
                   />
                 )}
@@ -157,18 +157,20 @@ export class Bsitter extends Component {
                 <Ionicons
                   name="ios-pin"
                   size={24}
-                  style={{ marginBottom: -4, marginLeft: 20 }}
+                  style={{ marginLeft: 10 }}
                   color={colors.lightGreen}
                 />
                 <MuliText> {item.distance} km </MuliText>
                 <Ionicons
                   name="ios-star"
                   size={24}
-                  style={{ marginBottom: -4, marginLeft: 20 }}
+                  style={{marginLeft: 10 }}
                   color={colors.lightGreen}
                 />
-                <MuliText>
-                  {' '}
+
+                <MuliText
+                  style={item.totalFeedback > 10 ? styles.green : styles.red}
+                >
                   {item.averageRating.toFixed(0)} ({item.totalFeedback}){' '}
                 </MuliText>
               </View>
@@ -199,6 +201,14 @@ export class Bsitter extends Component {
 export default withNavigation(Bsitter);
 
 const styles = StyleSheet.create({
+  green: {
+    marginLeft: 5,
+    color: colors.done,
+  },
+  red: {
+    marginLeft: 5,
+    color: colors.canceled,
+  },
   container: {
     flex: 1,
     backgroundColor: '#dfe6e9',

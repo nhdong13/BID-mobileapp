@@ -7,14 +7,13 @@ import {
 
 import TabBarIcon from 'components/TabBarIcon';
 import ParentHomeScreen from 'screens/parent/ParentHomeScreen';
-import SettingsScreen from 'screens/SettingsScreen';
+import ParentSetting from 'screens/ParentSetting';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import Feedback from 'screens/parent/Feedback';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
-import CalendarScreen from 'screens/babysitter/CalendarScreen';
 import PaymentStripe from 'utils/PaymentStripe';
 import SittingList from 'screens/parent/SittingList';
 
@@ -22,6 +21,8 @@ import SittingList from 'screens/parent/SittingList';
 import QRcodeScannerScreen from 'utils/qrScanner';
 import CircleScreens from 'screens/parent/CircleScreens';
 import ReportScreen from 'screens/ReportScreen';
+import CreateCodeScreen from 'screens/parent/CreateCodeScreen';
+import AddToCircle from 'screens/parent/AddToCircle';
 
 const config = Platform.select({
   default: {},
@@ -100,6 +101,12 @@ HomeStack.path = '';
 const CircleStack = createStackNavigator(
   {
     Circles: CircleScreens,
+    AddToCircle: {
+      screen: AddToCircle,
+      navigationOptions: () => ({
+        title: 'Thêm phụ huynh mà bạn biết',
+      }),
+    },
     // QrScanner: QRcodeScannerScreen,
   },
   config,
@@ -119,14 +126,18 @@ CircleStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settings: ParentSetting,
     Profile: ProfileDetail,
-    CalendarScreen: CalendarScreen,
     ReportScreen: ReportScreen,
     Payment: PaymentStripe,
     GetSitting: SittingList,
-    Feedback: Feedback
-
+    Feedback: Feedback,
+    CreateCodeScreen: {
+      screen: CreateCodeScreen,
+      navigationOptions: () => ({
+        title: 'Tạo mã cá nhân',
+      }),
+    },
   },
   config,
 );

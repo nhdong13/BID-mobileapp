@@ -12,6 +12,7 @@ import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class ProfileDetail extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ export default class ProfileDetail extends Component {
       dob: null,
       child: null,
       bsitter: null,
+      code: null,
     };
   }
 
@@ -50,7 +52,10 @@ export default class ProfileDetail extends Component {
       });
       // eslint-disable-next-line no-unused-expressions
       this.state.roleId == 2
-        ? this.setState({ child: res.parent.children })
+        ? this.setState({
+            child: res.parent.children,
+            code: res.parent.parentCode,
+          })
         : this.setState({ child: null });
       // eslint-disable-next-line no-unused-expressions
       this.state.roleId == 3
@@ -75,6 +80,9 @@ export default class ProfileDetail extends Component {
                 this.state.gender == 'MALE' ? colors.blueAqua : colors.pinkLight
               }
             />
+            <MuliText style={{ marginLeft: 25 }}>
+              Mã cá nhân: {this.state.code ? this.state.code : 'Chưa có'}
+            </MuliText>
           </View>
         </View>
         <MuliText style={{ marginHorizontal: 25, marginTop: 10 }}>
@@ -120,6 +128,19 @@ export default class ProfileDetail extends Component {
             )}
           </View>
         )}
+        {/* {!this.state.code && ( */}
+        <View>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('CreateCodeScreen', {
+                userId: this.state.userId,
+              })
+            }
+          >
+            <MuliText>Tạo mã cá nhân</MuliText>
+          </TouchableOpacity>
+        </View>
+        {/* )} */}
       </ScrollView>
     );
   }
