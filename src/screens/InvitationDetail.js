@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -12,7 +13,6 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateInvitation } from 'api/invitation.api';
-import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
 
 export default class InvitationDetail extends Component {

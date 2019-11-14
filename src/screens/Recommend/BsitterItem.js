@@ -134,7 +134,8 @@ export class Bsitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.bsitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)} tuổi
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
+                  tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
                   <Ionicons
@@ -164,7 +165,7 @@ export class Bsitter extends Component {
                 <Ionicons
                   name="ios-star"
                   size={24}
-                  style={{marginLeft: 10 }}
+                  style={{ marginLeft: 10 }}
                   color={colors.lightGreen}
                 />
 
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   bsitterName: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '400',
     color: '#315F61',
   },
@@ -293,8 +294,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   sitterImage: {
-    width: 65,
-    height: 65,
+    width: 55,
+    height: 55,
     borderRadius: 20,
     resizeMode: 'contain',
   },

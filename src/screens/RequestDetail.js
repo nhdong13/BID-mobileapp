@@ -25,6 +25,7 @@ import { withNavigationFocus } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
+import AlertPro from 'react-native-alert-pro';
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -48,6 +49,8 @@ export class RequestDetail extends Component {
       loading: false,
       chargeId: 0,
       amount: 0,
+      notificationMessage: '',
+      title: '',
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -90,17 +93,14 @@ export class RequestDetail extends Component {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
         const { sittingRequestsID: requestId } = this.state;
+        const { chargeId, amount } = await getRequestTransaction(requestId);
 
-        const trans = await getRequestTransaction(requestId);
-        if (trans) {
-          console.log(
-            'PHUC: RequestDetail -> componentDidUpdate -> trans',
-            trans,
-          );
-          const { chargeId, amount } = trans;
+        if (chargeId && amount) {
           if (chargeId && amount) {
             this.setState({ chargeId, amount });
           }
+        } else {
+          console.log('get request transaction ko chay roi');
         }
       }
     }
@@ -119,16 +119,33 @@ export class RequestDetail extends Component {
       .catch((error) => console.log(error));
   };
 
-  onCancel = async (status) => {
+  onCancel = async () => {
+    this.setState({
+      title: 'Bạn có thật sự muốn hủy ?',
+      notificationMessage:
+        'Nếu hủy bạn sẽ bị trừ 10% phí dịch vụ vào số tiền đã trả',
+    });
+    this.AlertPro.open();
+  };
+
+  confirmCancel = async (status) => {
     const { sittingRequestsID: requestId, chargeId, amount } = this.state;
-    console.log('PHUC: RequestDetail -> onCancel -> amount', amount);
-    console.log('PHUC: RequestDetail -> onCancel -> chargeId', chargeId);
-    console.log('PHUC: RequestDetail -> onCancel -> requestId', requestId);
-    console.log('PHUC: RequestDetail -> onCancel -> status', status);
+    console.log('PHUC: RequestDetail -> confirmCancel -> amount', amount);
+    console.log('PHUC: RequestDetail -> confirmCancel -> chargeId', chargeId);
+    console.log('PHUC: RequestDetail -> confirmCancel -> requestId', requestId);
+    console.log('PHUC: RequestDetail -> confirmCancel -> status', status);
+
     if (requestId != 0 && chargeId != 0 && amount != 0) {
       await cancelRequest(requestId, status, chargeId, amount).then((res) => {
-        if (res) {
-          this.props.navigation.navigate('Home');
+        if (res.data) {
+          console.log('PHUC: RequestDetail -> confirmCancel -> res', res.data);
+          this.AlertPro.close();
+          this.props.navigation.navigate('Home', { loading: false });
+        } else if (res.message.includes('Error')) {
+          this.refs.toast.show(
+            'Đã có lỗi xảy ra, vui lòng thử lại sau một thời gian',
+            DURATION.LENGTH_LONG,
+          );
         }
       });
     }
@@ -238,9 +255,37 @@ export class RequestDetail extends Component {
   }
 
   render() {
+    const { title, notificationMessage } = this.state;
     return (
       <ScrollView>
         <Toast ref="toast" position="top" />
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onConfirm={() => this.confirmCancel('CANCELED')}
+          onCancel={() => this.AlertPro.close()}
+          title={title}
+          message={notificationMessage}
+          textCancel="Không"
+          textConfirm="Có"
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+            buttonCancel: {
+              backgroundColor: '#e74c3c',
+            },
+            buttonConfirm: {
+              backgroundColor: '#4da6ff',
+            },
+          }}
+        />
         <View style={{ marginHorizontal: 30, backgroundColor: 'white' }}>
           <View style={styles.detailInformationContainer}>
             <View style={styles.informationText}>
@@ -416,7 +461,6 @@ export class RequestDetail extends Component {
                       </MuliText>
                     </View>
                   </View>
-
                   <View style={styles.informationText}>
                     <Ionicons
                       name="ios-car"
@@ -606,7 +650,7 @@ export class RequestDetail extends Component {
               (this.state.status == 'CONFIRMED' && (
                 <TouchableOpacity
                   style={styles.submitButton}
-                  onPress={() => this.onCancel('CANCELED')}
+                  onPress={() => this.onCancel()}
                 >
                   <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
                     Hủy

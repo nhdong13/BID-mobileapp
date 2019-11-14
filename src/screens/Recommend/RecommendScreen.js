@@ -113,7 +113,7 @@ export default class RecommendScreen extends Component {
                       />
                       <MuliText
                         style={{
-                          fontSize: 18,
+                          fontSize: 16,
                           color: '#315f61',
                           marginLeft: 10,
                         }}
@@ -165,7 +165,7 @@ export default class RecommendScreen extends Component {
                       />
                       <MuliText
                         style={{
-                          fontSize: 18,
+                          fontSize: 16,
                           color: '#315f61',
                           marginLeft: 10,
                         }}

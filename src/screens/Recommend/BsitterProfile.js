@@ -19,9 +19,11 @@ export default class BsitterProfile extends Component {
   }
 
   componentWillMount() {
-    const sitterId = this.props.navigation.getParam('sitterId');
-    const requestId = this.props.navigation.getParam('requestId');
-    const request = this.props.navigation.getParam('request');
+    // const sitterId = this.props.navigation.getParam('sitterId');
+    // const requestId = this.props.navigation.getParam('requestId');
+    // const request = this.props.navigation.getParam('request');
+
+    const { sitterId, requestId, request } = this.props.navigation.state.params;
 
     if (sitterId && sitterId != 0) {
       this.setState(
@@ -34,11 +36,9 @@ export default class BsitterProfile extends Component {
   }
 
   getBabysitter = async () => {
-    if (this.state.sitterId != 0 && this.state.requestId != 0) {
-      const data = await getProfileByRequest(
-        this.state.sitterId,
-        this.state.requestId,
-      );
+    const { sitterId, requestId } = this.state;
+    if (sitterId != 0 && requestId != 0) {
+      const data = await getProfileByRequest(sitterId, requestId);
       this.setState({
         sitter: data,
         user: data.user,
@@ -47,8 +47,8 @@ export default class BsitterProfile extends Component {
       return data;
     }
 
-    if (this.state.sitterId != 0) {
-      const data = await getProfile(this.state.sitterId);
+    if (sitterId != 0) {
+      const data = await getProfile(sitterId);
       this.setState({
         sitter: data,
         user: data.user,
