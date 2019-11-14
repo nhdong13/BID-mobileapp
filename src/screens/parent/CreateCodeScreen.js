@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, TextInput } from 'react-native';
@@ -5,7 +6,6 @@ import { MuliText } from 'components/StyledText';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createCode } from 'api/parent.api';
 import Toast, { DURATION } from 'react-native-easy-toast';
-import colors from 'assets/Color';
 
 export default class CreateCodeScreen extends Component {
   constructor(props) {
@@ -38,17 +38,28 @@ export default class CreateCodeScreen extends Component {
   render() {
     return (
       <ScrollView>
-        <View>
-          <Toast ref="toast" position="top" />
-          <TextInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            value={this.state.code}
-            onChangeText={(code) => this.setState({ code })}
-            placeholder="Nhập mã"
-            editable={this.state.disableCreate}
-          />
+        <View style={{ marginTop: 40 }}>
+          <Toast ref="toast" />
+          <View
+            style={{
+              width: 350,
+              borderColor: 'gray',
+              borderWidth: 1,
+              marginHorizontal: 10,
+            }}
+          >
+            <TextInput
+              style={{
+                marginLeft: 10,
+              }}
+              value={this.state.code}
+              onChangeText={(code) => this.setState({ code })}
+              placeholder="Nhập mã"
+              editable={this.state.disableCreate}
+            />
+          </View>
           {/* {this.state.disableCreate && ( */}
-          <TouchableOpacity>
+          <TouchableOpacity style={{ alignItems: 'center', marginTop: 10 }}>
             <MuliText onPress={() => this.createNewCode()}>Tạo mã</MuliText>
           </TouchableOpacity>
           {/* )} */}
@@ -58,6 +69,4 @@ export default class CreateCodeScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});

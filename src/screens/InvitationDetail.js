@@ -186,13 +186,13 @@ export default class InvitationDetail extends Component {
               </MuliText>
             </View>
           </View>
-          <View style={{ flex: 1, marginTop: 15, marginLeft: 10 }}>
+          <View style={{ marginTop: 20 }}>
             <TouchableOpacity
               onPress={() => {
                 this.callDetail();
               }}
               title="Show more detail"
-              style={{ flex: 1 }}
+              style={{ marginLeft: 10 }}
             >
               <MuliText style={{ color: colors.blueAqua }}>
                 {this.state.isModalVisible ? 'Ẩn đi' : 'Xem thêm'}
@@ -325,14 +325,6 @@ export default class InvitationDetail extends Component {
                 <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity>
                     <Ionicons
-                      name="ios-call"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Ionicons
                       name="ios-chatbubbles"
                       size={22}
                       style={{ marginBottom: -5, marginLeft: 10 }}
@@ -430,6 +422,7 @@ const styles = StyleSheet.create({
     borderColor: '#2ecc71',
     borderWidth: 2,
     backgroundColor: 'white',
+    marginTop: 20,
   },
   headerTitle: {
     fontSize: 15,
