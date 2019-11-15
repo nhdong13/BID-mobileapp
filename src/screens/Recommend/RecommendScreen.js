@@ -107,15 +107,15 @@ export default class RecommendScreen extends Component {
                             ? 'ios-arrow-down'
                             : 'ios-arrow-up'
                         }
-                        size={24}
-                        style={{ marginBottom: -6, marginLeft: 20 }}
+                        size={19}
+                        style={{ marginBottom: -6, marginLeft: 15 }}
                         color="#315f61"
                       />
                       <MuliText
                         style={{
-                          fontSize: 16,
+                          fontSize: 13,
                           color: '#315f61',
-                          marginLeft: 10,
+                          marginLeft: 5,
                         }}
                       >
                         Đề nghị ({this.state.recommendCount})
@@ -159,15 +159,15 @@ export default class RecommendScreen extends Component {
                             ? 'ios-arrow-down'
                             : 'ios-arrow-up'
                         }
-                        size={24}
-                        style={{ marginBottom: -6, marginLeft: 20 }}
+                        size={19}
+                        style={{ marginBottom: -6, marginLeft: 15 }}
                         color="#315f61"
                       />
                       <MuliText
                         style={{
-                          fontSize: 16,
+                          fontSize: 13,
                           color: '#315f61',
-                          marginLeft: 10,
+                          marginLeft: 5,
                         }}
                       >
                         Người giữ trẻ phù hợp ({this.state.matchedCount})

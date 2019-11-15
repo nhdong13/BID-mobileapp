@@ -140,16 +140,16 @@ export class Bsitter extends Component {
                 {item.user.gender == 'MALE' && (
                   <Ionicons
                     name="ios-male"
-                    size={20}
-                    style={{ marginBottom: -2, marginLeft: 10 }}
+                    size={15}
+                    style={{ marginBottom: -2, marginLeft: 5 }}
                     color={colors.blueAqua}
                   />
                 )}
                 {item.user.gender == 'FEMALE' && (
                   <Ionicons
                     name="ios-female"
-                    size={20}
-                    style={{ marginBottom: -2, marginLeft: 10 }}
+                    size={15}
+                    style={{ marginBottom: -2, marginLeft: 5 }}
                     color={colors.pinkLight}
                   />
                 )}
@@ -157,15 +157,15 @@ export class Bsitter extends Component {
               <View style={styles.lowerText}>
                 <Ionicons
                   name="ios-pin"
-                  size={24}
-                  style={{ marginLeft: 10 }}
+                  size={19}
+                  style={{ marginLeft: 5 }}
                   color={colors.lightGreen}
                 />
                 <MuliText> {item.distance} km </MuliText>
                 <Ionicons
                   name="ios-star"
-                  size={24}
-                  style={{ marginLeft: 10 }}
+                  size={19}
+                  style={{ marginLeft: 5 }}
                   color={colors.lightGreen}
                 />
 
@@ -183,13 +183,13 @@ export class Bsitter extends Component {
               style={styles.inviteButton}
               onPress={() => this.sendInvitation(item.userId)}
             >
-              <MuliText style={{ color: '#78ddb6', fontSize: 16 }}>
+              <MuliText style={{ color: '#78ddb6', fontSize: 11 }}>
                 Mời
               </MuliText>
             </TouchableOpacity>
           )}
           {item.isInvited && (
-            <MuliText style={{ color: '#B81A1A', fontSize: 16 }}>
+            <MuliText style={{ color: '#B81A1A', fontSize: 11 }}>
               Đã mời
             </MuliText>
           )}
@@ -247,9 +247,7 @@ const styles = StyleSheet.create({
   upperText: {
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginLeft: 15,
-    flex: 1,
-    alignItems: 'center',
+    marginLeft: 10,
   },
   lowerText: {
     flexDirection: 'row',
@@ -273,7 +271,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   bsitterName: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '400',
     color: '#315F61',
   },
