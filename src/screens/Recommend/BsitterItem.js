@@ -292,8 +292,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   sitterImage: {
-    width: 65,
-    height: 65,
+    width: 55,
+    height: 55,
     borderRadius: 20,
     resizeMode: 'contain',
   },

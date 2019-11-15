@@ -49,7 +49,6 @@ export async function acceptBabysitter(requestId, sitterId) {
 }
 
 export async function cancelRequest(requestId, status, chargeId, amount) {
-  console.log('came to cancel api');
   const data = {
     requestId,
     status,
@@ -73,9 +72,12 @@ export async function cancelRequest(requestId, status, chargeId, amount) {
 
   const response = await axios(options)
     .then((res) => res)
-    .catch((error) => console.log(error));
-  console.log('PHUC: cancelRequest -> response', response);
-  return response;
+    .catch((error) => console.log(error.response));
+  if (response) {
+    return response;
+  }
+
+  return { message: 'Error in CancelRequest - SittingRequestAPI' };
 }
 
 export async function updateRequest(request) {
