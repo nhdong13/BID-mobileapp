@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
@@ -9,11 +10,13 @@ import {
   FlatList,
   // TouchableOpacity,
 } from 'react-native';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
 import { withNavigationFocus } from 'react-navigation';
 // import Loader from 'utils/Loader';
 import SitterInvitation from 'screens/babysitter/SitterInvitation';
+import SitterInvitationPending from 'screens/babysitter/SitterInvitationPending';
 import colors from 'assets/Color';
 import Api from 'api/api_helper';
 import apiUrl from 'utils/Connection';
@@ -35,6 +38,11 @@ class SitterHomeScreen extends Component {
       title: 'Request confirmation',
       loading: false,
       notification: {},
+      index: 0,
+      routes: [
+        { key: 'Invitation', title: 'Lời mời' },
+        { key: 'Pending', title: 'Đang chờ' },
+      ],
     };
   }
 
@@ -181,6 +189,63 @@ class SitterHomeScreen extends Component {
       noRequestText,
       noRequestImage,
     } = styles;
+    const Invitation = () => (
+      <View style={{ alignItems: 'center', flex: 0.8 }}>
+        {invitations != '' && invitations ? (
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
+            data={invitations}
+            renderItem={({ item }) => <SitterInvitation invitation={item} />}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        ) : (
+          <View style={noRequest}>
+            <MuliText style={noRequestText}>
+              Hiện tại bạn không có lời mời nào
+            </MuliText>
+            <Image
+              source={require('assets/images/no-request.jpg')}
+              style={noRequestImage}
+            />
+          </View>
+        )}
+      </View>
+    );
+
+    const Pending = () => (
+      <View>
+        {invitations != '' && invitations ? (
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
+            data={invitations}
+            renderItem={({ item }) => (
+              <SitterInvitationPending invitation={item} />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        ) : (
+          <View style={noRequest}>
+            <MuliText style={noRequestText}>
+              Hiện tại bạn không có yêu cầu nào đang chờ
+            </MuliText>
+            <Image
+              source={require('assets/images/no-request.jpg')}
+              style={noRequestImage}
+            />
+          </View>
+        )}
+      </View>
+    );
     return (
       <View style={containerBsitter}>
         <Loader loading={this.state.loading} />
@@ -219,33 +284,23 @@ class SitterHomeScreen extends Component {
           opacity={0.8}
         />
         <View style={scheduleContainerBsitter}>
-          <MuliText style={textBsitter}>Lịch giữ trẻ của bạn test</MuliText>
+          <MuliText style={textBsitter}>Lịch giữ trẻ của bạn</MuliText>
         </View>
-        <View style={{ alignItems: 'center', flex: 0.8 }}>
-          {invitations != '' && invitations ? (
-            <FlatList
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={this._onRefresh}
-                />
-              }
-              data={invitations}
-              renderItem={({ item }) => <SitterInvitation invitation={item} />}
-              keyExtractor={(item) => item.id.toString()}
+        <TabView
+          navigationState={this.state}
+          renderScene={SceneMap({
+            Invitation: Invitation,
+            Pending: Pending,
+          })}
+          onIndexChange={(index) => this.setState({ index })}
+          renderTabBar={(props) => (
+            <TabBar
+              {...props}
+              indicatorStyle={{ backgroundColor: colors.white }}
+              style={{ backgroundColor: colors.darkGreenTitle }}
             />
-          ) : (
-            <View style={noRequest}>
-              <MuliText style={noRequestText}>
-                Hiện tại bạn không có yêu cầu nào
-              </MuliText>
-              <Image
-                source={require('assets/images/no-request.jpg')}
-                style={noRequestImage}
-              />
-            </View>
           )}
-        </View>
+        />
       </View>
     );
   }
@@ -310,7 +365,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 261,
+    width: 100,
     height: 236,
     marginVertical: 20,
   },
