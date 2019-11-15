@@ -148,7 +148,13 @@ class ParentHomeScreen extends Component {
 
     if (requests.length > 0) {
       const selectedDateRequest = requests.filter(
-        (request) => request.sittingDate == date,
+        (request) =>
+          request.sittingDate == date &&
+          (request.status != 'DONE' && request.status != 'CANCELED'),
+      );
+      console.log(
+        'PHUC: ParentHomeScreen -> onSelectedDate -> selectedDateRequest',
+        selectedDateRequest,
       );
 
       if (selectedDateRequest.length > 0) {

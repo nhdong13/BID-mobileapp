@@ -157,6 +157,24 @@ export class RequestDetail extends Component {
           );
         }
       });
+    } else {
+      await cancelRequest(requestId, 'PENDING', chargeId, amount).then(
+        (res) => {
+          if (res.data) {
+            console.log(
+              'PHUC: RequestDetail -> confirmCancel -> res',
+              res.data,
+            );
+            this.AlertPro.close();
+            this.props.navigation.navigate('Home', { loading: false });
+          } else if (res.message.includes('Error')) {
+            this.refs.toast.show(
+              'Đã có lỗi xảy ra, vui lòng thử lại sau một thời gian',
+              DURATION.LENGTH_LONG,
+            );
+          }
+        },
+      );
     }
   };
 
@@ -665,17 +683,17 @@ export class RequestDetail extends Component {
             </View>
           )}
           <View style={styles.buttonContainer}>
-            {this.state.status == 'PENDING' ||
-              (this.state.status == 'CONFIRMED' && (
-                <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={() => this.onCancel()}
-                >
-                  <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
-                    Hủy
-                  </MuliText>
-                </TouchableOpacity>
-              ))}
+            {(this.state.status == 'PENDING' ||
+              this.state.status == 'CONFIRMED') && (
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={() => this.onCancel()}
+              >
+                <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
+                  Hủy
+                </MuliText>
+              </TouchableOpacity>
+            )}
 
             {this.state.canCheckIn && this.state.status == 'CONFIRMED' && (
               <TouchableOpacity
