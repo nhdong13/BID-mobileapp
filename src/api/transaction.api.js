@@ -14,9 +14,17 @@ export async function getRequestTransaction(requestId) {
     .then((res) => res)
     .catch((error) => {
       if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        if (error.response.status == 404) {
+          console.log(
+            `Warning in Transaction api because no transaction were made`,
+          );
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else {
+          console.log(`Error happend in Transaction api`);
+          console.log(error.response);
+        }
       } else console.log('getRequestTransaction error' + error);
     });
   if (response.data) {

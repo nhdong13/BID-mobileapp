@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
 import moment from 'moment';
+import localization from 'moment/locale/vi';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { listByRequestAndStatus } from 'api/invitation.api';
@@ -26,6 +27,8 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
 import AlertPro from 'react-native-alert-pro';
+
+moment.locale('vi', localization);
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -51,6 +54,9 @@ export class RequestDetail extends Component {
       amount: 0,
       notificationMessage: '',
       title: '',
+      cancelAlert: 'Không',
+      confirmAlert: 'Có',
+      showConfirm: true,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -59,22 +65,26 @@ export class RequestDetail extends Component {
     this.getAcceptedInvitations();
 
     const { sittingRequestsID: requestId } = this.state;
-    Api.get('sittingRequests/' + requestId.toString()).then((resp) => {
-      this.setState({
-        date: resp.sittingDate,
-        startTime: resp.startTime,
-        endTime: resp.endTime,
-        address: resp.sittingAddress,
-        status: resp.status,
-        childrenNumber: resp.childrenNumber,
-        minAgeOfChildren: resp.minAgeOfChildren,
-        bsitter: resp.bsitter,
-        canCheckIn: resp.canCheckIn,
-        canCheckOut: resp.canCheckOut,
-        price: resp.totalPrice,
-        createUserId: resp.createdUser,
+    Api.get('sittingRequests/' + requestId.toString())
+      .then((resp) => {
+        this.setState({
+          date: resp.sittingDate,
+          startTime: resp.startTime,
+          endTime: resp.endTime,
+          address: resp.sittingAddress,
+          status: resp.status,
+          childrenNumber: resp.childrenNumber,
+          minAgeOfChildren: resp.minAgeOfChildren,
+          bsitter: resp.bsitter,
+          canCheckIn: resp.canCheckIn,
+          canCheckOut: resp.canCheckOut,
+          price: resp.totalPrice,
+          createUserId: resp.createdUser,
+        });
+      })
+      .catch((error) => {
+        console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
       });
-    });
 
     const trans = await getRequestTransaction(requestId).then();
     console.log(
@@ -96,9 +106,7 @@ export class RequestDetail extends Component {
         const { chargeId, amount } = await getRequestTransaction(requestId);
 
         if (chargeId && amount) {
-          if (chargeId && amount) {
-            this.setState({ chargeId, amount });
-          }
+          this.setState({ chargeId, amount });
         } else {
           console.log('get request transaction ko chay roi');
         }
@@ -124,6 +132,7 @@ export class RequestDetail extends Component {
       title: 'Bạn có thật sự muốn hủy ?',
       notificationMessage:
         'Nếu hủy bạn sẽ bị trừ 10% phí dịch vụ vào số tiền đã trả',
+      showConfirm: true,
     });
     this.AlertPro.open();
   };
@@ -224,11 +233,14 @@ export class RequestDetail extends Component {
               })
               .catch((error) => {
                 if (error.response.status == 409) {
-                  // eslint-disable-next-line react/no-string-refs
-                  this.refs.toast.show(
-                    'Người giữ trẻ này không còn phù hợp với yêu cầu của bạn.',
-                    DURATION.LENGTH_LONG,
-                  );
+                  this.setState({
+                    title: 'Người giữ trẻ không phù hợp',
+                    notificationMessage:
+                      'Người giữ trẻ này không còn phù hợp với yêu cầu của bạn.',
+                    showConfirm: false,
+                    cancelAlert: 'Đóng',
+                  });
+                  this.AlertPro.open();
 
                   const errorSitterId = error.response.data;
 
@@ -255,7 +267,13 @@ export class RequestDetail extends Component {
   }
 
   render() {
-    const { title, notificationMessage } = this.state;
+    const {
+      title,
+      notificationMessage,
+      cancelAlert,
+      confirmAlert,
+      showConfirm,
+    } = this.state;
     return (
       <ScrollView>
         <Toast ref="toast" position="top" />
@@ -267,8 +285,9 @@ export class RequestDetail extends Component {
           onCancel={() => this.AlertPro.close()}
           title={title}
           message={notificationMessage}
-          textCancel="Không"
-          textConfirm="Có"
+          textCancel={cancelAlert}
+          textConfirm={confirmAlert}
+          showConfirm={showConfirm}
           customStyles={{
             mask: {
               backgroundColor: 'transparent',

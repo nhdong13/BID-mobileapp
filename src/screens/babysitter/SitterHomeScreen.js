@@ -21,8 +21,11 @@ import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import Loader from 'utils/Loader';
 import registerPushNotifications from 'utils/Notification';
+import moment from 'moment';
+import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
-// import ModalPushNotification from 'components/ModalPushNotification';
+
+moment.locale('vi', localization);
 
 class SitterHomeScreen extends Component {
   constructor(props) {
@@ -121,7 +124,7 @@ class SitterHomeScreen extends Component {
   confirmModalPopup = () => {
     const { notification } = this.state;
     // console.log('PHUC: confirmModalPopup -> notification', notification);
-    this.props.navigation.navigate('InvitationDetail', {
+    this.props.navigation.push('InvitationDetail', {
       invitationId: notification.data.id,
     });
     this.AlertPro.close();
@@ -155,7 +158,7 @@ class SitterHomeScreen extends Component {
         },
         () => {
           const { notification } = this.state;
-          this.props.navigation.navigate('InvitationDetail', {
+          this.props.navigation.push('InvitationDetail', {
             invitationId: notification.data.id,
           });
           this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);

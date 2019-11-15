@@ -10,10 +10,13 @@ import {
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
 import moment from 'moment';
+import localization from 'moment/locale/vi';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateInvitation } from 'api/invitation.api';
 import { formater } from 'utils/MoneyFormater';
+
+moment.locale('vi', localization);
 
 export default class InvitationDetail extends Component {
   constructor(props) {

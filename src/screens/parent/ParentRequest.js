@@ -3,8 +3,11 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { MuliText } from 'components/StyledText';
 import moment from 'moment';
+import localization from 'moment/locale/vi';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
+
+moment.locale('vi', localization);
 
 class ParentRequest extends Component {
   constructor(props) {
