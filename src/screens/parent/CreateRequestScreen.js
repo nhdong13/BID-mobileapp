@@ -487,7 +487,7 @@ class CreateRequestScreen extends Component {
               </MuliText>
             </View>
           </View>
-          {this.state.requestId != 0 && (
+          {/* {this.state.requestId != 0 && (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
@@ -498,7 +498,7 @@ class CreateRequestScreen extends Component {
                 </MuliText>
               </TouchableOpacity>
             </View>
-          )}
+          )} */}
           {this.state.requestId == 0 && (
             <View style={styles.buttonContainer}>
               <TouchableOpacity

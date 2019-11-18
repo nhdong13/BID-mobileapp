@@ -120,6 +120,10 @@ class SitterHomeScreen extends Component {
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
+        invitations.sort((a, b) => {
+          return this.compareInviteByDate(a, b);
+        });
+
         const invitationsPending = invitations.filter(
           (invitation) => invitation.status == 'PENDING',
         );
@@ -136,10 +140,6 @@ class SitterHomeScreen extends Component {
           (invitation) => invitation.status == 'CONFIRMED',
         );
 
-        invitationsPending.sort((a, b) => {
-          return this.compareInviteByDate(a, b);
-        });
-
         this.setState({
           invitationsPending,
           invitationsUpcoming,
@@ -152,13 +152,6 @@ class SitterHomeScreen extends Component {
         ),
       );
   };
-
-  compareInviteByDate(a, b) {
-    let aTime = moment(`${a.sittingRequest.sittingDate} ${a.sittingRequest.startTime}`, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
-    let bTime = moment(`${b.sittingRequest.sittingDate} ${b.sittingRequest.startTime}`, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
-
-    return aTime < bTime;
-  }
 
   confirmModalPopup = () => {
     const { notification } = this.state;
@@ -211,6 +204,19 @@ class SitterHomeScreen extends Component {
     this.getInvitationData().then(() => {
       this.setState({ refreshing: false });
     });
+  };
+
+  compareInviteByDate = (a, b) => {
+    const aTime = moment(
+      `${a.sittingRequest.sittingDate} ${a.sittingRequest.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+    const bTime = moment(
+      `${b.sittingRequest.sittingDate} ${b.sittingRequest.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+
+    return aTime > bTime;
   };
 
   render() {
