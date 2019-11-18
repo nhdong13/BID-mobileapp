@@ -65,9 +65,9 @@ export class Bsitter extends Component {
     await Api.get('trackings/' + this.state.userId).then((res) => {
       // console.log(res.customerId);
       if (res.customerId == null || res.cardId == null) {
-        this.createCard().then((res) => {
+        this.createCard().then(async (res) => {
           if (res) {
-            createInvitation(requestId, invitation, request)
+            await createInvitation(requestId, invitation, request)
               .then((response) => {
                 // console.log(response);
                 this.props.changeInviteStatus(receiverId);
@@ -92,11 +92,7 @@ export class Bsitter extends Component {
     const token = await Stripe.paymentRequestWithCardFormAsync().catch(
       (error) => console.log(error),
     );
-    // console.log('PHUC: Bsitter -> sendInvitation -> token', token);
     if (token) {
-      // console.log(invitation);
-      // console.log(this.state.email,
-      //   token.tokenId, this.state.userId, this.state.name, token.card.cardId);
       createCustomer(
         this.state.email,
         token.tokenId,

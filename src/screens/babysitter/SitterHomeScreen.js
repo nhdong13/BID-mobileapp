@@ -8,7 +8,6 @@ import {
   Image,
   RefreshControl,
   FlatList,
-  // TouchableOpacity,
 } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -27,6 +26,7 @@ import registerPushNotifications from 'utils/Notification';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
+import UpcomingSitting from './UpcomingSitting';
 
 moment.locale('vi', localization);
 
@@ -118,6 +118,10 @@ class SitterHomeScreen extends Component {
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((res) => {
+        console.log(
+          'PHUC: SitterHomeScreen -> getInvitationData -> du lieu tra ve khi request invitation',
+          res,
+        );
         this.setState({
           invitations: res,
         });
@@ -191,6 +195,7 @@ class SitterHomeScreen extends Component {
       noRequest,
       noRequestText,
       noRequestImage,
+      horizontalUpcoming,
     } = styles;
     const Invitation = () => (
       <View style={{ alignItems: 'center', flex: 0.8 }}>
@@ -222,7 +227,7 @@ class SitterHomeScreen extends Component {
 
     const Pending = () => (
       <View>
-        {invitations != '' && invitations ? (
+        {invitations != null && invitations.length > 0 ? (
           <FlatList
             refreshControl={
               <RefreshControl
@@ -288,6 +293,25 @@ class SitterHomeScreen extends Component {
         />
         <View style={scheduleContainerBsitter}>
           <MuliText style={textBsitter}>Lịch giữ trẻ của bạn</MuliText>
+        </View>
+        <View style={horizontalUpcoming}>
+          <MuliText>Upcoming sittings</MuliText>
+          <View style={{ flex: 1 }}>
+            {invitations != null && invitations.length > 0 ? (
+              <FlatList
+                horizontal={true}
+                // refreshControl={
+                //   <RefreshControl
+                //     refreshing={refreshing}
+                //     onRefresh={this._onRefresh}
+                //   />
+                // }
+                data={invitations}
+                renderItem={({ item }) => <UpcomingSitting invitation={item} />}
+                keyExtractor={(item) => item.id.toString()}
+              />
+            ) : null}
+          </View>
         </View>
         <TabView
           navigationState={this.state}
@@ -384,8 +408,9 @@ const styles = StyleSheet.create({
   scheduleContainerBsitter: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    marginTop: 30,
+    marginTop: 15,
     paddingLeft: 30,
+    flex: 0.2,
     backgroundColor: '#fff',
     height: 150,
   },
@@ -395,5 +420,9 @@ const styles = StyleSheet.create({
     color: colors.darkGreenTitle,
     fontWeight: 'bold',
     fontSize: 10,
+  },
+  horizontalUpcoming: {
+    flex: 0.4,
+    backgroundColor: 'white',
   },
 });
