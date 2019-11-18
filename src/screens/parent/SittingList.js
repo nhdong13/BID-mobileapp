@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
@@ -12,9 +13,8 @@ import {
 import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
 import moment from 'moment';
-import Api from '../../api/api_helper';
-import {getSitting} from '../../api/sittingRequest.api';
 import { formater } from 'utils/MoneyFormater';
+import { getSitting } from '../../api/sittingRequest.api';
 
 export default class SittingList extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class SittingList extends Component {
       userId: this.state.userId,
       status: 'DONE',
     };
-    const rp = await getSitting(requestBody).then(res => {
+    const rp = await getSitting(requestBody).then((res) => {
       this.setState({ requests: res });
     });
   };
@@ -70,7 +70,11 @@ export default class SittingList extends Component {
                     marginHorizontal: 20,
                     borderRadius: 20,
                   }}
-                  onPress={() => this.props.navigation.navigate('Feedback', { requestId: request.id })}
+                  onPress={() =>
+                    this.props.navigation.navigate('Feedback', {
+                      requestId: request.id,
+                    })
+                  }
                 >
                   <View style={{ height: 135 }}>
                     <View

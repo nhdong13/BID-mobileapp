@@ -12,22 +12,23 @@ import {
 } from 'react-native';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
-// import { Agenda } from 'react-native-calendars';
 import { getRequests } from 'api/sittingRequest.api';
 import { withNavigationFocus } from 'react-navigation';
 // import Loader from 'utils/Loader';
 import ParentRequest from 'screens/parent/ParentRequest';
 import colors from 'assets/Color';
 import moment from 'moment';
+import localization from 'moment/locale/vi';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import CalendarStrip from 'react-native-calendar-strip';
 import registerPushNotifications from 'utils/Notification';
-// import ModalPushNotification from 'components/ModalPushNotification';
 import { markDates } from 'utils/markedDates';
 import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
 import Loader from 'utils/Loader';
+
+moment.locale('vi', localization);
 
 class ParentHomeScreen extends Component {
   constructor(props) {
@@ -43,12 +44,14 @@ class ParentHomeScreen extends Component {
       notificationMessage: '',
       title: '',
       loading: false,
+      selectedDateRequest: [],
     };
   }
 
   async componentDidMount() {
     this.setState({ loading: true });
     await this.getRequestData();
+    this.onSelectedDate();
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
@@ -66,6 +69,7 @@ class ParentHomeScreen extends Component {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
         await this.getRequestData();
+        this.onSelectedDate();
       }
     }
   }
@@ -94,7 +98,7 @@ class ParentHomeScreen extends Component {
         () => {
           const { notification } = this.state;
           this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
-          this.props.navigation.navigate('RequestDetail', {
+          this.props.navigation.push('RequestDetail', {
             requestId: notification.data.id,
           });
         },
@@ -104,7 +108,7 @@ class ParentHomeScreen extends Component {
 
   confirmModalPopup = () => {
     const { notification } = this.state;
-    this.props.navigation.navigate('RequestDetail', {
+    this.props.navigation.push('RequestDetail', {
       requestId: notification.data.id,
     });
     this.AlertPro.close();
@@ -114,11 +118,7 @@ class ParentHomeScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      registerPushNotifications(userId).then((response) => {
-        if (response) {
-          console.log('PHUC: App -> response', response.data);
-        }
-      });
+      registerPushNotifications(userId);
     });
     if (this.state.roleId != 0) {
       await getRequests(this.state.userId)
@@ -143,9 +143,37 @@ class ParentHomeScreen extends Component {
     });
   };
 
+  onSelectedDate = (date = moment().format('YYYY-MM-DD')) => {
+    const { requests } = this.state;
+
+    if (requests.length > 0) {
+      const selectedDateRequest = requests.filter(
+        (request) =>
+          request.sittingDate == date &&
+          (request.status != 'DONE' && request.status != 'CANCELED'),
+      );
+      console.log(
+        'PHUC: ParentHomeScreen -> onSelectedDate -> selectedDateRequest',
+        selectedDateRequest,
+      );
+
+      if (selectedDateRequest.length > 0) {
+        this.setState({ selectedDateRequest });
+      } else {
+        console.log('ko co record nao ca');
+        this.setState({ selectedDateRequest });
+      }
+    }
+  };
+
   render() {
     const { navigation } = this.props;
-    const { requests, refreshing, notificationMessage, title } = this.state;
+    const {
+      refreshing,
+      notificationMessage,
+      title,
+      selectedDateRequest,
+    } = this.state;
 
     const {
       borderText,
@@ -241,15 +269,13 @@ class ParentHomeScreen extends Component {
           weekendDateNumberStyle={{ color: '#bdc3c7', fontFamily: 'muli' }}
           iconContainer={{ flex: 0.1 }}
           onDateSelected={(date) =>
-            this.props.navigation.navigate('CreateRequest', {
-              selectedDate: moment(date).format('YYYY-MM-DD'),
-            })
+            this.onSelectedDate(date.format('YYYY-MM-DD'))
           }
         />
         <View style={{ flex: 1 }}>
-          {requests != '' && requests ? (
+          {selectedDateRequest != '' && selectedDateRequest ? (
             <FlatList
-              data={requests}
+              data={selectedDateRequest}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
@@ -274,7 +300,7 @@ class ParentHomeScreen extends Component {
                 >
                   <View style={noRequest}>
                     <MuliText style={noRequestText}>
-                      Hiện tại bạn không có yêu cầu nào
+                      Bạn không có yêu cầu nào cho ngày này
                     </MuliText>
                     <View
                       style={{

@@ -6,7 +6,7 @@ import moment from 'moment';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
 
-class SitterInvitation extends Component {
+class SitterInvitationPending extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,7 +16,7 @@ class SitterInvitation extends Component {
     const { invitation, navigation } = this.props;
     return (
       <View>
-        {invitation.status == 'CONFIRMED' && (
+        {invitation.status == 'PENDING' && (
           <TouchableOpacity
             key={invitation.id}
             style={{
@@ -53,17 +53,12 @@ class SitterInvitation extends Component {
                     .format('HH:mm')}
                 </MuliText>
               </View>
-              {/* OVERLAP
-          ACCEPTED
-          EXPIRED
-          CANCELED
-          DONE */}
               <View style={styles.rightInformation}>
                 <View style={styles.statusBoxPending}>
                   <MuliText
-                    style={{ fontWeight: '100', color: colors.confirmed }}
+                    style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    Đã xác nhận
+                    Đang chờ {invitation.status}
                   </MuliText>
                 </View>
                 <MuliText>
@@ -78,7 +73,7 @@ class SitterInvitation extends Component {
   }
 }
 
-export default withNavigation(SitterInvitation);
+export default withNavigation(SitterInvitationPending);
 
 const styles = StyleSheet.create({
   container: {
@@ -116,14 +111,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
     height: 40,
   },
-  statusBoxConfirm: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'green',
-    width: 100,
-    height: 50,
-    padding: 5,
-  },
+
   noRequest: {
     flex: 1,
     backgroundColor: 'white',
@@ -146,6 +134,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   requestItemSitter: {
+    justifyContent: 'space-between',
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
@@ -180,7 +169,7 @@ const styles = StyleSheet.create({
   rightInformation: {
     flex: 1,
     alignItems: 'flex-end',
-    marginRight: 10,
+    paddingRight: 10,
   },
   scheduleContainer: {
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
@@ -69,7 +69,7 @@ export default class CircleScreens extends Component {
     return (
       <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
         {/* Header vòng tròn tin tưởng của tôi */}
-        {this.state.circle.length > 0 && (
+        {this.state.circle.length > 0 ? (
           <View style={styles.firstHeaderContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -100,7 +100,36 @@ export default class CircleScreens extends Component {
                 })
               }
             >
-              <MuliText>Thêm</MuliText>
+              <MuliText style={{ color: colors.done }}>Thêm</MuliText>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.firstHeaderContainer}>
+            <View style={{ flexDirection: 'row' }}>
+              <Ionicons
+                name="ios-person"
+                size={24}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Những phụ huynh mà tôi biết ({this.state.circle.length})
+              </MuliText>
+            </View>
+            <TouchableOpacity
+              style={{
+                marginLeft: 'auto',
+                marginTop: 18,
+                color: colors.lightGreen,
+                marginRight: 10,
+              }}
+              onPress={() =>
+                this.props.navigation.navigate('AddToCircle', {
+                  ownerId: this.state.userId,
+                })
+              }
+            >
+              <MuliText style={{ color: colors.done }}>Thêm</MuliText>
             </TouchableOpacity>
           </View>
         )}

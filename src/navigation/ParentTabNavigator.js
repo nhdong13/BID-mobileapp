@@ -28,25 +28,6 @@ const config = Platform.select({
   default: {},
 });
 
-// const CreateRequestStack = createStackNavigator(
-//   {
-//     CreateRequest: CreateRequestScreen,
-//   },
-//   config,
-// );
-
-// CreateRequestStack.navigationOptions = {
-//   tabBarLabel: 'Tạo mới yêu cầu',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS == 'ios' ? 'ios-add' : 'md-add'}
-//     />
-//   ),
-// };
-
-// CreateRequestStack.path = '';
-
 const HomeStack = createStackNavigator(
   {
     Home: {

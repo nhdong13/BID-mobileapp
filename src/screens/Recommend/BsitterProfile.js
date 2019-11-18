@@ -5,6 +5,10 @@ import { MuliText } from 'components/StyledText';
 import { Gender } from 'utils/Enum';
 import { getProfileByRequest, getProfile } from 'api/babysitter.api';
 import { createInvitation } from 'api/invitation.api';
+import { createCustomer } from 'api/payment.api';
+import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
+import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
+import Api from 'api/api_helper';
 
 export default class BsitterProfile extends Component {
   constructor(props) {
@@ -20,10 +24,11 @@ export default class BsitterProfile extends Component {
   }
 
   componentWillMount() {
-    const sitterId = this.props.navigation.getParam('sitterId');
-    const requestId = this.props.navigation.getParam('requestId');
-    const request = this.props.navigation.getParam('request');
-    const distance = this.props.navigation.getParam('distance');
+    Stripe.setOptionsAsync({
+      publishableKey: stripeKey,
+      androidPayMode: 'test',
+    });
+    const { sitterId, requestId, request, distance } = this.props.navigation.state.params;
 
     if (sitterId && sitterId != 0) {
       this.setState(
@@ -36,11 +41,9 @@ export default class BsitterProfile extends Component {
   }
 
   getBabysitter = async () => {
-    if (this.state.sitterId != 0 && this.state.requestId != 0) {
-      const data = await getProfileByRequest(
-        this.state.sitterId,
-        this.state.requestId,
-      );
+    const { sitterId, requestId } = this.state;
+    if (sitterId != 0 && requestId != 0) {
+      const data = await getProfileByRequest(sitterId, requestId);
       this.setState({
         sitter: data,
         user: data.user,
@@ -49,8 +52,8 @@ export default class BsitterProfile extends Component {
       return data;
     }
 
-    if (this.state.sitterId != 0) {
-      const data = await getProfile(this.state.sitterId);
+    if (sitterId != 0) {
+      const data = await getProfile(sitterId);
       this.setState({
         sitter: data,
         user: data.user,
@@ -73,23 +76,55 @@ export default class BsitterProfile extends Component {
       receiver: sitterId,
       distance: this.state.distance,
     };
-    console.log(invitation);
-    await createInvitation(requestId, invitation, request)
-      .then((response) => {
-        this.changeInviteStatus();
-        this.setState({ requestId: response.data.newRequest.id });
-        this.props.navigation.state.params.onGoBack(
-          sitterId,
-          response.data.newRequest.id,
-        );
-      })
-      .catch((error) => console.log(error));
+    // console.log(invitation);
+    await Api.get('trackings/' + this.state.userId).then((res) => {
+      if (res.customerId == null || res.cardId == null) {
+        this.createCard().then(async (res) => {
+          if (res) {
+            await createInvitation(requestId, invitation, request)
+              .then((response) => {
+                this.changeInviteStatus();
+                this.setState({ requestId: response.data.newRequest.id });
+                this.props.navigation.state.params.onGoBack(
+                  sitterId,
+                  response.data.newRequest.id,
+                );
+              })
+              .catch((error) => console.log(error));
+          }
+        });
+      } else {
+        createInvitation(requestId, invitation, request)
+          .then((response) => {
+            // console.log(response);
+            this.props.changeInviteStatus(sitterId);
+            this.props.setRequestId(response.data.newRequest.id);
+          })
+          .catch((error) => console.log('aaa', error));
+      }
+    });
   };
 
   changeInviteStatus = () => {
     this.setState((prevState) => ({
       sitter: Object.assign(prevState.sitter, { isInvited: true }),
     }));
+  };
+
+  createCard = async () => {
+    const token = await Stripe.paymentRequestWithCardFormAsync().catch(
+      (error) => console.log(error),
+    );
+    if (token) {
+      createCustomer(
+        this.state.email,
+        token.tokenId,
+        this.state.userId,
+        this.state.name,
+        token.card.cardId,
+      );
+    }
+    return token;
   };
 
   // netstat -ano | findstr 3000
@@ -173,7 +208,13 @@ export default class BsitterProfile extends Component {
                       </TouchableOpacity>
                     )}
                     {this.state.sitter.isInvited && (
-                      <MuliText style={{ color: '#B81A1A', fontSize: 20 }}>
+                      <MuliText
+                        style={{
+                          marginTop: 10,
+                          color: '#B81A1A',
+                          fontSize: 20,
+                        }}
+                      >
                         Đã mời
                       </MuliText>
                     )}

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -9,11 +10,13 @@ import {
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
 import moment from 'moment';
+import localization from 'moment/locale/vi';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateInvitation } from 'api/invitation.api';
-import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
+
+moment.locale('vi', localization);
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -186,13 +189,13 @@ export default class InvitationDetail extends Component {
               </MuliText>
             </View>
           </View>
-          <View style={{ flex: 1, marginTop: 15, marginLeft: 10 }}>
+          <View style={{ marginTop: 20 }}>
             <TouchableOpacity
               onPress={() => {
                 this.callDetail();
               }}
               title="Show more detail"
-              style={{ flex: 1 }}
+              style={{ marginLeft: 10 }}
             >
               <MuliText style={{ color: colors.blueAqua }}>
                 {this.state.isModalVisible ? 'Ẩn đi' : 'Xem thêm'}
@@ -323,14 +326,6 @@ export default class InvitationDetail extends Component {
               </View>
               <View style={styles.rightInformation}>
                 <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity>
-                    <Ionicons
-                      name="ios-call"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
-                    />
-                  </TouchableOpacity>
                   <TouchableOpacity>
                     <Ionicons
                       name="ios-chatbubbles"

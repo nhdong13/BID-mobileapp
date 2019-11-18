@@ -66,9 +66,9 @@ export class Bsitter extends Component {
     await Api.get('trackings/' + this.state.userId).then((res) => {
       // console.log(res.customerId);
       if (res.customerId == null || res.cardId == null) {
-        this.createCard().then((res) => {
+        this.createCard().then(async (res) => {
           if (res) {
-            createInvitation(requestId, invitation, request)
+            await createInvitation(requestId, invitation, request)
               .then((response) => {
                 // console.log(response);
                 this.props.changeInviteStatus(receiverId);
@@ -93,11 +93,7 @@ export class Bsitter extends Component {
     const token = await Stripe.paymentRequestWithCardFormAsync().catch(
       (error) => console.log(error),
     );
-    // console.log('PHUC: Bsitter -> sendInvitation -> token', token);
     if (token) {
-      // console.log(invitation);
-      // console.log(this.state.email,
-      //   token.tokenId, this.state.userId, this.state.name, token.card.cardId);
       createCustomer(
         this.state.email,
         token.tokenId,
@@ -136,21 +132,22 @@ export class Bsitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.bsitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)} tuổi
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
+                  tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
                   <Ionicons
                     name="ios-male"
-                    size={20}
-                    style={{ marginBottom: -2, marginLeft: 10 }}
+                    size={15}
+                    style={{ marginBottom: -2, marginLeft: 5 }}
                     color={colors.blueAqua}
                   />
                 )}
                 {item.user.gender == 'FEMALE' && (
                   <Ionicons
                     name="ios-female"
-                    size={20}
-                    style={{ marginBottom: -2, marginLeft: 10 }}
+                    size={15}
+                    style={{ marginBottom: -2, marginLeft: 5 }}
                     color={colors.pinkLight}
                   />
                 )}
@@ -158,15 +155,15 @@ export class Bsitter extends Component {
               <View style={styles.lowerText}>
                 <Ionicons
                   name="ios-pin"
-                  size={24}
-                  style={{ marginLeft: 10 }}
+                  size={19}
+                  style={{ marginLeft: 5 }}
                   color={colors.lightGreen}
                 />
                 <MuliText> {item.distance} </MuliText>
                 <Ionicons
                   name="ios-star"
-                  size={24}
-                  style={{marginLeft: 10 }}
+                  size={19}
+                  style={{ marginLeft: 5 }}
                   color={colors.lightGreen}
                 />
 
@@ -184,13 +181,13 @@ export class Bsitter extends Component {
               style={styles.inviteButton}
               onPress={() => this.sendInvitation(item.userId)}
             >
-              <MuliText style={{ color: '#78ddb6', fontSize: 16 }}>
+              <MuliText style={{ color: '#78ddb6', fontSize: 11 }}>
                 Mời
               </MuliText>
             </TouchableOpacity>
           )}
           {item.isInvited && (
-            <MuliText style={{ color: '#B81A1A', fontSize: 16 }}>
+            <MuliText style={{ color: '#B81A1A', fontSize: 11 }}>
               Đã mời
             </MuliText>
           )}
@@ -248,9 +245,7 @@ const styles = StyleSheet.create({
   upperText: {
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginLeft: 15,
-    flex: 1,
-    alignItems: 'center',
+    marginLeft: 10,
   },
   lowerText: {
     flexDirection: 'row',
@@ -274,7 +269,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   bsitterName: {
-    fontSize: 18,
+    fontSize: 13,
     fontWeight: '400',
     color: '#315F61',
   },
@@ -295,8 +290,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   sitterImage: {
-    width: 65,
-    height: 65,
+    width: 55,
+    height: 55,
     borderRadius: 20,
     resizeMode: 'contain',
   },
