@@ -135,6 +135,11 @@ class SitterHomeScreen extends Component {
         const invitationsUpcoming = invitations.filter(
           (invitation) => invitation.status == 'CONFIRMED',
         );
+
+        invitationsPending.sort((a, b) => {
+          return this.compareInviteByDate(a, b);
+        });
+
         this.setState({
           invitationsPending,
           invitationsUpcoming,
@@ -147,6 +152,13 @@ class SitterHomeScreen extends Component {
         ),
       );
   };
+
+  compareInviteByDate(a, b) {
+    let aTime = moment(`${a.sittingRequest.sittingDate} ${a.sittingRequest.startTime}`, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
+    let bTime = moment(`${b.sittingRequest.sittingDate} ${b.sittingRequest.startTime}`, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
+
+    return aTime < bTime;
+  }
 
   confirmModalPopup = () => {
     const { notification } = this.state;
