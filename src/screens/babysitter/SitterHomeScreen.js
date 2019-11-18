@@ -120,32 +120,17 @@ class SitterHomeScreen extends Component {
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
-        // console.log(
-        //   'PHUC: SitterHomeScreen -> getInvitationData -> du lieu tra ve khi request invitation',
-        //   invitations,
-        // );
-        console.log(
-          '------------------- pending array ----------------------------------',
-        );
-
         const invitationsPending = invitations.filter(
           (invitation) => invitation.status == 'PENDING',
         );
-        console.log(invitationsPending);
-        console.log(
-          '------------------- accepted array ----------------------------------',
-        );
+
         const invitationsWaiting = invitations.filter(
           (invitation) => invitation.status == 'ACCEPTED',
         );
-        console.log(invitationsWaiting);
-        console.log(
-          '------------------- upcoming array ----------------------------------',
-        );
+
         const invitationsUpcoming = invitations.filter(
           (invitation) => invitation.status == 'CONFIRMED',
         );
-        console.log(invitationsUpcoming);
         this.setState({
           invitationsPending,
           invitationsUpcoming,
@@ -323,9 +308,9 @@ class SitterHomeScreen extends Component {
         <View style={scheduleContainerBsitter}>
           <MuliText style={textBsitter}>Lịch giữ trẻ của bạn</MuliText>
         </View>
-        <View style={horizontalUpcoming}>
-          <MuliText>Upcoming sittings</MuliText>
-          {invitationsUpcoming != null && invitationsUpcoming.length > 0 ? (
+        {invitationsUpcoming != null && invitationsUpcoming.length > 0 ? (
+          <View style={horizontalUpcoming}>
+            <MuliText>Upcoming sittings</MuliText>
             <View style={{ flex: 1 }}>
               <FlatList
                 horizontal={true}
@@ -336,8 +321,8 @@ class SitterHomeScreen extends Component {
                 keyExtractor={(item) => item.id.toString()}
               />
             </View>
-          ) : null}
-        </View>
+          </View>
+        ) : null}
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
