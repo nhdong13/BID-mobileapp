@@ -20,7 +20,9 @@ class CreateRequestScreen extends Component {
       requestId: 0,
       userId: null,
       loggedUser: null,
-      sittingDate: null || this.props.navigation.getParam('selectedDate'),
+      sittingDate:
+        this.props.navigation.getParam('selectedDate') ||
+        new moment().format('YYYY-MM-DD'),
       startTime: null,
       endTime: null,
       sittingAddress: null,

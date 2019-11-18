@@ -127,6 +127,10 @@ class SitterHomeScreen extends Component {
         const invitationsWaiting = invitations.filter(
           (invitation) => invitation.status == 'ACCEPTED',
         );
+        console.log(
+          'PHUC: SitterHomeScreen -> getInvitationData -> invitationsWaiting',
+          invitationsWaiting,
+        );
 
         const invitationsUpcoming = invitations.filter(
           (invitation) => invitation.status == 'CONFIRMED',
