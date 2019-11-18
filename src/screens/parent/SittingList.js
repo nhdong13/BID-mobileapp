@@ -60,13 +60,13 @@ export default class SittingList extends Component {
       <View style={styles.container}>
         <View style={{ alignItems: 'center' }}>
           {requests != '' && requests ? (
-            <ScrollView>
+            <ScrollView showsHorizontalScrollIndicator="false">
               {requests.map((request) => (
                 <TouchableOpacity
                   key={request.id}
                   style={{
                     backgroundColor: '#fff',
-                    marginTop: 20,
+                    marginTop: 10,
                     marginHorizontal: 20,
                     borderRadius: 20,
                   }}

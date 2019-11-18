@@ -32,8 +32,8 @@ class ParentRequest extends Component {
                 {moment(request.sittingDate).format('dddd Do MMMM')}
               </MuliText>
               <MuliText style={{ color: '#7edeb9' }}>
-                {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
-                {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
+                {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} đến
+                {moment.utc(request.endTime, ' HH:mm').format(' HH:mm')}
               </MuliText>
             </View>
             <View style={styles.rightInformation}>
@@ -80,7 +80,7 @@ class ParentRequest extends Component {
                   </MuliText>
                 </View>
               )}
-              <MuliText>{formater(request.totalPrice)} VND</MuliText>
+              <MuliText>{formater(request.totalPrice)} Đồng</MuliText>
             </View>
           </View>
         </TouchableOpacity>
@@ -122,9 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'green',
-    width: 120,
     height: 40,
-    padding: 10,
   },
   statusBoxConfirm: {
     justifyContent: 'center',
@@ -159,7 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 200,
+    height: 150,
     width: 350,
     marginHorizontal: 15,
     alignItems: 'center',
@@ -171,7 +169,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     height: 130,
-    marginHorizontal: 30,
+    marginHorizontal: 15,
     alignItems: 'center',
     marginTop: 20,
     borderRadius: 15,
@@ -185,15 +183,14 @@ const styles = StyleSheet.create({
   fuckthisshit: {},
   leftInformation: {
     // backgroundColor: 'blue',
-    margin: 10,
-    paddingHorizontal: 5,
+    paddingLeft: 10,
     flex: 1,
   },
   rightInformation: {
     // backgroundColor: 'green',
     flex: 1,
     alignItems: 'flex-end',
-    paddingRight: 20,
+    paddingRight: 10,
   },
   scheduleContainer: {
     alignItems: 'center',

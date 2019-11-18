@@ -179,8 +179,6 @@ class ParentHomeScreen extends Component {
     } = this.state;
 
     const {
-      borderText,
-      textParentRequest,
       container,
       textParent,
       scheduleContainer,
@@ -222,7 +220,6 @@ class ParentHomeScreen extends Component {
         <View style={scheduleContainer}>
           <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
           <TouchableOpacity
-            style={{ marginVertical: 10 }}
             onPress={() =>
               navigation.navigate('CreateRequest', {
                 selectedDate: moment(this.state.selectedDate).format(
@@ -231,11 +228,9 @@ class ParentHomeScreen extends Component {
               })
             }
           >
-            <View style={borderText}>
-              <MuliText style={textParentRequest}>
-                Nhấn vào đây để tạo yêu cầu
-              </MuliText>
-            </View>
+            <MuliText style={styles.textParentRequest}>
+              Nhấn vào đây để tạo yêu cầu
+            </MuliText>
           </TouchableOpacity>
         </View>
         <CalendarStrip
@@ -257,7 +252,6 @@ class ParentHomeScreen extends Component {
             flex: 0.2,
             paddingTop: 10,
             paddingBottom: 10,
-            marginBottom: 10,
           }}
           calendarHeaderStyle={{
             color: '#527395',
@@ -350,6 +344,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   textParentRequest: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    borderRadius: 1,
     color: colors.gray,
   },
   textBsitterRequest: {
@@ -383,13 +382,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     marginTop: 15,
-    paddingHorizontal: 20,
-    paddingTop: 30,
+    paddingHorizontal: 5,
+    paddingTop: 10,
   },
   noRequestText: {
     marginVertical: 10,
-    marginHorizontal: 30,
-    paddingTop: 20,
+    paddingTop: 10,
     fontSize: 18,
     color: '#315f61',
     fontWeight: 'bold',
@@ -403,8 +401,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 25,
-    paddingVertical: 15,
-    flex: 0.1,
     backgroundColor: '#fff',
   },
   scheduleContainerBsitter: {

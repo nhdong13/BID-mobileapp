@@ -137,7 +137,7 @@ export default class BsitterProfile extends Component {
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
                   <MuliText
-                    style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+                    style={{ fontSize: 13, color: '#315f61', marginLeft: 10 }}
                   >
                     Thông tin cơ bản
                   </MuliText>
@@ -165,7 +165,7 @@ export default class BsitterProfile extends Component {
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
                   <MuliText
-                    style={{ fontSize: 18, color: '#315f61', marginLeft: 10 }}
+                    style={{ fontSize: 13, color: '#315f61', marginLeft: 10 }}
                   >
                     Yêu cầu làm việc
                   </MuliText>
@@ -202,7 +202,7 @@ export default class BsitterProfile extends Component {
                           )
                         }
                       >
-                        <MuliText style={{ color: '#78ddb6', fontSize: 20 }}>
+                        <MuliText style={{ color: '#78ddb6', fontSize: 15 }}>
                           Mời
                         </MuliText>
                       </TouchableOpacity>
@@ -212,7 +212,7 @@ export default class BsitterProfile extends Component {
                         style={{
                           marginTop: 10,
                           color: '#B81A1A',
-                          fontSize: 20,
+                          fontSize: 15,
                         }}
                       >
                         Đã mời
@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     backgroundColor: 'white',
     // flex: 1,
-    paddingHorizontal: 20,
     paddingBottom: 20,
     marginTop: 10,
   },
@@ -263,6 +262,6 @@ const styles = StyleSheet.create({
   },
   textField: {
     marginBottom: 10,
-    fontSize: 16,
+    fontSize: 11,
   },
 });

@@ -138,16 +138,16 @@ export class Bsitter extends Component {
                 {item.user.gender == 'MALE' && (
                   <Ionicons
                     name="ios-male"
-                    size={15}
-                    style={{ marginBottom: -2, marginLeft: 5 }}
+                    size={18}
+                    style={{ marginBottom: -3, marginLeft: 5 }}
                     color={colors.blueAqua}
                   />
                 )}
                 {item.user.gender == 'FEMALE' && (
                   <Ionicons
                     name="ios-female"
-                    size={15}
-                    style={{ marginBottom: -2, marginLeft: 5 }}
+                    size={18}
+                    style={{ marginBottom: -3, marginLeft: 5 }}
                     color={colors.pinkLight}
                   />
                 )}
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   bsitterContainer: {
-    marginVertical: 13,
+    marginVertical: 8,
   },
   bsitterItem: {
     flexDirection: 'row',
@@ -262,14 +262,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inviteButton: {
-    marginTop: 10,
+    marginTop: 14,
   },
   inviteButtonDisable: {
     marginTop: 10,
     opacity: 0.7,
   },
   bsitterName: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '400',
     color: '#315F61',
   },

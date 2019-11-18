@@ -220,7 +220,7 @@ class SitterHomeScreen extends Component {
       horizontalUpcoming,
     } = styles;
     const InvitationPending = () => (
-      <View style={{ alignItems: 'center', flex: 0.8 }}>
+      <View style={{ flex: 1 }}>
         <FlatList
           refreshControl={
             <RefreshControl
@@ -247,7 +247,7 @@ class SitterHomeScreen extends Component {
     );
 
     const InvitationWaiting = () => (
-      <View>
+      <View style={{ flex: 1 }}>
         <FlatList
           refreshControl={
             <RefreshControl
@@ -314,7 +314,9 @@ class SitterHomeScreen extends Component {
         </View>
         {invitationsUpcoming != null && invitationsUpcoming.length > 0 ? (
           <View style={horizontalUpcoming}>
-            <MuliText>Upcoming sittings</MuliText>
+            <MuliText style={{ marginHorizontal: 15 }}>
+              Lịch giữ trẻ sắp tới
+            </MuliText>
             <View style={{ flex: 1 }}>
               <FlatList
                 horizontal={true}
@@ -338,7 +340,9 @@ class SitterHomeScreen extends Component {
             <TabBar
               {...props}
               indicatorStyle={{ backgroundColor: colors.white }}
-              style={{ backgroundColor: colors.darkGreenTitle }}
+              style={{
+                backgroundColor: colors.darkGreenTitle,
+              }}
             />
           )}
         />
@@ -375,40 +379,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#dfe6e9',
   },
   textParent: {
-    marginTop: 20,
+    marginTop: 15,
     fontSize: 19,
     color: '#315f61',
     fontWeight: 'bold',
     lineHeight: 20,
   },
   textBsitter: {
-    marginTop: 20,
-    fontSize: 19,
+    marginTop: 15,
+    fontSize: 14,
     color: '#315f61',
     fontWeight: 'bold',
-    lineHeight: 20,
+    lineHeight: 15,
     alignItems: 'flex-start',
   },
   noRequest: {
     flex: 1,
-    backgroundColor: 'white',
     alignItems: 'center',
-    marginTop: 20,
-    paddingHorizontal: 20,
-    paddingTop: 30,
+    backgroundColor: 'white',
+    marginTop: 10,
   },
   noRequestText: {
     marginVertical: 10,
-    marginHorizontal: 30,
-    paddingTop: 20,
-    fontSize: 18,
+    marginHorizontal: 25,
+    paddingTop: 15,
+    fontSize: 13,
     color: '#315f61',
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 100,
-    height: 236,
-    marginVertical: 20,
+    width: 300,
+    height: 500,
   },
   scheduleContainer: {
     alignItems: 'center',
@@ -420,22 +421,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   scheduleContainerBsitter: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
     marginTop: 15,
-    paddingLeft: 30,
-    flex: 0.2,
+    padding: 30,
     backgroundColor: '#fff',
+    height: 100,
   },
   date: {
     marginTop: 5,
     marginBottom: 10,
     color: colors.darkGreenTitle,
-    fontWeight: '400',
-    fontSize: 15,
+    fontWeight: 'bold',
+    fontSize: 10,
   },
   horizontalUpcoming: {
-    flex: 0.4,
+    height: 200,
     backgroundColor: 'white',
   },
 });
