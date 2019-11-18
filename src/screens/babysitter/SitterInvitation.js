@@ -41,7 +41,7 @@ class SitterInvitation extends Component {
                   )}
                 </MuliText>
                 <MuliText>
-                  Lời mời từ {invitation.sittingRequest.user.nickname}
+                  Từ {invitation.sittingRequest.user.nickname}
                 </MuliText>
                 <MuliText style={{ marginTop: 10, color: '#7edeb9' }}>
                   {moment
@@ -63,7 +63,7 @@ class SitterInvitation extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.confirmed }}
                   >
-                    Đã xác nhận
+                    {invitation.status}
                   </MuliText>
                 </View>
                 <MuliText>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     marginTop: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingTop: 30,
   },
   noRequestText: {
@@ -141,17 +141,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 261,
-    height: 236,
+    width: 100,
+    height: 100,
     marginVertical: 20,
   },
   requestItemSitter: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 150,
-    width: 350,
-    marginHorizontal: 15,
+    height: 110,
+    width: 330,
+    marginHorizontal: 5,
     alignItems: 'center',
     borderRadius: 15,
     marginBottom: 5,
@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
   },
   leftInformationSitter: {
     marginLeft: 10,
-    flex: 1,
   },
   fuckthisshit: {},
   leftInformation: {

@@ -237,7 +237,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     backgroundColor: 'white',
     // flex: 1,
-    paddingHorizontal: 20,
     paddingBottom: 20,
     marginTop: 10,
   },

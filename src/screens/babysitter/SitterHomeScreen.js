@@ -198,7 +198,7 @@ class SitterHomeScreen extends Component {
       horizontalUpcoming,
     } = styles;
     const Invitation = () => (
-      <View style={{ alignItems: 'center', flex: 0.8 }}>
+      <View style={{ alignItems: 'center', flex: 1 }}>
         {invitations != '' && invitations ? (
           <FlatList
             refreshControl={
@@ -410,9 +410,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 15,
     paddingLeft: 30,
-    flex: 0.2,
     backgroundColor: '#fff',
-    height: 150,
+    height: 100,
   },
   date: {
     marginTop: 5,

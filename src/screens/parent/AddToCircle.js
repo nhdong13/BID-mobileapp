@@ -111,13 +111,13 @@ export default class AddToCircle extends Component {
                 style={styles.inviteButton}
                 onPress={() => this.addToCircle()}
               >
-                <MuliText style={{ color: '#78ddb6', fontSize: 16 }}>
+                <MuliText style={{ color: '#78ddb6', fontSize: 12 }}>
                   Thêm
                 </MuliText>
               </TouchableOpacity>
             )}
             {this.state.friend != null && this.state.friend.isInvited && (
-              <MuliText style={{ color: '#B81A1A', fontSize: 16 }}>
+              <MuliText style={{ color: '#B81A1A', fontSize: 12 }}>
                 Đã thêm
               </MuliText>
             )}

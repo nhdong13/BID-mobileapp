@@ -239,97 +239,95 @@ class CreateRequestScreen extends Component {
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <View>
-              <View style={styles.input}>
-                <Ionicons
-                  name="ios-timer"
-                  size={20}
-                  color={colors.gray}
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-timer"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginTop: 10,
+                }}
+              />
 
-                <DatePicker
-                  style={styles.pickedTime}
-                  date={this.state.startTime}
-                  // minDate={moment().format()}
-                  // maxDate={this.state.endTime}
-                  mode="time"
-                  placeholder="Giờ bắt đầu"
-                  format="HH:mm"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  androidMode="spinner"
-                  customStyles={{
-                    dateInput: {
-                      borderWidth: 0,
-                    },
-                    placeholderText: {
-                      fontSize: 15,
-                      color: colors.gray,
-                      marginRight: 30,
-                    },
-                    dateText: {
-                      fontSize: 15,
-                      color: 'black',
-                    },
-                  }}
-                  is24Hour
-                  onDateChange={async (time) => {
-                    await this.setState({ startTime: time });
-                    console.log(this.state.startTime);
-                    this.updatePrice();
-                  }}
-                  showIcon={false}
-                />
-              </View>
+              <DatePicker
+                style={styles.pickedTime}
+                date={this.state.startTime}
+                // minDate={moment().format()}
+                // maxDate={this.state.endTime}
+                mode="time"
+                placeholder="Giờ bắt đầu"
+                format="HH:mm"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                androidMode="spinner"
+                customStyles={{
+                  dateInput: {
+                    borderWidth: 0,
+                  },
+                  placeholderText: {
+                    fontSize: 15,
+                    color: colors.gray,
+                    marginRight: 30,
+                  },
+                  dateText: {
+                    fontSize: 15,
+                    color: 'black',
+                  },
+                }}
+                is24Hour
+                onDateChange={async (time) => {
+                  await this.setState({ startTime: time });
+                  console.log(this.state.startTime);
+                  this.updatePrice();
+                }}
+                showIcon={false}
+              />
             </View>
-            <View>
-              <View style={styles.input}>
-                <Ionicons
-                  name="ios-time"
-                  size={20}
-                  color={colors.gray}
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
-                <DatePicker
-                  style={styles.pickedTime}
-                  // minDate={this.state.startTime}
-                  date={this.state.endTime}
-                  mode="time"
-                  placeholder="Giờ kết thúc"
-                  format="HH:mm"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  androidMode="spinner"
-                  customStyles={{
-                    dateInput: {
-                      borderWidth: 0,
-                    },
-                    placeholderText: {
-                      fontSize: 15,
-                      color: colors.gray,
-                      marginRight: 30,
-                    },
-                    dateText: {
-                      fontSize: 15,
-                      color: 'black',
-                    },
-                  }}
-                  is24Hour
-                  onDateChange={async (time) => {
-                    await this.setState({ endTime: time });
-                    console.log(this.state.endTime);
-                    this.updatePrice();
-                  }}
-                  showIcon={false}
-                />
-              </View>
+
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-time"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginTop: 10,
+                }}
+              />
+              <DatePicker
+                style={styles.pickedTime}
+                // minDate={this.state.startTime}
+                date={this.state.endTime}
+                mode="time"
+                placeholder="Giờ kết thúc"
+                format="HH:mm"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                androidMode="spinner"
+                customStyles={{
+                  dateInput: {
+                    borderWidth: 0,
+                  },
+                  placeholderText: {
+                    fontSize: 15,
+                    color: colors.gray,
+                    marginRight: 30,
+                  },
+                  dateText: {
+                    fontSize: 15,
+                    color: 'black',
+                  },
+                }}
+                is24Hour
+                onDateChange={async (time) => {
+                  await this.setState({ endTime: time });
+                  console.log(this.state.endTime);
+                  this.updatePrice();
+                }}
+                showIcon={false}
+              />
             </View>
           </View>
+
           <View style={styles.inputAddress}>
             <Ionicons
               name="ios-home"

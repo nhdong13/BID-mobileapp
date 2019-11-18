@@ -100,7 +100,7 @@ export default class CircleScreens extends Component {
                 })
               }
             >
-              <MuliText style={{ color: colors.done }}>Thêm</MuliText>
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>Thêm</MuliText>
             </TouchableOpacity>
           </View>
         ) : (
@@ -129,7 +129,9 @@ export default class CircleScreens extends Component {
                 })
               }
             >
-              <MuliText style={{ color: colors.done }}>Thêm</MuliText>
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>
+                Thêm
+              </MuliText>
             </TouchableOpacity>
           </View>
         )}
@@ -163,7 +165,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={24}
+                size={19}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -203,7 +205,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={24}
+                size={19}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -264,13 +266,13 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginTop: 18,
-    fontSize: 15,
+    fontSize: 10,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },
   textDeselect: {
     marginTop: 5,
-    fontSize: 15,
+    fontSize: 10,
     color: colors.lightGreen,
   },
   container: {
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   bsitterName: {
-    fontSize: 18,
+    fontSize: 13,
     fontWeight: '400',
     color: '#315F61',
   },
