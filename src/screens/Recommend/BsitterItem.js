@@ -55,11 +55,12 @@ export class Bsitter extends Component {
 
   sendInvitation = async (receiverId) => {
     // console.log('it go here');
-    const { requestId, request } = this.props;
+    const { requestId, request, item } = this.props;
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
       receiver: receiverId,
+      distance: item.distance,
     };
     // console.log(request);
     await Api.get('trackings/' + this.state.userId).then((res) => {
@@ -83,7 +84,7 @@ export class Bsitter extends Component {
             this.props.changeInviteStatus(receiverId);
             this.props.setRequestId(response.data.newRequest.id);
           })
-          .catch((error) => console.log('aaa', error));
+          .catch((error) => console.log('--- Create invitation error', error));
       }
     });
   };
@@ -125,6 +126,7 @@ export class Bsitter extends Component {
                 sitterId: item.userId,
                 requestId: requestId,
                 request: request,
+                distance: item.distance,
                 onGoBack: (receiverId, requestId) =>
                   this.changeStateOnGoBack(receiverId, requestId),
               })
@@ -160,7 +162,7 @@ export class Bsitter extends Component {
                   style={{ marginLeft: 10 }}
                   color={colors.lightGreen}
                 />
-                <MuliText> {item.distance} km </MuliText>
+                <MuliText> {item.distance} </MuliText>
                 <Ionicons
                   name="ios-star"
                   size={24}

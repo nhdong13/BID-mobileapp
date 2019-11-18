@@ -13,6 +13,7 @@ export default class BsitterProfile extends Component {
       requestId: 0,
       sitterId: 0,
       request: null,
+      distance: 0,
       sitter: {},
       user: {},
     };
@@ -22,10 +23,11 @@ export default class BsitterProfile extends Component {
     const sitterId = this.props.navigation.getParam('sitterId');
     const requestId = this.props.navigation.getParam('requestId');
     const request = this.props.navigation.getParam('request');
+    const distance = this.props.navigation.getParam('distance');
 
     if (sitterId && sitterId != 0) {
       this.setState(
-        { sitterId: sitterId, requestId: requestId, request: request },
+        { sitterId: sitterId, requestId: requestId, request: request, distance: distance },
         () => this.getBabysitter(),
       );
     } else {
@@ -69,6 +71,7 @@ export default class BsitterProfile extends Component {
       requestId: requestId,
       status: 'PENDING',
       receiver: sitterId,
+      distance: this.state.distance,
     };
     console.log(invitation);
     await createInvitation(requestId, invitation, request)
@@ -116,6 +119,9 @@ export default class BsitterProfile extends Component {
                     {this.state.user.gender == 'MALE'
                       ? Gender.MALE
                       : Gender.FEMALE}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Cách bạn: {this.state.distance}
                   </MuliText>
                 </View>
               </View>
