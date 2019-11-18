@@ -16,6 +16,7 @@ export default class BsitterProfile extends Component {
     this.state = {
       requestId: 0,
       sitterId: 0,
+      userId: 0,
       request: null,
       distance: 0,
       sitter: {},
@@ -28,11 +29,23 @@ export default class BsitterProfile extends Component {
       publishableKey: stripeKey,
       androidPayMode: 'test',
     });
-    const { sitterId, requestId, request, distance } = this.props.navigation.state.params;
+    const {
+      sitterId,
+      requestId,
+      request,
+      distance,
+      userId,
+    } = this.props.navigation.state.params;
 
     if (sitterId && sitterId != 0) {
       this.setState(
-        { sitterId: sitterId, requestId: requestId, request: request, distance: distance },
+        {
+          sitterId,
+          requestId,
+          request,
+          distance,
+          userId,
+        },
         () => this.getBabysitter(),
       );
     } else {
@@ -237,6 +250,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#dfe6e9',
+    marginHorizontal: 15,
     paddingBottom: 20,
   },
   sectionContainer: {

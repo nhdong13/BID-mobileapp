@@ -2,7 +2,13 @@
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
-import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
@@ -12,6 +18,8 @@ import colors from 'assets/Color';
 import { updateRequest } from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
+
+const { width, height } = Dimensions.get('window');
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -258,7 +266,7 @@ class CreateRequestScreen extends Component {
                 // maxDate={this.state.endTime}
                 mode="time"
                 placeholder="Giờ bắt đầu"
-                format="HH:mm"
+                format="HH:MM"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 androidMode="spinner"
@@ -301,7 +309,7 @@ class CreateRequestScreen extends Component {
                 date={this.state.endTime}
                 mode="time"
                 placeholder="Giờ kết thúc"
-                format="HH:mm"
+                format="HH:MM"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 androidMode="spinner"
@@ -326,6 +334,7 @@ class CreateRequestScreen extends Component {
                   this.updatePrice();
                 }}
                 showIcon={false}
+                minuteInterval={15}
               />
             </View>
           </View>
@@ -499,7 +508,7 @@ class CreateRequestScreen extends Component {
               </TouchableOpacity>
             </View>
           )} */}
-          {this.state.requestId == 0 && (
+          {this.state.requestId == 0 ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
@@ -509,6 +518,18 @@ class CreateRequestScreen extends Component {
                   Kế tiếp
                 </MuliText>
               </TouchableOpacity>
+            </View>
+          ) : (
+            <View
+              style={{
+                marginHorizontal: 15,
+                marginTop: 30,
+                alignItems: 'center',
+              }}
+            >
+              <MuliText style={{ color: colors.gray, fontSize: 12 }}>
+                Bạn không thể thay đổi yêu cầu giữ trẻ khi đã mời bảo mẫu
+              </MuliText>
             </View>
           )}
         </View>

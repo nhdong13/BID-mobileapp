@@ -119,6 +119,7 @@ export class Bsitter extends Component {
             style={{ flexDirection: 'row', flexGrow: 2 }}
             onPress={() =>
               navigation.navigate('SitterProfile', {
+                userId: this.state.userId,
                 sitterId: item.userId,
                 requestId: requestId,
                 request: request,

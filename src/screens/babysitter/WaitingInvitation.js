@@ -5,6 +5,7 @@ import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 class WaitingInvitation extends Component {
   constructor(props) {
@@ -67,9 +68,22 @@ class WaitingInvitation extends Component {
                   </MuliText>
                 </View>
                 <MuliText style={{ fontSize: 10, marginTop: 10 }}>
-                  {formater(invitation.sittingRequest.totalPrice)} Đồng
+                  {formater(invitation.sittingRequest.totalPrice)} đ
                 </MuliText>
-                <MuliText>{invitation.distance}</MuliText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    margin: 10,
+                  }}
+                >
+                  <FontAwesome5
+                    name="directions"
+                    size={20}
+                    color={colors.darkGreenTitle}
+                    style={{ marginRight: 5 }}
+                  />
+                  <MuliText>{invitation.distance} km</MuliText>
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -143,9 +157,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 100,
-    height: 100,
-    marginVertical: 20,
+    width: 30,
+    height: 10,
   },
   requestItemSitter: {
     flexDirection: 'row',

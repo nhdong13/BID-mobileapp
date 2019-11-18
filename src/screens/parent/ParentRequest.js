@@ -80,7 +80,7 @@ class ParentRequest extends Component {
                   </MuliText>
                 </View>
               )}
-              <MuliText>{formater(request.totalPrice)} Đồng</MuliText>
+              <MuliText>{formater(request.totalPrice)} đ</MuliText>
             </View>
           </View>
         </TouchableOpacity>
