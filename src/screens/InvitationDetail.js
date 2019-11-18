@@ -16,7 +16,7 @@ import colors from 'assets/Color';
 import { updateInvitation } from 'api/invitation.api';
 import { formater } from 'utils/MoneyFormater';
 
-moment.locale('vi', localization);
+moment.updateLocale('vi', localization);
 
 export default class InvitationDetail extends Component {
   constructor(props) {
@@ -37,10 +37,6 @@ export default class InvitationDetail extends Component {
       minAgeOfChildren: 1,
       createUserId: 0,
     };
-    console.log(
-      'PHUC: InvitationDetail -> constructor -> invitationID',
-      this.state.invitationID,
-    );
   }
 
   componentDidMount() {
@@ -153,43 +149,117 @@ export default class InvitationDetail extends Component {
                 color="#bdc3c7"
               />
               <MuliText style={styles.contentInformation}>
-                {this.state.status == 'PENDING' && (
+                {this.state.invitationStatus == 'PENDING' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    {this.state.status}
+                    {this.state.invitationStatus}
                   </MuliText>
                 )}
-                {this.state.status == 'DONE' && (
+                {this.state.invitationStatus == 'DONE' && (
                   <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                    {this.state.status}
+                    {this.state.invitationStatus}
                   </MuliText>
                 )}
-                {this.state.status == 'ONGOING' && (
+                {this.state.invitationStatus == 'ONGOING' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.ongoing }}
                   >
-                    {this.state.status}
+                    {this.state.invitationStatus}
                   </MuliText>
                 )}
-                {this.state.status == 'EXPIRED' && (
+                {this.state.invitationStatus == 'EXPIRED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.status}
+                    {this.state.invitationStatus}
                   </MuliText>
                 )}
-                {this.state.status == 'CONFIRMED' && (
+                {this.state.invitationStatus == 'CONFIRMED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.confirmed }}
                   >
-                    {this.state.status}
+                    {this.state.invitationStatus}
                   </MuliText>
                 )}
               </MuliText>
             </View>
           </View>
-          <View style={{ marginTop: 20 }}>
+          <View style={styles.detailContainer}>
+            <View style={styles.detailPictureContainer}>
+              <Image
+                source={this.state.detailPictureParent}
+                style={styles.profileImg}
+              />
+              <View style={styles.leftInformation}>
+                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
+                <MuliText style={{ fontSize: 15 }}>
+                  {this.state.parentName}
+                </MuliText>
+              </View>
+              <View style={styles.rightInformation}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity>
+                    <Ionicons
+                      name="ios-chatbubbles"
+                      size={22}
+                      style={{ marginBottom: -5, marginLeft: 10 }}
+                      color="#adffcb"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.detailContainer}>
+            <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
+            <View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                      <Ionicons
+                        name="ios-man"
+                        size={22}
+                        style={{ marginBottom: -5, marginLeft: 15 }}
+                        color="#adffcb"
+                      />
+                      <View>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>
+                          {this.state.childrenNumber}
+                        </MuliText>
+                      </View>
+                    </View>
+                    <MuliText style={styles.grayOptionInformation}>
+                      Số trẻ
+                    </MuliText>
+                  </View>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                      <Ionicons
+                        name="ios-happy"
+                        size={22}
+                        style={{ marginBottom: -5, marginLeft: 15 }}
+                        color="#adffcb"
+                      />
+                      <View>
+                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>
+                          {this.state.minAgeOfChildren}
+                        </MuliText>
+                      </View>
+                    </View>
+                    <MuliText style={styles.grayOptionInformation}>
+                      Nhỏ tuổi nhất:
+                    </MuliText>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+          <View style={{ marginTop: 10 }}>
             <TouchableOpacity
               onPress={() => {
                 this.callDetail();
@@ -203,58 +273,6 @@ export default class InvitationDetail extends Component {
             </TouchableOpacity>
             {this.state.isModalVisible && (
               <View>
-                <View style={styles.detailContainer}>
-                  <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
-                  <View>
-                    <ScrollView
-                      horizontal={true}
-                      showsHorizontalScrollIndicator={false}
-                    >
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={styles.childrenInformationContainer}>
-                          <View style={{ flexDirection: 'row', marginTop: 25 }}>
-                            <Ionicons
-                              name="ios-man"
-                              size={22}
-                              style={{ marginBottom: -5, marginLeft: 15 }}
-                              color="#adffcb"
-                            />
-                            <View>
-                              <MuliText
-                                style={{ marginLeft: 15, fontSize: 15 }}
-                              >
-                                {this.state.childrenNumber}
-                              </MuliText>
-                            </View>
-                          </View>
-                          <MuliText style={styles.grayOptionInformation}>
-                            Số trẻ
-                          </MuliText>
-                        </View>
-                        <View style={styles.childrenInformationContainer}>
-                          <View style={{ flexDirection: 'row', marginTop: 25 }}>
-                            <Ionicons
-                              name="ios-happy"
-                              size={22}
-                              style={{ marginBottom: -5, marginLeft: 15 }}
-                              color="#adffcb"
-                            />
-                            <View>
-                              <MuliText
-                                style={{ marginLeft: 15, fontSize: 15 }}
-                              >
-                                {this.state.minAgeOfChildren}
-                              </MuliText>
-                            </View>
-                          </View>
-                          <MuliText style={styles.grayOptionInformation}>
-                            Nhỏ tuổi nhất:
-                          </MuliText>
-                        </View>
-                      </View>
-                    </ScrollView>
-                  </View>
-                </View>
                 <View style={styles.detailContainer}>
                   <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
                   <View style={styles.informationText}>
@@ -312,32 +330,6 @@ export default class InvitationDetail extends Component {
             )}
           </View>
 
-          <View style={styles.detailContainer}>
-            <View style={styles.detailPictureContainer}>
-              <Image
-                source={this.state.detailPictureParent}
-                style={styles.profileImg}
-              />
-              <View style={styles.leftInformation}>
-                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
-                <MuliText style={{ fontSize: 15 }}>
-                  {this.state.parentName}
-                </MuliText>
-              </View>
-              <View style={styles.rightInformation}>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity>
-                    <Ionicons
-                      name="ios-chatbubbles"
-                      size={22}
-                      style={{ marginBottom: -5, marginLeft: 10 }}
-                      color="#adffcb"
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
           <View style={styles.buttonContainer}>
             {this.state.invitationStatus == 'PENDING' && (
               <View style={styles.buttonContainer}>
@@ -379,11 +371,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 80,
     width: 140,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 1,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 1, height: 5 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 5,
+    elevation: 2,
   },
   rightInformation: {
     marginLeft: 'auto',
@@ -405,7 +397,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   detailContainer: {
-    marginTop: 20,
+    marginVertical: 15,
   },
   submitButton: {
     width: 90,
