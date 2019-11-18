@@ -494,7 +494,7 @@ class CreateRequestScreen extends Component {
                 style={styles.submitButton}
                 onPress={this.updateRequest}
               >
-                <MuliText style={{ color: 'white', fontSize: 16 }}>
+                <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
                 </MuliText>
               </TouchableOpacity>
@@ -506,7 +506,7 @@ class CreateRequestScreen extends Component {
                 style={styles.submitButton}
                 onPress={this.toRecommendScreen}
               >
-                <MuliText style={{ color: 'white', fontSize: 16 }}>
+                <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
                 </MuliText>
               </TouchableOpacity>
@@ -585,16 +585,17 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   submitButton: {
-    width: 200,
-    height: 50,
+    width: 170,
+    height: 40,
     padding: 10,
+    marginBottom: 10,
     backgroundColor: '#315F61',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonContainer: {
-    paddingTop: 30,
+    paddingTop: 15,
     alignItems: 'center',
   },
   detailPictureContainer: {

@@ -15,7 +15,7 @@ class SitterInvitation extends Component {
   render() {
     const { invitation, navigation } = this.props;
     return (
-      <View>
+      <View key={invitation.id}>
         {invitation.status == 'CONFIRMED' && (
           <TouchableOpacity
             key={invitation.id}

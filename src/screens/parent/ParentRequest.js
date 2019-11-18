@@ -122,9 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'green',
-    width: 120,
     height: 40,
-    padding: 10,
   },
   statusBoxConfirm: {
     justifyContent: 'center',
@@ -171,7 +169,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     height: 130,
-    marginHorizontal: 30,
+    marginHorizontal: 15,
     alignItems: 'center',
     marginTop: 20,
     borderRadius: 15,
@@ -185,15 +183,14 @@ const styles = StyleSheet.create({
   fuckthisshit: {},
   leftInformation: {
     // backgroundColor: 'blue',
-    margin: 10,
-    paddingHorizontal: 5,
+    paddingLeft: 10,
     flex: 1,
   },
   rightInformation: {
     // backgroundColor: 'green',
     flex: 1,
     alignItems: 'flex-end',
-    paddingRight: 20,
+    paddingRight: 10,
   },
   scheduleContainer: {
     alignItems: 'center',

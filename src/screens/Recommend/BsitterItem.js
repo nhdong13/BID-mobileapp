@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   bsitterContainer: {
-    marginVertical: 13,
+    marginVertical: 8,
   },
   bsitterItem: {
     flexDirection: 'row',
@@ -264,14 +264,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inviteButton: {
-    marginTop: 10,
+    marginTop: 14,
   },
   inviteButtonDisable: {
     marginTop: 10,
     opacity: 0.7,
   },
   bsitterName: {
-    fontSize: 13,
+    fontSize: 10,
     fontWeight: '400',
     color: '#315F61',
   },
