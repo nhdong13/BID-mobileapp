@@ -6,7 +6,7 @@ import moment from 'moment';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
 
-class SitterInvitationPending extends Component {
+class WaitingInvitation extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,7 +16,7 @@ class SitterInvitationPending extends Component {
     const { invitation, navigation } = this.props;
     return (
       <View>
-        {invitation.status == 'PENDING' && (
+        {invitation.status === 'ACCEPTED' && (
           <TouchableOpacity
             key={invitation.id}
             style={{
@@ -53,12 +53,17 @@ class SitterInvitationPending extends Component {
                     .format('HH:mm')}
                 </MuliText>
               </View>
+              {/* OVERLAP
+          ACCEPTED
+          EXPIRED
+          CANCELED
+          DONE */}
               <View style={styles.rightInformation}>
                 <View style={styles.statusBoxPending}>
                   <MuliText
-                    style={{ fontWeight: '100', color: colors.pending }}
+                    style={{ fontWeight: '100', color: colors.lightGreen }}
                   >
-                    {invitation.status}
+                    Đang chờ phụ huynh
                   </MuliText>
                 </View>
                 <MuliText>
@@ -73,7 +78,7 @@ class SitterInvitationPending extends Component {
   }
 }
 
-export default withNavigation(SitterInvitationPending);
+export default withNavigation(WaitingInvitation);
 
 const styles = StyleSheet.create({
   container: {
@@ -111,13 +116,20 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
     height: 40,
   },
-
+  statusBoxConfirm: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'green',
+    width: 100,
+    height: 50,
+    padding: 5,
+  },
   noRequest: {
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
     marginTop: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingTop: 30,
   },
   noRequestText: {
@@ -129,12 +141,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 261,
-    height: 236,
+    width: 100,
+    height: 100,
     marginVertical: 20,
   },
   requestItemSitter: {
-    justifyContent: 'space-between',
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
@@ -168,7 +179,7 @@ const styles = StyleSheet.create({
   rightInformation: {
     flex: 1,
     alignItems: 'flex-end',
-    paddingRight: 10,
+    marginRight: 10,
   },
   scheduleContainer: {
     alignItems: 'center',

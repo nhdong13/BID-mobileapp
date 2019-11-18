@@ -14,8 +14,8 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
 import { withNavigationFocus } from 'react-navigation';
 // import Loader from 'utils/Loader';
-import SitterInvitation from 'screens/babysitter/SitterInvitation';
-import SitterInvitationPending from 'screens/babysitter/SitterInvitationPending';
+import WaitingInvitation from 'screens/babysitter/WaitingInvitation';
+import PendingInvitation from 'screens/babysitter/PendingInvitation';
 import colors from 'assets/Color';
 import Api from 'api/api_helper';
 import apiUrl from 'utils/Connection';
@@ -26,15 +26,17 @@ import registerPushNotifications from 'utils/Notification';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
-import UpcomingSitting from './UpcomingSitting';
+import UpcomingInvitation from 'screens/babysitter/UpcomingInvitation';
 
-moment.locale('vi', localization);
+moment.updateLocale('vi', localization);
 
 class SitterHomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invitations: null,
+      invitationsPending: null,
+      invitationsUpcoming: null,
+      invitationsWaiting: null,
       userId: 0,
       refreshing: false,
       notificationMessage: 'Your request have been accepted',
@@ -43,8 +45,8 @@ class SitterHomeScreen extends Component {
       notification: {},
       index: 0,
       routes: [
-        { key: 'Invitation', title: 'Lời mời' },
-        { key: 'Pending', title: 'Đang chờ' },
+        { key: 'Pending', title: 'Lời mời' },
+        { key: 'Waiting', title: 'Đang chờ' },
       ],
     };
   }
@@ -117,13 +119,22 @@ class SitterHomeScreen extends Component {
       }
     });
     await Api.post('invitations/sitterInvitation', requestBody)
-      .then((res) => {
-        console.log(
-          'PHUC: SitterHomeScreen -> getInvitationData -> du lieu tra ve khi request invitation',
-          res,
+      .then((invitations) => {
+        const invitationsPending = invitations.filter(
+          (invitation) => invitation.status == 'PENDING',
+        );
+
+        const invitationsWaiting = invitations.filter(
+          (invitation) => invitation.status == 'ACCEPTED',
+        );
+
+        const invitationsUpcoming = invitations.filter(
+          (invitation) => invitation.status == 'CONFIRMED',
         );
         this.setState({
-          invitations: res,
+          invitationsPending,
+          invitationsUpcoming,
+          invitationsWaiting,
         });
       })
       .catch((error) =>
@@ -187,7 +198,14 @@ class SitterHomeScreen extends Component {
   };
 
   render() {
-    const { invitations, refreshing, title, notificationMessage } = this.state;
+    const {
+      invitationsPending,
+      invitationsUpcoming,
+      invitationsWaiting,
+      refreshing,
+      title,
+      notificationMessage,
+    } = this.state;
     const {
       containerBsitter,
       textBsitter,
@@ -197,61 +215,57 @@ class SitterHomeScreen extends Component {
       noRequestImage,
       horizontalUpcoming,
     } = styles;
-    const Invitation = () => (
-      <View style={{ alignItems: 'center', flex: 1 }}>
-        {invitations != '' && invitations ? (
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={this._onRefresh}
-              />
-            }
-            data={invitations}
-            renderItem={({ item }) => <SitterInvitation invitation={item} />}
-            keyExtractor={(item) => item.id.toString()}
-          />
-        ) : (
-          <View style={noRequest}>
-            <MuliText style={noRequestText}>
-              Hiện tại bạn không có lời mời nào
-            </MuliText>
-            <Image
-              source={require('assets/images/no-request.jpg')}
-              style={noRequestImage}
+    const InvitationPending = () => (
+      <View style={{ alignItems: 'center', flex: 0.8 }}>
+        <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
             />
-          </View>
-        )}
+          }
+          data={invitationsPending}
+          renderItem={({ item }) => <PendingInvitation invitation={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={
+            <View style={noRequest}>
+              <MuliText style={noRequestText}>
+                Hiện tại bạn không có lời mời nào
+              </MuliText>
+              <Image
+                source={require('assets/images/no-request.jpg')}
+                style={noRequestImage}
+              />
+            </View>
+          }
+        />
       </View>
     );
 
-    const Pending = () => (
+    const InvitationWaiting = () => (
       <View>
-        {invitations != null && invitations.length > 0 ? (
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={this._onRefresh}
-              />
-            }
-            data={invitations}
-            renderItem={({ item }) => (
-              <SitterInvitationPending invitation={item} />
-            )}
-            keyExtractor={(item) => item.id.toString()}
-          />
-        ) : (
-          <View style={noRequest}>
-            <MuliText style={noRequestText}>
-              Hiện tại bạn không có yêu cầu nào đang chờ
-            </MuliText>
-            <Image
-              source={require('assets/images/no-request.jpg')}
-              style={noRequestImage}
+        <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
             />
-          </View>
-        )}
+          }
+          data={invitationsWaiting}
+          renderItem={({ item }) => <WaitingInvitation invitation={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={
+            <View style={noRequest}>
+              <MuliText style={noRequestText}>
+                Hiện tại bạn không có lời mời nào
+              </MuliText>
+              <Image
+                source={require('assets/images/no-request.jpg')}
+                style={noRequestImage}
+              />
+            </View>
+          }
+        />
       </View>
     );
     return (
@@ -294,30 +308,26 @@ class SitterHomeScreen extends Component {
         <View style={scheduleContainerBsitter}>
           <MuliText style={textBsitter}>Lịch giữ trẻ của bạn</MuliText>
         </View>
-        <View style={horizontalUpcoming}>
-          <MuliText>Upcoming sittings</MuliText>
-          <View style={{ flex: 1 }}>
-            {invitations != null && invitations.length > 0 ? (
+        {invitationsUpcoming != null && invitationsUpcoming.length > 0 ? (
+          <View style={horizontalUpcoming}>
+            <MuliText>Upcoming sittings</MuliText>
+            <View style={{ flex: 1 }}>
               <FlatList
                 horizontal={true}
-                // refreshControl={
-                //   <RefreshControl
-                //     refreshing={refreshing}
-                //     onRefresh={this._onRefresh}
-                //   />
-                // }
-                data={invitations}
-                renderItem={({ item }) => <UpcomingSitting invitation={item} />}
+                data={invitationsUpcoming}
+                renderItem={({ item }) => (
+                  <UpcomingInvitation invitation={item} />
+                )}
                 keyExtractor={(item) => item.id.toString()}
               />
-            ) : null}
+            </View>
           </View>
-        </View>
+        ) : null}
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
-            Invitation: Invitation,
-            Pending: Pending,
+            Pending: InvitationPending,
+            Waiting: InvitationWaiting,
           })}
           onIndexChange={(index) => this.setState({ index })}
           renderTabBar={(props) => (
