@@ -69,6 +69,7 @@ class WaitingInvitation extends Component {
                 <MuliText>
                   {formater(invitation.sittingRequest.totalPrice)}VND
                 </MuliText>
+                <MuliText>{invitation.distance}</MuliText>
               </View>
             </View>
           </TouchableOpacity>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { retrieveToken } from 'utils/handleToken';
 import qs from 'qs';
-import apiUrl from 'utils/Connection';
+import apiUrl, { sittingRequestAPI } from 'utils/Connection';
 
 export async function recommend(requestId, request) {
   const { token } = await retrieveToken();
@@ -45,6 +45,44 @@ export async function acceptBabysitter(requestId, sitterId) {
 
   const response = await axios(options);
 
+  return response;
+}
+
+export async function startSitting(requestId, sitterId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  let url = `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`;
+  console.log("Duong: startSitting -> url", url)
+  const options = {
+    method: 'GET',
+    url: `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}
+
+export async function doneSitting(requestId, sitterId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+  let url = `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`;
+  const options = {
+    method: 'GET',
+    url: `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
   return response;
 }
 

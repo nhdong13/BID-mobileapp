@@ -606,7 +606,7 @@ export class RequestDetail extends Component {
                               color={colors.lightGreen}
                             />
                             <MuliText style={{ marginLeft: 3 }}>
-                              {item.user.babysitter.distance} km
+                              {item.distance}
                             </MuliText>
                           </View>
                           <View style={{ flexDirection: 'row' }}>
