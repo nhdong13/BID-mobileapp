@@ -17,6 +17,7 @@ export default class BsitterProfile extends Component {
       requestId: 0,
       sitterId: 0,
       request: null,
+      distance: 0,
       sitter: {},
       user: {},
     };
@@ -27,11 +28,11 @@ export default class BsitterProfile extends Component {
       publishableKey: stripeKey,
       androidPayMode: 'test',
     });
-    const { sitterId, requestId, request } = this.props.navigation.state.params;
+    const { sitterId, requestId, request, distance } = this.props.navigation.state.params;
 
     if (sitterId && sitterId != 0) {
       this.setState(
-        { sitterId: sitterId, requestId: requestId, request: request },
+        { sitterId: sitterId, requestId: requestId, request: request, distance: distance },
         () => this.getBabysitter(),
       );
     } else {
@@ -73,6 +74,7 @@ export default class BsitterProfile extends Component {
       requestId: requestId,
       status: 'PENDING',
       receiver: sitterId,
+      distance: this.state.distance,
     };
     // console.log(invitation);
     await Api.get('trackings/' + this.state.userId).then((res) => {
@@ -152,6 +154,9 @@ export default class BsitterProfile extends Component {
                     {this.state.user.gender == 'MALE'
                       ? Gender.MALE
                       : Gender.FEMALE}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Cách bạn: {this.state.distance}
                   </MuliText>
                 </View>
               </View>

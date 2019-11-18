@@ -7,7 +7,7 @@ import localization from 'moment/locale/vi';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
 
-moment.locale('vi', localization);
+moment.updateLocale('vi', localization);
 
 class ParentRequest extends Component {
   constructor(props) {

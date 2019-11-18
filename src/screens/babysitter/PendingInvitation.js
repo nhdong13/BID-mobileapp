@@ -64,6 +64,7 @@ class PendingInvitation extends Component {
                 <MuliText style={{ fontSize: 9, marginTop: 10 }}>
                   {formater(invitation.sittingRequest.totalPrice)} Đồng
                 </MuliText>
+                <MuliText>{invitation.distance}</MuliText>
               </View>
             </View>
           </TouchableOpacity>

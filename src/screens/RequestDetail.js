@@ -28,7 +28,7 @@ import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
 import AlertPro from 'react-native-alert-pro';
 
-moment.locale('vi', localization);
+moment.updateLocale('vi', localization);
 
 export class RequestDetail extends Component {
   constructor(props) {
@@ -606,7 +606,7 @@ export class RequestDetail extends Component {
                               color={colors.lightGreen}
                             />
                             <MuliText style={{ marginLeft: 3 }}>
-                              {item.user.babysitter.distance} km
+                              {item.distance}
                             </MuliText>
                           </View>
                           <View style={{ flexDirection: 'row' }}>

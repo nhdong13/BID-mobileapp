@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { withNavigationFocus } from 'react-navigation';
-import { updateRequestStatus } from 'api/sittingRequest.api';
+import { updateRequestStatus, startSitting, doneSitting } from 'api/sittingRequest.api';
 
 import io from 'socket.io-client';
 
@@ -112,11 +112,21 @@ export class QRcodeScannerScreen extends React.Component {
               this.onSuccess();
               const { dataInvitation } = this.state;
               if (dataInvitation != null) {
-                updateRequestStatus(dataInvitation)
+                console.log("Duong: QRcodeScannerScreen -> handleBarCodeScanned -> dataInvitation.status", dataInvitation.status)
+                if (dataInvitation.status == 'ONGOING') {
+                  startSitting(dataInvitation.id, this.state.userId)
                   .then(() => {
                     // this.props.navigation.navigate('Home', { loading: false });
                   })
                   .catch((error) => console.log(error));
+                }
+                if (dataInvitation.status == 'DONE') {
+                  doneSitting(dataInvitation.id, this.state.userId)
+                  .then(() => {
+                    // this.props.navigation.navigate('Home', { loading: false });
+                  })
+                  .catch((error) => console.log(error));
+                }
               }
             }
             if (this.state.isDone) {

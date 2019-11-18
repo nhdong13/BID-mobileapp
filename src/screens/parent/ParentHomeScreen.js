@@ -28,7 +28,7 @@ import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
 import Loader from 'utils/Loader';
 
-moment.locale('vi', localization);
+moment.updateLocale('vi', localization);
 
 class ParentHomeScreen extends Component {
   constructor(props) {
@@ -45,6 +45,7 @@ class ParentHomeScreen extends Component {
       title: '',
       loading: false,
       selectedDateRequest: [],
+      selectedDate: new moment().format('YYYY-MM-DD'),
     };
   }
 
@@ -143,7 +144,9 @@ class ParentHomeScreen extends Component {
     });
   };
 
-  onSelectedDate = (date = moment().format('YYYY-MM-DD')) => {
+  onSelectedDate = (
+    date = moment(this.state.selectedDate).format('YYYY-MM-DD'),
+  ) => {
     const { requests } = this.state;
 
     if (requests.length > 0) {
@@ -217,7 +220,13 @@ class ParentHomeScreen extends Component {
         <View style={scheduleContainer}>
           <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CreateRequest')}
+            onPress={() =>
+              navigation.navigate('CreateRequest', {
+                selectedDate: moment(this.state.selectedDate).format(
+                  'YYYY-MM-DD',
+                ),
+              })
+            }
           >
             <MuliText style={styles.textParentRequest}>
               Nhấn vào đây để tạo yêu cầu
@@ -262,9 +271,10 @@ class ParentHomeScreen extends Component {
           weekendDateNameStyle={{ color: '#e74c3c', fontFamily: 'muli' }}
           weekendDateNumberStyle={{ color: '#bdc3c7', fontFamily: 'muli' }}
           iconContainer={{ flex: 0.1 }}
-          onDateSelected={(date) =>
-            this.onSelectedDate(date.format('YYYY-MM-DD'))
-          }
+          onDateSelected={(date) => {
+            this.onSelectedDate(date.format('YYYY-MM-DD'));
+            this.setState({ selectedDate: date });
+          }}
         />
         <View style={{ flex: 1 }}>
           {selectedDateRequest != '' && selectedDateRequest ? (
