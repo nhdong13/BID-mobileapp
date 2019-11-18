@@ -6,7 +6,7 @@ import moment from 'moment';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
 
-class SitterInvitationPending extends Component {
+class PendingInvitation extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,7 +16,7 @@ class SitterInvitationPending extends Component {
     const { invitation, navigation } = this.props;
     return (
       <View>
-        {invitation.status == 'PENDING' && (
+        {invitation.status === 'PENDING' && (
           <TouchableOpacity
             key={invitation.id}
             style={{
@@ -73,7 +73,7 @@ class SitterInvitationPending extends Component {
   }
 }
 
-export default withNavigation(SitterInvitationPending);
+export default withNavigation(PendingInvitation);
 
 const styles = StyleSheet.create({
   container: {
