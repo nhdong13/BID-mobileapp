@@ -216,6 +216,13 @@ class ParentHomeScreen extends Component {
         />
         <View style={scheduleContainer}>
           <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CreateRequest')}
+          >
+            <MuliText style={styles.textParentRequest}>
+              Nhấn vào đây để tạo yêu cầu
+            </MuliText>
+          </TouchableOpacity>
         </View>
         <CalendarStrip
           markedDates={
@@ -327,6 +334,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   textParentRequest: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    borderRadius: 1,
     color: colors.gray,
   },
   textBsitterRequest: {
@@ -379,7 +391,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 25,
-    paddingBottom: 5,
     backgroundColor: '#fff',
   },
   scheduleContainerBsitter: {

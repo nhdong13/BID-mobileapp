@@ -40,17 +40,17 @@ class PendingInvitation extends Component {
                     'dddd Do MMMM',
                   )}
                 </MuliText>
-                <MuliText>
-                  Từ {invitation.sittingRequest.user.nickname}
-                </MuliText>
-                <MuliText style={{ marginTop: 10, color: '#7edeb9' }}>
+                <MuliText style={{ color: '#7edeb9' }}>
                   {moment
                     .utc(invitation.sittingRequest.startTime, 'HH:mm')
                     .format('HH:mm')}{' '}
-                  -
+                  đến
                   {moment
-                    .utc(invitation.sittingRequest.endTime, 'HH:mm')
-                    .format('HH:mm')}
+                    .utc(invitation.sittingRequest.endTime, ' HH:mm')
+                    .format(' HH:mm')}
+                </MuliText>
+                <MuliText style={{ marginTop: 15 }}>
+                  Từ {invitation.sittingRequest.user.nickname}
                 </MuliText>
               </View>
               <View style={styles.rightInformation}>
@@ -58,11 +58,11 @@ class PendingInvitation extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    {invitation.status}
+                    Chờ phê duyệt
                   </MuliText>
                 </View>
-                <MuliText>
-                  {formater(invitation.sittingRequest.totalPrice)}VND
+                <MuliText style={{ fontSize: 9, marginTop: 10 }}>
+                  {formater(invitation.sittingRequest.totalPrice)} Đồng
                 </MuliText>
               </View>
             </View>
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     // backgroundColor: 'green',
     height: 40,
+    width: 80,
   },
 
   noRequest: {
@@ -138,8 +139,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 110,
-    width: 330,
+    height: 150,
+    width: 350,
     marginHorizontal: 5,
     alignItems: 'center',
     borderRadius: 15,
@@ -159,16 +160,13 @@ const styles = StyleSheet.create({
   leftInformationSitter: {
     marginLeft: 10,
   },
-  fuckthisshit: {},
   leftInformation: {
     margin: 10,
     paddingHorizontal: 5,
-    flex: 1,
   },
   rightInformation: {
-    flex: 1,
-    alignItems: 'flex-end',
-    paddingRight: 10,
+    alignContent: 'flex-end',
+    marginLeft: 95,
   },
   scheduleContainer: {
     alignItems: 'center',
@@ -190,7 +188,6 @@ const styles = StyleSheet.create({
   },
   date: {
     marginTop: 5,
-    marginBottom: 10,
     color: colors.darkGreenTitle,
     fontWeight: '400',
     fontSize: 15,

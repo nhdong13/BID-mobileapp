@@ -216,7 +216,7 @@ class SitterHomeScreen extends Component {
       horizontalUpcoming,
     } = styles;
     const InvitationPending = () => (
-      <View style={{ alignItems: 'center', flex: 0.8 }}>
+      <View style={{ flex: 1 }}>
         <FlatList
           refreshControl={
             <RefreshControl
@@ -243,7 +243,7 @@ class SitterHomeScreen extends Component {
     );
 
     const InvitationWaiting = () => (
-      <View>
+      <View style={{ flex: 1 }}>
         <FlatList
           refreshControl={
             <RefreshControl
@@ -310,7 +310,9 @@ class SitterHomeScreen extends Component {
         </View>
         {invitationsUpcoming != null && invitationsUpcoming.length > 0 ? (
           <View style={horizontalUpcoming}>
-            <MuliText>Upcoming sittings</MuliText>
+            <MuliText style={{ marginHorizontal: 15 }}>
+              Lịch giữ trẻ sắp tới
+            </MuliText>
             <View style={{ flex: 1 }}>
               <FlatList
                 horizontal={true}
@@ -334,7 +336,9 @@ class SitterHomeScreen extends Component {
             <TabBar
               {...props}
               indicatorStyle={{ backgroundColor: colors.white }}
-              style={{ backgroundColor: colors.darkGreenTitle }}
+              style={{
+                backgroundColor: colors.darkGreenTitle,
+              }}
             />
           )}
         />
@@ -387,11 +391,9 @@ const styles = StyleSheet.create({
   },
   noRequest: {
     flex: 1,
-    backgroundColor: 'white',
     alignItems: 'center',
-    marginTop: 15,
-    paddingHorizontal: 15,
-    paddingTop: 25,
+    backgroundColor: 'white',
+    marginTop: 10,
   },
   noRequestText: {
     marginVertical: 10,
@@ -402,9 +404,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 150,
-    height: 300,
-    marginVertical: 20,
+    width: 300,
+    height: 500,
   },
   scheduleContainer: {
     alignItems: 'center',
@@ -416,10 +417,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   scheduleContainerBsitter: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
     marginTop: 15,
-    paddingLeft: 30,
+    padding: 30,
     backgroundColor: '#fff',
     height: 100,
   },
@@ -431,7 +432,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   horizontalUpcoming: {
-    flex: 0.4,
+    height: 200,
     backgroundColor: 'white',
   },
 });

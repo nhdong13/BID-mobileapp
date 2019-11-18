@@ -327,7 +327,6 @@ class CreateRequestScreen extends Component {
               />
             </View>
           </View>
-
           <View style={styles.inputAddress}>
             <Ionicons
               name="ios-home"

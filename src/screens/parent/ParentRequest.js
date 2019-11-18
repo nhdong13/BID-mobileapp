@@ -32,8 +32,8 @@ class ParentRequest extends Component {
                 {moment(request.sittingDate).format('dddd Do MMMM')}
               </MuliText>
               <MuliText style={{ color: '#7edeb9' }}>
-                {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} -
-                {moment.utc(request.endTime, 'HH:mm').format('HH:mm')}
+                {moment.utc(request.startTime, 'HH:mm').format('HH:mm')} đến
+                {moment.utc(request.endTime, ' HH:mm').format(' HH:mm')}
               </MuliText>
             </View>
             <View style={styles.rightInformation}>
@@ -80,7 +80,7 @@ class ParentRequest extends Component {
                   </MuliText>
                 </View>
               )}
-              <MuliText>{formater(request.totalPrice)} VND</MuliText>
+              <MuliText>{formater(request.totalPrice)} Đồng</MuliText>
             </View>
           </View>
         </TouchableOpacity>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 200,
+    height: 150,
     width: 350,
     marginHorizontal: 15,
     alignItems: 'center',
