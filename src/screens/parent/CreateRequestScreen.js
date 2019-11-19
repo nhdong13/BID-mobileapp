@@ -266,7 +266,7 @@ class CreateRequestScreen extends Component {
                 // maxDate={this.state.endTime}
                 mode="time"
                 placeholder="Giờ bắt đầu"
-                format="HH:MM"
+                format="HH:mm"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 androidMode="spinner"
@@ -309,7 +309,7 @@ class CreateRequestScreen extends Component {
                 date={this.state.endTime}
                 mode="time"
                 placeholder="Giờ kết thúc"
-                format="HH:MM"
+                format="HH:mm"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 androidMode="spinner"

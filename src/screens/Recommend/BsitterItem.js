@@ -20,6 +20,7 @@ export class Bsitter extends Component {
       userId: 0,
       email: '',
       name: '',
+      requestId: 0,
     };
   }
 
@@ -56,6 +57,7 @@ export class Bsitter extends Component {
   sendInvitation = async (receiverId) => {
     // console.log('it go here');
     const { requestId, request, item } = this.props;
+
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
@@ -106,8 +108,11 @@ export class Bsitter extends Component {
   };
 
   changeStateOnGoBack(receiverId, requestId) {
+    console.log('PHUC: changeStateOnGoBack -> receiverId', receiverId);
+    console.log('PHUC:changeStateOnGoBack -> requestId', requestId);
     this.props.changeInviteStatus(receiverId);
     this.props.setRequestId(requestId);
+    this.setState({ requestId });
   }
 
   render() {
@@ -121,7 +126,7 @@ export class Bsitter extends Component {
               navigation.navigate('SitterProfile', {
                 userId: this.state.userId,
                 sitterId: item.userId,
-                requestId: requestId,
+                requestId: this.state.requestId != 0 ? this.state.requestId : requestId,
                 request: request,
                 distance: item.distance,
                 onGoBack: (receiverId, requestId) =>

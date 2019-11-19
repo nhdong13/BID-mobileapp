@@ -79,10 +79,6 @@ export default class BsitterProfile extends Component {
   };
 
   sendInvitation = async (sitterId, requestId, request) => {
-    console.log(
-      'Duong: BsitterProfile -> sendInvitation -> requestId',
-      requestId,
-    );
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
@@ -109,11 +105,26 @@ export default class BsitterProfile extends Component {
       } else {
         createInvitation(requestId, invitation, request)
           .then((response) => {
-            // console.log(response);
-            this.props.changeInviteStatus(sitterId);
-            this.props.setRequestId(response.data.newRequest.id);
+            if (invitation.requestId == 0) {
+              this.changeInviteStatus(sitterId);
+              this.props.navigation.state.params.onGoBack(
+                sitterId,
+                response.data.newRequest.id,
+              );
+            } else if (invitation.requestId != 0) {
+              this.changeInviteStatus(sitterId);
+              this.props.navigation.state.params.onGoBack(
+                sitterId,
+                invitation.requestId,
+              );
+            }
           })
-          .catch((error) => console.log('aaa', error));
+          .catch((error) =>
+            console.log(
+              'Error in BsitterProfile -> CreateInvitation when have card',
+              error,
+            ),
+          );
       }
     });
   };
