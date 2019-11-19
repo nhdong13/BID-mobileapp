@@ -6,7 +6,7 @@ import moment from 'moment';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
 
-class SitterInvitation extends Component {
+class WaitingInvitation extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,7 +16,7 @@ class SitterInvitation extends Component {
     const { invitation, navigation } = this.props;
     return (
       <View>
-        {invitation.status == 'CONFIRMED' && (
+        {invitation.status === 'ACCEPTED' && (
           <TouchableOpacity
             key={invitation.id}
             style={{
@@ -61,9 +61,9 @@ class SitterInvitation extends Component {
               <View style={styles.rightInformation}>
                 <View style={styles.statusBoxPending}>
                   <MuliText
-                    style={{ fontWeight: '100', color: colors.confirmed }}
+                    style={{ fontWeight: '100', color: colors.lightGreen }}
                   >
-                    Đã xác nhận
+                    Đang chờ phụ huynh
                   </MuliText>
                 </View>
                 <MuliText>
@@ -79,7 +79,7 @@ class SitterInvitation extends Component {
   }
 }
 
-export default withNavigation(SitterInvitation);
+export default withNavigation(WaitingInvitation);
 
 const styles = StyleSheet.create({
   container: {
