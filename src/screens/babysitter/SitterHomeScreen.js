@@ -8,6 +8,7 @@ import {
   Image,
   RefreshControl,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -27,6 +28,8 @@ import moment from 'moment';
 import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
 import UpcomingInvitation from 'screens/babysitter/UpcomingInvitation';
+
+const { height } = Dimensions.get('window');
 
 moment.updateLocale('vi', localization);
 
@@ -79,7 +82,7 @@ class SitterHomeScreen extends Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     const { userId } = this.state;
     // console.log('PHUC: componentDidUpdate -> data', data);
     if (prevProps.isFocused != this.props.isFocused) {
@@ -94,16 +97,7 @@ class SitterHomeScreen extends Component {
             }
           });
         }
-
-        Api.post('invitations/sitterInvitation', requestBody)
-          .then((res) => {
-            this.setState({ invitations: res });
-          })
-          .catch((error) =>
-            console.log(
-              'HomeScreen - getDataAccordingToRole - Invitations ' + error,
-            ),
-          );
+        await this.getInvitationData();
       }
     }
   }
@@ -120,6 +114,10 @@ class SitterHomeScreen extends Component {
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
+        invitations.sort((a, b) => {
+          return this.compareInviteByDate(a, b);
+        });
+
         const invitationsPending = invitations.filter(
           (invitation) => invitation.status == 'PENDING',
         );
@@ -136,10 +134,6 @@ class SitterHomeScreen extends Component {
           (invitation) => invitation.status == 'CONFIRMED',
         );
 
-        invitationsPending.sort((a, b) => {
-          return this.compareInviteByDate(a, b);
-        });
-
         this.setState({
           invitationsPending,
           invitationsUpcoming,
@@ -152,13 +146,6 @@ class SitterHomeScreen extends Component {
         ),
       );
   };
-
-  compareInviteByDate(a, b) {
-    let aTime = moment(`${a.sittingRequest.sittingDate} ${a.sittingRequest.startTime}`, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
-    let bTime = moment(`${b.sittingRequest.sittingDate} ${b.sittingRequest.startTime}`, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY HH:mm:ss');
-
-    return aTime < bTime;
-  }
 
   confirmModalPopup = () => {
     const { notification } = this.state;
@@ -213,6 +200,19 @@ class SitterHomeScreen extends Component {
     });
   };
 
+  compareInviteByDate = (a, b) => {
+    const aTime = moment(
+      `${a.sittingRequest.sittingDate} ${a.sittingRequest.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+    const bTime = moment(
+      `${b.sittingRequest.sittingDate} ${b.sittingRequest.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+
+    return aTime > bTime;
+  };
+
   render() {
     const {
       invitationsPending,
@@ -249,7 +249,7 @@ class SitterHomeScreen extends Component {
                 Hiện tại bạn không có lời mời nào
               </MuliText>
               <Image
-                source={require('assets/images/no-request.jpg')}
+                source={require('assets/images/no-pending.png')}
                 style={noRequestImage}
               />
             </View>
@@ -273,10 +273,10 @@ class SitterHomeScreen extends Component {
           ListEmptyComponent={
             <View style={noRequest}>
               <MuliText style={noRequestText}>
-                Hiện tại bạn không có lời mời nào
+                Bạn không có lời mời nào đang chờ chấp nhận
               </MuliText>
               <Image
-                source={require('assets/images/no-request.jpg')}
+                source={require('assets/images/no-waiting.png')}
                 style={noRequestImage}
               />
             </View>
@@ -406,10 +406,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   noRequest: {
-    flex: 1,
+    height: (4 * height) / 5,
     alignItems: 'center',
     backgroundColor: 'white',
-    marginTop: 10,
   },
   noRequestText: {
     marginVertical: 10,
@@ -420,8 +419,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 300,
-    height: 500,
+    marginTop: 60,
+    width: 250,
+    height: 230,
   },
   scheduleContainer: {
     alignItems: 'center',

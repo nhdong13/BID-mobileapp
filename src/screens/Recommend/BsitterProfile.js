@@ -16,6 +16,7 @@ export default class BsitterProfile extends Component {
     this.state = {
       requestId: 0,
       sitterId: 0,
+      userId: 0,
       request: null,
       distance: 0,
       sitter: {},
@@ -28,11 +29,23 @@ export default class BsitterProfile extends Component {
       publishableKey: stripeKey,
       androidPayMode: 'test',
     });
-    const { sitterId, requestId, request, distance } = this.props.navigation.state.params;
+    const {
+      sitterId,
+      requestId,
+      request,
+      distance,
+      userId,
+    } = this.props.navigation.state.params;
 
     if (sitterId && sitterId != 0) {
       this.setState(
-        { sitterId: sitterId, requestId: requestId, request: request, distance: distance },
+        {
+          sitterId,
+          requestId,
+          request,
+          distance,
+          userId,
+        },
         () => this.getBabysitter(),
       );
     } else {
@@ -66,10 +79,6 @@ export default class BsitterProfile extends Component {
   };
 
   sendInvitation = async (sitterId, requestId, request) => {
-    console.log(
-      'Duong: BsitterProfile -> sendInvitation -> requestId',
-      requestId,
-    );
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
@@ -96,11 +105,26 @@ export default class BsitterProfile extends Component {
       } else {
         createInvitation(requestId, invitation, request)
           .then((response) => {
-            // console.log(response);
-            this.props.changeInviteStatus(sitterId);
-            this.props.setRequestId(response.data.newRequest.id);
+            if (invitation.requestId == 0) {
+              this.changeInviteStatus(sitterId);
+              this.props.navigation.state.params.onGoBack(
+                sitterId,
+                response.data.newRequest.id,
+              );
+            } else if (invitation.requestId != 0) {
+              this.changeInviteStatus(sitterId);
+              this.props.navigation.state.params.onGoBack(
+                sitterId,
+                invitation.requestId,
+              );
+            }
           })
-          .catch((error) => console.log('aaa', error));
+          .catch((error) =>
+            console.log(
+              'Error in BsitterProfile -> CreateInvitation when have card',
+              error,
+            ),
+          );
       }
     });
   };
@@ -237,6 +261,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#dfe6e9',
+    marginHorizontal: 15,
     paddingBottom: 20,
   },
   sectionContainer: {
