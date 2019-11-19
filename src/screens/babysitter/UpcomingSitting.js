@@ -58,6 +58,7 @@ class UpcomingSitting extends Component {
                 <MuliText>
                   gia tien {formater(invitation.sittingRequest.totalPrice)}VND
                 </MuliText>
+                <MuliText>{invitation.distance}</MuliText>
               </View>
             </View>
           </TouchableOpacity>

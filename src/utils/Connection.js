@@ -48,4 +48,9 @@ export const transactionAPI = {
   getRequestTransaction: `${url}/transactions/`,
 };
 
+export const sittingRequestAPI = {
+  startSittingRequest: `${url}/sittingRequests/startSittingRequest/`,
+  doneSittingRequest: `${url}/sittingRequests/doneSittingRequest/`,
+}
+
 export default apiUrl;
