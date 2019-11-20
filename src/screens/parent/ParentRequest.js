@@ -80,15 +80,6 @@ class ParentRequest extends Component {
                   </MuliText>
                 </View>
               )}
-              {request.status == 'EXPIRED' && (
-                <View style={styles.statusBoxPending}>
-                  <MuliText
-                    style={{ fontWeight: '100', color: colors.canceled }}
-                  >
-                    {request.status}
-                  </MuliText>
-                </View>
-              )}
               <MuliText>{formater(request.totalPrice)} đ</MuliText>
             </View>
           </View>

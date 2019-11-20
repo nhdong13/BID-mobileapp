@@ -36,7 +36,7 @@ export async function create(ownerId, friendId) {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
     },
-    data: qs.stringify({ ownerId: ownerId, friendId: friendId }),
+    data: qs.stringify({ownerId: ownerId, friendId: friendId}),
   };
 
   const response = await axios(options);

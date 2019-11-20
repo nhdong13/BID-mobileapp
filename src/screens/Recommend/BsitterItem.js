@@ -126,7 +126,8 @@ export class Bsitter extends Component {
               navigation.navigate('SitterProfile', {
                 userId: this.state.userId,
                 sitterId: item.userId,
-                requestId: this.state.requestId != 0 ? this.state.requestId : requestId,
+                requestId:
+                  this.state.requestId != 0 ? this.state.requestId : requestId,
                 request: request,
                 distance: item.distance,
                 onGoBack: (receiverId, requestId) =>
@@ -187,15 +188,17 @@ export class Bsitter extends Component {
               style={styles.inviteButton}
               onPress={() => this.sendInvitation(item.userId)}
             >
-              <MuliText style={{ color: '#78ddb6', fontSize: 11 }}>
+              <MuliText style={{ color: '#78ddb6', fontSize: 13 }}>
                 Mời
               </MuliText>
             </TouchableOpacity>
           )}
           {item.isInvited && (
-            <MuliText style={{ color: '#B81A1A', fontSize: 11 }}>
-              Đã mời
-            </MuliText>
+            <View style={styles.inviteButton}>
+              <MuliText style={{ color: '#B81A1A', fontSize: 13 }}>
+                Đã mời
+              </MuliText>
+            </View>
           )}
         </View>
       </View>
