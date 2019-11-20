@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
@@ -24,7 +25,7 @@ import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -128,22 +129,21 @@ class CreateRequestScreen extends Component {
 
     getOverlapSittingRequest(request)
       .then((result) => {
-          // is overlap with other request
-          if (result.data.length > 0) {
-            this.setState({
-              noticeTitle: 'Yêu cầu trùng lặp',
-              noticeMessage: `Bạn có ${result.data.length} yêu cầu đã tạo với khoảng thời trên. Tạo yêu cầu trông trẻ sẽ mất phí. Bạn có chắc muốn tạo thêm?`,
-              showConfirm: true,
-              cancelAlert: 'Hủy',
-              confirmAlert: 'Tiếp tục',
-              overlapRequests: result.data,
-            });
-            //
-            this.AlertPro.open();
-          } else {
-            this.toRecommendScreen();
-          }
-        
+        // is overlap with other request
+        if (result.data.length > 0) {
+          this.setState({
+            noticeTitle: 'Yêu cầu trùng lặp',
+            noticeMessage: `Bạn có ${result.data.length} yêu cầu đã tạo với khoảng thời trên. Tạo yêu cầu trông trẻ sẽ mất phí. Bạn có chắc muốn tạo thêm?`,
+            showConfirm: true,
+            cancelAlert: 'Hủy',
+            confirmAlert: 'Tiếp tục',
+            overlapRequests: result.data,
+          });
+          //
+          this.AlertPro.open();
+        } else {
+          this.toRecommendScreen();
+        }
       })
       .catch((error) => {
         console.log(
@@ -176,7 +176,7 @@ class CreateRequestScreen extends Component {
       request: request,
       onGoBack: (requestId) => this.setState({ requestId: requestId }),
     });
-    
+
     this.AlertPro.close();
   };
 
@@ -599,7 +599,7 @@ class CreateRequestScreen extends Component {
                 Tổng tiền thanh toán:
               </MuliText>
               <MuliText style={styles.price}>
-                {formater(this.state.price)} VND
+                {formater(this.state.price)} Đồng
               </MuliText>
             </View>
           </View>
@@ -698,14 +698,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   headerTitleChild: {
+    marginLeft: 15,
     fontSize: 20,
     color: '#315F61',
-    marginBottom: 10,
+    marginBottom: 15,
     fontWeight: '800',
+    marginTop: 10,
   },
   headerTitle: {
     marginHorizontal: 15,
-    marginTop: 30,
     fontSize: 20,
     color: '#315F61',
     marginBottom: 10,
@@ -730,7 +731,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detailContainerChild: {
-    marginHorizontal: 15,
     marginTop: 20,
   },
   detailContainer: {
