@@ -234,14 +234,14 @@ const styles = StyleSheet.create({
   },
   sectionContainer2: {
     backgroundColor: 'white',
-    paddingHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
+    paddingHorizontal: 5,
+    marginTop: 5,
+    marginBottom: 5,
   },
   sectionContainer: {
     backgroundColor: 'white',
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginTop: 5,
   },
   headerSection: {
     backgroundColor: 'white',

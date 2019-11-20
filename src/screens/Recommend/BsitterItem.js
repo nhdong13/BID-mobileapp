@@ -20,6 +20,7 @@ export class Bsitter extends Component {
       userId: 0,
       email: '',
       name: '',
+      requestId: 0,
     };
   }
 
@@ -56,6 +57,7 @@ export class Bsitter extends Component {
   sendInvitation = async (receiverId) => {
     // console.log('it go here');
     const { requestId, request, item } = this.props;
+
     const invitation = {
       requestId: requestId,
       status: 'PENDING',
@@ -106,8 +108,11 @@ export class Bsitter extends Component {
   };
 
   changeStateOnGoBack(receiverId, requestId) {
+    console.log('PHUC: changeStateOnGoBack -> receiverId', receiverId);
+    console.log('PHUC:changeStateOnGoBack -> requestId', requestId);
     this.props.changeInviteStatus(receiverId);
     this.props.setRequestId(requestId);
+    this.setState({ requestId });
   }
 
   render() {
@@ -119,8 +124,9 @@ export class Bsitter extends Component {
             style={{ flexDirection: 'row', flexGrow: 2 }}
             onPress={() =>
               navigation.navigate('SitterProfile', {
+                userId: this.state.userId,
                 sitterId: item.userId,
-                requestId: requestId,
+                requestId: this.state.requestId != 0 ? this.state.requestId : requestId,
                 request: request,
                 distance: item.distance,
                 onGoBack: (receiverId, requestId) =>
@@ -138,16 +144,16 @@ export class Bsitter extends Component {
                 {item.user.gender == 'MALE' && (
                   <Ionicons
                     name="ios-male"
-                    size={15}
-                    style={{ marginBottom: -2, marginLeft: 5 }}
+                    size={18}
+                    style={{ marginBottom: -3, marginLeft: 5 }}
                     color={colors.blueAqua}
                   />
                 )}
                 {item.user.gender == 'FEMALE' && (
                   <Ionicons
                     name="ios-female"
-                    size={15}
-                    style={{ marginBottom: -2, marginLeft: 5 }}
+                    size={18}
+                    style={{ marginBottom: -3, marginLeft: 5 }}
                     color={colors.pinkLight}
                   />
                 )}
@@ -237,7 +243,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   bsitterContainer: {
-    marginVertical: 13,
+    marginVertical: 8,
   },
   bsitterItem: {
     flexDirection: 'row',
@@ -262,14 +268,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inviteButton: {
-    marginTop: 10,
+    marginTop: 14,
   },
   inviteButtonDisable: {
     marginTop: 10,
     opacity: 0.7,
   },
   bsitterName: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '400',
     color: '#315F61',
   },

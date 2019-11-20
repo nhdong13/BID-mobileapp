@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   bsitterName: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '400',
     color: '#315F61',
     marginRight: 5,

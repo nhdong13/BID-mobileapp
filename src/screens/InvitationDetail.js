@@ -46,6 +46,7 @@ export default class InvitationDetail extends Component {
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(
       (resp) => {
+        console.log('PHUC: InvitationDetail -> getData -> resp', resp);
         this.setState({
           createUserId: resp.sittingRequest.user.id,
           parentName: resp.sittingRequest.user.nickname,
@@ -152,6 +153,13 @@ export default class InvitationDetail extends Component {
                 {this.state.invitationStatus == 'PENDING' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
+                  >
+                    {this.state.invitationStatus}
+                  </MuliText>
+                )}
+                {this.state.invitationStatus == 'ACCEPTED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.lightGreen }}
                   >
                     {this.state.invitationStatus}
                   </MuliText>

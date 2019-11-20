@@ -5,6 +5,7 @@ import { withNavigation } from 'react-navigation';
 import moment from 'moment';
 import colors from 'assets/Color';
 import { formater } from 'utils/MoneyFormater';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 class UpcomingInvitation extends Component {
   constructor(props) {
@@ -29,22 +30,22 @@ class UpcomingInvitation extends Component {
           >
             <View style={styles.requestItemSitter}>
               <View style={styles.leftInformationSitter}>
-                <MuliText>
-                  Lời mời từ {invitation.sittingRequest.user.nickname}
-                </MuliText>
                 <MuliText style={styles.date}>
                   {moment(invitation.sittingRequest.sittingDate).format(
                     'dddd Do MMMM',
                   )}
                 </MuliText>
-                <MuliText style={{ marginTop: 5, color: '#7edeb9' }}>
+                <MuliText style={{ color: '#7edeb9' }}>
                   {moment
                     .utc(invitation.sittingRequest.startTime, 'HH:mm')
                     .format('HH:mm')}{' '}
-                  -
+                  đến
                   {moment
-                    .utc(invitation.sittingRequest.endTime, 'HH:mm')
-                    .format('HH:mm')}
+                    .utc(invitation.sittingRequest.endTime, ' HH:mm')
+                    .format(' HH:mm')}
+                </MuliText>
+                <MuliText style={{ marginTop: 15 }}>
+                  Từ {invitation.sittingRequest.user.nickname}
                 </MuliText>
               </View>
               <View style={styles.rightInformation}>
@@ -52,13 +53,26 @@ class UpcomingInvitation extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    {invitation.status}
+                    Đã xác nhận
                   </MuliText>
                 </View>
-                <MuliText>
-                  gia tien {formater(invitation.sittingRequest.totalPrice)}VND
+                <MuliText style={{ fontSize: 10, marginTop: 10 }}>
+                  Giá tiền {formater(invitation.sittingRequest.totalPrice)} đ
                 </MuliText>
-                <MuliText>{invitation.distance}</MuliText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    margin: 10,
+                  }}
+                >
+                  <FontAwesome5
+                    name="directions"
+                    size={20}
+                    color={colors.darkGreenTitle}
+                    style={{ marginRight: 5 }}
+                  />
+                  <MuliText>{invitation.distance} km</MuliText>
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -72,7 +86,7 @@ export default withNavigation(UpcomingInvitation);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.8,
     alignItems: 'center',
     // backgroundColor: 'red',
     // backgroundColor: '#dfe6e9',
@@ -133,7 +147,6 @@ const styles = StyleSheet.create({
   },
   requestItemSitter: {
     justifyContent: 'space-between',
-    flex: 1,
     flexDirection: 'row',
     backgroundColor: 'white',
     height: 150,
@@ -141,7 +154,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     borderRadius: 15,
-    elevation: 2,
+    elevation: 3,
     // marginBottom: 5,
   },
   requestItem: {

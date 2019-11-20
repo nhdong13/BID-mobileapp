@@ -2,7 +2,13 @@
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
-import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
@@ -17,6 +23,8 @@ import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
+
+const { width, height } = Dimensions.get('window');
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -343,95 +351,93 @@ class CreateRequestScreen extends Component {
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <View>
-              <View style={styles.input}>
-                <Ionicons
-                  name="ios-timer"
-                  size={20}
-                  color={colors.gray}
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-timer"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginTop: 10,
+                }}
+              />
 
-                <DatePicker
-                  style={styles.pickedTime}
-                  date={this.state.startTime}
-                  // minDate={moment().format()}
-                  // maxDate={this.state.endTime}
-                  mode="time"
-                  placeholder="Giờ bắt đầu"
-                  format="HH:mm"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  androidMode="spinner"
-                  customStyles={{
-                    dateInput: {
-                      borderWidth: 0,
-                    },
-                    placeholderText: {
-                      fontSize: 15,
-                      color: colors.gray,
-                      marginRight: 30,
-                    },
-                    dateText: {
-                      fontSize: 15,
-                      color: 'black',
-                    },
-                  }}
-                  is24Hour
-                  onDateChange={async (time) => {
-                    await this.setState({ startTime: time });
-                    console.log(this.state.startTime);
-                    this.updatePrice();
-                  }}
-                  showIcon={false}
-                />
-              </View>
+              <DatePicker
+                style={styles.pickedTime}
+                date={this.state.startTime}
+                // minDate={moment().format()}
+                // maxDate={this.state.endTime}
+                mode="time"
+                placeholder="Giờ bắt đầu"
+                format="HH:mm"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                androidMode="spinner"
+                customStyles={{
+                  dateInput: {
+                    borderWidth: 0,
+                  },
+                  placeholderText: {
+                    fontSize: 15,
+                    color: colors.gray,
+                    marginRight: 30,
+                  },
+                  dateText: {
+                    fontSize: 15,
+                    color: 'black',
+                  },
+                }}
+                is24Hour
+                onDateChange={async (time) => {
+                  await this.setState({ startTime: time });
+                  console.log(this.state.startTime);
+                  this.updatePrice();
+                }}
+                showIcon={false}
+              />
             </View>
-            <View>
-              <View style={styles.input}>
-                <Ionicons
-                  name="ios-time"
-                  size={20}
-                  color={colors.gray}
-                  style={{
-                    marginTop: 10,
-                  }}
-                />
-                <DatePicker
-                  style={styles.pickedTime}
-                  // minDate={this.state.startTime}
-                  date={this.state.endTime}
-                  mode="time"
-                  placeholder="Giờ kết thúc"
-                  format="HH:mm"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  androidMode="spinner"
-                  customStyles={{
-                    dateInput: {
-                      borderWidth: 0,
-                    },
-                    placeholderText: {
-                      fontSize: 15,
-                      color: colors.gray,
-                      marginRight: 30,
-                    },
-                    dateText: {
-                      fontSize: 15,
-                      color: 'black',
-                    },
-                  }}
-                  is24Hour
-                  onDateChange={async (time) => {
-                    await this.setState({ endTime: time });
-                    console.log(this.state.endTime);
-                    this.updatePrice();
-                  }}
-                  showIcon={false}
-                />
-              </View>
+
+            <View style={styles.input}>
+              <Ionicons
+                name="ios-time"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginTop: 10,
+                }}
+              />
+              <DatePicker
+                style={styles.pickedTime}
+                // minDate={this.state.startTime}
+                date={this.state.endTime}
+                mode="time"
+                placeholder="Giờ kết thúc"
+                format="HH:mm"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                androidMode="spinner"
+                customStyles={{
+                  dateInput: {
+                    borderWidth: 0,
+                  },
+                  placeholderText: {
+                    fontSize: 15,
+                    color: colors.gray,
+                    marginRight: 30,
+                  },
+                  dateText: {
+                    fontSize: 15,
+                    color: 'black',
+                  },
+                }}
+                is24Hour
+                onDateChange={async (time) => {
+                  await this.setState({ endTime: time });
+                  console.log(this.state.endTime);
+                  this.updatePrice();
+                }}
+                showIcon={false}
+                minuteInterval={15}
+              />
             </View>
           </View>
           <View style={styles.inputAddress}>
@@ -592,28 +598,40 @@ class CreateRequestScreen extends Component {
               </MuliText>
             </View>
           </View>
-          {this.state.requestId != 0 && (
+          {/* {this.state.requestId != 0 && (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={this.updateRequest}
               >
-                <MuliText style={{ color: 'white', fontSize: 16 }}>
+                <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
                 </MuliText>
               </TouchableOpacity>
             </View>
-          )}
-          {this.state.requestId == 0 && (
+          )} */}
+          {this.state.requestId == 0 ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={this.beforeRecommend}
               >
-                <MuliText style={{ color: 'white', fontSize: 16 }}>
+                <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
                 </MuliText>
               </TouchableOpacity>
+            </View>
+          ) : (
+            <View
+              style={{
+                marginHorizontal: 15,
+                marginTop: 30,
+                alignItems: 'center',
+              }}
+            >
+              <MuliText style={{ color: colors.gray, fontSize: 12 }}>
+                Bạn không thể thay đổi yêu cầu giữ trẻ khi đã mời bảo mẫu
+              </MuliText>
             </View>
           )}
         </View>
@@ -689,16 +707,17 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   submitButton: {
-    width: 200,
-    height: 50,
+    width: 170,
+    height: 40,
     padding: 10,
+    marginBottom: 10,
     backgroundColor: '#315F61',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonContainer: {
-    paddingTop: 30,
+    paddingTop: 15,
     alignItems: 'center',
   },
   detailPictureContainer: {

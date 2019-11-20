@@ -47,6 +47,7 @@ export class CircleItem extends Component {
           <MuliText
             style={{
               color: 'black',
+              fontSize: 14,
             }}
           >
             {item.friend.user.nickname}

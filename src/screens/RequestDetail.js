@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -57,6 +58,7 @@ export class RequestDetail extends Component {
       cancelAlert: 'Không',
       confirmAlert: 'Có',
       showConfirm: true,
+      refreshing: false,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -276,6 +278,11 @@ export class RequestDetail extends Component {
     );
   };
 
+  _onRefresh = () => {
+    // this.setState({ loading: true });
+    this.getAcceptedInvitations();
+  };
+
   callDetail() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
@@ -291,9 +298,14 @@ export class RequestDetail extends Component {
       cancelAlert,
       confirmAlert,
       showConfirm,
+      refreshing,
     } = this.state;
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />
+        }
+      >
         <Toast ref="toast" position="top" />
         <AlertPro
           ref={(ref) => {
@@ -381,6 +393,20 @@ export class RequestDetail extends Component {
                 {this.state.status == 'PENDING' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'DONE_UNCONFIMRED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'DONE_BY_NEWSTART' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
                   >
                     {this.state.status}
                   </MuliText>
@@ -624,11 +650,6 @@ export class RequestDetail extends Component {
                       </View>
                       <View style={styles.rightInformationSitter}>
                         <View>
-                          {/* <TouchableOpacity style={styles.inviteButton} >
-                            <MuliText style={{ color: "#78ddb6", fontSize: 16 }}>
-                              Decline
-                            </MuliText>
-                          </TouchableOpacity> */}
                           <TouchableOpacity
                             style={styles.inviteButton}
                             onPress={() =>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { login } from 'api/login';
 import Modal from 'react-native-modal';
 import {
+  ScrollView,
   Image,
   Platform,
   StyleSheet,
@@ -103,7 +104,7 @@ class LoginScreen extends Component {
     this.setState({
       title: 'Quét vân tay',
       message: 'Chạm tay vào cảm biến để thực hiện đăng nhập',
-      textCancel: 'Quay lại'
+      textCancel: 'Quay lại',
     });
     this.AlertPro.open();
     const result = await LocalAuthentication.authenticateAsync(
@@ -128,7 +129,7 @@ class LoginScreen extends Component {
       this.setState({
         title: 'FingerPrint not found',
         message: 'Please try again or use password to proceed',
-        textCancel: 'Try Again'
+        textCancel: 'Try Again',
       });
       this.AlertPro.open();
     } else {
@@ -138,138 +139,143 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView
-        style={{ flex: 1, justifyContent: 'center' }}
-        keyboardVerticalOffset={60}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      >
-        <AlertPro
-          ref={(ref) => {
-            this.AlertPro = ref;
-          }}
-          onCancel={() => this.AlertPro.close()}
-          title={this.state.title}
-          message={this.state.message}
-          showConfirm={false}
-          closeOnPressMask={false}
-          onClose={() => LocalAuthentication.cancelAuthenticate()}
-          textCancel={this.state.textCancel}
-          customStyles={{
-            mask: {
-              backgroundColor: 'transparent',
-            },
-            container: {
-              shadowColor: '#000000',
-              shadowOpacity: 0.1,
-              shadowRadius: 10,
-            },
-          }}
-        />
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={require('assets/images/logo.png')}
-            style={styles.logoImage}
+      <ScrollView>
+        <KeyboardAvoidingView
+          style={{ flex: 1, justifyContent: 'center' }}
+          keyboardVerticalOffset={60}
+          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        >
+          <AlertPro
+            ref={(ref) => {
+              this.AlertPro = ref;
+            }}
+            onCancel={() => this.AlertPro.close()}
+            title={this.state.title}
+            message={this.state.message}
+            showConfirm={false}
+            closeOnPressMask={false}
+            onClose={() => LocalAuthentication.cancelAuthenticate()}
+            textCancel={this.state.textCancel}
+            customStyles={{
+              mask: {
+                backgroundColor: 'transparent',
+              },
+              container: {
+                shadowColor: '#000000',
+                shadowOpacity: 0.1,
+                shadowRadius: 10,
+              },
+            }}
           />
-        </View>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={require('assets/images/login-family.png')}
-            style={styles.familyImage}
-          />
-          <MuliText style={{ color: '#707070', fontSize: 16 }}>
-            Xin hãy đăng nhập để tiếp tục
-          </MuliText>
-        </View>
-        <View style={styles.textContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => this.setState({ phoneNumber: text })}
-            placeholder="Username"
-            disableFullscreenUI={false}
-            value={this.state.phoneNumber}
-            textContentType="username"
-          />
-        </View>
-        <View style={styles.textContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => this.setState({ password: text })}
-            placeholder="Password"
-            disableFullscreenUI={false}
-            value={this.state.password}
-            secureTextEntry={true}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.submitButton} onPress={this.onLogin}>
-            <MuliText style={{ color: 'white', fontSize: 16 }}>
-              Đăng nhập
+          <View style={styles.welcomeContainer}>
+            <Image
+              source={require('assets/images/logo.png')}
+              style={styles.logoImage}
+            />
+          </View>
+          <View style={styles.welcomeContainer}>
+            <Image
+              source={require('assets/images/login-family.png')}
+              style={styles.familyImage}
+            />
+            <MuliText style={{ color: '#707070', fontSize: 16 }}>
+              Xin hãy đăng nhập để tiếp tục
             </MuliText>
-          </TouchableOpacity>
-        </View>
-
-        {this.state.isModalVisible ? (
-          <Modal
-            isVisible={this.state.isModalVisible}
-            hasBackdrop={true}
-            backdropOpacity={0.9}
-            onBackdropPress={this.toggleModal}
-            backdropColor="white"
-            onBackButtonPress={this.toggleModal}
-          >
-            <View
-              style={{
-                flex: 0.2,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-              }}
+          </View>
+          <View style={styles.textContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(text) => this.setState({ phoneNumber: text })}
+              placeholder="Username"
+              disableFullscreenUI={false}
+              value={this.state.phoneNumber}
+              textContentType="username"
+            />
+          </View>
+          <View style={styles.textContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(text) => this.setState({ password: text })}
+              placeholder="Password"
+              disableFullscreenUI={false}
+              value={this.state.password}
+              secureTextEntry={true}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={this.onLogin}
             >
-              <MuliText style={{ color: '#707070', fontSize: 16 }}>
-                Xin nhập Authentication Code
+              <MuliText style={{ color: 'white', fontSize: 16 }}>
+                Đăng nhập
               </MuliText>
-              <View style={styles.textContainer}>
-                <TextInput
-                  style={styles.textInput}
-                  onChangeText={(text) => this.setState({ OTP: text })}
-                  placeholder="Authentication code"
-                  disableFullscreenUI={false}
-                  value={this.state.OTP}
-                  keyboardType="number-pad"
-                />
-              </View>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.submitOTPButton}
-                  onPress={this.onSubmitOTP}
-                >
-                  <MuliText style={{ color: 'white', fontSize: 16 }}>
-                    Gửi
-                  </MuliText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => this.checkDeviceForHardware()}
-                  style={{ alignItems: 'center' }}
-                >
-                  <FontAwesome5
-                    name="fingerprint"
-                    size={30}
-                    color={colors.darkGreenTitle}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        ) : (
-          <View />
-        )}
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.welcomeContainer}>
-          <MuliText>
-            copyrights claim thing that you don't want to read
-          </MuliText>
-        </View>
-      </KeyboardAvoidingView>
+          {this.state.isModalVisible ? (
+            <Modal
+              isVisible={this.state.isModalVisible}
+              hasBackdrop={true}
+              backdropOpacity={0.9}
+              onBackdropPress={this.toggleModal}
+              backdropColor="white"
+              onBackButtonPress={this.toggleModal}
+            >
+              <View
+                style={{
+                  flex: 0.2,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'white',
+                }}
+              >
+                <MuliText style={{ color: '#707070', fontSize: 16 }}>
+                  Xin nhập Authentication Code
+                </MuliText>
+                <View style={styles.textContainer}>
+                  <TextInput
+                    style={styles.textInput}
+                    onChangeText={(text) => this.setState({ OTP: text })}
+                    placeholder="Authentication code"
+                    disableFullscreenUI={false}
+                    value={this.state.OTP}
+                    keyboardType="number-pad"
+                  />
+                </View>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={styles.submitOTPButton}
+                    onPress={this.onSubmitOTP}
+                  >
+                    <MuliText style={{ color: 'white', fontSize: 16 }}>
+                      Gửi
+                    </MuliText>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => this.checkDeviceForHardware()}
+                    style={{ alignItems: 'center' }}
+                  >
+                    <FontAwesome5
+                      name="fingerprint"
+                      size={30}
+                      color={colors.darkGreenTitle}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          ) : (
+            <View />
+          )}
+
+          <View style={styles.welcomeContainer}>
+            <MuliText>
+              copyrights claim thing that you don't want to read
+            </MuliText>
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
