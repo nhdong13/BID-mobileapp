@@ -155,13 +155,21 @@ export default class BsitterProfile extends Component {
   render() {
     return (
       <ScrollView>
+        <View style={{ marginTop: 15, alignItems: 'center' }}>
+          <MuliText style={styles.headerTitle}>
+            Thông tin người giữ trẻ
+          </MuliText>
+          <MuliText style={styles.grayOptionInformation}>
+            Thông tin chi tiết người giữ trẻ
+          </MuliText>
+        </View>
         <View style={styles.container}>
           <ScrollView>
             {this.state.sitter && (
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
                   <MuliText
-                    style={{ fontSize: 13, color: '#315f61', marginLeft: 10 }}
+                    style={{ fontSize: 15, color: '#315f61', marginLeft: 10 }}
                   >
                     Thông tin cơ bản
                   </MuliText>
@@ -180,7 +188,7 @@ export default class BsitterProfile extends Component {
                       : Gender.FEMALE}
                   </MuliText>
                   <MuliText style={styles.textField}>
-                    Cách bạn: {this.state.distance}
+                    Cách bạn: {this.state.distance} km
                   </MuliText>
                 </View>
               </View>
@@ -189,7 +197,7 @@ export default class BsitterProfile extends Component {
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
                   <MuliText
-                    style={{ fontSize: 13, color: '#315f61', marginLeft: 10 }}
+                    style={{ fontSize: 15, color: '#315f61', marginLeft: 10 }}
                   >
                     Yêu cầu làm việc
                   </MuliText>
@@ -258,9 +266,19 @@ export default class BsitterProfile extends Component {
 // };
 
 const styles = StyleSheet.create({
+  grayOptionInformation: {
+    color: '#bdc3c7',
+    fontSize: 11,
+    fontWeight: '200',
+  },
+  headerTitle: {
+    fontSize: 15,
+    color: '#315F61',
+    marginBottom: 10,
+    fontWeight: '800',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#dfe6e9',
     marginHorizontal: 15,
     paddingBottom: 20,
   },
@@ -274,7 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: '#bdc3c7',
-    height: 60,
+    height: 40,
     alignItems: 'center',
     marginBottom: 15,
   },

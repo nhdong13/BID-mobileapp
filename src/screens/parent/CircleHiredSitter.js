@@ -28,7 +28,9 @@ export class CircleHiredSitter extends Component {
     return (
       <View key={item.id} style={styles.bsitterContainer}>
         <View style={styles.bsitterItem}>
-          <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', flexGrow: 2, marginLeft: 15 }}
+          >
             <Image
               source={require('assets/images/Phuc.png')}
               style={styles.sitterImage}
@@ -42,7 +44,7 @@ export class CircleHiredSitter extends Component {
                 {item.user.gender == 'MALE' && (
                   <Ionicons
                     name="ios-male"
-                    size={20}
+                    size={15}
                     style={styles.icon}
                     color={colors.blueAqua}
                   />
@@ -50,7 +52,7 @@ export class CircleHiredSitter extends Component {
                 {item.user.gender == 'FEMALE' && (
                   <Ionicons
                     name="ios-female"
-                    size={20}
+                    size={15}
                     style={styles.icon}
                     color={colors.pinkLight}
                   />
@@ -59,7 +61,7 @@ export class CircleHiredSitter extends Component {
               <View style={styles.lowerText}>
                 <Ionicons
                   name="ios-pin"
-                  size={24}
+                  size={15}
                   style={styles.icon}
                   color={colors.lightGreen}
                 />
@@ -69,7 +71,7 @@ export class CircleHiredSitter extends Component {
                 </MuliText>
                 <Ionicons
                   name="ios-star"
-                  size={24}
+                  size={15}
                   style={styles.icon}
                   color={colors.lightGreen}
                 />
@@ -90,7 +92,7 @@ export default withNavigation(CircleHiredSitter);
 
 const styles = StyleSheet.create({
   bsitterContainer: {
-    marginVertical: 8,
+    marginVertical: 10,
     marginLeft: 10,
   },
   bsitterItem: {
@@ -111,9 +113,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
   },
-  icon: {
-    marginTop: 3,
-  },
   bsitterName: {
     fontSize: 13,
     fontWeight: '400',
@@ -121,9 +120,9 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   sitterImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 160 / 2,
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
     overflow: 'hidden',
   },
 });

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-string-refs */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
@@ -15,11 +16,16 @@ import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
-import { updateRequest } from 'api/sittingRequest.api';
+import {
+  updateRequest,
+  getOverlapSittingRequest,
+} from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
+import Toast, { DURATION } from 'react-native-easy-toast';
+import AlertPro from 'react-native-alert-pro';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -40,6 +46,12 @@ class CreateRequestScreen extends Component {
       child: null,
       totalPrice: 0,
       spPrice: null,
+      overlapRequests: [],
+      noticeTitle: '',
+      noticeMessage: '',
+      cancelAlert: '',
+      confirmAlert: '',
+      showConfirm: false,
     };
     console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -85,10 +97,67 @@ class CreateRequestScreen extends Component {
       .catch((error) => console.log(error));
   };
 
-  toRecommendScreen = () => {
-    if (this.state.childrenNumber == 0) {
+  beforeRecommend = () => {
+    if (this.state.startTime == null || this.state.endTime == null) {
+      this.refs.toast.show(
+        'Vui lòng chọn thời gian trông trẻ',
+        // DURATION.LENGTH_LONG,
+      );
       return;
     }
+
+    if (this.state.childrenNumber == 0) {
+      this.refs.toast.show(
+        'Vui lòng chọn ít nhất một trẻ',
+        DURATION.LENGTH_LONG,
+      );
+      return;
+    }
+
+    const request = {
+      requestId: this.state.requestId != 0 ? this.state.requestId : 0,
+      createdUser: this.state.userId,
+      sittingDate: this.state.sittingDate,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      sittingAddress: this.state.sittingAddress,
+      childrenNumber: this.state.childrenNumber,
+      minAgeOfChildren: this.state.minAgeOfChildren,
+      status: 'PENDING',
+      totalPrice: this.state.price,
+    };
+
+    getOverlapSittingRequest(request)
+      .then((result) => {
+        // is overlap with other request
+        if (result.data.length > 0) {
+          this.setState({
+            noticeTitle: 'Yêu cầu trùng lặp',
+            noticeMessage: `Bạn có ${result.data.length} yêu cầu đã tạo với khoảng thời trên. Tạo yêu cầu trông trẻ sẽ mất phí. Bạn có chắc muốn tạo thêm?`,
+            showConfirm: true,
+            cancelAlert: 'Hủy',
+            confirmAlert: 'Tiếp tục',
+            overlapRequests: result.data,
+          });
+          //
+          this.AlertPro.open();
+        } else {
+          this.toRecommendScreen();
+        }
+      })
+      .catch((error) => {
+        console.log(
+          'Duong: CreateRequestScreen -> beforeRecommend -> error',
+          error,
+        );
+        this.refs.toast.show(
+          'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+          DURATION.LENGTH_LONG,
+        );
+      });
+  };
+
+  toRecommendScreen = () => {
     const request = {
       requestId: this.state.requestId != 0 ? this.state.requestId : 0,
       createdUser: this.state.userId,
@@ -107,6 +176,8 @@ class CreateRequestScreen extends Component {
       request: request,
       onGoBack: (requestId) => this.setState({ requestId: requestId }),
     });
+
+    this.AlertPro.close();
   };
 
   updateRequest = async () => {
@@ -202,8 +273,44 @@ class CreateRequestScreen extends Component {
   };
 
   render() {
+    const {
+      noticeTitle,
+      noticeMessage,
+      cancelAlert,
+      confirmAlert,
+      showConfirm,
+    } = this.state;
+
     return (
       <ScrollView>
+        <Toast ref="toast" position="top" />
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onConfirm={() => this.toRecommendScreen()}
+          onCancel={() => this.AlertPro.close()}
+          title={noticeTitle}
+          message={noticeMessage}
+          textCancel={cancelAlert}
+          textConfirm={confirmAlert}
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+            buttonCancel: {
+              backgroundColor: '#e74c3c',
+            },
+            buttonConfirm: {
+              backgroundColor: '#4da6ff',
+            },
+          }}
+        />
         <View style={styles.containerInformationRequest}>
           <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
           <View>
@@ -492,7 +599,7 @@ class CreateRequestScreen extends Component {
                 Tổng tiền thanh toán:
               </MuliText>
               <MuliText style={styles.price}>
-                {formater(this.state.price)} VND
+                {formater(this.state.price)} Đồng
               </MuliText>
             </View>
           </View>
@@ -512,7 +619,7 @@ class CreateRequestScreen extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
-                onPress={this.toRecommendScreen}
+                onPress={this.beforeRecommend}
               >
                 <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
@@ -591,14 +698,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   headerTitleChild: {
+    marginLeft: 15,
     fontSize: 20,
     color: '#315F61',
-    marginBottom: 10,
+    marginBottom: 15,
     fontWeight: '800',
+    marginTop: 10,
   },
   headerTitle: {
     marginHorizontal: 15,
-    marginTop: 30,
     fontSize: 20,
     color: '#315F61',
     marginBottom: 10,
@@ -623,7 +731,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detailContainerChild: {
-    marginHorizontal: 15,
     marginTop: 20,
   },
   detailContainer: {
