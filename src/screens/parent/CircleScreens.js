@@ -67,7 +67,7 @@ export default class CircleScreens extends Component {
 
   render() {
     return (
-      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
+      <ScrollView>
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (
           <View style={styles.firstHeaderContainer}>
@@ -79,7 +79,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={24}
+                size={17}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -90,36 +90,7 @@ export default class CircleScreens extends Component {
             <TouchableOpacity
               style={{
                 marginLeft: 'auto',
-                marginTop: 18,
-                color: colors.lightGreen,
-                marginRight: 10,
-              }}
-              onPress={() =>
-                this.props.navigation.navigate('AddToCircle', {
-                  ownerId: this.state.userId,
-                })
-              }
-            >
-              <MuliText style={{ color: colors.done, fontSize: 11 }}>Thêm</MuliText>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.firstHeaderContainer}>
-            <View style={{ flexDirection: 'row' }}>
-              <Ionicons
-                name="ios-person"
-                size={24}
-                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
-                color={colors.darkGreenTitle}
-              />
-              <MuliText style={styles.headerText}>
-                Những phụ huynh mà tôi biết ({this.state.circle.length})
-              </MuliText>
-            </View>
-            <TouchableOpacity
-              style={{
-                marginLeft: 'auto',
-                marginTop: 18,
+                marginTop: 14,
                 color: colors.lightGreen,
                 marginRight: 10,
               }}
@@ -130,6 +101,37 @@ export default class CircleScreens extends Component {
               }
             >
               <MuliText style={{ color: colors.done, fontSize: 11 }}>
+                Thêm
+              </MuliText>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.firstHeaderContainer}>
+            <View style={{ flexDirection: 'row' }}>
+              <Ionicons
+                name="ios-person"
+                size={17}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Những phụ huynh mà tôi biết ({this.state.circle.length})
+              </MuliText>
+            </View>
+            <TouchableOpacity
+              style={{
+                marginLeft: 'auto',
+                marginTop: 13,
+                color: colors.lightGreen,
+                marginRight: 10,
+              }}
+              onPress={() =>
+                this.props.navigation.navigate('AddToCircle', {
+                  ownerId: this.state.userId,
+                })
+              }
+            >
+              <MuliText style={{ color: colors.done, fontSize: 13 }}>
                 Thêm
               </MuliText>
             </TouchableOpacity>
@@ -165,7 +167,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={19}
+                size={17}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -205,7 +207,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={19}
+                size={17}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -243,30 +245,34 @@ CircleScreens.navigationOptions = {
 };
 const styles = StyleSheet.create({
   itemContainer: {
-    marginBottom: 10,
     backgroundColor: '#fff',
+    borderWidth: 0,
+    borderBottomWidth: 6,
+    borderColor: colors.gray,
   },
   firstHeaderContainer: {
+    marginHorizontal: 20,
     borderWidth: 0,
     borderBottomWidth: 2,
     borderColor: colors.gray,
     flexDirection: 'row',
     marginTop: 10,
     backgroundColor: '#fff',
-    height: 60,
+    height: 40,
   },
   headerContainer: {
+    marginHorizontal: 20,
     borderColor: colors.gray,
     borderWidth: 0,
     borderBottomWidth: 2,
     flexDirection: 'row',
     marginTop: 6,
     backgroundColor: '#fff',
-    height: 60,
+    height: 40,
   },
   headerText: {
-    marginTop: 18,
-    fontSize: 10,
+    marginTop: 13,
+    fontSize: 13,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },

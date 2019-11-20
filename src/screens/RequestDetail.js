@@ -445,8 +445,8 @@ export class RequestDetail extends Component {
               onPress={() => {
                 this.callDetail();
               }}
-              title="Show more detail"
               style={{ marginLeft: 10 }}
+              title="Show more detail"
             >
               <MuliText style={{ color: colors.blueAqua }}>
                 {this.state.isModalVisible ? ' Ẩn đi' : 'Xem thêm'}
@@ -620,7 +620,7 @@ export class RequestDetail extends Component {
                         <MuliText style={styles.pictureInformationSitter}>
                           Người giữ trẻ
                         </MuliText>
-                        <MuliText style={{ fontSize: 15 }}>
+                        <MuliText style={{ fontSize: 13 }}>
                           {item.user.nickname}
                         </MuliText>
                         <View style={styles.lowerText}>
@@ -846,8 +846,8 @@ const styles = StyleSheet.create({
   },
   inviteButton: {
     flex: 1,
-    width: 100,
-    height: 30,
+    width: 80,
+    height: 25,
     backgroundColor: '#315F61',
     borderRadius: 30,
     alignItems: 'center',
@@ -930,9 +930,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   profileImg: {
-    width: 70,
-    height: 70,
-    borderRadius: 140 / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'black',

@@ -28,7 +28,7 @@ export class CircleItem extends Component {
         key={item.userId}
         style={{
           alignItems: 'center',
-          marginHorizontal: 10,
+          marginHorizontal: 20,
           marginVertical: 10,
         }}
       >
@@ -36,10 +36,10 @@ export class CircleItem extends Component {
           source={require('assets/images/Phuc.png')}
           style={{
             opacity: null,
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
             marginBottom: 5,
-            borderRadius: 120 / 2,
+            borderRadius: 60 / 2,
             overflow: 'hidden',
           }}
         />
@@ -47,7 +47,7 @@ export class CircleItem extends Component {
           <MuliText
             style={{
               color: 'black',
-              fontSize: 14,
+              fontSize: 11,
             }}
           >
             {item.friend.user.nickname}

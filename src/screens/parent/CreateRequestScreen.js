@@ -2,13 +2,7 @@
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
 import moment from 'moment';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
@@ -18,8 +12,6 @@ import colors from 'assets/Color';
 import { updateRequest } from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
-
-const { width, height } = Dimensions.get('window');
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -370,9 +362,8 @@ class CreateRequestScreen extends Component {
                     >
                       <View
                         style={{
-                          alignContent: 'space-between',
                           flexDirection: 'row',
-                          marginLeft: 40,
+                          marginLeft: 20,
                         }}
                       >
                         <View>
@@ -492,7 +483,7 @@ class CreateRequestScreen extends Component {
                 Tổng tiền thanh toán:
               </MuliText>
               <MuliText style={styles.price}>
-                {formater(this.state.price)} VND
+                {formater(this.state.price)} Đồng
               </MuliText>
             </View>
           </View>
@@ -591,14 +582,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   headerTitleChild: {
+    marginLeft: 15,
     fontSize: 20,
     color: '#315F61',
-    marginBottom: 10,
+    marginBottom: 15,
     fontWeight: '800',
+    marginTop: 10,
   },
   headerTitle: {
     marginHorizontal: 15,
-    marginTop: 30,
     fontSize: 20,
     color: '#315F61',
     marginBottom: 10,
@@ -623,7 +615,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detailContainerChild: {
-    marginHorizontal: 15,
     marginTop: 20,
   },
   detailContainer: {

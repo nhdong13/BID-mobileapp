@@ -67,10 +67,17 @@ export default class ProfileDetail extends Component {
   render() {
     return (
       <ScrollView>
+        <View style={{ marginTop: 15, alignItems: 'center' }}>
+          <MuliText style={styles.headerTitle}>Chi tiết tài khoản</MuliText>
+          <MuliText style={styles.grayOptionInformation}>
+            Chi tiết tài khoản của tôi
+          </MuliText>
+        </View>
         <View>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <MuliText style={{ marginLeft: 25 }}>
-              {this.state.name} - {moment().diff(this.state.dob, 'years')} -
+              {this.state.name} - {moment().diff(this.state.dob, 'years')} tuổi
+              -
             </MuliText>
             <Ionicons
               name={this.state.gender == 'MALE' ? 'ios-male' : 'ios-female'}
@@ -110,7 +117,7 @@ export default class ProfileDetail extends Component {
                 </MuliText>
                 <View style={styles.detailPictureContainer}>
                   {this.state.child.map((item) => (
-                    <View key={item.id}>
+                    <View style={{ marginLeft: 15 }} key={item.id}>
                       <Image
                         source={{ uri: item.image }}
                         style={styles.profileImg}
@@ -122,22 +129,22 @@ export default class ProfileDetail extends Component {
                     </View>
                   ))}
                 </View>
-                {/* {!this.state.code && ( */}
-                <View style={{ alignItems: 'center', marginTop: 20 }}>
-                  <TouchableOpacity
-                    style={styles.barcode}
-                    onPress={() =>
-                      this.props.navigation.navigate('CreateCodeScreen', {
-                        userId: this.state.userId,
-                      })
-                    }
-                  >
-                    <MuliText style={{ color: colors.done }}>
-                      Tạo mã cá nhân
-                    </MuliText>
-                  </TouchableOpacity>
-                </View>
-                {/* )} */}
+                {!this.state.code && (
+                  <View style={{ alignItems: 'center', marginTop: 20 }}>
+                    <TouchableOpacity
+                      style={styles.barcode}
+                      onPress={() =>
+                        this.props.navigation.navigate('CreateCodeScreen', {
+                          userId: this.state.userId,
+                        })
+                      }
+                    >
+                      <MuliText style={{ color: colors.done }}>
+                        Tạo mã cá nhân
+                      </MuliText>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             ) : (
               <View />
@@ -149,10 +156,21 @@ export default class ProfileDetail extends Component {
   }
 }
 ProfileDetail.navigationOptions = {
-  title: 'Chi tiết hồ sơ',
+  title: '',
 };
 
 const styles = StyleSheet.create({
+  grayOptionInformation: {
+    color: '#bdc3c7',
+    fontSize: 11,
+    fontWeight: '200',
+  },
+  headerTitle: {
+    fontSize: 15,
+    color: '#315F61',
+    marginBottom: 10,
+    fontWeight: '800',
+  },
   barcode: {
     width: 150,
     height: 35,
@@ -168,9 +186,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   detailPictureContainer: {
+    paddingHorizontal: 15,
     marginTop: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   textReview: {
     marginLeft: 8,
@@ -208,12 +226,7 @@ const styles = StyleSheet.create({
     color: '#bdc3c7',
     // backgroundColor: 'red',
   },
-  headerTitle: {
-    fontSize: 15,
-    color: '#315F61',
-    marginBottom: 10,
-    fontWeight: '800',
-  },
+
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,
@@ -248,12 +261,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 1,
-  },
-  grayOptionInformation: {
-    color: '#bdc3c7',
-    fontSize: 11,
-    paddingLeft: 15,
-    fontWeight: '200',
-    marginTop: 10,
   },
 });
