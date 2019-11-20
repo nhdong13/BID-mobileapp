@@ -129,16 +129,21 @@ class CreateRequestScreen extends Component {
     getOverlapSittingRequest(request)
       .then((result) => {
           // is overlap with other request
-        this.setState({
-          noticeTitle: 'Yêu cầu trùng lặp',
-          noticeMessage: `Bạn có ${result.data.length} yêu cầu đã tạo với khoảng thời trên. Tạo yêu cầu trông trẻ sẽ mất phí. Bạn có chắc muốn tạo thêm?`,
-          showConfirm: true,
-          cancelAlert: 'Hủy',
-          confirmAlert: 'Tiếp tục',
-          overlapRequests: result.data,
-        });
-        //
-        this.AlertPro.open();
+          if (result.data.length > 0) {
+            this.setState({
+              noticeTitle: 'Yêu cầu trùng lặp',
+              noticeMessage: `Bạn có ${result.data.length} yêu cầu đã tạo với khoảng thời trên. Tạo yêu cầu trông trẻ sẽ mất phí. Bạn có chắc muốn tạo thêm?`,
+              showConfirm: true,
+              cancelAlert: 'Hủy',
+              confirmAlert: 'Tiếp tục',
+              overlapRequests: result.data,
+            });
+            //
+            this.AlertPro.open();
+          } else {
+            this.toRecommendScreen();
+          }
+        
       })
       .catch((error) => {
         console.log(
