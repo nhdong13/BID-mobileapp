@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -23,21 +22,25 @@ export default class AddToCircle extends Component {
     this.state = {
       ownerId: 0,
       code: null,
-      friendId: 0,
       friend: null,
     };
   }
 
   componentWillMount() {
     const ownerId = this.props.navigation.getParam('ownerId');
+    console.log('Duong: AddToCircle -> componentWillMount -> ownerId', ownerId);
+
     this.setState({ ownerId });
   }
 
   findParent() {
-    findByCode(this.state.userId, this.state.code)
+    findByCode(this.state.ownerId, this.state.code)
       .then((result) => {
-        console.log(result);
-        this.setState({ friend: result.data });
+        if (result.data.user.id == this.state.ownerId) {
+          this.refs.toast.show('Bạn không thể thêm chính mình', DURATION.LENGTH_LONG);
+        } else {
+          this.setState({ friend: result.data });
+        }
       })
       .catch((error) => {
         console.log('Duong: AddToCircle -> findParent -> error', error);
@@ -45,85 +48,88 @@ export default class AddToCircle extends Component {
   }
 
   addToCircle() {
-    create(this.state.ownerId, this.state.friendId)
+    create(this.state.ownerId, this.state.friend.userId)
       .then((result) => {
         this.setState((prevState) => ({
           friend: Object.assign(prevState.friend, { isInvited: true }),
         }));
-        console.log('a');
-        this.refs.toast.show('Tạo thành công', DURATION.LENGTH_LONG);
+        this.refs.toast.show('Thêm thành công', DURATION.LENGTH_LONG);
       })
       .catch((error) => {
         console.log('Duong: AddToCircle -> addToCircle -> error', error);
-        this.refs.toast.show('Mã trùng', DURATION.LENGTH_LONG);
+        this.refs.toast.show('Đã xảy ra lỗi', DURATION.LENGTH_LONG);
       });
   }
 
   render() {
     return (
-      <ScrollView>
-        <View style={{ flexDirection: 'row', marginTop: 40 }}>
-          <Toast ref="toast" />
-          <View
-            style={{
-              width: 350,
-              borderColor: 'gray',
-              borderWidth: 1,
-              marginHorizontal: 10,
-            }}
-          >
-            <TextInput
+      <View>
+        <Toast ref="toast" position="top" />
+        <ScrollView>
+          <View style={{ flexDirection: 'row', marginTop: 40 }}>
+            <View
               style={{
-                width: 300,
+                width: 350,
+                borderColor: 'gray',
+                borderWidth: 1,
                 marginHorizontal: 10,
               }}
-              value={this.state.code}
-              onChangeText={(code) => this.setState({ code })}
-              placeholder="Nhập mã cần tìm"
-            />
-          </View>
-          {/* {this.state.disableCreate && ( */}
-          <TouchableOpacity onPress={() => this.findParent()}>
-            <Ionicons
-              name="ios-search"
-              size={25}
-              style={{ marginLeft: 5 }}
-              color="#315f61"
-            />
-          </TouchableOpacity>
-          {/* )} */}
-        </View>
-        <View style={styles.detailContainer}>
-          {this.state.friend != null && (
-            <View style={styles.detailPictureContainer}>
-              <Image source={images.parent} style={styles.sitterImage} />
-              <View style={styles.leftInformation}>
-                <MuliText style={styles.pictureInformation}>Phụ huynh</MuliText>
-                <MuliText style={{ fontSize: 15 }}>
-                  {this.state.friend.user.nickname}
-                </MuliText>
-              </View>
+            >
+              <TextInput
+                style={{
+                  width: 300,
+                  marginHorizontal: 10,
+                }}
+                value={this.state.code}
+                onChangeText={(code) => this.setState({ code })}
+                placeholder="Nhập mã cần tìm"
+              />
             </View>
-          )}
-          <View style={styles.rightInformation}>
-            {this.state.friend != null && !this.state.friend.isInvited && (
-              <TouchableOpacity
-                style={styles.inviteButton}
-                onPress={() => this.addToCircle()}
-              >
-                <MuliText style={{ color: '#78ddb6', fontSize: 12 }}>
-                  Thêm
-                </MuliText>
-              </TouchableOpacity>
-            )}
-            {this.state.friend != null && this.state.friend.isInvited && (
-              <MuliText style={{ color: '#B81A1A', fontSize: 12 }}>
-                Đã thêm
-              </MuliText>
-            )}
+            {/* {this.state.disableCreate && ( */}
+            <TouchableOpacity onPress={() => this.findParent()}>
+              <Ionicons
+                name="ios-search"
+                size={25}
+                style={{ marginLeft: 5 }}
+                color="#315f61"
+              />
+            </TouchableOpacity>
+            {/* )} */}
           </View>
-        </View>
-      </ScrollView>
+          <View style={styles.detailContainer}>
+            {this.state.friend != null && (
+              <View style={styles.detailPictureContainer}>
+                <Image source={images.parent} style={styles.sitterImage} />
+                <View style={styles.leftInformation}>
+                  <MuliText style={styles.pictureInformation}>
+                    Phụ huynh
+                  </MuliText>
+                  <MuliText style={{ fontSize: 15 }}>
+                    {this.state.friend.user.nickname}
+                  </MuliText>
+                </View>
+              </View>
+            )}
+            <View style={styles.rightInformation}>
+              {this.state.friend && !this.state.friend.isInvited && (
+                <TouchableOpacity
+                  style={styles.inviteButton}
+                  onPress={() => this.addToCircle()}
+                >
+                  <MuliText style={{ color: '#78ddb6', fontSize: 12 }}>
+                    Thêm
+                  </MuliText>
+                </TouchableOpacity>
+              )}
+              {this.state.friend && this.state.friend.isInvited && (
+                <MuliText style={{ color: '#B81A1A', fontSize: 12 }}>
+                  Đã thêm
+                </MuliText>
+              )}
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
