@@ -36,8 +36,14 @@ export default class AddToCircle extends Component {
   findParent() {
     findByCode(this.state.userId, this.state.code)
       .then((result) => {
-        console.log(result);
-        this.setState({ friend: result.data });
+        if (result.data.user.id == this.state.ownerId) {
+          this.refs.toast.show(
+            'Bạn không thể thêm chính mình',
+            DURATION.LENGTH_LONG,
+          );
+        } else {
+          this.setState({ friend: result.data });
+        }
       })
       .catch((error) => {
         console.log('Duong: AddToCircle -> findParent -> error', error);

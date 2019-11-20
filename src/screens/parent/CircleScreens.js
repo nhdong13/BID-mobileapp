@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { MuliText } from 'components/StyledText';
@@ -8,6 +10,7 @@ import { getCircle } from 'api/circle.api';
 import CircleItem from 'screens/parent/CircleItem';
 import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
 import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
+import Toast from 'react-native-easy-toast';
 
 export default class CircleScreens extends Component {
   constructor(props) {
@@ -68,6 +71,7 @@ export default class CircleScreens extends Component {
   render() {
     return (
       <ScrollView>
+        <Toast ref="toast" position="top" />
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (
           <View style={styles.firstHeaderContainer}>
@@ -97,6 +101,9 @@ export default class CircleScreens extends Component {
               onPress={() =>
                 this.props.navigation.navigate('AddToCircle', {
                   ownerId: this.state.userId,
+                  onGoBack: () => {
+                    this.getCircle();
+                  },
                 })
               }
             >
