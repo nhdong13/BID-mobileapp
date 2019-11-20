@@ -10,6 +10,7 @@ import { getCircle } from 'api/circle.api';
 import CircleItem from 'screens/parent/CircleItem';
 import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
 import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
+import Toast from 'react-native-easy-toast';
 
 export default class CircleScreens extends Component {
   constructor(props) {
