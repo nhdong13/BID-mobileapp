@@ -207,3 +207,22 @@ export async function getSitting(body) {
   }
   return { message: 'error trying to get data from response' };
 }
+
+export async function getOverlapSittingRequest(request) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const options = {
+    method: 'POST',
+    url: `${sittingRequestAPI.getOverlapRequests}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(request),
+  };
+
+  const response = await axios(options);
+  return response;
+}

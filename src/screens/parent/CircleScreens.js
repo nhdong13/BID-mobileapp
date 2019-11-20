@@ -5,9 +5,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import colors from 'assets/Color';
 import { getCircle } from 'api/circle.api';
+import { retrieveToken } from 'utils/handleToken';
 import CircleItem from 'screens/parent/CircleItem';
 import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
 import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
+import Toast, { DURATION } from 'react-native-easy-toast';
 
 export default class CircleScreens extends Component {
   constructor(props) {
@@ -28,6 +30,11 @@ export default class CircleScreens extends Component {
   }
 
   getCircle() {
+    retrieveToken().then((res) => {
+      const { userId } = res;
+      this.setState({ userId });
+    });
+
     getCircle()
       .then((result) => {
         this.setState({
@@ -65,9 +72,14 @@ export default class CircleScreens extends Component {
     }
   }
 
+  showToast() {
+    this.refs.toast.show("Cặc", DURATION.LENGTH_LONG);
+  }
+
   render() {
     return (
       <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
+        <Toast ref="toast" position="top" />
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (
           <View style={styles.firstHeaderContainer}>
@@ -97,6 +109,9 @@ export default class CircleScreens extends Component {
               onPress={() =>
                 this.props.navigation.navigate('AddToCircle', {
                   ownerId: this.state.userId,
+                  onGoBack: () => {
+                    this.getCircle();
+                  }
                 })
               }
             >
