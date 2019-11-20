@@ -61,89 +61,96 @@ export default class AddToCircle extends Component {
 
   render() {
     return (
-      <ScrollView>
-        <View style={{ marginTop: 15, alignItems: 'center' }}>
-          <MuliText style={styles.headerTitle}>Thêm phụ huynh</MuliText>
-          <MuliText style={styles.grayOptionInformation}>
-            Thêm phụ huynh mà bạn biết
-          </MuliText>
-        </View>
-        <View style={{ flexDirection: 'row', marginTop: 15, justifyContent: 'center' }}>
-          <Toast ref="toast" />
+      <View>
+        <Toast ref="toast" position="top" />
+        <ScrollView>
+          <View style={{ marginTop: 15, alignItems: 'center' }}>
+            <MuliText style={styles.headerTitle}>Thêm phụ huynh</MuliText>
+            <MuliText style={styles.grayOptionInformation}>
+              Thêm phụ huynh mà bạn biết
+            </MuliText>
+          </View>
           <View
             style={{
-              borderRadius: 7,
-              borderColor: 'gray',
-              borderWidth: 1,
-              marginHorizontal: 10,
+              flexDirection: 'row',
+              marginTop: 15,
+              justifyContent: 'center',
             }}
           >
-            <TextInput
+            <View
               style={{
-                width: 290,
-                marginLeft: 10,
-                marginTop: 5,
+                borderRadius: 7,
+                borderColor: 'gray',
+                borderWidth: 1,
+                marginHorizontal: 10,
               }}
-              value={this.state.code}
-              onChangeText={(code) => this.setState({ code })}
-              placeholder="Nhập mã cần tìm"
-            />
+            >
+              <TextInput
+                style={{
+                  width: 290,
+                  marginLeft: 10,
+                  marginTop: 5,
+                }}
+                value={this.state.code}
+                onChangeText={(code) => this.setState({ code })}
+                placeholder="Nhập mã cần tìm"
+              />
+            </View>
+            {/* {this.state.disableCreate && ( */}
+            <TouchableOpacity style={{}} onPress={() => this.findParent()}>
+              <Ionicons name="ios-search" size={30} color="#315f61" />
+            </TouchableOpacity>
+            {/* )} */}
           </View>
-          {/* {this.state.disableCreate && ( */}
-          <TouchableOpacity
-            style={{ }}
-            onPress={() => this.findParent()}
-          >
-            <Ionicons name="ios-search" size={30} color="#315f61" />
-          </TouchableOpacity>
-          {/* )} */}
-        </View>
-        <View style={styles.detailContainer}>
-          {this.state.friend != null && (
-            <View>
-              <MuliText style={{ marginTop: 10, marginLeft: 10, fontSize: 15 }}>
-                Tìm thấy
-              </MuliText>
-              <View style={styles.detailPictureContainer}>
-                <Image source={images.parent} style={styles.sitterImage} />
-                <View style={styles.leftInformation}>
-                  <MuliText style={styles.pictureInformation}>
-                    Phụ huynh
-                  </MuliText>
-                  <MuliText style={{ fontSize: 13 }}>
-                    {this.state.friend.user.nickname}
-                  </MuliText>
-                  <MuliText>
-                    Mã cá nhân: {this.state.friend.parentCode}
-                  </MuliText>
-                  <MuliText style={{ width: 200 }}>
-                    Địa chỉ: {this.state.friend.user.address}
-                  </MuliText>
+          <View style={styles.detailContainer}>
+            {this.state.friend != null && (
+              <View>
+                <MuliText
+                  style={{ marginTop: 10, marginLeft: 10, fontSize: 15 }}
+                >
+                  Tìm thấy
+                </MuliText>
+                <View style={styles.detailPictureContainer}>
+                  <Image source={images.parent} style={styles.sitterImage} />
+                  <View style={styles.leftInformation}>
+                    <MuliText style={styles.pictureInformation}>
+                      Phụ huynh
+                    </MuliText>
+                    <MuliText style={{ fontSize: 13 }}>
+                      {this.state.friend.user.nickname}
+                    </MuliText>
+                    <MuliText>
+                      Mã cá nhân: {this.state.friend.parentCode}
+                    </MuliText>
+                    <MuliText style={{ width: 200 }}>
+                      Địa chỉ: {this.state.friend.user.address}
+                    </MuliText>
+                  </View>
                 </View>
               </View>
+            )}
+            <View style={styles.rightInformation}>
+              {this.state.friend != null && !this.state.friend.isInvited && (
+                <TouchableOpacity
+                  style={styles.inviteButton}
+                  onPress={() => this.addToCircle()}
+                >
+                  <MuliText style={{ color: '#78ddb6', fontSize: 12 }}>
+                    Thêm
+                  </MuliText>
+                </TouchableOpacity>
+              )}
+              {this.state.friend != null && this.state.friend.isInvited && (
+                <View style={styles.inviteButton}>
+                  <MuliText style={{ color: '#B81A1A', fontSize: 12 }}>
+                    Đã thêm
+                  </MuliText>
+                </View>
+              )}
             </View>
-          )}
-          <View style={styles.rightInformation}>
-            {this.state.friend != null && !this.state.friend.isInvited && (
-              <TouchableOpacity
-                style={styles.inviteButton}
-                onPress={() => this.addToCircle()}
-              >
-                <MuliText style={{ color: '#78ddb6', fontSize: 12 }}>
-                  Thêm
-                </MuliText>
-              </TouchableOpacity>
-            )}
-            {this.state.friend != null && this.state.friend.isInvited && (
-              <View style={styles.inviteButton}>
-                <MuliText style={{ color: '#B81A1A', fontSize: 12 }}>
-                  Đã thêm
-                </MuliText>
-              </View>
-            )}
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }
