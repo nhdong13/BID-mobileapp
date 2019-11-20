@@ -8,11 +8,11 @@ import {
   View,
   Image,
   Dimensions,
+  ScrollView
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
-import { ScrollView } from 'react-native-gesture-handler';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { updateRequest } from 'api/sittingRequest.api';
@@ -334,7 +334,7 @@ class CreateRequestScreen extends Component {
                   this.updatePrice();
                 }}
                 showIcon={false}
-                minuteInterval={15}
+                // minuteInterval={15}
               />
             </View>
           </View>

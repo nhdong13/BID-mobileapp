@@ -1,10 +1,9 @@
+/* eslint-disable nonblock-statement-body-position */
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Picker } from 'react-native';
 import { CheckBox } from 'native-base';
-import RNPickerSelect from 'react-native-picker-select';
 import { retrieveToken } from 'utils/handleToken';
-import Api from 'api/api_helper';
-import {updateBsProfile} from 'api/babysitter.api';
+import { updateBsProfile, getProfile } from 'api/babysitter.api';
 
 import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
@@ -13,109 +12,160 @@ export default class CalendarScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fr1: false,
-      fr2: false,
-      fr3: false,
-      fr4: false,
-      fr5: false,
-      fr6: false,
-      fr7: false,
-      daytimes: [],
-      evenings: [],
-      dStart: '',
-      dEnd: '',
-      nStart: '',
-      nEnd: '',
-      userId: 0,
-      phdS: { label: 'Từ', value: null, color: '#9EA0A4' },
-      phdE: { label: 'Đến', value: null, color: '#9EA0A4' },
-      phnS: { label: 'Từ', value: null, color: '#9EA0A4' },
-      phnE: { label: 'Đến', value: null, color: '#9EA0A4' },
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
+      startDaytime: '08',
+      endDayTime: '09',
+      startNightTime: '17',
+      endNightTime: '18',
+      sitterId: 0,
     };
   }
 
-  componentDidMount() {
-    this.getUserId();
-    let temp = [];
-    for (let i = 8; i < 18; i++) {
-      if (i<10) temp.push({ label: i.toString() + 'H', value: '0'+ i.toString() })
-      else temp.push({ label: i.toString() + 'H', value: i.toString() });
-    }
-    this.setState({ daytimes: temp });
-    temp = [];
-    for (let i = 18; i < 23; i++) {
-      temp.push({ label: i.toString() + 'H', value: i.toString() });
-    }
-    this.setState({ evenings: temp });
-    this.getUserId().then(res => {
-      Api.get('babysitters/' + this.state.userId.toString()).then(res => {
-        if (res.evening != null) this.setState({
-          phnS: { label: res.evening[0] + res.evening[1] + 'H', value: res.evening[0] + res.evening[1], color: '#9EA0A4' },
-          phnE: { label: res.evening[3] + res.evening[4] + 'H', value: res.evening[3] + res.evening[4], color: '#9EA0A4' },
+  async componentDidMount() {
+    await this.getUserId().then(() => {
+      const { sitterId } = this.state;
+      if (sitterId != 0) {
+        getProfile(sitterId).then((res) => {
+          const { daytime, evening, weeklySchedule } = res;
+          const startDaytime = daytime.split('-')[0];
+          const endDayTime = daytime.split('-')[1];
+          const startNightTime = evening.split('-')[0];
+          const endNightTime = evening.split('-')[1];
+          this.setState({
+            startDaytime,
+            endDayTime,
+            startNightTime,
+            endNightTime,
+          });
+          const workDays = weeklySchedule.split(',');
+          workDays.forEach((day) => {
+            switch (day) {
+              case 'MON':
+                this.setState({ mon: true });
+                break;
+              case 'TUE':
+                this.setState({ tue: true });
+                break;
+              case 'WED':
+                this.setState({ wed: true });
+                break;
+              case 'THU':
+                this.setState({ thu: true });
+                break;
+              case 'FRI':
+                this.setState({ fri: true });
+                break;
+              case 'SAT':
+                this.setState({ sat: true });
+                break;
+              case 'SUN':
+                this.setState({ sun: true });
+                break;
+              default:
+                console.log(
+                  'Error in getprofile sitter -> CalendarScreen -> switch',
+                );
+                break;
+            }
+          });
         });
-        if (res.daytime != null) this.setState({
-          phdS: { label: res.daytime[0] + res.daytime[1] + 'H', value: res.daytime[0] + res.daytime[1], color: '#9EA0A4' },
-          phdE: { label: res.daytime[3] + res.daytime[4] + 'H', value: res.daytime[3] + res.daytime[4], color: '#9EA0A4' },
-        });
-        console.log(res.evening[0] + res.evening[1]);
-        let workDays = res.weeklySchedule.split(',');
-        workDays.forEach(element => {
-          if (element == 'MON') this.setState({ fr1: true });
-          if (element == 'TUE') this.setState({ fr2: true });
-          if (element == 'WED') this.setState({ fr3: true });
-          if (element == 'THU') this.setState({ fr4: true });
-          if (element == 'FRI') this.setState({ fr5: true });
-          if (element == 'SAT') this.setState({ fr6: true });
-          if (element == 'SUN') this.setState({ fr7: true });
-        });
-      });
+      }
     });
   }
 
   getUserId = async () => {
     await retrieveToken().then((res) => {
       const { userId } = res;
-      this.setState({ userId });
+      if (userId != 0) {
+        this.setState({ sitterId: userId });
+      }
     });
   };
 
-  save = () => {
-    let req = 0;
-    if (parseInt(this.state.dStart) > 7 && parseInt(this.state.dStart) < 18) req += 1;
-    if (parseInt(this.state.dEnd) > 7 && parseInt(this.state.dEnd) < 18) req += 1;
-    if (parseInt(this.state.nStart) > 17 && parseInt(this.state.nStart) < 23) req += 1;
-    if (parseInt(this.state.nEnd) > 17 && parseInt(this.state.nEnd) < 23) req += 1;
-    if (req != 4 || parseInt(this.state.dStart) > parseInt(this.state.dEnd) 
-      || parseInt(this.state.nStart) > parseInt(this.state.nEnd)) return;
-    let temp = '';
-    if (this.state.fr1) temp += 'MON,';
-    if (this.state.fr2) temp += 'TUE,';
-    if (this.state.fr3) temp += 'WED,';
-    if (this.state.fr4) temp += 'THU,';
-    if (this.state.fr5) temp += 'FRI,';
-    if (this.state.fr6) temp += 'SAT,';
-    if (this.state.fr7) temp += 'SUN,';
+  updateSchedule = () => {
+    console.log('update schedule went');
+    const {
+      mon,
+      tue,
+      wed,
+      thu,
+      fri,
+      sat,
+      sun,
+      startDaytime,
+      endDayTime,
+      startNightTime,
+      endNightTime,
+      sitterId,
+    } = this.state;
+    const workDays = [];
+    const dayTime = [startDaytime, endDayTime];
+    const nightTime = [startNightTime, endNightTime];
+
+    if (mon) workDays.push('MON');
+    if (tue) workDays.push('TUE');
+    if (wed) workDays.push('WED');
+    if (thu) workDays.push('THU');
+    if (fri) workDays.push('FRI');
+    if (sat) workDays.push('SAT');
+    if (sun) workDays.push('SUN');
+
+    const stringWorkDays = workDays.join();
+    const stringDayTime = dayTime.join('-');
+    const stringNightTime = nightTime.join('-');
+
+    console.log(
+      'PHUC: CalendarScreen -> updateSchedule -> stringDayTime',
+      stringDayTime,
+    );
+    console.log(
+      'PHUC: CalendarScreen -> updateSchedule -> stringNightTime',
+      stringNightTime,
+    );
+    console.log(
+      'PHUC: CalendarScreen -> updateSchedule -> workDays',
+      stringWorkDays,
+    );
+
     const body = {
-      daytime: this.state.dStart + '-' + this.state.dEnd,
-      evening: this.state.nStart + '-' + this.state.nEnd,
-      weeklySchedule: temp,
+      daytime: stringDayTime,
+      evening: stringNightTime,
+      weeklySchedule: stringWorkDays,
     };
-    console.log(body);
-    updateBsProfile(this.state.userId, body);
-  }
+
+    updateBsProfile(sitterId, body);
+  };
 
   render() {
+    const {
+      mon,
+      tue,
+      wed,
+      thu,
+      fri,
+      sat,
+      sun,
+      startDaytime,
+      endDayTime,
+      startNightTime,
+      endNightTime,
+    } = this.state;
     return (
       <View>
-        <View style={{ marginTop: 35, marginLeft: 10, alignItems: 'center' }}>
+        <View style={{ marginTop: 35, alignItems: 'center' }}>
           <MuliText style={styles.headerTitle}>Lịch</MuliText>
           <MuliText style={styles.grayOptionInformation}>
             Lịch giữ trẻ của tôi
           </MuliText>
         </View>
 
-        <View style={{ flexDirection: 'row', marginTop: 30, marginBottom: 15 }}>
-          <View style={styles.hide} />
+        <View style={{ marginTop: 30, marginBottom: 15, alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
             <MuliText style={styles.dayText}>T2</MuliText>
             <MuliText style={styles.dayText}>T3</MuliText>
@@ -126,119 +176,148 @@ export default class CalendarScreen extends Component {
             <MuliText style={styles.dayText}>CN</MuliText>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-          <View st style={{ marginTop: 10 }}>
-            <MuliText>Ngày</MuliText>
-            <MuliText style={{ fontWeight: 'bold' }}>làm việc</MuliText>
-          </View>
+
+        <View style={{ alignItems: 'center', marginBottom: 20 }}>
           {/* Radio button */}
-          <View style={{ flexDirection: 'row', marginLeft: 22, marginTop: 12 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 12,
+              marginLeft: -15,
+            }}
+          >
             <CheckBox
-              style={{ width: 22, marginLeft: 10 }}
-              checked={this.state.fr1}
-              onPress={() => this.setState({ fr1: !this.state.fr1 })}
+              style={styles.radioButton}
+              checked={mon}
+              onPress={() => this.setState({ mon: !this.state.mon })}
             />
             <CheckBox
-              style={{ width: 22, marginLeft: 15 }}
-              checked={this.state.fr2}
-              onPress={() => this.setState({ fr2: !this.state.fr2 })}
+              style={styles.radioButton}
+              checked={tue}
+              onPress={() => this.setState({ tue: !this.state.tue })}
             />
             <CheckBox
-              style={{ width: 22, marginLeft: 15 }}
-              checked={this.state.fr3}
-              onPress={() => this.setState({ fr3: !this.state.fr3 })}
+              style={styles.radioButton}
+              checked={wed}
+              onPress={() => this.setState({ wed: !this.state.wed })}
             />
             <CheckBox
-              style={{ width: 22, marginLeft: 15 }}
-              checked={this.state.fr4}
-              onPress={() => this.setState({ fr4: !this.state.fr4 })}
+              style={styles.radioButton}
+              checked={thu}
+              onPress={() => this.setState({ thu: !this.state.thu })}
             />
             <CheckBox
-              style={{ width: 22, marginLeft: 15 }}
-              checked={this.state.fr5}
-              onPress={() => this.setState({ fr5: !this.state.fr5 })}
+              style={styles.radioButton}
+              checked={fri}
+              onPress={() => this.setState({ fri: !this.state.fri })}
             />
             <CheckBox
-              style={{ width: 22, marginLeft: 15 }}
-              checked={this.state.fr6}
-              onPress={() => this.setState({ fr6: !this.state.fr6 })}
+              style={styles.radioButton}
+              checked={sat}
+              onPress={() => this.setState({ sat: !this.state.sat })}
             />
             <CheckBox
-              style={{ width: 22, marginLeft: 15 }}
-              checked={this.state.fr7}
-              onPress={() => this.setState({ fr7: !this.state.fr7 })}
+              style={styles.radioButton}
+              checked={sun}
+              onPress={() => this.setState({ sun: !this.state.sun })}
             />
           </View>
           {/* End Radio button */}
         </View>
 
-        <View style={{ height: 150, marginTop: 30 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <MuliText
-              style={{
-                width: 80,
-                marginLeft: 20,
-                marginRight: 40,
+        <View style={{ alignItems: 'center', marginTop: 20 }}>
+          <MuliText>Sáng</MuliText>
+          <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+            <Picker
+              selectedValue={startDaytime}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue) => {
+                this.setState({ startDaytime: itemValue });
+                if (parseInt(itemValue, 10) > parseInt(endDayTime, 10)) {
+                  this.setState({ endDayTime: itemValue });
+                }
               }}
             >
-              Ban ngày
-            </MuliText>
-            <View style={{ width: 30 }}>
-            <RNPickerSelect
-              placeholder={this.state.phdS}
-              value={this.state.phdS}
-              onValueChange={(value) => this.setState({dStart: value})}
-              items={this.state.daytimes}
-            />
-            </View>
-            <MuliText style={{ width: 30, marginLeft: 30, fontSize: 17 }}>
-              -
-            </MuliText>
-            <View style={{ width: 30, marginLeft: 20 }}>
-            <RNPickerSelect
-              placeholder={this.state.phdE}
-              value={this.state.phdE}
-              onValueChange={(value) => this.setState({dEnd: value})}
-              items={this.state.daytimes}
-            />
-            </View>
+              <Picker.Item label="08:00" value="08" />
+              <Picker.Item label="09:00" value="09" />
+              <Picker.Item label="10:00" value="10" />
+              <Picker.Item label="11:00" value="11" />
+              <Picker.Item label="12:00" value="12" />
+              <Picker.Item label="13:00" value="13" />
+              <Picker.Item label="14:00" value="14" />
+              <Picker.Item label="15:00" value="15" />
+              <Picker.Item label="16:00" value="16" />
+              <Picker.Item label="17:00" value="17" />
+            </Picker>
+
+            <Picker
+              selectedValue={endDayTime}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue) => {
+                this.setState({ endDayTime: itemValue });
+                if (parseInt(itemValue, 10) < parseInt(endDayTime, 10)) {
+                  this.setState({ startDaytime: itemValue });
+                }
+              }}
+            >
+              <Picker.Item label="09:00" value="09" />
+              <Picker.Item label="10:00" value="10" />
+              <Picker.Item label="11:00" value="11" />
+              <Picker.Item label="12:00" value="12" />
+              <Picker.Item label="13:00" value="13" />
+              <Picker.Item label="14:00" value="14" />
+              <Picker.Item label="15:00" value="15" />
+              <Picker.Item label="16:00" value="16" />
+              <Picker.Item label="17:00" value="17" />
+            </Picker>
           </View>
 
-          <View style={{ flexDirection: 'row', marginTop: 20 }}>
-            <MuliText
-              style={{
-                width: 80,
-                marginLeft: 20,
-                marginRight: 40,
+          <MuliText>Chiều</MuliText>
+          <View style={{ flexDirection: 'row' }}>
+            <Picker
+              selectedValue={startNightTime}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue) => {
+                this.setState({ startNightTime: itemValue });
+                if (parseInt(itemValue, 10) > parseInt(endNightTime, 10)) {
+                  this.setState({ endNightTime: itemValue });
+                }
               }}
             >
-              Ban đêm
-            </MuliText>
-            <View style={{ width: 30 }}>
-              <RNPickerSelect
-                placeholder={this.state.phnS}
-                value={this.state.phnS}
-                style={{ width: 50 }}
-                onValueChange={(value) => this.setState({nStart: value})}
-                items={this.state.evenings}
-              />
-            </View>
-            <MuliText style={{ width: 30, marginLeft: 30, fontSize: 17 }}>
-              -
-            </MuliText>
-            <View style={{ width: 30, marginLeft: 20 }}>
-            <RNPickerSelect
-              placeholder={this.state.phnE}
-              value={this.state.phnE}
-              onValueChange={(value) => this.setState({nEnd: value})}
-              items={this.state.evenings}
-            />
-            </View>
+              <Picker.Item label="17:00" value="17" />
+              <Picker.Item label="18:00" value="18" />
+              <Picker.Item label="19:00" value="19" />
+              <Picker.Item label="20:00" value="20" />
+              <Picker.Item label="21:00" value="21" />
+              <Picker.Item label="22:00" value="22" />
+              <Picker.Item label="23:00" value="23" />
+            </Picker>
+
+            <Picker
+              selectedValue={endNightTime}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue) => {
+                this.setState({ endNightTime: itemValue });
+                if (parseInt(itemValue, 10) < parseInt(endNightTime, 10)) {
+                  this.setState({ startNightTime: itemValue });
+                }
+              }}
+            >
+              <Picker.Item label="18:00" value="18" />
+              <Picker.Item label="19:00" value="19" />
+              <Picker.Item label="20:00" value="20" />
+              <Picker.Item label="21:00" value="21" />
+              <Picker.Item label="22:00" value="22" />
+              <Picker.Item label="23:00" value="23" />
+            </Picker>
           </View>
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.submitButton} onPress={this.save}>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => this.updateSchedule()}
+          >
             <MuliText style={{ color: 'white', fontSize: 16 }}>Lưu</MuliText>
           </TouchableOpacity>
         </View>
@@ -269,12 +348,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   dayText: {
-    marginLeft: 15,
+    marginHorizontal: 10,
     width: 22,
   },
   radioButton: {
-    marginLeft: 20,
-    marginTop: 20,
+    marginHorizontal: 11,
+    // width: 22,
+    // height: 22,
   },
   hide: {
     backgroundColor: 'white',

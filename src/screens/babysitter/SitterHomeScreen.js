@@ -108,9 +108,9 @@ class SitterHomeScreen extends Component {
       id: this.state.userId,
     };
     registerPushNotifications(requestBody.id).then((response) => {
-      if (response) {
-        console.log('PHUC: App -> response', response.data);
-      }
+      // if (response) {
+      //   console.log('PHUC: App -> response', response.data);
+      // }
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
@@ -125,10 +125,10 @@ class SitterHomeScreen extends Component {
         const invitationsWaiting = invitations.filter(
           (invitation) => invitation.status == 'ACCEPTED',
         );
-        console.log(
-          'PHUC: SitterHomeScreen -> getInvitationData -> invitationsWaiting',
-          invitationsWaiting,
-        );
+        // console.log(
+        //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsWaiting',
+        //   invitationsWaiting,
+        // );
 
         const invitationsUpcoming = invitations.filter(
           (invitation) => invitation.status == 'CONFIRMED',
@@ -157,10 +157,10 @@ class SitterHomeScreen extends Component {
   };
 
   handleNotification = (notification) => {
-    console.log(
-      'PHUC: SitterHomeScreen -> handleNotification -> notification',
-      notification,
-    );
+    // console.log(
+    //   'PHUC: SitterHomeScreen -> handleNotification -> notification',
+    //   notification,
+    // );
     const { origin } = notification;
     if (origin == 'received') {
       this._onRefresh();
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
   },
   noRequestImage: {
     marginTop: 60,
-    width: 250,
+    width: 290,
     height: 230,
   },
   scheduleContainer: {
