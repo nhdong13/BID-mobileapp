@@ -100,10 +100,29 @@ export default class ProfileDetail extends Component {
             <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
               Ngày làm việc: {this.state.bsitter.weeklySchedule}
             </MuliText>
-            <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
-              Thời gian làm việc: {this.state.bsitter.daytime} and{' '}
-              {this.state.bsitter.evening}
-            </MuliText>
+            <View
+              style={{
+                marginHorizontal: 25,
+                marginTop: 20,
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <MuliText
+                  style={{ marginRight: 10, fontSize: 16, marginBottom: 10 }}
+                >
+                  Sáng
+                </MuliText>
+                <MuliText>{this.state.bsitter.daytime}</MuliText>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <MuliText
+                  style={{ marginRight: 10, fontSize: 16, marginBottom: 10 }}
+                >
+                  Chiều
+                </MuliText>
+                <MuliText>{this.state.bsitter.evening}</MuliText>
+              </View>
+            </View>
           </View>
         ) : (
           <View />
