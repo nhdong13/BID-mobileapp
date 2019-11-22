@@ -9,7 +9,7 @@ import {
   View,
   Image,
   Dimensions,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';

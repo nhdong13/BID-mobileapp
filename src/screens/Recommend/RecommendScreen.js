@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,6 +25,7 @@ export default class RecommendScreen extends Component {
       request: null,
       isModalVisible: true,
       isModalVisible2: true,
+      loading: true,
     };
   }
 
@@ -46,6 +52,7 @@ export default class RecommendScreen extends Component {
         listMatched: data.listMatched,
         recommendCount: data.recommendCount,
         recommendList: data.recommendList,
+        loading: false,
       });
 
       return data;
@@ -87,6 +94,7 @@ export default class RecommendScreen extends Component {
 
   // netstat -ano | findstr 3000
   render() {
+    const { loading } = this.state;
     return (
       <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
         <View style={styles.container}>
@@ -199,16 +207,20 @@ export default class RecommendScreen extends Component {
             </View>
           ) : (
             <View>
-              <MuliText
-                style={{
-                  marginTop: 50,
-                  color: colors.gray,
-                  fontSize: 25,
-                  marginHorizontal: 50,
-                }}
-              >
-                Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
-              </MuliText>
+              {loading ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                <MuliText
+                  style={{
+                    marginTop: 50,
+                    color: colors.gray,
+                    fontSize: 25,
+                    marginHorizontal: 50,
+                  }}
+                >
+                  Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
+                </MuliText>
+              )}
             </View>
           )}
         </View>

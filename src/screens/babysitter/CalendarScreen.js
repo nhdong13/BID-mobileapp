@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/no-string-refs */
 /* eslint-disable nonblock-statement-body-position */
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Picker } from 'react-native';
@@ -7,6 +9,7 @@ import { updateBsProfile, getProfile } from 'api/babysitter.api';
 
 import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
+import Toast, { DURATION } from 'react-native-easy-toast';
 // import { RadioButton } from 'react-native-paper';
 export default class CalendarScreen extends Component {
   constructor(props) {
@@ -89,7 +92,6 @@ export default class CalendarScreen extends Component {
   };
 
   updateSchedule = () => {
-    console.log('update schedule went');
     const {
       mon,
       tue,
@@ -120,26 +122,19 @@ export default class CalendarScreen extends Component {
     const stringDayTime = dayTime.join('-');
     const stringNightTime = nightTime.join('-');
 
-    console.log(
-      'PHUC: CalendarScreen -> updateSchedule -> stringDayTime',
-      stringDayTime,
-    );
-    console.log(
-      'PHUC: CalendarScreen -> updateSchedule -> stringNightTime',
-      stringNightTime,
-    );
-    console.log(
-      'PHUC: CalendarScreen -> updateSchedule -> workDays',
-      stringWorkDays,
-    );
-
     const body = {
       daytime: stringDayTime,
       evening: stringNightTime,
       weeklySchedule: stringWorkDays,
     };
 
-    updateBsProfile(sitterId, body);
+    updateBsProfile(sitterId, body).then((res) => {
+      if (res.status == '200') {
+        this.refs.toast.show('Cập nhật lịch làm việc thành công');
+      } else {
+        this.refs.toast.show('Đã có lỗi xảy ra vui lòng kiểm tra lại thông tin và thử lại');
+      }
+    });
   };
 
   render() {
@@ -158,6 +153,7 @@ export default class CalendarScreen extends Component {
     } = this.state;
     return (
       <View>
+        <Toast ref="toast" position="top" />
         <View style={{ marginTop: 35, alignItems: 'center' }}>
           <MuliText style={styles.headerTitle}>Lịch</MuliText>
           <MuliText style={styles.grayOptionInformation}>
@@ -255,7 +251,7 @@ export default class CalendarScreen extends Component {
               style={{ height: 50, width: 150 }}
               onValueChange={(itemValue) => {
                 this.setState({ endDayTime: itemValue });
-                if (parseInt(itemValue, 10) < parseInt(endDayTime, 10)) {
+                if (parseInt(itemValue, 10) < parseInt(startDaytime, 10)) {
                   this.setState({ startDaytime: itemValue });
                 }
               }}
@@ -298,7 +294,7 @@ export default class CalendarScreen extends Component {
               style={{ height: 50, width: 150 }}
               onValueChange={(itemValue) => {
                 this.setState({ endNightTime: itemValue });
-                if (parseInt(itemValue, 10) < parseInt(endNightTime, 10)) {
+                if (parseInt(itemValue, 10) < parseInt(startNightTime, 10)) {
                   this.setState({ startNightTime: itemValue });
                 }
               }}
