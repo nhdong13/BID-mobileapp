@@ -72,6 +72,12 @@ class SitterHomeScreen extends Component {
       socketIO.emit('userId', this.state.userId);
     });
 
+    socketIO.on('reloading', (notification) => {
+      this._onRefresh();
+      // const { notificationMessage, title } = notification;
+      // this.setState({ notificationMessage, title });
+    });
+
     socketIO.on('triggerQr', (data) => {
       if (data.qr && this.state.userId != 0) {
         this.props.navigation.navigate('QrSitter', {
@@ -155,10 +161,10 @@ class SitterHomeScreen extends Component {
   };
 
   handleNotification = (notification) => {
-    // console.log(
-    //   'PHUC: SitterHomeScreen -> handleNotification -> notification',
-    //   notification,
-    // );
+    console.log(
+      'PHUC: SitterHomeScreen -> handleNotification -> notification',
+      notification,
+    );
     const { origin } = notification;
     if (origin == 'received') {
       this._onRefresh();
