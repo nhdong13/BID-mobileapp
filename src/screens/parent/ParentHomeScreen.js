@@ -378,8 +378,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   noRequestImage: {
-    width: 261,
-    height: 236,
+    width: 290,
+    height: 230,
     marginVertical: 20,
   },
   scheduleContainer: {
