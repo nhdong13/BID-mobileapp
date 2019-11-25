@@ -51,28 +51,17 @@ export class CircleHiredSitter extends Component {
                   <Ionicons
                     name="ios-female"
                     size={20}
-                    style={styles.icon}
                     color={colors.pinkLight}
                   />
                 )}
               </View>
               <View style={styles.lowerText}>
-                <Ionicons
-                  name="ios-pin"
-                  size={24}
-                  style={styles.icon}
-                  color={colors.lightGreen}
-                />
+                <Ionicons name="ios-pin" size={24} color={colors.lightGreen} />
                 <MuliText style={styles.bsitterName}>
                   {' '}
                   {item.distance} km{' '}
                 </MuliText>
-                <Ionicons
-                  name="ios-star"
-                  size={24}
-                  style={styles.icon}
-                  color={colors.lightGreen}
-                />
+                <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
                 <MuliText style={styles.bsitterName}>
                   {' '}
                   {item.averageRating.toFixed(0)}{' '}
@@ -110,9 +99,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     flex: 1,
     alignItems: 'flex-start',
-  },
-  icon: {
-    marginTop: 3,
   },
   bsitterName: {
     fontSize: 13,

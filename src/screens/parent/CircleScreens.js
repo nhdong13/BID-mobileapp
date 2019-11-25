@@ -74,13 +74,9 @@ export default class CircleScreens extends Component {
     }
   }
 
-  showToast() {
-    this.refs.toast.show("Cặc", DURATION.LENGTH_LONG);
-  }
-
   render() {
     return (
-      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
+      <ScrollView style={{ backgroundColor: colors.white }}>
         <Toast ref="toast" position="top" />
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (
@@ -112,7 +108,9 @@ export default class CircleScreens extends Component {
                 })
               }
             >
-              <MuliText style={{ color: colors.done, fontSize: 11 }}>Thêm</MuliText>
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>
+                Thêm
+              </MuliText>
             </TouchableOpacity>
           </View>
         ) : (
@@ -259,22 +257,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   firstHeaderContainer: {
+    marginHorizontal: 15,
     borderWidth: 0,
     borderBottomWidth: 2,
     borderColor: colors.gray,
     flexDirection: 'row',
     marginTop: 10,
     backgroundColor: colors.white,
-    height: 40,
+    height: 45,
   },
   headerContainer: {
+    marginHorizontal: 15,
     borderColor: colors.gray,
     borderWidth: 0,
     borderBottomWidth: 2,
     flexDirection: 'row',
     marginTop: 6,
     backgroundColor: colors.white,
-    height: 40,
+    height: 45,
   },
   headerText: {
     marginTop: 18,

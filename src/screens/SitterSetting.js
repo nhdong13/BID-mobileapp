@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
     color: colors.darkGreenTitle,
   },
   detailInformationContainer: {
+    marginLeft: 15,
     flex: 1,
     marginTop: 20,
     flexDirection: 'row',
