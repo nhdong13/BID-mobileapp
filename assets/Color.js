@@ -12,6 +12,11 @@ const colors = {
   overlap: '#9b59b6',
   white: '#fff',
   dot: '#12663E',
+  loginText: '#707070',
+  homeColor: '#ecf0f1',
+  buttonConfirm: '#4da6ff',
+  calendarHeader: '#527395',
+  dateName: '#95a5a6',
 };
 
 export default colors;
