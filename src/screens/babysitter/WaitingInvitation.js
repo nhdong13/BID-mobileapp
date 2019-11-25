@@ -20,12 +20,7 @@ class WaitingInvitation extends Component {
         {invitation.status === 'ACCEPTED' && (
           <TouchableOpacity
             key={invitation.id}
-            style={{
-              backgroundColor: '#fff',
-              marginTop: 20,
-              marginHorizontal: 15,
-              borderRadius: 15,
-            }}
+            style={styles.container}
             onPress={() =>
               invitation.status == 'EXPIRED' || invitation.status == 'DENIED'
                 ? null
@@ -41,7 +36,7 @@ class WaitingInvitation extends Component {
                     'dddd Do MMMM',
                   )}
                 </MuliText>
-                <MuliText style={{ color: '#7edeb9' }}>
+                <MuliText style={{ color: colors.lightGreen }}>
                   {moment
                     .utc(invitation.sittingRequest.startTime, 'HH:mm')
                     .format('HH:mm')}{' '}
@@ -92,74 +87,20 @@ export default withNavigation(WaitingInvitation);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  containerBsitter: {
-    flex: 1,
-    backgroundColor: '#dfe6e9',
-  },
-  createRequest: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: 'absolute',
-    opacity: 0.9,
-    bottom: 10,
-    right: 10,
-  },
-  textHeaderParent: {
-    fontSize: 20,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-  },
-  textHeaderBsitter: {
-    fontSize: 20,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-    alignItems: 'flex-start',
+    backgroundColor: colors.white,
+    marginTop: 20,
+    marginHorizontal: 15,
+    borderRadius: 15,
   },
   statusBoxPending: {
     alignItems: 'flex-end',
-    // backgroundColor: 'green',
     height: 40,
     width: 80,
-  },
-  statusBoxConfirm: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'green',
-    width: 100,
-    height: 50,
-    padding: 5,
-  },
-  noRequest: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    marginTop: 20,
-    paddingHorizontal: 5,
-    paddingTop: 30,
-  },
-  noRequestText: {
-    marginVertical: 10,
-    marginHorizontal: 30,
-    paddingTop: 20,
-    fontSize: 18,
-    color: '#315f61',
-    fontWeight: 'bold',
-  },
-  noRequestImage: {
-    width: 30,
-    height: 10,
   },
   requestItemSitter: {
     flexDirection: 'row',
     backgroundColor: 'white',
     height: 150,
-    width: 350,
     alignItems: 'center',
     borderRadius: 15,
     marginBottom: 5,
@@ -167,31 +108,9 @@ const styles = StyleSheet.create({
   leftInformationSitter: {
     marginLeft: 10,
   },
-  leftInformation: {
-    margin: 10,
-    paddingHorizontal: 5,
-  },
   rightInformation: {
     alignContent: 'flex-end',
-    marginLeft: 95,
-  },
-  scheduleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-    paddingVertical: 15,
-    marginBottom: 20,
-    flex: 0.1,
-    backgroundColor: '#fff',
-  },
-  scheduleContainerBsitter: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginTop: 25,
-    paddingVertical: 15,
-    paddingLeft: 30,
-    flex: 0.25,
-    backgroundColor: '#fff',
+    marginLeft: 'auto',
   },
   date: {
     marginTop: 5,

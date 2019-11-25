@@ -35,7 +35,7 @@ class UpcomingInvitation extends Component {
                     'dddd Do MMMM',
                   )}
                 </MuliText>
-                <MuliText style={{ color: '#7edeb9' }}>
+                <MuliText style={{ color: colors.lightGreen }}>
                   {moment
                     .utc(invitation.sittingRequest.startTime, 'HH:mm')
                     .format('HH:mm')}{' '}
@@ -88,62 +88,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 0.8,
     alignItems: 'center',
-    // backgroundColor: 'red',
-    // backgroundColor: '#dfe6e9',
     paddingVertical: 5,
-  },
-  containerBsitter: {
-    flex: 1,
-    backgroundColor: '#dfe6e9',
-  },
-  createRequest: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: 'absolute',
-    opacity: 0.9,
-    bottom: 10,
-    right: 10,
-  },
-  textHeaderParent: {
-    fontSize: 20,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-  },
-  textHeaderBsitter: {
-    fontSize: 20,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-    alignItems: 'flex-start',
   },
   statusBoxPending: {
     alignItems: 'flex-end',
-    // backgroundColor: 'green',
     height: 40,
-  },
-
-  noRequest: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    marginTop: 20,
-    paddingHorizontal: 20,
-    paddingTop: 30,
-  },
-  noRequestText: {
-    marginVertical: 10,
-    marginHorizontal: 30,
-    paddingTop: 20,
-    fontSize: 18,
-    color: '#315f61',
-    fontWeight: 'bold',
-  },
-  noRequestImage: {
-    width: 261,
-    height: 236,
-    marginVertical: 20,
   },
   requestItemSitter: {
     justifyContent: 'space-between',
@@ -155,27 +104,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     elevation: 3,
-    // marginBottom: 5,
-  },
-  requestItem: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'violet',
-    height: 180,
-    marginHorizontal: 30,
-    alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 15,
-    marginBottom: 5,
   },
   leftInformationSitter: {
     marginLeft: 10,
-    flex: 1,
-  },
-  fuckthisshit: {},
-  leftInformation: {
-    margin: 10,
-    paddingHorizontal: 5,
     flex: 1,
   },
   rightInformation: {
@@ -183,27 +114,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingRight: 10,
   },
-  scheduleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-    paddingVertical: 15,
-    marginBottom: 20,
-    flex: 0.1,
-    backgroundColor: '#fff',
-  },
-  scheduleContainerBsitter: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginTop: 25,
-    paddingVertical: 15,
-    paddingLeft: 30,
-    flex: 0.25,
-    backgroundColor: '#fff',
-  },
   date: {
     marginTop: 10,
-    // marginBottom: 10,
     color: colors.darkGreenTitle,
     fontWeight: '400',
     fontSize: 15,

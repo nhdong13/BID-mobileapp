@@ -849,15 +849,9 @@ const styles = StyleSheet.create({
   },
   inviteButton: {
     flex: 1,
-<<<<<<< HEAD
     width: 80,
     height: 25,
     backgroundColor: colors.darkGreenTitle,
-=======
-    width: 100,
-    height: 30,
-    backgroundColor: '#315F61',
->>>>>>> parent of b440e73... Merge branch 'dev-ky' of capstone-project/react-native-boilerplate into develop
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',

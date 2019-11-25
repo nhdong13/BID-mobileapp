@@ -114,9 +114,7 @@ class SitterHomeScreen extends Component {
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
-        invitations.sort((a, b) => {
-          return this.compareInviteByDate(a, b);
-        });
+        invitations.sort((a, b) => this.compareInviteByDate(a, b));
 
         const invitationsPending = invitations.filter(
           (invitation) => invitation.status == 'PENDING',
@@ -307,10 +305,10 @@ class SitterHomeScreen extends Component {
               shadowRadius: 10,
             },
             buttonCancel: {
-              backgroundColor: '#e74c3c',
+              backgroundColor: colors.canceled,
             },
             buttonConfirm: {
-              backgroundColor: '#4da6ff',
+              backgroundColor: colors.buttonConfirm,
             },
           }}
         />
@@ -370,37 +368,14 @@ SitterHomeScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  borderText: {
-    borderRadius: 1,
-    borderColor: colors.gray,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-  },
-  textParentRequest: {
-    color: colors.gray,
-  },
-  textBsitterRequest: {
-    color: colors.gray,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   containerBsitter: {
     flex: 1,
-    backgroundColor: '#dfe6e9',
-  },
-  textParent: {
-    marginTop: 15,
-    fontSize: 19,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
+    backgroundColor: colors.homeColor,
   },
   textBsitter: {
     marginTop: 15,
     fontSize: 14,
-    color: '#315f61',
+    color: colors.darkGreenTitle,
     fontWeight: 'bold',
     lineHeight: 15,
     alignItems: 'flex-start',
@@ -415,7 +390,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     paddingTop: 15,
     fontSize: 13,
-    color: '#315f61',
+    color: colors.darkGreenTitle,
     fontWeight: 'bold',
   },
   noRequestImage: {
@@ -423,29 +398,13 @@ const styles = StyleSheet.create({
     width: 250,
     height: 230,
   },
-  scheduleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-    paddingVertical: 15,
-    marginBottom: 20,
-    flex: 0.1,
-    backgroundColor: '#fff',
-  },
   scheduleContainerBsitter: {
     alignContent: 'center',
     alignItems: 'center',
     marginTop: 15,
     padding: 30,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     height: 100,
-  },
-  date: {
-    marginTop: 5,
-    marginBottom: 10,
-    color: colors.darkGreenTitle,
-    fontWeight: 'bold',
-    fontSize: 10,
   },
   horizontalUpcoming: {
     height: 200,
