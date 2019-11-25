@@ -102,7 +102,7 @@ export default class InvitationDetail extends Component {
                 name="ios-calendar"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformationDate}>
                 {moment(this.state.date).format('dddd Do MMMM')}
@@ -113,7 +113,7 @@ export default class InvitationDetail extends Component {
                 name="ios-cash"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {formater(this.state.price)} VND
@@ -124,7 +124,7 @@ export default class InvitationDetail extends Component {
                 name="ios-timer"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
@@ -136,7 +136,7 @@ export default class InvitationDetail extends Component {
                 name="ios-home"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {this.state.address}
@@ -147,7 +147,7 @@ export default class InvitationDetail extends Component {
                 name="ios-megaphone"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {this.state.invitationStatus == 'PENDING' && (

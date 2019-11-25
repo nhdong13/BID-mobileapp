@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   textInput: {
-    borderColor: colors.white,
+    borderColor: colors.gray,
     width: 300,
     height: 60,
     borderWidth: 2,

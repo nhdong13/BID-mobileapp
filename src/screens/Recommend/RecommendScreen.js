@@ -96,7 +96,7 @@ export default class RecommendScreen extends Component {
   render() {
     const { loading } = this.state;
     return (
-      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
+      <ScrollView style={{ backgroundColor: colors.homeColor }}>
         <View style={styles.container}>
           {this.state.recommendList.length > 0 ||
           this.state.listMatched.length > 0 ? (
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 10,
-    backgroundColor: colors.gray,
+    backgroundColor: colors.homeColor,
   },
 
   sectionContainer2: {

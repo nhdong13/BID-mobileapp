@@ -223,13 +223,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-
-  optionInformation: {
-    color: '#bdc3c7',
-    fontSize: 13,
-    paddingLeft: 15,
-    fontWeight: '400',
-  },
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,

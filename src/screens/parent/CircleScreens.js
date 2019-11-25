@@ -1,7 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
@@ -24,6 +29,7 @@ export default class CircleScreens extends Component {
       hidedCircle: true,
       hidedHiredSitter: true,
       hidedFriendSitter: true,
+      refreshing: false,
     };
   }
 
@@ -49,6 +55,11 @@ export default class CircleScreens extends Component {
         console.log('Duong: CircleScreens -> getCircle -> error', error);
       });
   }
+
+  _onRefresh = () => {
+    // this.setState({ loading: true });
+    this.getCircle();
+  };
 
   hidedCircle() {
     if (this.state.hidedCircle) {
@@ -76,7 +87,12 @@ export default class CircleScreens extends Component {
 
   render() {
     return (
-      <ScrollView style={{ backgroundColor: colors.white }}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
+        }
+        style={{ backgroundColor: colors.white }}
+      >
         <Toast ref="toast" position="top" />
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (

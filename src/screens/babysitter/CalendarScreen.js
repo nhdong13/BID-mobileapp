@@ -9,7 +9,7 @@ import { updateBsProfile, getProfile } from 'api/babysitter.api';
 
 import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast from 'react-native-easy-toast';
 // import { RadioButton } from 'react-native-paper';
 export default class CalendarScreen extends Component {
   constructor(props) {
@@ -132,7 +132,9 @@ export default class CalendarScreen extends Component {
       if (res.status == '200') {
         this.refs.toast.show('Cập nhật lịch làm việc thành công');
       } else {
-        this.refs.toast.show('Đã có lỗi xảy ra vui lòng kiểm tra lại thông tin và thử lại');
+        this.refs.toast.show(
+          'Đã có lỗi xảy ra vui lòng kiểm tra lại thông tin và thử lại',
+        );
       }
     });
   };
@@ -335,13 +337,10 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 10,
     marginTop: 20,
-    backgroundColor: '#315F61',
+    backgroundColor: colors.darkGreenTitle,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  textContainer: {
-    marginTop: 10,
   },
   dayText: {
     marginHorizontal: 10,
@@ -349,107 +348,16 @@ const styles = StyleSheet.create({
   },
   radioButton: {
     marginHorizontal: 11,
-    // width: 22,
-    // height: 22,
-  },
-  hide: {
-    backgroundColor: 'white',
-    width: 95,
-  },
-  netWorkContainer: {
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: 'white',
-    marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 10,
-    borderRadius: 15,
-    height: 200,
-    width: 200,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 10,
-  },
-  textReview: {
-    marginLeft: 8,
-    marginRight: 100,
-    flex: 1,
-  },
-  line: {
-    borderBottomColor: colors.gray,
-    borderBottomWidth: 1,
-    marginTop: 10,
-    marginHorizontal: 25,
-  },
-  reivewContainer: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  nameReview: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#315F61',
-  },
-  optionInformation: {
-    color: '#bdc3c7',
-    fontSize: 13,
-    paddingLeft: 15,
-    fontWeight: '400',
-  },
-  textOption: {
-    marginHorizontal: 5,
-  },
-  informationText: {
-    fontSize: 13,
-    marginTop: 20,
-    flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
   },
   headerTitle: {
     marginLeft: 10,
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
-  detailContainer: {
-    marginHorizontal: 25,
-    marginTop: 20,
-  },
-  profileImg2: {
-    width: 60,
-    height: 70,
-    borderRadius: 50,
-    overflow: 'hidden',
-    borderWidth: 1,
-    marginLeft: 10,
-  },
-  profileImg: {
-    width: 100,
-    height: 100,
-    overflow: 'hidden',
-    marginTop: 10,
-  },
-  childrenInformationContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 5,
-    borderRadius: 15,
-    height: 100,
-    width: 160,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 1,
-  },
   grayOptionInformation: {
-    color: '#bdc3c7',
+    color: colors.gray,
     fontSize: 11,
     fontWeight: '200',
     marginLeft: 10,

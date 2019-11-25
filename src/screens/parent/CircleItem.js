@@ -3,6 +3,7 @@ import { Image, View } from 'react-native';
 import moment from 'moment';
 import { MuliText } from 'components/StyledText';
 import { withNavigation } from 'react-navigation';
+import colors from 'assets/Color';
 
 export class CircleItem extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ export class CircleItem extends Component {
         <View>
           <MuliText
             style={{
-              color: 'black',
+              color: colors.darkGreenTitle,
               fontSize: 14,
             }}
           >
