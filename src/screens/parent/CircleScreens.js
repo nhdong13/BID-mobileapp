@@ -7,10 +7,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import colors from 'assets/Color';
 import { getCircle } from 'api/circle.api';
+import { retrieveToken } from 'utils/handleToken';
 import CircleItem from 'screens/parent/CircleItem';
 import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
 import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
-import Toast from 'react-native-easy-toast';
+import Toast, { DURATION } from 'react-native-easy-toast';
 
 export default class CircleScreens extends Component {
   constructor(props) {
@@ -31,6 +32,11 @@ export default class CircleScreens extends Component {
   }
 
   getCircle() {
+    retrieveToken().then((res) => {
+      const { userId } = res;
+      this.setState({ userId });
+    });
+
     getCircle()
       .then((result) => {
         this.setState({
@@ -68,9 +74,13 @@ export default class CircleScreens extends Component {
     }
   }
 
+  showToast() {
+    this.refs.toast.show("Cặc", DURATION.LENGTH_LONG);
+  }
+
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: '#dfe6e9' }}>
         <Toast ref="toast" position="top" />
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (
@@ -83,7 +93,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={24}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -102,9 +112,7 @@ export default class CircleScreens extends Component {
                 })
               }
             >
-              <MuliText style={{ color: colors.done, fontSize: 11 }}>
-                Thêm
-              </MuliText>
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>Thêm</MuliText>
             </TouchableOpacity>
           </View>
         ) : (
@@ -112,7 +120,7 @@ export default class CircleScreens extends Component {
             <View style={{ flexDirection: 'row' }}>
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={24}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -128,7 +136,7 @@ export default class CircleScreens extends Component {
                 })
               }
             >
-              <MuliText style={{ color: colors.done, fontSize: 13 }}>
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>
                 Thêm
               </MuliText>
             </TouchableOpacity>
@@ -164,7 +172,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={19}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -204,7 +212,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={19}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -251,7 +259,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   firstHeaderContainer: {
-    marginHorizontal: 20,
     borderWidth: 0,
     borderBottomWidth: 2,
     borderColor: colors.gray,
@@ -261,7 +268,6 @@ const styles = StyleSheet.create({
     height: 40,
   },
   headerContainer: {
-    marginHorizontal: 20,
     borderColor: colors.gray,
     borderWidth: 0,
     borderBottomWidth: 2,
@@ -271,8 +277,8 @@ const styles = StyleSheet.create({
     height: 40,
   },
   headerText: {
-    marginTop: 13,
-    fontSize: 13,
+    marginTop: 18,
+    fontSize: 10,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },

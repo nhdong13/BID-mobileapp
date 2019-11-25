@@ -59,7 +59,7 @@ class WaitingInvitation extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.lightGreen }}
                   >
-                    Chờ phản hồi
+                    Đang chờ phụ huynh
                   </MuliText>
                 </View>
                 <MuliText style={{ fontSize: 10, marginTop: 10 }}>

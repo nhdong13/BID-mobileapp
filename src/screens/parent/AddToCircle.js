@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -23,18 +22,19 @@ export default class AddToCircle extends Component {
     this.state = {
       ownerId: 0,
       code: null,
-      friendId: 0,
       friend: null,
     };
   }
 
   componentWillMount() {
     const ownerId = this.props.navigation.getParam('ownerId');
+    console.log('Duong: AddToCircle -> componentWillMount -> ownerId', ownerId);
+
     this.setState({ ownerId });
   }
 
   findParent() {
-    findByCode(this.state.userId, this.state.code)
+    findByCode(this.state.ownerId, this.state.code)
       .then((result) => {
         if (result.data.user.id == this.state.ownerId) {
           this.refs.toast.show(
@@ -51,17 +51,16 @@ export default class AddToCircle extends Component {
   }
 
   addToCircle() {
-    create(this.state.ownerId, this.state.friendId)
+    create(this.state.ownerId, this.state.friend.userId)
       .then((result) => {
         this.setState((prevState) => ({
           friend: Object.assign(prevState.friend, { isInvited: true }),
         }));
-        console.log('a');
-        this.refs.toast.show('Tạo thành công', DURATION.LENGTH_LONG);
+        this.refs.toast.show('Thêm thành công', DURATION.LENGTH_LONG);
       })
       .catch((error) => {
         console.log('Duong: AddToCircle -> addToCircle -> error', error);
-        this.refs.toast.show('Mã trùng', DURATION.LENGTH_LONG);
+        this.refs.toast.show('Đã xảy ra lỗi', DURATION.LENGTH_LONG);
       });
   }
 
@@ -86,8 +85,13 @@ export default class AddToCircle extends Component {
               />
             </View>
             {/* {this.state.disableCreate && ( */}
-            <TouchableOpacity style={{}} onPress={() => this.findParent()}>
-              <Ionicons name="ios-search" size={30} color="#315f61" />
+            <TouchableOpacity onPress={() => this.findParent()}>
+              <Ionicons
+                name="ios-search"
+                size={25}
+                style={{ marginLeft: 5 }}
+                color="#315f61"
+              />
             </TouchableOpacity>
             {/* )} */}
           </View>
@@ -115,7 +119,7 @@ export default class AddToCircle extends Component {
               </View>
             )}
             <View style={styles.rightInformation}>
-              {this.state.friend != null && !this.state.friend.isInvited && (
+              {this.state.friend && !this.state.friend.isInvited && (
                 <TouchableOpacity
                   style={styles.inviteButton}
                   onPress={() => this.addToCircle()}
@@ -182,11 +186,11 @@ const styles = StyleSheet.create({
   },
   detailContainer: {
     flexDirection: 'row',
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
   detailPictureContainer: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 15,
   },
   rightInformation: {
     marginLeft: 'auto',
@@ -202,9 +206,8 @@ const styles = StyleSheet.create({
     color: colors.gray,
   },
   sitterImage: {
-    marginTop: 10,
-    width: 80,
-    height: 80,
+    width: 65,
+    height: 65,
     borderRadius: 20,
     resizeMode: 'contain',
   },

@@ -156,14 +156,6 @@ export default class BsitterProfile extends Component {
   render() {
     return (
       <ScrollView>
-        <View style={{ marginTop: 15, alignItems: 'center' }}>
-          <MuliText style={styles.headerTitle}>
-            Thông tin người giữ trẻ
-          </MuliText>
-          <MuliText style={styles.grayOptionInformation}>
-            Thông tin chi tiết người giữ trẻ
-          </MuliText>
-        </View>
         <View style={styles.container}>
           <ScrollView>
             {this.state.sitter && (
@@ -187,7 +179,7 @@ export default class BsitterProfile extends Component {
                       : Gender.FEMALE}
                   </MuliText>
                   <MuliText style={styles.textField}>
-                    Cách bạn: {this.state.distance} km
+                    Cách bạn: {this.state.distance}
                   </MuliText>
                 </View>
               </View>
@@ -279,6 +271,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: '#dfe6e9',
     marginHorizontal: 15,
     paddingBottom: 20,
   },

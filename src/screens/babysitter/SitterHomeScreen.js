@@ -114,7 +114,9 @@ class SitterHomeScreen extends Component {
     });
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
-        invitations.sort((a, b) => this.compareInviteByDate(a, b));
+        invitations.sort((a, b) => {
+          return this.compareInviteByDate(a, b);
+        });
 
         const invitationsPending = invitations.filter(
           (invitation) => invitation.status == 'PENDING',

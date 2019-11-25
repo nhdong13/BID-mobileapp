@@ -126,8 +126,7 @@ export class Bsitter extends Component {
               navigation.navigate('SitterProfile', {
                 userId: this.state.userId,
                 sitterId: item.userId,
-                requestId:
-                  this.state.requestId != 0 ? this.state.requestId : requestId,
+                requestId: this.state.requestId != 0 ? this.state.requestId : requestId,
                 request: request,
                 distance: item.distance,
                 onGoBack: (receiverId, requestId) =>

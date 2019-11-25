@@ -74,7 +74,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-switch"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -85,7 +85,28 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color="#bdc3c7"
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailInformationContainer}>
+              <View style={styles.informationText}>
+                <Ionicons
+                  name="ios-home"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color="#bdc3c7"
+                />
+                <MuliText style={styles.contentInformation}>
+                  Lịch trông trẻ
+                </MuliText>
+              </View>
+              <View>
+                <Ionicons
+                  name="ios-arrow-forward"
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -98,7 +119,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-calendar"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -107,7 +128,7 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -120,7 +141,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-timer"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -129,7 +150,7 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -142,7 +163,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-cash"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -153,7 +174,7 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -168,7 +189,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-settings"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -177,7 +198,7 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -187,7 +208,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-information-circle-outline"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -198,7 +219,7 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -211,7 +232,7 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-log-out"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.canceled}
                 />
@@ -220,7 +241,7 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color={colors.gray}
                 />
@@ -267,19 +288,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   contentInformation: {
-    fontSize: 13,
+    fontSize: 15,
     paddingLeft: 15,
     color: colors.darkGreenTitle,
   },
   detailInformationContainer: {
-    marginLeft: 15,
     flex: 1,
-    marginTop: 15,
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   informationText: {
-    fontSize: 13,
+    fontSize: 18,
     flexDirection: 'row',
     color: colors.gray,
   },

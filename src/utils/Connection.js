@@ -50,6 +50,7 @@ export const transactionAPI = {
 export const sittingRequestAPI = {
   startSittingRequest: `${url}/sittingRequests/startSittingRequest/`,
   doneSittingRequest: `${url}/sittingRequests/doneSittingRequest/`,
-};
+  getOverlapRequests: `${url}/sittingRequests/getOverlapRequests`,
+}
 
 export default apiUrl;

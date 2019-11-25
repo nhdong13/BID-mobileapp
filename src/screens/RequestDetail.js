@@ -437,6 +437,13 @@ export class RequestDetail extends Component {
                     {this.state.status}
                   </MuliText>
                 )}
+                {this.state.status == 'EXPIRED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}
               </MuliText>
             </View>
           </View>
@@ -445,8 +452,8 @@ export class RequestDetail extends Component {
               onPress={() => {
                 this.callDetail();
               }}
-              style={{ marginLeft: 10 }}
               title="Show more detail"
+              style={{ marginLeft: 10 }}
             >
               <MuliText style={{ color: colors.blueAqua }}>
                 {this.state.isModalVisible ? ' Ẩn đi' : 'Xem thêm'}
@@ -616,7 +623,7 @@ export class RequestDetail extends Component {
                         <MuliText style={styles.pictureInformationSitter}>
                           Người giữ trẻ
                         </MuliText>
-                        <MuliText style={{ fontSize: 13 }}>
+                        <MuliText style={{ fontSize: 15 }}>
                           {item.user.nickname}
                         </MuliText>
                         <View style={styles.lowerText}>
@@ -842,9 +849,15 @@ const styles = StyleSheet.create({
   },
   inviteButton: {
     flex: 1,
+<<<<<<< HEAD
     width: 80,
     height: 25,
     backgroundColor: colors.darkGreenTitle,
+=======
+    width: 100,
+    height: 30,
+    backgroundColor: '#315F61',
+>>>>>>> parent of b440e73... Merge branch 'dev-ky' of capstone-project/react-native-boilerplate into develop
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
@@ -900,9 +913,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   profileImg: {
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 70,
+    height: 70,
+    borderRadius: 140 / 2,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'black',

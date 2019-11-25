@@ -67,17 +67,10 @@ export default class ProfileDetail extends Component {
   render() {
     return (
       <ScrollView>
-        <View style={{ marginTop: 15, alignItems: 'center' }}>
-          <MuliText style={styles.headerTitle}>Chi tiết tài khoản</MuliText>
-          <MuliText style={styles.grayOptionInformation}>
-            Chi tiết tài khoản của tôi
-          </MuliText>
-        </View>
         <View>
           <View style={{ flexDirection: 'row', marginTop: 20 }}>
             <MuliText style={{ marginLeft: 25 }}>
-              {this.state.name} - {moment().diff(this.state.dob, 'years')} tuổi
-              -
+              {this.state.name} - {moment().diff(this.state.dob, 'years')} -
             </MuliText>
             <Ionicons
               name={this.state.gender == 'MALE' ? 'ios-male' : 'ios-female'}
@@ -117,7 +110,7 @@ export default class ProfileDetail extends Component {
                 </MuliText>
                 <View style={styles.detailPictureContainer}>
                   {this.state.child.map((item) => (
-                    <View style={{ marginLeft: 15 }} key={item.id}>
+                    <View key={item.id}>
                       <Image
                         source={{ uri: item.image }}
                         style={styles.profileImg}
@@ -129,22 +122,22 @@ export default class ProfileDetail extends Component {
                     </View>
                   ))}
                 </View>
-                {!this.state.code && (
-                  <View style={{ alignItems: 'center', marginTop: 20 }}>
-                    <TouchableOpacity
-                      style={styles.barcode}
-                      onPress={() =>
-                        this.props.navigation.navigate('CreateCodeScreen', {
-                          userId: this.state.userId,
-                        })
-                      }
-                    >
-                      <MuliText style={{ color: colors.done }}>
-                        Tạo mã cá nhân
-                      </MuliText>
-                    </TouchableOpacity>
-                  </View>
-                )}
+                {/* {!this.state.code && ( */}
+                <View style={{ alignItems: 'center', marginTop: 20 }}>
+                  <TouchableOpacity
+                    style={styles.barcode}
+                    onPress={() =>
+                      this.props.navigation.navigate('CreateCodeScreen', {
+                        userId: this.state.userId,
+                      })
+                    }
+                  >
+                    <MuliText style={{ color: colors.done }}>
+                      Tạo mã cá nhân
+                    </MuliText>
+                  </TouchableOpacity>
+                </View>
+                {/* )} */}
               </View>
             ) : (
               <View />
@@ -156,7 +149,7 @@ export default class ProfileDetail extends Component {
   }
 }
 ProfileDetail.navigationOptions = {
-  title: '',
+  title: 'Chi tiết hồ sơ',
 };
 
 const styles = StyleSheet.create({
@@ -190,9 +183,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   detailPictureContainer: {
-    paddingHorizontal: 15,
     marginTop: 20,
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   optionInformation: {
@@ -201,7 +194,6 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     fontWeight: '400',
   },
-
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,

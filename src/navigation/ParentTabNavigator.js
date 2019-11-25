@@ -58,6 +58,9 @@ const HomeStack = createStackNavigator(
     },
     SitterProfile: {
       screen: BsitterProfile,
+      navigationOptions: () => ({
+        title: 'Thông tin người giữ trẻ',
+      }),
     },
     QrScanner: QRcodeScannerScreen,
   },
@@ -81,6 +84,9 @@ const CircleStack = createStackNavigator(
     Circles: CircleScreens,
     AddToCircle: {
       screen: AddToCircle,
+      navigationOptions: () => ({
+        title: 'Thêm phụ huynh mà bạn biết',
+      }),
     },
     // QrScanner: QRcodeScannerScreen,
   },
@@ -109,6 +115,9 @@ const SettingsStack = createStackNavigator(
     Feedback: Feedback,
     CreateCodeScreen: {
       screen: CreateCodeScreen,
+      navigationOptions: () => ({
+        title: 'Tạo mã cá nhân',
+      }),
     },
   },
   config,
