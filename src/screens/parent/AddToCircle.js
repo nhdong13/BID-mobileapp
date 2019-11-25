@@ -76,46 +76,30 @@ export default class AddToCircle extends Component {
               Thêm phụ huynh mà bạn biết
             </MuliText>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 15,
-              justifyContent: 'center',
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 7,
-                borderColor: 'gray',
-                borderWidth: 1,
-                marginHorizontal: 10,
-              }}
-            >
+          <View style={styles.containerParent}>
+            <View style={styles.detailContainerParent}>
               <TextInput
-                style={{
-                  width: 290,
-                  marginLeft: 10,
-                  marginTop: 5,
-                }}
+                style={styles.searchParent}
                 value={this.state.code}
                 onChangeText={(code) => this.setState({ code })}
                 placeholder="Nhập mã cần tìm"
               />
             </View>
-
-            <TouchableOpacity style={{}} onPress={() => this.findParent()}>
-              <Ionicons name="ios-search" size={30} color="#315f61" />
+            {/* {this.state.disableCreate && ( */}
+            <TouchableOpacity onPress={() => this.findParent()}>
+              <Ionicons
+                name="ios-search"
+                size={25}
+                style={{ marginLeft: 5 }}
+                color="#315f61"
+              />
             </TouchableOpacity>
             {/* )} */}
           </View>
           <View style={styles.detailContainer}>
             {this.state.friend != null && (
               <View>
-                <MuliText
-                  style={{ marginTop: 10, marginLeft: 10, fontSize: 15 }}
-                >
-                  Tìm thấy
-                </MuliText>
+                <MuliText style={styles.headerFindText}>Tìm thấy</MuliText>
                 <View style={styles.detailPictureContainer}>
                   <Image source={images.parent} style={styles.sitterImage} />
                   <View style={styles.leftInformation}>
@@ -128,30 +112,32 @@ export default class AddToCircle extends Component {
                     <MuliText>
                       Mã cá nhân: {this.state.friend.parentCode}
                     </MuliText>
-                    <MuliText style={{ width: 200 }}>
-                      Địa chỉ: {this.state.friend.user.address}
-                    </MuliText>
-                  </View>
-                  <View style={styles.rightInformation}>
-                    {this.state.friend && !this.state.friend.isInvited && (
-                      <TouchableOpacity
-                        style={styles.inviteButton}
-                        onPress={() => this.addToCircle()}
-                      >
-                        <MuliText style={{ color: '#78ddb6', fontSize: 12 }}>
-                          Thêm
-                        </MuliText>
-                      </TouchableOpacity>
-                    )}
-                    {this.state.friend && this.state.friend.isInvited && (
-                      <MuliText style={{ color: '#B81A1A', fontSize: 12 }}>
-                        Đã thêm
-                      </MuliText>
-                    )}
                   </View>
                 </View>
+                <MuliText style={styles.addressText}>
+                  Địa chỉ: {this.state.friend.user.address}
+                </MuliText>
               </View>
             )}
+            <View style={styles.rightInformation}>
+              {this.state.friend && !this.state.friend.isInvited && (
+                <TouchableOpacity
+                  style={styles.inviteButton}
+                  onPress={() => this.addToCircle()}
+                >
+                  <MuliText style={{ color: colors.lightGreen, fontSize: 12 }}>
+                    Thêm
+                  </MuliText>
+                </TouchableOpacity>
+              )}
+              {this.state.friend != null && this.state.friend.isInvited && (
+                <View style={styles.inviteButton}>
+                  <MuliText style={{ color: colors.canceled, fontSize: 12 }}>
+                    Đã thêm
+                  </MuliText>
+                </View>
+              )}
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -160,45 +146,69 @@ export default class AddToCircle extends Component {
 }
 
 const styles = StyleSheet.create({
+  headerFindText: {
+    marginTop: 15,
+    marginLeft: 10,
+    fontSize: 15,
+    color: colors.gray,
+  },
+  addressText: {
+    marginHorizontal: 20,
+  },
+  searchParent: {
+    width: 290,
+    marginLeft: 10,
+    marginTop: 5,
+  },
+  detailContainerParent: {
+    borderRadius: 7,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginHorizontal: 10,
+  },
+  containerParent: {
+    flexDirection: 'row',
+    marginTop: 15,
+    justifyContent: 'center',
+  },
   grayOptionInformation: {
-    color: '#bdc3c7',
+    color: colors.gray,
     fontSize: 11,
     fontWeight: '200',
   },
   headerTitle: {
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
   inviteButton: {
-    marginTop: 40,
+    marginTop: 50,
   },
   detailContainer: {
     flexDirection: 'row',
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
   detailPictureContainer: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 15,
   },
   rightInformation: {
-    marginLeft: 15,
+    marginLeft: 'auto',
     marginTop: 30,
   },
   leftInformation: {
-    marginTop: 5,
+    marginTop: 20,
     marginLeft: 5,
   },
   pictureInformation: {
     fontSize: 13,
     fontWeight: '400',
-    color: '#bdc3c7',
+    color: colors.gray,
   },
   sitterImage: {
-    marginTop: 10,
-    width: 80,
-    height: 80,
+    width: 65,
+    height: 65,
     borderRadius: 20,
     resizeMode: 'contain',
   },

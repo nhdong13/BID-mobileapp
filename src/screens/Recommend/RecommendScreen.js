@@ -117,15 +117,9 @@ export default class RecommendScreen extends Component {
                         }
                         size={19}
                         style={{ marginBottom: -6, marginLeft: 15 }}
-                        color="#315f61"
+                        color={colors.darkGreenTitle}
                       />
-                      <MuliText
-                        style={{
-                          fontSize: 13,
-                          color: '#315f61',
-                          marginLeft: 5,
-                        }}
-                      >
+                      <MuliText style={styles.textRecommend}>
                         Đề nghị ({this.state.recommendCount})
                       </MuliText>
                     </View>
@@ -169,15 +163,9 @@ export default class RecommendScreen extends Component {
                         }
                         size={19}
                         style={{ marginBottom: -6, marginLeft: 15 }}
-                        color="#315f61"
+                        color={colors.darkGreenTitle}
                       />
-                      <MuliText
-                        style={{
-                          fontSize: 13,
-                          color: '#315f61',
-                          marginLeft: 5,
-                        }}
-                      >
+                      <MuliText style={styles.textRecommend}>
                         Người giữ trẻ phù hợp ({this.state.matchedCount})
                       </MuliText>
                     </View>
@@ -230,20 +218,23 @@ export default class RecommendScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  notFindRecommend: {
+    marginTop: 50,
+    color: colors.gray,
+    fontSize: 25,
+    marginHorizontal: 50,
+  },
+  textRecommend: {
+    fontSize: 13,
+    color: colors.darkGreenTitle,
+    marginLeft: 5,
+  },
   container: {
     flex: 1,
     paddingBottom: 10,
-    backgroundColor: '#dfe6e9',
+    backgroundColor: colors.gray,
   },
-  textInput: {
-    borderColor: '#EEEEEE',
-    width: 300,
-    height: 60,
-    borderWidth: 2,
-    borderRadius: 30,
-    padding: 10,
-    fontFamily: 'muli',
-  },
+
   sectionContainer2: {
     backgroundColor: 'white',
     paddingHorizontal: 5,
@@ -259,72 +250,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: '#bdc3c7',
+    borderColor: colors.gray,
     height: 60,
     alignItems: 'center',
     marginBottom: 10,
-  },
-  notfoundMessage: {
-    backgroundColor: 'white',
-    flex: 1,
-    padding: 20,
-    marginTop: 10,
-  },
-  bsitterContainer: {
-    marginTop: 20,
-  },
-  bsitterItem: {
-    flexDirection: 'row',
-  },
-  upperText: {
-    flexDirection: 'row',
-    marginHorizontal: 10,
-    marginLeft: 15,
-    flex: 1,
-    alignItems: 'center',
-  },
-  lowerText: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  submitButton: {
-    width: 300,
-    height: 60,
-    padding: 10,
-    backgroundColor: '#315F61',
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inviteButton: {
-    marginTop: 10,
-  },
-  bsitterName: {
-    fontSize: 18,
-    fontWeight: '400',
-    color: '#315F61',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  buttonContainer: {
-    paddingTop: 30,
-    alignItems: 'center',
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  textContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  sitterImage: {
-    width: 65,
-    height: 65,
-    borderRadius: 20,
-    resizeMode: 'contain',
   },
 });

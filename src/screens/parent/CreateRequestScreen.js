@@ -25,7 +25,7 @@ import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
 
-const { width } = Dimensions.get('window');
+// const { width, height } = Dimensions.get('window');
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -278,7 +278,6 @@ class CreateRequestScreen extends Component {
       noticeMessage,
       cancelAlert,
       confirmAlert,
-      showConfirm,
     } = this.state;
 
     return (
@@ -369,8 +368,6 @@ class CreateRequestScreen extends Component {
               <DatePicker
                 style={styles.pickedTime}
                 date={this.state.startTime}
-                // minDate={moment().format()}
-                // maxDate={this.state.endTime}
                 mode="time"
                 placeholder="Giờ bắt đầu"
                 format="HH:mm"
@@ -463,12 +460,9 @@ class CreateRequestScreen extends Component {
               <View style={styles.detailContainerChild}>
                 <MuliText style={styles.headerTitleChild}>
                   Trẻ của bạn:
-                  {/* {this.state.child.length} */}
                 </MuliText>
                 <View style={styles.detailPictureContainer}>
                   {this.state.child.map((item) => (
-                    // eslint-disable-next-line react/no-array-index-key
-
                     <TouchableOpacity
                       key={item.id}
                       onPress={() => {
@@ -599,7 +593,7 @@ class CreateRequestScreen extends Component {
                 Tổng tiền thanh toán:
               </MuliText>
               <MuliText style={styles.price}>
-                {formater(this.state.price)} Đồng
+                {formater(this.state.price)} VND
               </MuliText>
             </View>
           </View>
@@ -654,7 +648,7 @@ CreateRequestScreen.navigationOptions = {
 const styles = StyleSheet.create({
   price: {
     fontSize: 15,
-    color: '#7edeb9',
+    color: colors.lightGreen,
     fontWeight: '800',
   },
   priceContainer: {
@@ -670,7 +664,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     marginHorizontal: 15,
     marginTop: 15,
-    borderColor: '#7edeb9',
+    borderColor: colors.lightGreen,
   },
   inputAddress: {
     flex: 1,
@@ -698,17 +692,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   headerTitleChild: {
-    marginLeft: 15,
     fontSize: 20,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 15,
     fontWeight: '800',
-    marginTop: 10,
   },
   headerTitle: {
     marginHorizontal: 15,
+    marginTop: 30,
     fontSize: 20,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
@@ -717,7 +710,7 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
     marginBottom: 10,
-    backgroundColor: '#315F61',
+    backgroundColor: colors.darkGreenTitle,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -731,18 +724,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detailContainerChild: {
+    marginHorizontal: 15,
     marginTop: 20,
   },
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,
-  },
-  profileImg: {
-    width: 80,
-    height: 80,
-    borderRadius: 140 / 2,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
   },
 });

@@ -57,13 +57,12 @@ export default class SitterSetting extends Component {
           />
           <View style={{ marginTop: 10, alignItems: 'center' }}>
             <MuliText style={styles.headerTitle}>{this.state.name}</MuliText>
-            <MuliText style={styles.grayOptionInformation}>
+            <MuliText style={styles.blueOptionInformation}>
               Người giữ trẻ
             </MuliText>
           </View>
         </View>
-        <View style={styles.informationContainer} />
-        <View style={{ marginHorizontal: 25, marginTop: 25 }}>
+        <View style={styles.containerInformation}>
           <MuliText style={styles.headerTitleGray}>
             Thông tin tài khoản
           </MuliText>
@@ -75,9 +74,9 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-switch"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Chi tiết tài khoản
@@ -86,9 +85,30 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
                   color="#bdc3c7"
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.detailInformationContainer}>
+              <View style={styles.informationText}>
+                <Ionicons
+                  name="ios-home"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color="#bdc3c7"
+                />
+                <MuliText style={styles.contentInformation}>
+                  Lịch trông trẻ
+                </MuliText>
+              </View>
+              <View>
+                <Ionicons
+                  name="ios-arrow-forward"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -99,18 +119,18 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-calendar"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>Lịch nghỉ</MuliText>
               </View>
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -121,18 +141,18 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-timer"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>Lịch sử</MuliText>
               </View>
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -143,9 +163,9 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-cash"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Thanh toán
@@ -154,33 +174,33 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ marginHorizontal: 25, marginTop: 15 }}>
+        <View style={styles.containerInformation}>
           <MuliText style={styles.headerTitleGray}>Chức năng khác</MuliText>
           <View>
             <TouchableOpacity style={styles.detailInformationContainer}>
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-settings"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>Tùy chỉnh</MuliText>
               </View>
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -188,9 +208,9 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-information-circle-outline"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Giúp đỡ và thông tin liên quan
@@ -199,9 +219,9 @@ export default class SitterSetting extends Component {
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -212,18 +232,18 @@ export default class SitterSetting extends Component {
               <View style={styles.informationText}>
                 <Ionicons
                   name="ios-log-out"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="red"
+                  color={colors.canceled}
                 />
                 <MuliText style={styles.contentInformation}>Thoát</MuliText>
               </View>
               <View>
                 <Ionicons
                   name="ios-arrow-forward"
-                  size={17}
+                  size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -239,7 +259,11 @@ SitterSetting.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  grayOptionInformation: {
+  containerInformation: {
+    marginHorizontal: 25,
+    marginTop: 25,
+  },
+  blueOptionInformation: {
     color: colors.blueAqua,
     fontSize: 13,
     fontWeight: '200',
@@ -252,7 +276,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
@@ -264,45 +288,25 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   contentInformation: {
-    fontSize: 13,
+    fontSize: 15,
     paddingLeft: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
   },
   detailInformationContainer: {
     marginLeft: 15,
     flex: 1,
-    marginTop: 15,
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // backgroundColor: 'red'
   },
   informationText: {
-    fontSize: 13,
+    fontSize: 18,
     flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
-  },
-
-  nameText: {
-    fontSize: 35,
-    fontWeight: 'bold',
-  },
-  viewProfileText: {
-    fontSize: 15,
+    color: colors.gray,
   },
   informationContainer: {
     marginHorizontal: 25,
     flexDirection: 'row',
     marginTop: 10,
-    // backgroundColor: 'red',
-  },
-  profileImg: {
-    marginLeft: 'auto',
-    width: 80,
-    height: 80,
-    borderRadius: 160 / 2,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
   },
 });

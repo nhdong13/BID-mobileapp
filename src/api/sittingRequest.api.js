@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { retrieveToken } from 'utils/handleToken';
 import qs from 'qs';
@@ -53,8 +54,8 @@ export async function startSitting(requestId, sitterId) {
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
 
-  let url = `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`;
-  console.log("Duong: startSitting -> url", url)
+  const url = `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`;
+  console.log('Duong: startSitting -> url', url);
   const options = {
     method: 'GET',
     url: `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`,
@@ -72,7 +73,7 @@ export async function doneSitting(requestId, sitterId) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
-  let url = `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`;
+  const url = `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`;
   const options = {
     method: 'GET',
     url: `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`,
