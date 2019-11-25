@@ -57,11 +57,10 @@ export default class ParentSetting extends Component {
           />
           <View style={{ marginTop: 10, alignItems: 'center' }}>
             <MuliText style={styles.headerTitle}>{this.state.name}</MuliText>
-            <MuliText style={styles.grayOptionInformation}>Phụ huynh</MuliText>
+            <MuliText style={styles.blueOptionInformation}>Phụ huynh</MuliText>
           </View>
         </View>
-        <View style={styles.informationContainer} />
-        <View style={{ marginHorizontal: 25, marginTop: 25 }}>
+        <View style={styles.informationContainer}>
           <MuliText style={styles.headerTitleGray}>
             Thông tin tài khoản
           </MuliText>
@@ -75,7 +74,7 @@ export default class ParentSetting extends Component {
                   name="ios-switch"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Chi tiết tài khoản
@@ -86,7 +85,7 @@ export default class ParentSetting extends Component {
                   name="ios-arrow-forward"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -99,7 +98,7 @@ export default class ParentSetting extends Component {
                   name="ios-cash"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Thanh toán
@@ -110,13 +109,13 @@ export default class ParentSetting extends Component {
                   name="ios-arrow-forward"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ marginHorizontal: 25, marginTop: 15 }}>
+        <View style={styles.informationContainer}>
           <MuliText style={styles.headerTitleGray}>Chức năng khác</MuliText>
           <View>
             <TouchableOpacity style={styles.detailInformationContainer}>
@@ -125,7 +124,7 @@ export default class ParentSetting extends Component {
                   name="ios-settings"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>Tùy chỉnh</MuliText>
               </View>
@@ -134,7 +133,7 @@ export default class ParentSetting extends Component {
                   name="ios-arrow-forward"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -144,7 +143,7 @@ export default class ParentSetting extends Component {
                   name="ios-information-circle-outline"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Giúp đỡ và thông tin liên quan
@@ -155,7 +154,7 @@ export default class ParentSetting extends Component {
                   name="ios-arrow-forward"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -177,7 +176,7 @@ export default class ParentSetting extends Component {
                   name="ios-arrow-forward"
                   size={17}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -193,7 +192,7 @@ ParentSetting.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  grayOptionInformation: {
+  blueOptionInformation: {
     color: colors.blueAqua,
     fontSize: 13,
     fontWeight: '200',
@@ -206,7 +205,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
   contentInformation: {
     fontSize: 13,
     paddingLeft: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
   },
   detailInformationContainer: {
     marginLeft: 15,
@@ -228,35 +227,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // backgroundColor: 'red'
   },
   informationText: {
     fontSize: 13,
     flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
-  },
-
-  nameText: {
-    fontSize: 35,
-    fontWeight: 'bold',
-  },
-  viewProfileText: {
-    fontSize: 15,
+    color: colors.grays,
   },
   informationContainer: {
     marginHorizontal: 25,
-    flexDirection: 'row',
-    marginTop: 10,
-    // backgroundColor: 'red',
-  },
-  profileImg: {
-    marginLeft: 'auto',
-    width: 80,
-    height: 80,
-    borderRadius: 160 / 2,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
+    marginTop: 15,
   },
 });

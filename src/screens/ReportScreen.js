@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import {
   Dimensions,
@@ -105,21 +107,8 @@ export default class ReportScreen extends Component {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <MuliText
-                style={{
-                  color: 'white',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                Gửi
-              </MuliText>
+            <TouchableOpacity style={styles.touchContainer}>
+              <MuliText style={styles.textButton}>Gửi</MuliText>
             </TouchableOpacity>
           </View>
         </View>
@@ -132,6 +121,15 @@ ReportScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  touchContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textButton: {
+    color: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -169,96 +167,5 @@ const styles = StyleSheet.create({
     borderRightColor: colors.done,
     position: 'absolute',
     alignItems: 'center',
-  },
-  name: {
-    alignItems: 'center',
-  },
-  detailPictureContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  textReview: {
-    marginLeft: 8,
-    marginRight: 100,
-    flex: 1,
-  },
-  line: {
-    borderBottomColor: colors.gray,
-    borderBottomWidth: 1,
-    marginTop: 10,
-    marginHorizontal: 25,
-  },
-  reivewContainer: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  nameReview: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#315F61',
-  },
-  optionInformation: {
-    color: '#bdc3c7',
-    fontSize: 13,
-    paddingLeft: 15,
-    fontWeight: '400',
-  },
-  textOption: {
-    marginHorizontal: 5,
-  },
-  informationText: {
-    fontSize: 13,
-    marginTop: 20,
-    flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
-  },
-  headerTitle: {
-    fontSize: 15,
-    color: '#315F61',
-    marginBottom: 10,
-    fontWeight: '800',
-  },
-  detailContainer: {
-    marginHorizontal: 25,
-    marginTop: 20,
-  },
-  profileImg2: {
-    width: 60,
-    height: 70,
-    borderRadius: 50,
-    overflow: 'hidden',
-    borderWidth: 1,
-    marginLeft: 10,
-  },
-  profileImg: {
-    width: 80,
-    height: 80,
-    borderRadius: 140 / 2,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  childrenInformationContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 5,
-    borderRadius: 15,
-    height: 100,
-    width: 160,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  grayOptionInformation: {
-    color: '#bdc3c7',
-    fontSize: 11,
-    paddingLeft: 15,
-    fontWeight: '200',
-    marginTop: 10,
   },
 });

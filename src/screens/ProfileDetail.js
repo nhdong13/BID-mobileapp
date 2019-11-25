@@ -88,19 +88,19 @@ export default class ProfileDetail extends Component {
               }
             />
           </View>
-          <MuliText style={{ marginTop: 20, marginHorizontal: 25 }}>
+          <MuliText style={styles.textDetail}>
             Mã cá nhân: {this.state.code ? this.state.code : 'Chưa có'}
           </MuliText>
         </View>
-        <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
+        <MuliText style={styles.textDetail}>
           Địa chỉ: {this.state.address}
         </MuliText>
         {this.state.bsitter != null ? (
           <View>
-            <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
+            <MuliText style={styles.textDetail}>
               Ngày làm việc: {this.state.bsitter.weeklySchedule}
             </MuliText>
-            <MuliText style={{ marginHorizontal: 25, marginTop: 20 }}>
+            <MuliText style={styles.textDetail}>
               Thời gian làm việc: {this.state.bsitter.daytime} and{' '}
               {this.state.bsitter.evening}
             </MuliText>
@@ -160,14 +160,18 @@ ProfileDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  textDetail: {
+    marginHorizontal: 25,
+    marginTop: 20,
+  },
   grayOptionInformation: {
-    color: '#bdc3c7',
+    color: colors.gray,
     fontSize: 11,
     fontWeight: '200',
   },
   headerTitle: {
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: '#2ecc71',
+    borderColor: colors.done,
     borderWidth: 1,
     backgroundColor: 'white',
   },
@@ -190,76 +194,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
   },
-  textReview: {
-    marginLeft: 8,
-    marginRight: 100,
-    flex: 1,
-  },
-  line: {
-    borderBottomColor: colors.gray,
-    borderBottomWidth: 1,
-    marginTop: 10,
-    marginHorizontal: 25,
-  },
-  reivewContainer: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  nameReview: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#315F61',
-  },
+
   optionInformation: {
     color: '#bdc3c7',
     fontSize: 13,
     paddingLeft: 15,
     fontWeight: '400',
   },
-  textOption: {
-    marginHorizontal: 5,
-  },
-  informationText: {
-    fontSize: 13,
-    marginTop: 20,
-    flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
-  },
 
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,
-  },
-  profileImg2: {
-    width: 60,
-    height: 70,
-    borderRadius: 50,
-    overflow: 'hidden',
-    borderWidth: 1,
-    marginLeft: 10,
-  },
-  profileImg: {
-    width: 80,
-    height: 80,
-    borderRadius: 140 / 2,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  childrenInformationContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    marginHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 5,
-    borderRadius: 15,
-    height: 100,
-    width: 160,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 1,
   },
 });

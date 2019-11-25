@@ -328,10 +328,10 @@ export class RequestDetail extends Component {
               shadowRadius: 10,
             },
             buttonCancel: {
-              backgroundColor: '#e74c3c',
+              backgroundColor: colors.canceled,
             },
             buttonConfirm: {
-              backgroundColor: '#4da6ff',
+              backgroundColor: colors.blueAqua,
             },
           }}
         />
@@ -342,7 +342,7 @@ export class RequestDetail extends Component {
                 name="ios-calendar"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformationDate}>
                 {moment(this.state.date).format('dddd Do MMMM')}
@@ -353,7 +353,7 @@ export class RequestDetail extends Component {
                 name="ios-cash"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {formater(this.state.price)} VND
@@ -364,7 +364,7 @@ export class RequestDetail extends Component {
                 name="ios-timer"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
@@ -376,7 +376,7 @@ export class RequestDetail extends Component {
                 name="ios-home"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {this.state.address}
@@ -387,7 +387,7 @@ export class RequestDetail extends Component {
                 name="ios-megaphone"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {this.state.status == 'PENDING' && (
@@ -463,17 +463,15 @@ export class RequestDetail extends Component {
                     >
                       <View style={{ flexDirection: 'row' }}>
                         <View style={styles.childrenInformationContainer}>
-                          <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                          <View style={styles.detailChildrenInformation}>
                             <Ionicons
                               name="ios-man"
                               size={22}
                               style={{ marginBottom: -5, marginLeft: 15 }}
-                              color="#adffcb"
+                              color={colors.lightGreen}
                             />
                             <View>
-                              <MuliText
-                                style={{ marginLeft: 10, fontSize: 15 }}
-                              >
+                              <MuliText style={styles.textChildrenInformation}>
                                 {this.state.childrenNumber}
                               </MuliText>
                             </View>
@@ -483,17 +481,16 @@ export class RequestDetail extends Component {
                           </MuliText>
                         </View>
                         <View style={styles.childrenInformationContainer}>
-                          <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                          <View style={styles.detailChildrenInformation}>
                             <Ionicons
                               name="ios-happy"
                               size={22}
                               style={{ marginBottom: -5, marginLeft: 15 }}
-                              color="#adffcb"
+                              color={colors.lightGreen}
                             />
                             <View>
-                              <MuliText
-                                style={{ marginLeft: 10, fontSize: 15 }}
-                              >
+                              <MuliText>
+                                style={styles.textChildrenInformation}>
                                 {this.state.minAgeOfChildren}
                               </MuliText>
                             </View>
@@ -513,7 +510,7 @@ export class RequestDetail extends Component {
                       name="ios-cash"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -529,7 +526,7 @@ export class RequestDetail extends Component {
                       name="ios-car"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -546,7 +543,7 @@ export class RequestDetail extends Component {
                       name="ios-text"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -563,7 +560,7 @@ export class RequestDetail extends Component {
                       name="ios-man"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 10 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -678,26 +675,14 @@ export class RequestDetail extends Component {
           )}
           {this.state.status == 'PENDING' &&
             this.state.invitations.length == 0 && (
-              <View
-                style={{
-                  marginHorizontal: 15,
-                  marginTop: 30,
-                  alignItems: 'center',
-                }}
-              >
+              <View style={styles.statusText}>
                 <MuliText style={{ color: colors.gray, fontSize: 12 }}>
                   Chưa có người giữ trẻ nào chấp nhận yêu cầu của bạn
                 </MuliText>
               </View>
             )}
           {this.state.status == 'CANCELED' && (
-            <View
-              style={{
-                marginHorizontal: 10,
-                marginTop: 30,
-                alignItems: 'center',
-              }}
-            >
+            <View style={styles.statusText}>
               <MuliText style={{ color: colors.gray }}>
                 Bạn đã hủy yêu cầu này
               </MuliText>
@@ -710,9 +695,10 @@ export class RequestDetail extends Component {
                 style={styles.submitButton}
                 onPress={() => this.onCancel()}
               >
-                <MuliText style={{ color: '#e74c3c', fontSize: 12 }}>
+                <MuliText style={{ color: colors.canceled, fontSize: 12 }}>
                   Hủy
                 </MuliText>
+                F
               </TouchableOpacity>
             )}
 
@@ -723,7 +709,7 @@ export class RequestDetail extends Component {
                   this.onOpenQR('ONGOING');
                 }}
               >
-                <MuliText style={{ color: '#2ecc71', fontSize: 12 }}>
+                <MuliText style={{ color: colors.done, fontSize: 12 }}>
                   Người giữ trẻ Check-in
                 </MuliText>
               </TouchableOpacity>
@@ -736,7 +722,7 @@ export class RequestDetail extends Component {
                   this.onOpenQRwhenDone('DONE');
                 }}
               >
-                <MuliText style={{ color: '#8e44ad', fontSize: 11 }}>
+                <MuliText style={{ color: colors.overlap, fontSize: 11 }}>
                   Xác nhận công việc hoàn thành
                 </MuliText>
               </TouchableOpacity>
@@ -745,12 +731,12 @@ export class RequestDetail extends Component {
           {this.state.status == 'ACCEPTED' || this.state.status == 'DENIED' ? (
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: '#2ecc71', fontSize: 11 }}>
+                <MuliText style={{ color: colors.done, fontSize: 11 }}>
                   Chấp nhận
                 </MuliText>
               </TouchableOpacity>
               <TouchableOpacity style={styles.answerButton}>
-                <MuliText style={{ color: '#e74c3c', fontSize: 11 }}>
+                <MuliText style={{ color: colors.canceled, fontSize: 11 }}>
                   Từ chối
                 </MuliText>
               </TouchableOpacity>
@@ -766,14 +752,13 @@ export class RequestDetail extends Component {
                     });
                   }}
                 >
-                  <MuliText style={{ color: '#8e44ad', fontSize: 13 }}>
+                  <MuliText style={{ color: colors.overlap, fontSize: 13 }}>
                     Danh sách người giữ trẻ
                   </MuliText>
                 </TouchableOpacity>
               )}
             </View>
           )}
-
           {/* end */}
         </View>
       </ScrollView>
@@ -788,6 +773,19 @@ RequestDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  statusText: {
+    marginHorizontal: 15,
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  textChildrenInformation: {
+    marginLeft: 10,
+    fontSize: 15,
+  },
+  detailChildrenInformation: {
+    flexDirection: 'row',
+    marginTop: 25,
+  },
   rightInformationSitter: {
     marginLeft: 'auto',
   },
@@ -798,12 +796,12 @@ const styles = StyleSheet.create({
   pictureInformationSitter: {
     fontSize: 13,
     fontWeight: '400',
-    color: '#bdc3c7',
+    color: colors.gray,
   },
   pictureInformation: {
     fontSize: 13,
     fontWeight: '400',
-    color: '#bdc3c7',
+    color: colors.gray,
   },
   leftInformationSitter: {
     marginLeft: 5,
@@ -821,7 +819,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 80,
     width: 140,
-    shadowColor: '#000',
+    shadowColor: 'black',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
@@ -838,7 +836,7 @@ const styles = StyleSheet.create({
   headerSection: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: '#bdc3c7',
+    borderColor: colors.gray,
     height: 20,
     alignItems: 'center',
     marginBottom: 5,
@@ -848,33 +846,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 80,
     height: 25,
-    backgroundColor: '#315F61',
+    backgroundColor: colors.darkGreenTitle,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 15,
     marginLeft: 45,
-  },
-  bsitterName: {
-    fontSize: 13,
-    fontWeight: '400',
-    color: '#315F61',
-  },
-  upperText: {
-    flexDirection: 'row',
-    marginHorizontal: 5,
-    marginLeft: 10,
-    flex: 1,
-    alignItems: 'center',
-  },
-  sitterImage: {
-    width: '100%',
-    borderRadius: 15,
-    resizeMode: 'contain',
-    marginLeft: 45,
-  },
-  bsitterItem: {
-    flexDirection: 'row',
   },
   detailPictureContainer: {
     flexDirection: 'row',
@@ -914,20 +891,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: -15,
     marginHorizontal: 10,
-    backgroundColor: '#315F61',
+    backgroundColor: colors.darkGreenTitle,
     borderRadius: 10,
   },
   headerTitle: {
     fontSize: 14,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 5,
     fontWeight: '800',
     marginLeft: 5,
-  },
-  optionsText: {
-    fontSize: 15,
-    color: 'gray',
-    fontWeight: 'bold',
   },
   profileImg: {
     width: 50,
@@ -937,56 +909,35 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
   },
-  textAndDayContainer: {
-    flexDirection: 'row',
-  },
   informationText: {
     fontSize: 13,
     marginTop: 15,
     flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
+    color: colors.gray,
   },
   contentInformation: {
     fontSize: 12,
     paddingLeft: 10,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
   },
   contentInformationDate: {
     fontSize: 12,
     paddingLeft: 10,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     fontWeight: '700',
-  },
-  priceText: {
-    fontSize: 15,
-    marginLeft: 150,
-    marginTop: 25,
-    flexDirection: 'row',
   },
   detailInformationContainer: {
     flex: 1,
     marginTop: 5,
     marginHorizontal: 5,
   },
-  detailOptionsContainer: {
-    flex: 1,
-    marginTop: 15,
-  },
-  optionText: {
-    fontSize: 15,
-    marginLeft: 45,
-    marginTop: 25,
-    flexDirection: 'row',
-  },
-
   optionInformation: {
     fontSize: 13,
     paddingLeft: 10,
     fontWeight: '400',
   },
   grayOptionInformation: {
-    color: '#bdc3c7',
+    color: colors.gray,
     fontSize: 11,
     paddingLeft: 10,
     fontWeight: '200',
