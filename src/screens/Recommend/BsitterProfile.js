@@ -9,6 +9,7 @@ import { createCustomer } from 'api/payment.api';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
 import Api from 'api/api_helper';
+import colors from 'assets/Color';
 
 export default class BsitterProfile extends Component {
   constructor(props) {
@@ -168,9 +169,7 @@ export default class BsitterProfile extends Component {
             {this.state.sitter && (
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
-                  <MuliText
-                    style={{ fontSize: 15, color: '#315f61', marginLeft: 10 }}
-                  >
+                  <MuliText style={styles.textInformation}>
                     Thông tin cơ bản
                   </MuliText>
                 </View>
@@ -196,9 +195,7 @@ export default class BsitterProfile extends Component {
             {this.state.sitter && (
               <View style={styles.sectionContainer}>
                 <View style={styles.headerSection}>
-                  <MuliText
-                    style={{ fontSize: 15, color: '#315f61', marginLeft: 10 }}
-                  >
+                  <MuliText style={styles.textInformation}>
                     Yêu cầu làm việc
                   </MuliText>
                 </View>
@@ -234,7 +231,9 @@ export default class BsitterProfile extends Component {
                           )
                         }
                       >
-                        <MuliText style={{ color: '#78ddb6', fontSize: 15 }}>
+                        <MuliText
+                          style={{ color: colors.lightGreen, fontSize: 15 }}
+                        >
                           Mời
                         </MuliText>
                       </TouchableOpacity>
@@ -243,7 +242,7 @@ export default class BsitterProfile extends Component {
                       <MuliText
                         style={{
                           marginTop: 10,
-                          color: '#B81A1A',
+                          color: colors.canceled,
                           fontSize: 15,
                         }}
                       >
@@ -261,19 +260,20 @@ export default class BsitterProfile extends Component {
   }
 }
 
-// RecommendScreen.navigationOptions = {
-//   title: 'Đề nghị người giữ trẻ',
-// };
-
 const styles = StyleSheet.create({
+  textInformation: {
+    fontSize: 15,
+    color: colors.darkGreenTitle,
+    marginLeft: 10,
+  },
   grayOptionInformation: {
-    color: '#bdc3c7',
+    color: colors.gray,
     fontSize: 11,
     fontWeight: '200',
   },
   headerTitle: {
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
   },
@@ -284,14 +284,13 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     backgroundColor: 'white',
-    // flex: 1,
     paddingBottom: 20,
     marginTop: 10,
   },
   headerSection: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: '#bdc3c7',
+    borderColor: colors.gray,
     height: 40,
     alignItems: 'center',
     marginBottom: 15,

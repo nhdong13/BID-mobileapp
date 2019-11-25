@@ -188,14 +188,14 @@ export class Bsitter extends Component {
               style={styles.inviteButton}
               onPress={() => this.sendInvitation(item.userId)}
             >
-              <MuliText style={{ color: '#78ddb6', fontSize: 13 }}>
+              <MuliText style={{ color: colors.lightGreen, fontSize: 13 }}>
                 Mời
               </MuliText>
             </TouchableOpacity>
           )}
           {item.isInvited && (
             <View style={styles.inviteButton}>
-              <MuliText style={{ color: '#B81A1A', fontSize: 13 }}>
+              <MuliText style={{ color: colors.canceled, fontSize: 13 }}>
                 Đã mời
               </MuliText>
             </View>
@@ -219,31 +219,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#dfe6e9',
+    backgroundColor: colors.gray,
     paddingBottom: 20,
-  },
-  textInput: {
-    borderColor: '#EEEEEE',
-    width: 300,
-    height: 60,
-    borderWidth: 2,
-    borderRadius: 30,
-    padding: 10,
-    fontFamily: 'muli',
-  },
-  sectionContainer: {
-    backgroundColor: 'white',
-    flex: 1,
-    paddingHorizontal: 20,
-    marginTop: 10,
-  },
-  headerSection: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#bdc3c7',
-    height: 60,
-    alignItems: 'center',
-    marginBottom: 15,
   },
   bsitterContainer: {
     marginVertical: 8,
@@ -261,42 +238,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  submitButton: {
-    width: 300,
-    height: 60,
-    padding: 10,
-    backgroundColor: '#315F61',
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   inviteButton: {
     marginTop: 14,
-  },
-  inviteButtonDisable: {
-    marginTop: 10,
-    opacity: 0.7,
   },
   bsitterName: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#315F61',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  buttonContainer: {
-    paddingTop: 30,
-    alignItems: 'center',
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  textContainer: {
-    alignItems: 'center',
-    marginTop: 10,
+    color: colors.darkGreenTitle,
   },
   sitterImage: {
     width: 55,

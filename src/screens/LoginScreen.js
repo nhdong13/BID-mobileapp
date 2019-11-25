@@ -178,7 +178,7 @@ class LoginScreen extends Component {
               source={require('assets/images/login-family.png')}
               style={styles.familyImage}
             />
-            <MuliText style={{ color: '#707070', fontSize: 16 }}>
+            <MuliText style={{ color: colors.loginText, fontSize: 16 }}>
               Xin hãy đăng nhập để tiếp tục
             </MuliText>
           </View>
@@ -230,7 +230,7 @@ class LoginScreen extends Component {
                   backgroundColor: 'white',
                 }}
               >
-                <MuliText style={{ color: '#707070', fontSize: 16 }}>
+                <MuliText style={{ color: colors.loginText, fontSize: 16 }}>
                   Xin nhập Authentication Code
                 </MuliText>
                 <View style={styles.textContainer}>
@@ -270,9 +270,7 @@ class LoginScreen extends Component {
           )}
 
           <View style={styles.welcomeContainer}>
-            <MuliText>
-              copyrights claim thing that you don't want to read
-            </MuliText>
+            <MuliText>Bản quyền thuộc về nhóm đồ án BID</MuliText>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -289,10 +287,10 @@ LoginScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   textInput: {
-    borderColor: '#EEEEEE',
+    borderColor: colors.white,
     width: 300,
     height: 60,
     borderWidth: 2,
@@ -304,7 +302,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 60,
     padding: 10,
-    backgroundColor: '#315F61',
+    backgroundColor: colors.darkGreenTitle,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
@@ -314,13 +312,10 @@ const styles = StyleSheet.create({
     height: 60,
     padding: 10,
     marginRight: 10,
-    backgroundColor: '#315F61',
+    backgroundColor: colors.darkGreenTitle,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
   },
   buttonContainer: {
     paddingTop: 30,
@@ -348,43 +343,5 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginTop: 20,
     marginBottom: 20,
-  },
-  tabBarInfoContainer: {
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 10,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 5,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
   },
 });

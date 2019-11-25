@@ -65,7 +65,7 @@ export default class SittingList extends Component {
                 <TouchableOpacity
                   key={request.id}
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: colors.white,
                     marginTop: 10,
                     marginHorizontal: 20,
                     borderRadius: 20,
@@ -80,7 +80,7 @@ export default class SittingList extends Component {
                     <View
                       style={{
                         flex: 0.2,
-                        backgroundColor: '#78ddb6',
+                        backgroundColor: colors.lightGreen,
                         borderTopLeftRadius: 20,
                         borderTopRightRadius: 20,
                       }}
@@ -145,42 +145,12 @@ SittingList.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#dfe6e9',
+    backgroundColor: colors.gray,
   },
-  createRequest: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: 'absolute',
-    opacity: 0.9,
-    bottom: 10,
-    right: 10,
-  },
-  textHeaderParent: {
-    fontSize: 20,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-  },
-  textHeaderBsitter: {
-    fontSize: 20,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-    alignItems: 'flex-start',
-  },
-  statusBoxPending: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'green',
-    width: 90,
-    height: 40,
-    padding: 10,
-  },
+
   statusBoxConfirm: {
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'green',
     width: 90,
     height: 40,
     padding: 10,
@@ -198,7 +168,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     paddingTop: 20,
     fontSize: 18,
-    color: '#315f61',
+    color: colors.darkGreenTitle,
     fontWeight: 'bold',
   },
   noRequestImage: {
@@ -206,53 +176,10 @@ const styles = StyleSheet.create({
     height: 236,
     marginVertical: 20,
   },
-  requestItem: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    height: 120,
-    marginHorizontal: 30,
-    alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 15,
-  },
   leftInformation: {
-    // backgroundColor: 'blue',
     margin: 15,
     paddingHorizontal: 5,
     flex: 1,
-  },
-  rightInformation: {
-    // backgroundColor: 'green',
-    flex: 1,
-    alignItems: 'flex-end',
-    paddingRight: 20,
-  },
-  headerTitle: {
-    marginHorizontal: 15,
-    marginTop: 30,
-    fontSize: 25,
-    color: '#315F61',
-    marginBottom: 10,
-    fontWeight: '800',
-  },
-  scheduleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 30,
-    paddingTop: 20,
-    marginBottom: 20,
-    flex: 0.1,
-    backgroundColor: '#fff',
-  },
-  scheduleContainerBsitter: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginTop: 30,
-    paddingTop: 20,
-    paddingLeft: 30,
-    flex: 0.25,
-    backgroundColor: '#fff',
   },
   date: {
     marginBottom: 10,
