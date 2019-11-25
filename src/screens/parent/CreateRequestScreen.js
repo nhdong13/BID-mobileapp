@@ -358,7 +358,7 @@ class CreateRequestScreen extends Component {
                       <View
                         style={{
                           flexDirection: 'row',
-                          marginLeft: 20,
+                          marginLeft: 50,
                         }}
                       >
                         <View>

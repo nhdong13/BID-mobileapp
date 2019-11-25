@@ -489,8 +489,7 @@ export class RequestDetail extends Component {
                               color={colors.lightGreen}
                             />
                             <View>
-                              <MuliText>
-                                style={styles.textChildrenInformation}>
+                              <MuliText style={styles.textChildrenInformation}>
                                 {this.state.minAgeOfChildren}
                               </MuliText>
                             </View>
@@ -698,7 +697,6 @@ export class RequestDetail extends Component {
                 <MuliText style={{ color: colors.canceled, fontSize: 12 }}>
                   Hủy
                 </MuliText>
-                F
               </TouchableOpacity>
             )}
 

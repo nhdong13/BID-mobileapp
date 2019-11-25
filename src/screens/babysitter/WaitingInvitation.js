@@ -54,11 +54,6 @@ class WaitingInvitation extends Component {
                   Từ {invitation.sittingRequest.user.nickname}
                 </MuliText>
               </View>
-              {/* OVERLAP
-          ACCEPTED
-          EXPIRED
-          CANCELED
-          DONE */}
               <View style={styles.rightInformation}>
                 <View style={styles.statusBoxPending}>
                   <MuliText
