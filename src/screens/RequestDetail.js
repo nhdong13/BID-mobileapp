@@ -21,6 +21,8 @@ import {
   acceptBabysitter,
   updateRequestStatus,
   cancelRequest,
+  getRequests,
+  getRequestDetail,
 } from 'api/sittingRequest.api';
 import { getRequestTransaction } from 'api/transaction.api';
 import { withNavigationFocus } from 'react-navigation';
@@ -69,6 +71,38 @@ export class RequestDetail extends Component {
     this.getAcceptedInvitations();
 
     const { sittingRequestsID: requestId } = this.state;
+    // rewrite api get request data
+    await getRequestDetail(requestId).then((res) => {
+      const {
+        sittingDate: date,
+        startTime,
+        endTime,
+        sittingAddress: address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        totalPrice: price,
+        createdUser: createUserId,
+      } = res;
+      this.setState({
+        date,
+        startTime,
+        endTime,
+        address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        price,
+        createUserId,
+      });
+    });
+    // dong's code
     Api.get('sittingRequests/' + requestId.toString())
       .then((resp) => {
         this.setState({
@@ -90,13 +124,13 @@ export class RequestDetail extends Component {
         console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
       });
 
-    const trans = await getRequestTransaction(requestId).then();
+    const transaction = await getRequestTransaction(requestId).then();
     console.log(
       'PHUC: RequestDetail -> componentDidMount -> requestId',
       requestId,
     );
-    if (trans) {
-      const { chargeId, amount } = trans;
+    if (transaction) {
+      const { chargeId, amount } = transaction;
       if (chargeId && amount) {
         this.setState({ chargeId, amount });
       }
@@ -230,6 +264,41 @@ export class RequestDetail extends Component {
     });
   };
 
+  getRequestDetail = async () => {
+    const { sittingRequestsID: requestId } = this.state;
+    // rewrite api get request data
+    await getRequestDetail(requestId).then((res) => {
+      const {
+        sittingDate: date,
+        startTime,
+        endTime,
+        sittingAddress: address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        totalPrice: price,
+        createdUser: createUserId,
+      } = res;
+      this.setState({
+        date,
+        startTime,
+        endTime,
+        address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        price,
+        createUserId,
+      });
+    });
+  };
+
   acceptBabysitter = (sitterId, name) => {
     const msg =
       'Bạn có chắc chắn chọn ' +
@@ -291,9 +360,11 @@ export class RequestDetail extends Component {
     );
   };
 
-  _onRefresh = () => {
-    // this.setState({ loading: true });
-    this.getAcceptedInvitations();
+  _onRefresh = async () => {
+    this.setState({ loading: true });
+    await this.getAcceptedInvitations();
+    await this.getRequestDetail();
+    this.setState({ loading: false });
   };
 
   callDetail() {

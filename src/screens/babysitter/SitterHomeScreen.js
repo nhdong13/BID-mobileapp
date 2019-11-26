@@ -236,6 +236,7 @@ class SitterHomeScreen extends Component {
       noRequestImage,
       horizontalUpcoming,
     } = styles;
+
     const InvitationPending = () => (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -289,6 +290,7 @@ class SitterHomeScreen extends Component {
         />
       </View>
     );
+
     return (
       <View style={containerBsitter}>
         <Loader loading={this.state.loading} />

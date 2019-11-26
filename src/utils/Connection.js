@@ -51,6 +51,7 @@ export const sittingRequestAPI = {
   startSittingRequest: `${url}/sittingRequests/startSittingRequest/`,
   doneSittingRequest: `${url}/sittingRequests/doneSittingRequest/`,
   getOverlapRequests: `${url}/sittingRequests/getOverlapRequests`,
+  getRequestDetail: `${url}/sittingRequests/`,
 };
 
 export default apiUrl;

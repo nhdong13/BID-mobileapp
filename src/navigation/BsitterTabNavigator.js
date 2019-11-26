@@ -11,7 +11,7 @@ import SitterHomeScreen from 'screens/babysitter/SitterHomeScreen';
 import PaymentStripe from 'utils/PaymentStripe';
 import ProfileDetail from 'screens/ProfileDetail';
 import CalendarScreen from 'screens/babysitter/CalendarScreen';
-import SittingList from 'screens/parent/SittingList';
+import SittingHistory from 'screens/setting/SittingHistory';
 import SettingsScreen from '../screens/SitterSetting';
 import TabBarIcon from '../components/TabBarIcon';
 
@@ -51,7 +51,7 @@ const SettingsStack = createStackNavigator(
     Settings: SettingsScreen,
     Profile: ProfileDetail,
     Payment: PaymentStripe,
-    GetSitting: SittingList,
+    SittingHistory: SittingHistory,
     CalendarScreen: CalendarScreen,
   },
   config,
