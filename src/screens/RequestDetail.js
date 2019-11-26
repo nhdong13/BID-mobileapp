@@ -28,6 +28,7 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
 import AlertPro from 'react-native-alert-pro';
+import Loader from 'utils/Loader';
 
 moment.updateLocale('vi', localization);
 
@@ -59,6 +60,7 @@ export class RequestDetail extends Component {
       confirmAlert: 'Có',
       showConfirm: true,
       refreshing: false,
+      loading: false,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -147,12 +149,17 @@ export class RequestDetail extends Component {
     console.log('PHUC: RequestDetail -> confirmCancel -> status', status);
 
     if (requestId != 0 && chargeId != 0 && amount != 0) {
+      this.setState({ loading: true });
       await cancelRequest(requestId, status, chargeId, amount).then((res) => {
         if (res.data) {
+          this.setState({ loading: false });
+
           console.log('PHUC: RequestDetail -> confirmCancel -> res', res.data);
           this.AlertPro.close();
           this.props.navigation.navigate('Home', { loading: false });
         } else if (res.message.includes('Error')) {
+          this.setState({ loading: false });
+
           this.refs.toast.show(
             'Đã có lỗi xảy ra, vui lòng thử lại sau một thời gian',
             DURATION.LENGTH_LONG,
@@ -160,9 +167,13 @@ export class RequestDetail extends Component {
         }
       });
     } else {
+      this.setState({ loading: true });
+
       await cancelRequest(requestId, 'PENDING', chargeId, amount).then(
         (res) => {
           if (res.data) {
+            this.setState({ loading: false });
+
             console.log(
               'PHUC: RequestDetail -> confirmCancel -> res',
               res.data,
@@ -170,6 +181,8 @@ export class RequestDetail extends Component {
             this.AlertPro.close();
             this.props.navigation.navigate('Home', { loading: false });
           } else if (res.message.includes('Error')) {
+            this.setState({ loading: false });
+
             this.refs.toast.show(
               'Đã có lỗi xảy ra, vui lòng thử lại sau một thời gian',
               DURATION.LENGTH_LONG,
@@ -299,6 +312,7 @@ export class RequestDetail extends Component {
       confirmAlert,
       showConfirm,
       refreshing,
+      loading,
     } = this.state;
     return (
       <ScrollView
@@ -306,6 +320,7 @@ export class RequestDetail extends Component {
           <RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />
         }
       >
+        <Loader loading={loading} />
         <Toast ref="toast" position="top" />
         <AlertPro
           ref={(ref) => {

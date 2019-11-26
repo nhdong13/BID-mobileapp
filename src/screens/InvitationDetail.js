@@ -190,6 +190,13 @@ export default class InvitationDetail extends Component {
                     {this.state.invitationStatus}
                   </MuliText>
                 )}
+                {this.state.invitationStatus == 'SITTER_NOT_CHECKIN' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.invitationStatus}
+                  </MuliText>
+                )}
               </MuliText>
             </View>
           </View>

@@ -72,7 +72,7 @@ class PendingInvitation extends Component {
                     color={colors.darkGreenTitle}
                     style={{ marginRight: 5 }}
                   />
-                  <MuliText>{invitation.distance} km</MuliText>
+                  <MuliText>{invitation.distance}</MuliText>
                 </View>
               </View>
             </View>
