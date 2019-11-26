@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   bsitterName: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginRight: 5,
   },
   sitterImage: {

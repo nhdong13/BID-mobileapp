@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
   Image,
-  Dimensions,
   ScrollView,
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
@@ -303,10 +302,10 @@ class CreateRequestScreen extends Component {
               shadowRadius: 10,
             },
             buttonCancel: {
-              backgroundColor: '#e74c3c',
+              backgroundColor: colors.canceled,
             },
             buttonConfirm: {
-              backgroundColor: '#4da6ff',
+              backgroundColor: colors.buttonConfirm,
             },
           }}
         />
@@ -593,7 +592,7 @@ class CreateRequestScreen extends Component {
                 Tổng tiền thanh toán:
               </MuliText>
               <MuliText style={styles.price}>
-                {formater(this.state.price)} VND
+                {formater(this.state.price)} Đồng
               </MuliText>
             </View>
           </View>
