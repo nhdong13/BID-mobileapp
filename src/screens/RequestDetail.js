@@ -484,6 +484,11 @@ export class RequestDetail extends Component {
                   </MuliText>
                 )}
                 {this.state.status == 'DONE_UNCONFIMRED' && (
+                  <MuliText style={{ fontWeight: '100', color: colors.done }}>
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'SITTER_NOT_CHECKIN' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
@@ -491,9 +496,7 @@ export class RequestDetail extends Component {
                   </MuliText>
                 )}
                 {this.state.status == 'DONE_BY_NEWSTART' && (
-                  <MuliText
-                    style={{ fontWeight: '100', color: colors.canceled }}
-                  >
+                  <MuliText style={{ fontWeight: '100', color: colors.done }}>
                     {this.state.status}
                   </MuliText>
                 )}

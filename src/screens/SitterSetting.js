@@ -136,7 +136,7 @@ export default class SitterSetting extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.detailInformationContainer}
-              onPress={() => this.props.navigation.navigate('GetSitting')}
+              onPress={() => this.props.navigation.navigate('SittingHistory')}
             >
               <View style={styles.informationText}>
                 <Ionicons

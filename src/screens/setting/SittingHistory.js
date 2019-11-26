@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   RefreshControl,
+  Dimensions,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -14,7 +15,9 @@ import ItemHistory from 'screens/setting/ItemHistory';
 import Loader from 'utils/Loader';
 import { getRequests } from 'api/sittingRequest.api';
 
-export default class SittingHistory extends Component {
+const { height } = Dimensions.get('window');
+
+export class SittingHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +40,22 @@ export default class SittingHistory extends Component {
 
     const { userId } = this.state;
     await getRequests(userId).then((res) => {
-      this.setState({ requests: res });
+      console.log('PHUC: SittingHistory -> getSittingRequest -> res', res);
+      // hien tat cac cac request ngoai tru request voi status pending, ongoing, confirmed
+
+      const requests = res.filter(
+        (request) =>
+          request.status != 'PENDING' &&
+          request.status != 'ONGOING' &&
+          request.status != 'CONFIRMED',
+      );
+
+      console.log(
+        'PHUC: SittingHistory -> getSittingRequest -> requests',
+        requests,
+      );
+
+      this.setState({ requests: requests });
     });
   };
 
@@ -52,7 +70,12 @@ export default class SittingHistory extends Component {
     const { requests, refreshing, loading } = this.state;
     const { noRequest, noRequestText, noRequestImage } = styles;
     return (
-      <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 1,
+          // backgroundColor: colors.gray,
+        }}
+      >
         <Loader loading={loading} />
         <FlatList
           refreshControl={
@@ -62,8 +85,9 @@ export default class SittingHistory extends Component {
             />
           }
           data={requests}
-          renderItem={({ item }) => <ItemHistory invitation={item} />}
+          renderItem={({ item }) => <ItemHistory request={item} />}
           keyExtractor={(item) => item.id.toString()}
+          style={{ backgroundColor: colors.homeColor }}
           ListEmptyComponent={
             <View style={noRequest}>
               <MuliText style={noRequestText}>
@@ -80,6 +104,8 @@ export default class SittingHistory extends Component {
     );
   }
 }
+
+export default SittingHistory;
 
 SittingHistory.navigationOptions = {
   title: 'Yêu cầu giữ trẻ',
@@ -102,9 +128,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
-    marginTop: 20,
+    // marginTop: 20,
     paddingHorizontal: 20,
     paddingTop: 30,
+    height: height,
   },
   noRequestText: {
     marginVertical: 10,

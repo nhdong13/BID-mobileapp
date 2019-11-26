@@ -115,7 +115,7 @@ export default class ParentSetting extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.detailInformationContainer}
-              onPress={() => this.props.navigation.navigate('Payment')}
+              onPress={() => this.props.navigation.navigate('SittingHistory')}
             >
               <View style={styles.informationText}>
                 <Ionicons
