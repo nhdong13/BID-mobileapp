@@ -148,7 +148,7 @@ class SitterHomeScreen extends Component {
         });
       })
       .catch((error) => {
-        this.setState({ loading: true });
+        this.setState({ loading: false });
         console.log(
           'HomeScreen - getDataAccordingToRole - Invitations ' + error,
         );

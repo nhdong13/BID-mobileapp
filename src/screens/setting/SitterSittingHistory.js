@@ -10,53 +10,83 @@ import {
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
+import Api from 'api/api_helper';
 import colors from 'assets/Color';
-import ItemHistory from 'screens/setting/ItemHistory';
+import ItemSitterHistory from 'screens/setting/ItemSitterHistory';
 import Loader from 'utils/Loader';
-import { getRequests } from 'api/sittingRequest.api';
+import moment from 'moment';
 
 const { height } = Dimensions.get('window');
 
-export class SittingHistory extends Component {
+export class SitterSittingHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      requests: null,
       userId: 0,
       loading: false,
       refreshing: false,
     };
   }
 
-  componentWillMount() {
-    this.getSittingRequest();
+  async componentWillMount() {
+    await retrieveToken().then((res) => {
+      const { userId } = res;
+      this.setState({ userId });
+    });
+    await this.getInvitationData();
   }
 
-  getSittingRequest = async () => {
-    await retrieveToken().then(async (res) => {
-      const { userId } = res;
-      await this.setState({ userId });
-    });
-
+  getInvitationData = async () => {
+    // get data for the babysitter (invitations)
     const { userId } = this.state;
-    await getRequests(userId).then((res) => {
-      console.log('PHUC: SittingHistory -> getSittingRequest -> res', res);
-      // hien tat cac cac request ngoai tru request voi status pending, ongoing, confirmed
+    const requestBody = {
+      id: userId,
+    };
+    this.setState({ loading: true });
 
-      const requests = res.filter(
-        (request) =>
-          request.status != 'PENDING' &&
-          request.status != 'ONGOING' &&
-          request.status != 'CONFIRMED',
-      );
+    await Api.post('invitations/sitterInvitation', requestBody)
+      .then((invitations) => {
+        console.log(
+          'PHUC: SitterSittingHistory -> getInvitationData -> invitations',
+          invitations,
+        );
+        invitations.sort((a, b) => this.compareInviteByDate(a, b));
 
-      console.log(
-        'PHUC: SittingHistory -> getSittingRequest -> requests',
-        requests,
-      );
+        const sittingHistory = invitations.filter(
+          (invitation) =>
+            invitation.sittingRequest.status !== 'PENDING' &&
+            invitation.sittingRequest.status !== 'ONGOING' &&
+            invitation.sittingRequest.status !== 'CONFIRMED',
+        );
+        console.log(
+          'PHUC: SitterSittingHistory -> getInvitationData -> sittingHistory',
+          sittingHistory,
+        );
+        this.setState({
+          sittingHistory,
+          loading: false,
+        });
+      })
+      .catch((error) => {
+        console.log(
+          'PHUC: SitterSittingHistory -> getInvitationData -> error',
+          error,
+        );
+        this.setState({ loading: false });
+      });
+  };
 
-      this.setState({ requests: requests });
-    });
+  compareInviteByDate = (a, b) => {
+    const aTime = moment(
+      `${a.sittingRequest.sittingDate} ${a.sittingRequest.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+    const bTime = moment(
+      `${b.sittingRequest.sittingDate} ${b.sittingRequest.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+
+    return aTime > bTime;
   };
 
   _onRefresh = async () => {
@@ -67,7 +97,7 @@ export class SittingHistory extends Component {
   };
 
   render() {
-    const { requests, refreshing, loading } = this.state;
+    const { sittingHistory, refreshing, loading } = this.state;
     const { noRequest, noRequestText, noRequestImage } = styles;
     return (
       <View
@@ -84,8 +114,8 @@ export class SittingHistory extends Component {
               onRefresh={this._onRefresh}
             />
           }
-          data={requests}
-          renderItem={({ item }) => <ItemHistory request={item} />}
+          data={sittingHistory}
+          renderItem={({ item }) => <ItemSitterHistory invitation={item} />}
           keyExtractor={(item) => item.id.toString()}
           style={{ backgroundColor: colors.homeColor }}
           ListEmptyComponent={
@@ -105,10 +135,10 @@ export class SittingHistory extends Component {
   }
 }
 
-export default SittingHistory;
+export default SitterSittingHistory;
 
-SittingHistory.navigationOptions = {
-  title: 'Lịch sử yêu cầu',
+SitterSittingHistory.navigationOptions = {
+  title: 'Lịch sử giữ trẻ',
 };
 
 const styles = StyleSheet.create({
