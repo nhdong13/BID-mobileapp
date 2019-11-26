@@ -6,7 +6,7 @@ export const markDates = (requests) => {
     if (
       request.sittingDate !== undefined &&
       request.sittingDate !== null &&
-      (request.status != 'DONE' && request.status != 'CANCELED')
+      (request.status == 'PENDING' || request.status == 'CONFIRMED' || request.status == 'ONGOING')
     ) {
       const markedDateFormat = {
         date: request.sittingDate,

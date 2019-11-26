@@ -153,7 +153,7 @@ class ParentHomeScreen extends Component {
       const selectedDateRequest = requests.filter(
         (request) =>
           request.sittingDate == date &&
-          (request.status != 'DONE' && request.status != 'CANCELED'),
+          (request.status == 'PENDING' || request.status == 'CONFIRMED' || request.status == 'ONGOING'),
       );
       selectedDateRequest.sort((a, b) => this.compareInviteByDate(a, b));
       this.setState({ selectedDateRequest });

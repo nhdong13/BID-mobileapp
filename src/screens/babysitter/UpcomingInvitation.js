@@ -17,15 +17,13 @@ class UpcomingInvitation extends Component {
     const { invitation, navigation } = this.props;
     return (
       <View style={styles.container}>
-        {invitation.status === 'CONFIRMED' && (
+        {invitation.sittingRequest.status === 'CONFIRMED' && (
           <TouchableOpacity
             key={invitation.id}
             onPress={() =>
-              invitation.status == 'EXPIRED' || invitation.status == 'DENIED'
-                ? null
-                : navigation.navigate('InvitationDetail', {
-                    invitationId: invitation.id,
-                  })
+              navigation.navigate('InvitationDetail', {
+                invitationId: invitation.id,
+              })
             }
           >
             <View style={styles.requestItemSitter}>
@@ -71,7 +69,7 @@ class UpcomingInvitation extends Component {
                     color={colors.darkGreenTitle}
                     style={{ marginRight: 5 }}
                   />
-                  <MuliText>{invitation.distance} km</MuliText>
+                  <MuliText>{invitation.distance}</MuliText>
                 </View>
               </View>
             </View>

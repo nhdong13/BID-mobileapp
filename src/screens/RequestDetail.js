@@ -21,6 +21,8 @@ import {
   acceptBabysitter,
   updateRequestStatus,
   cancelRequest,
+  getRequests,
+  getRequestDetail,
 } from 'api/sittingRequest.api';
 import { getRequestTransaction } from 'api/transaction.api';
 import { withNavigationFocus } from 'react-navigation';
@@ -28,6 +30,7 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import { createCharge } from 'api/payment.api';
 import { formater } from 'utils/MoneyFormater';
 import AlertPro from 'react-native-alert-pro';
+import Loader from 'utils/Loader';
 
 moment.updateLocale('vi', localization);
 
@@ -59,6 +62,7 @@ export class RequestDetail extends Component {
       confirmAlert: 'Có',
       showConfirm: true,
       refreshing: false,
+      loading: false,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -67,34 +71,66 @@ export class RequestDetail extends Component {
     this.getAcceptedInvitations();
 
     const { sittingRequestsID: requestId } = this.state;
-    Api.get('sittingRequests/' + requestId.toString())
-      .then((resp) => {
-        this.setState({
-          date: resp.sittingDate,
-          startTime: resp.startTime,
-          endTime: resp.endTime,
-          address: resp.sittingAddress,
-          status: resp.status,
-          childrenNumber: resp.childrenNumber,
-          minAgeOfChildren: resp.minAgeOfChildren,
-          bsitter: resp.bsitter,
-          canCheckIn: resp.canCheckIn,
-          canCheckOut: resp.canCheckOut,
-          price: resp.totalPrice,
-          createUserId: resp.createdUser,
-        });
-      })
-      .catch((error) => {
-        console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
+    // rewrite api get request data
+    await getRequestDetail(requestId).then((res) => {
+      const {
+        sittingDate: date,
+        startTime,
+        endTime,
+        sittingAddress: address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        totalPrice: price,
+        createdUser: createUserId,
+      } = res;
+      this.setState({
+        date,
+        startTime,
+        endTime,
+        address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        price,
+        createUserId,
       });
+    });
+    // dong's code
+    // Api.get('sittingRequests/' + requestId.toString())
+    //   .then((resp) => {
+    //     this.setState({
+    //       date: resp.sittingDate,
+    //       startTime: resp.startTime,
+    //       endTime: resp.endTime,
+    //       address: resp.sittingAddress,
+    //       status: resp.status,
+    //       childrenNumber: resp.childrenNumber,
+    //       minAgeOfChildren: resp.minAgeOfChildren,
+    //       bsitter: resp.bsitter,
+    //       canCheckIn: resp.canCheckIn,
+    //       canCheckOut: resp.canCheckOut,
+    //       price: resp.totalPrice,
+    //       createUserId: resp.createdUser,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
+    //   });
 
-    const trans = await getRequestTransaction(requestId).then();
+    const transaction = await getRequestTransaction(requestId).then();
     console.log(
       'PHUC: RequestDetail -> componentDidMount -> requestId',
       requestId,
     );
-    if (trans) {
-      const { chargeId, amount } = trans;
+    if (transaction) {
+      const { chargeId, amount } = transaction;
       if (chargeId && amount) {
         this.setState({ chargeId, amount });
       }
@@ -147,12 +183,17 @@ export class RequestDetail extends Component {
     console.log('PHUC: RequestDetail -> confirmCancel -> status', status);
 
     if (requestId != 0 && chargeId != 0 && amount != 0) {
+      this.setState({ loading: true });
       await cancelRequest(requestId, status, chargeId, amount).then((res) => {
         if (res.data) {
+          this.setState({ loading: false });
+
           console.log('PHUC: RequestDetail -> confirmCancel -> res', res.data);
           this.AlertPro.close();
           this.props.navigation.navigate('Home', { loading: false });
         } else if (res.message.includes('Error')) {
+          this.setState({ loading: false });
+
           this.refs.toast.show(
             'Đã có lỗi xảy ra, vui lòng thử lại sau một thời gian',
             DURATION.LENGTH_LONG,
@@ -160,9 +201,13 @@ export class RequestDetail extends Component {
         }
       });
     } else {
+      this.setState({ loading: true });
+
       await cancelRequest(requestId, 'PENDING', chargeId, amount).then(
         (res) => {
           if (res.data) {
+            this.setState({ loading: false });
+
             console.log(
               'PHUC: RequestDetail -> confirmCancel -> res',
               res.data,
@@ -170,6 +215,8 @@ export class RequestDetail extends Component {
             this.AlertPro.close();
             this.props.navigation.navigate('Home', { loading: false });
           } else if (res.message.includes('Error')) {
+            this.setState({ loading: false });
+
             this.refs.toast.show(
               'Đã có lỗi xảy ra, vui lòng thử lại sau một thời gian',
               DURATION.LENGTH_LONG,
@@ -214,6 +261,41 @@ export class RequestDetail extends Component {
 
     this.setState({
       invitations: data,
+    });
+  };
+
+  getRequestDetail = async () => {
+    const { sittingRequestsID: requestId } = this.state;
+    // rewrite api get request data
+    await getRequestDetail(requestId).then((res) => {
+      const {
+        sittingDate: date,
+        startTime,
+        endTime,
+        sittingAddress: address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        totalPrice: price,
+        createdUser: createUserId,
+      } = res;
+      this.setState({
+        date,
+        startTime,
+        endTime,
+        address,
+        status,
+        childrenNumber,
+        minAgeOfChildren,
+        bsitter,
+        canCheckIn,
+        canCheckOut,
+        price,
+        createUserId,
+      });
     });
   };
 
@@ -278,9 +360,11 @@ export class RequestDetail extends Component {
     );
   };
 
-  _onRefresh = () => {
-    // this.setState({ loading: true });
-    this.getAcceptedInvitations();
+  _onRefresh = async () => {
+    this.setState({ loading: true });
+    await this.getAcceptedInvitations();
+    await this.getRequestDetail();
+    this.setState({ loading: false });
   };
 
   callDetail() {
@@ -299,6 +383,7 @@ export class RequestDetail extends Component {
       confirmAlert,
       showConfirm,
       refreshing,
+      loading,
     } = this.state;
     return (
       <ScrollView
@@ -306,6 +391,7 @@ export class RequestDetail extends Component {
           <RefreshControl refreshing={refreshing} onRefresh={this._onRefresh} />
         }
       >
+        <Loader loading={loading} />
         <Toast ref="toast" position="top" />
         <AlertPro
           ref={(ref) => {
@@ -398,6 +484,11 @@ export class RequestDetail extends Component {
                   </MuliText>
                 )}
                 {this.state.status == 'DONE_UNCONFIMRED' && (
+                  <MuliText style={{ fontWeight: '100', color: colors.done }}>
+                    {this.state.status}
+                  </MuliText>
+                )}
+                {this.state.status == 'SITTER_NOT_CHECKIN' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
@@ -405,9 +496,7 @@ export class RequestDetail extends Component {
                   </MuliText>
                 )}
                 {this.state.status == 'DONE_BY_NEWSTART' && (
-                  <MuliText
-                    style={{ fontWeight: '100', color: colors.canceled }}
-                  >
+                  <MuliText style={{ fontWeight: '100', color: colors.done }}>
                     {this.state.status}
                   </MuliText>
                 )}

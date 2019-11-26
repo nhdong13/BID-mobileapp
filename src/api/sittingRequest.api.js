@@ -4,6 +4,29 @@ import { retrieveToken } from 'utils/handleToken';
 import qs from 'qs';
 import apiUrl, { sittingRequestAPI } from 'utils/Connection';
 
+export async function getRequestDetail(requestId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+  const options = {
+    method: 'GET',
+    url: `${sittingRequestAPI.getRequestDetail}${requestId}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => {
+    if (requestId != 0) console.log('PHUC: getRequests -> error', error);
+  });
+
+  if (response.data) {
+    return response.data;
+  }
+  return { message: 'ERROR IN getRequestDetail - sittingRequestAPI' };
+}
+
 export async function recommend(requestId, request) {
   const { token } = await retrieveToken();
   let trimpedToken = '';

@@ -10,6 +10,7 @@ import {
   RefreshControl,
   FlatList,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -29,6 +30,7 @@ import moment from 'moment';
 import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
 import UpcomingInvitation from 'screens/babysitter/UpcomingInvitation';
+import { getRequests } from 'api/sittingRequest.api';
 
 const { height } = Dimensions.get('window');
 
@@ -111,14 +113,13 @@ class SitterHomeScreen extends Component {
 
   getInvitationData = async () => {
     // get data for the babysitter (invitations)
+    const { userId } = this.state;
     const requestBody = {
-      id: this.state.userId,
+      id: userId,
     };
-    registerPushNotifications(requestBody.id).then((response) => {
-      // if (response) {
-      //   console.log('PHUC: App -> response', response.data);
-      // }
-    });
+    this.setState({ loading: true });
+    await registerPushNotifications(userId);
+
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
         invitations.sort((a, b) => this.compareInviteByDate(a, b));
@@ -130,26 +131,28 @@ class SitterHomeScreen extends Component {
         const invitationsWaiting = invitations.filter(
           (invitation) => invitation.status == 'ACCEPTED',
         );
-        // console.log(
-        //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsWaiting',
-        //   invitationsWaiting,
-        // );
 
         const invitationsUpcoming = invitations.filter(
-          (invitation) => invitation.status == 'CONFIRMED',
+          (invitation) => invitation.sittingRequest.status == 'CONFIRMED',
+        );
+        console.log(
+          'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
+          invitationsUpcoming,
         );
 
         this.setState({
           invitationsPending,
           invitationsUpcoming,
           invitationsWaiting,
+          loading: false,
         });
       })
-      .catch((error) =>
+      .catch((error) => {
+        this.setState({ loading: false });
         console.log(
           'HomeScreen - getDataAccordingToRole - Invitations ' + error,
-        ),
-      );
+        );
+      });
   };
 
   confirmModalPopup = () => {
@@ -218,6 +221,19 @@ class SitterHomeScreen extends Component {
     return aTime > bTime;
   };
 
+  compareResquestByDate = (a, b) => {
+    const aTime = moment(
+      `${a.sittingDate} ${a.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+    const bTime = moment(
+      `${b.sittingDate} ${b.startTime}`,
+      'DD-MM-YYYY HH:mm:ss',
+    ).format('DD-MM-YYYY HH:mm:ss');
+
+    return aTime > bTime;
+  };
+
   render() {
     const {
       invitationsPending,
@@ -226,6 +242,7 @@ class SitterHomeScreen extends Component {
       refreshing,
       title,
       notificationMessage,
+      loading,
     } = this.state;
     const {
       containerBsitter,
@@ -236,6 +253,7 @@ class SitterHomeScreen extends Component {
       noRequestImage,
       horizontalUpcoming,
     } = styles;
+
     const InvitationPending = () => (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -289,9 +307,10 @@ class SitterHomeScreen extends Component {
         />
       </View>
     );
+
     return (
       <View style={containerBsitter}>
-        <Loader loading={this.state.loading} />
+        <Loader loading={loading} />
         <AlertPro
           ref={(ref) => {
             this.AlertPro = ref;
