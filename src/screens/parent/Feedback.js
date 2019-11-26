@@ -6,6 +6,8 @@ import {
   View,
   Image,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
   // TouchableOpacity,
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
@@ -72,61 +74,67 @@ export default class Feedback extends Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <View style={styles.colorTop} />
-        <View style={{ alignItems: 'center' }}>
-          <Image
-            source={require('assets/images/Phuc.png')}
-            style={styles.pictureReport}
-          />
-          {this.state.bsitter && (
-            <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
-              {this.state.bsitter.nickname}
-            </MuliText>
-          )}
-          <StarRating
-            starStyle={{
-              marginLeft: 10,
-            }}
-            fullStarColor={colors.done}
-            starSize={30}
-            disabled={false}
-            maxStars={5}
-            rating={this.state.starCount}
-            selectedStar={(rating) => this.onStarRatingPress(rating)}
-          />
-          <View style={styles.reportContainer}>
-            <TextInput
-              multiline
-              maxLength={200}
-              underlineColorAndroid="white"
-              style={{
-                textAlignVertical: 'top',
-                marginHorizontal: 15,
-                width: 300,
-                height: 200,
-              }}
+        <KeyboardAvoidingView
+          style={{ flex: 1, justifyContent: 'center' }}
+          keyboardVerticalOffset={60}
+          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        >
+          <View style={styles.colorTop} />
+          <View style={{ alignItems: 'center' }}>
+            <Image
+              source={require('assets/images/Phuc.png')}
+              style={styles.pictureReport}
             />
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Home')}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
+            {this.state.bsitter && (
+              <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
+                {this.state.bsitter.nickname}
+              </MuliText>
+            )}
+            <StarRating
+              starStyle={{
+                marginLeft: 10,
               }}
-            >
-              <MuliText
+              fullStarColor={colors.done}
+              starSize={30}
+              disabled={false}
+              maxStars={5}
+              rating={this.state.starCount}
+              selectedStar={(rating) => this.onStarRatingPress(rating)}
+            />
+            <View style={styles.reportContainer}>
+              <TextInput
+                multiline
+                maxLength={200}
+                underlineColorAndroid="white"
                 style={{
-                  color: 'white',
+                  textAlignVertical: 'top',
+                  marginHorizontal: 15,
+                  width: 300,
+                  height: 200,
+                }}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Home')}
+                style={{
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                Gửi
-              </MuliText>
-            </TouchableOpacity>
+                <MuliText
+                  style={{
+                    color: 'white',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Gửi
+                </MuliText>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }

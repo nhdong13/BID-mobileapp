@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { withNavigationFocus } from 'react-navigation';
-import { updateRequestStatus, startSitting, doneSitting } from 'api/sittingRequest.api';
+import { startSitting, doneSitting } from 'api/sittingRequest.api';
 
 import io from 'socket.io-client';
 
@@ -112,26 +112,31 @@ export class QRcodeScannerScreen extends React.Component {
               this.onSuccess();
               const { dataInvitation } = this.state;
               if (dataInvitation != null) {
-                console.log("Duong: QRcodeScannerScreen -> handleBarCodeScanned -> dataInvitation.status", dataInvitation.status)
+                console.log(
+                  'Duong: QRcodeScannerScreen -> handleBarCodeScanned -> dataInvitation.status',
+                  dataInvitation.status,
+                );
                 if (dataInvitation.status == 'ONGOING') {
                   startSitting(dataInvitation.id, this.state.userId)
-                  .then(() => {
-                    // this.props.navigation.navigate('Home', { loading: false });
-                  })
-                  .catch((error) => console.log(error));
+                    .then(() => {
+                      // this.props.navigation.navigate('Home', { loading: false });
+                    })
+                    .catch((error) => console.log(error));
                 }
                 if (dataInvitation.status == 'DONE') {
                   doneSitting(dataInvitation.id, this.state.userId)
-                  .then(() => {
-                    // this.props.navigation.navigate('Home', { loading: false });
-                  })
-                  .catch((error) => console.log(error));
+                    .then(() => {
+                      // this.props.navigation.navigate('Home', { loading: false });
+                    })
+                    .catch((error) => console.log(error));
                 }
               }
             }
-            if (this.state.isDone) {
+
+            const { isDone, dataInvitation } = this.state;
+            if (isDone) {
               this.props.navigation.navigate('Feedback', {
-                requestId: this.props.navigation.getParam('sittingId'),
+                requestId: dataInvitation.id,
               });
             } else {
               this.props.navigation.navigate('Home');
