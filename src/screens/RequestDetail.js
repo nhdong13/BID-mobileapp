@@ -103,26 +103,26 @@ export class RequestDetail extends Component {
       });
     });
     // dong's code
-    Api.get('sittingRequests/' + requestId.toString())
-      .then((resp) => {
-        this.setState({
-          date: resp.sittingDate,
-          startTime: resp.startTime,
-          endTime: resp.endTime,
-          address: resp.sittingAddress,
-          status: resp.status,
-          childrenNumber: resp.childrenNumber,
-          minAgeOfChildren: resp.minAgeOfChildren,
-          bsitter: resp.bsitter,
-          canCheckIn: resp.canCheckIn,
-          canCheckOut: resp.canCheckOut,
-          price: resp.totalPrice,
-          createUserId: resp.createdUser,
-        });
-      })
-      .catch((error) => {
-        console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
-      });
+    // Api.get('sittingRequests/' + requestId.toString())
+    //   .then((resp) => {
+    //     this.setState({
+    //       date: resp.sittingDate,
+    //       startTime: resp.startTime,
+    //       endTime: resp.endTime,
+    //       address: resp.sittingAddress,
+    //       status: resp.status,
+    //       childrenNumber: resp.childrenNumber,
+    //       minAgeOfChildren: resp.minAgeOfChildren,
+    //       bsitter: resp.bsitter,
+    //       canCheckIn: resp.canCheckIn,
+    //       canCheckOut: resp.canCheckOut,
+    //       price: resp.totalPrice,
+    //       createUserId: resp.createdUser,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
+    //   });
 
     const transaction = await getRequestTransaction(requestId).then();
     console.log(
