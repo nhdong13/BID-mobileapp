@@ -113,6 +113,28 @@ export default class ParentSetting extends Component {
                 />
               </View>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.detailInformationContainer}
+              onPress={() => this.props.navigation.navigate('Payment')}
+            >
+              <View style={styles.informationText}>
+                <Ionicons
+                  name="ios-timer"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color={colors.gray}
+                />
+                <MuliText style={styles.contentInformation}>Lịch sử</MuliText>
+              </View>
+              <View>
+                <Ionicons
+                  name="ios-arrow-forward"
+                  size={22}
+                  style={{ marginBottom: -5 }}
+                  color={colors.gray}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.informationContainer}>

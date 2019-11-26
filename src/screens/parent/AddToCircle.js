@@ -91,7 +91,7 @@ export default class AddToCircle extends Component {
                 name="ios-search"
                 size={25}
                 style={{ marginLeft: 5 }}
-                color="#315f61"
+                color={colors.darkGreenTitle}
               />
             </TouchableOpacity>
             {/* )} */}

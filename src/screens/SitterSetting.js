@@ -87,7 +87,7 @@ export default class SitterSetting extends Component {
                   name="ios-arrow-forward"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
               </View>
             </TouchableOpacity>
@@ -97,7 +97,7 @@ export default class SitterSetting extends Component {
                   name="ios-home"
                   size={22}
                   style={{ marginBottom: -5 }}
-                  color="#bdc3c7"
+                  color={colors.gray}
                 />
                 <MuliText style={styles.contentInformation}>
                   Lịch trông trẻ

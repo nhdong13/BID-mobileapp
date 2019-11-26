@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   bsitterName: {
     fontSize: 13,
     fontWeight: '400',
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginRight: 5,
   },
   sitterImage: {
