@@ -27,6 +27,7 @@ export default class Feedback extends Component {
       isModalVisible: false,
       starCount: 5,
       isRated: false,
+      description: '',
     };
   }
 
@@ -53,14 +54,23 @@ export default class Feedback extends Component {
   }
 
   onStarRatingPress(rating) {
+    this.setState({ starCount: rating });
+  }
+
+  submitRating = () => {
     const body = {
-      rating: rating,
+      rating: this.state.starCount,
       requestId: this.state.sittingRequestsID,
+      description: this.state.description,
     };
     if (!this.state.isRated) {
       Api.post('feedback/', body);
-      this.setState({ starCount: rating, isRated: true });
+      this.setState({ isRated: true });
     }
+  }
+
+  handleInput = (e) => {
+    this.setState({ description: e.target.value });
   }
 
   callDetail() {
@@ -106,6 +116,7 @@ export default class Feedback extends Component {
                 multiline
                 maxLength={200}
                 underlineColorAndroid="white"
+                onChange={(e) => this.handleInput(e)}
                 style={{
                   textAlignVertical: 'top',
                   marginHorizontal: 15,
@@ -116,7 +127,10 @@ export default class Feedback extends Component {
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Home')}
+                onPress={() => {
+                  this.submitRating();
+                  this.props.navigation.navigate('Home');
+              }}
                 style={{
                   alignItems: 'center',
                   justifyContent: 'center',
