@@ -11,6 +11,7 @@ import {
   View,
   KeyboardAvoidingView,
   ToastAndroid,
+  Clipboard,
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
@@ -25,7 +26,7 @@ class LoginScreen extends Component {
     this.state = {
       phoneNumber: '02',
       password: '12341234',
-      OTP: '',
+      OTP: null,
       isModalVisible: false,
       roleId: null,
       userId: null,
@@ -35,19 +36,22 @@ class LoginScreen extends Component {
       message: '',
       title: '',
       textCancel: 'Close',
+      secret: null,
     };
   }
 
   onLogin = async () => {
-    const { phoneNumber, password } = this.state;
-    login(phoneNumber, password)
+    const { phoneNumber, password, OTP, secret } = this.state;
+    await login(phoneNumber, password, OTP, secret)
       .then((res) => {
         if (res && res != 400) {
+          const { roleId, userId, secret } = res.data;
+          console.log('PHUC: LoginScreen -> onLogin -> secret', secret);
           if (res.data.roleId && res.data.roleId == 3) {
-            this.setState({ roleId: res.data.roleId, userId: res.data.userId });
+            this.setState({ roleId, userId, secret });
             this.setState({ isModalVisible: true });
           } else {
-            this.setState({ roleId: res.data.roleId, userId: res.data.userId });
+            this.setState({ roleId, userId });
             this.props.navigation.navigate('AuthLoading', {
               roleId: this.state.roleId,
               userId: this.state.userId,
@@ -70,12 +74,45 @@ class LoginScreen extends Component {
 
   onSubmitOTP = async () => {
     // eslint-disable-next-line no-unused-expressions
-    this.state.OTP.length == 7
-      ? this.props.navigation.navigate('AuthLoading', {
-          roleId: this.state.roleId,
-          userId: this.state.userId,
-        })
-      : console.log('wrong OTP code, please try again');
+    const { phoneNumber, password, OTP, secret } = this.state;
+    console.log('PHUC: LoginScreen -> onSubmitOTP -> secret', secret);
+
+    await login(phoneNumber, password, OTP, secret)
+      .then((res) => {
+        if (res && res != 400) {
+          const { roleId, userId, secret } = res.data;
+          if (res.data.roleId && res.data.roleId == 3) {
+            this.setState({ roleId, userId, secret });
+            this.setState({ isModalVisible: true });
+          }
+        } else if (Platform.OS != 'ios') {
+          ToastAndroid.showWithGravity(
+            'Wrong Username or Password',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            80,
+          );
+        }
+      })
+      .catch((error) => {
+        console.log('Error on LoginScreen ' + error);
+      });
+  };
+
+  onCopy = async () => {
+    const { secret } = this.state;
+    Clipboard.setString(secret.base32);
+    const test = await Clipboard.getString();
+    console.log('PHUC: LoginScreen -> onCopy -> test', test);
+  };
+
+  onFinish = async () => {
+    const { roleId, userId } = this.state;
+    this.props.navigation.navigate('AuthLoading', {
+      roleId: roleId,
+      userId: userId,
+    });
   };
 
   toggleModal = () => {
@@ -138,6 +175,89 @@ class LoginScreen extends Component {
   };
 
   render() {
+    const { secret } = this.state;
+
+    const displaySecret = () => (
+      <View
+        style={{
+          flex: 0.2,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+        }}
+      >
+        <MuliText style={{ color: colors.loginText, fontSize: 16 }}>
+          Xin nhập Authentication Code
+        </MuliText>
+        <View style={styles.textContainer}>
+          <MuliText>{secret}</MuliText>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.submitOTPButton}
+            onPress={this.onSubmitOTP}
+          >
+            <MuliText style={{ color: 'white', fontSize: 16 }}>
+              Sao chép
+            </MuliText>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.submitOTPButton}
+            onPress={this.onSubmitOTP}
+          >
+            <MuliText style={{ color: 'white', fontSize: 16 }}>
+              Hoàn tất
+            </MuliText>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+
+    const inputOTP = () => (
+      <View
+        style={{
+          flex: 0.2,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+        }}
+      >
+        <MuliText style={{ color: colors.loginText, fontSize: 16 }}>
+          Vui lòng tạo otp bằng secret bên dưới
+        </MuliText>
+        <View style={styles.textContainer}>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => this.setState({ OTP: text })}
+            placeholder="Authentication code"
+            disableFullscreenUI={false}
+            value={this.state.OTP}
+            keyboardType="number-pad"
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.submitOTPButton}
+            onPress={this.onSubmitOTP}
+          >
+            <MuliText style={{ color: 'white', fontSize: 16 }}>Gửi</MuliText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.checkDeviceForHardware()}
+            style={{ alignItems: 'center' }}
+          >
+            <FontAwesome5
+              name="fingerprint"
+              size={30}
+              color={colors.darkGreenTitle}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+
     return (
       <ScrollView>
         <KeyboardAvoidingView
@@ -222,6 +342,44 @@ class LoginScreen extends Component {
               backdropColor="white"
               onBackButtonPress={this.toggleModal}
             >
+              {/* {this.state.secret ? ( */}
+              {/* <View
+                  style={{
+                    flex: 0.2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'white',
+                  }}
+                >
+                  <MuliText style={{ color: colors.loginText, fontSize: 16 }}>
+                    Vui lòng tạo otp bằng secret bên dưới
+                  </MuliText>
+                  <View style={styles.textContainer}>
+                    <MuliText>{secret.base32}</MuliText>
+                  </View>
+
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.submitOTPButton}
+                      onPress={() => this.onCopy()}
+                    >
+                      <MuliText style={{ color: 'white', fontSize: 16 }}>
+                        Sao chép
+                      </MuliText>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={styles.submitOTPButton}
+                      onPress={() => this.onFinish()}
+                    >
+                      <MuliText style={{ color: 'white', fontSize: 16 }}>
+                        Hoàn tất
+                      </MuliText>
+                    </TouchableOpacity>
+                  </View>
+                </View> */}
+              {/* ) : ( */}
               <View
                 style={{
                   flex: 0.2,
@@ -264,6 +422,7 @@ class LoginScreen extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
+              {/* )} */}
             </Modal>
           ) : (
             <View />
