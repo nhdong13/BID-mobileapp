@@ -11,14 +11,14 @@ export default class AuthLoadingScreen extends React.Component {
   _bootstrapAsync = async () => {
     await retrieveToken().then((res) => {
       const userToken = res;
-      // console.log(
-      // 'PHUC: AuthLoadingScreen -> _bootstrapAsync -> userToken.roleId',
-      // userToken.roleId,
-      // );
+      console.log(
+        'PHUC: AuthLoadingScreen -> _bootstrapAsync -> userToken',
+        userToken,
+      );
 
-      if (userToken.roleId == 2) {
+      if (userToken.roleId == 2 && userToken.token) {
         this.props.navigation.navigate('ParentMain');
-      } else if (userToken.roleId == 3) {
+      } else if (userToken.roleId == 3 && userToken.token) {
         this.props.navigation.navigate('BsitterMain');
       } else {
         this.props.navigation.navigate('Auth');

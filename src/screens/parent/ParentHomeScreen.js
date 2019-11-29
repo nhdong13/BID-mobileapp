@@ -119,7 +119,7 @@ class ParentHomeScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      registerPushNotifications(userId);
+      // registerPushNotifications(userId);
     });
     if (this.state.roleId != 0) {
       await getRequests(this.state.userId)

@@ -100,11 +100,11 @@ class SitterHomeScreen extends Component {
           id: userId,
         };
         if (userId != 0) {
-          registerPushNotifications(requestBody.id).then((response) => {
-            if (response) {
-              console.log('PHUC: App -> response', response.data);
-            }
-          });
+        //   registerPushNotifications(requestBody.id).then((response) => {
+        //     if (response) {
+        //       console.log('PHUC: App -> response', response.data);
+        //     }
+        //   });
         }
         await this.getInvitationData();
       }
@@ -118,7 +118,7 @@ class SitterHomeScreen extends Component {
       id: userId,
     };
     this.setState({ loading: true });
-    await registerPushNotifications(userId);
+    // await registerPushNotifications(userId);
 
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
