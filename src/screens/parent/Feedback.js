@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import colors from 'assets/Color';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import StarRating from 'react-native-star-rating';
 import Api from 'api/api_helper';
 
@@ -27,23 +27,24 @@ export default class Feedback extends Component {
       isModalVisible: false,
       starCount: 5,
       isRated: false,
+      description: '',
     };
   }
 
-  componentDidMount() {
-    Api.get('sittingRequests/' + this.state.sittingRequestsID.toString()).then(
-      (resp) => {
-        this.setState({
-          date: resp.sittingDate,
-          startTime: resp.startTime,
-          endTime: resp.endTime,
-          address: resp.sittingAddress,
-          bsitter: resp.bsitter,
-          price: resp.totalPrice,
-        });
-      },
-    );
-    Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
+  async componentDidMount() {
+    await Api.get(
+      'sittingRequests/' + this.state.sittingRequestsID.toString(),
+    ).then((resp) => {
+      this.setState({
+        date: resp.sittingDate,
+        startTime: resp.startTime,
+        endTime: resp.endTime,
+        address: resp.sittingAddress,
+        bsitter: resp.bsitter,
+        price: resp.totalPrice,
+      });
+    });
+    await Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
       (res) => {
         if (res != null) {
           this.setState({ starCount: res[0].rating, isRated: true });
@@ -53,15 +54,26 @@ export default class Feedback extends Component {
   }
 
   onStarRatingPress(rating) {
-    const body = {
-      rating: rating,
-      requestId: this.state.sittingRequestsID,
-    };
     if (!this.state.isRated) {
-      Api.post('feedback/', body);
-      this.setState({ starCount: rating, isRated: true });
+      this.setState({ starCount: rating });
     }
   }
+
+  submitRating = () => {
+    const { starCount, sittingRequestsID, description } = this.state;
+    const body = {
+      rating: starCount,
+      requestId: sittingRequestsID,
+      description: description,
+    };
+    console.log('PHUC: Feedback -> submitRating -> body', body);
+
+    if (!this.state.isRated) {
+      Api.post('feedback/', body);
+      this.setState({ isRated: true });
+      this.props.navigation.navigate('Home');
+    }
+  };
 
   callDetail() {
     if (this.state.isModalVisible) {
@@ -72,68 +84,112 @@ export default class Feedback extends Component {
   }
 
   render() {
+    const { isRated } = this.state;
+
     return (
-      <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={{ flex: 1 }}>
         <KeyboardAvoidingView
-          style={{ flex: 1, justifyContent: 'center' }}
+          style={{ flex: 1, alignItems: 'center' }}
           keyboardVerticalOffset={60}
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         >
-          <View style={styles.colorTop} />
-          <View style={{ alignItems: 'center' }}>
-            <Image
-              source={require('assets/images/Phuc.png')}
-              style={styles.pictureReport}
-            />
-            {this.state.bsitter && (
-              <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
-                {this.state.bsitter.nickname}
-              </MuliText>
-            )}
-            <StarRating
-              starStyle={{
-                marginLeft: 10,
-              }}
-              fullStarColor={colors.done}
-              starSize={30}
-              disabled={false}
-              maxStars={5}
-              rating={this.state.starCount}
-              selectedStar={(rating) => this.onStarRatingPress(rating)}
-            />
-            <View style={styles.reportContainer}>
-              <TextInput
-                multiline
-                maxLength={200}
-                underlineColorAndroid="white"
-                style={{
-                  textAlignVertical: 'top',
-                  marginHorizontal: 15,
-                  width: 300,
-                  height: 200,
-                }}
+          <ScrollView>
+            <View style={styles.colorTop} />
+            <View style={{ alignItems: 'center' }}>
+              <Image
+                source={require('assets/images/Phuc.png')}
+                style={styles.pictureReport}
               />
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Home')}
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <MuliText
-                  style={{
-                    color: 'white',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  Gửi
+              {this.state.bsitter && (
+                <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>
+                  {this.state.bsitter.nickname}
                 </MuliText>
-              </TouchableOpacity>
+              )}
+              <StarRating
+                starStyle={{
+                  marginLeft: 10,
+                }}
+                fullStarColor={colors.done}
+                starSize={30}
+                disabled={false}
+                maxStars={5}
+                rating={this.state.starCount}
+                selectedStar={(rating) => this.onStarRatingPress(rating)}
+              />
+              <View style={styles.reportContainer}>
+                <TextInput
+                  multiline
+                  maxLength={200}
+                  underlineColorAndroid="white"
+                  onChangeText={(text) => this.setState({ description: text })}
+                  style={{
+                    textAlignVertical: 'top',
+                    marginHorizontal: 15,
+                    width: 300,
+                    height: 200,
+                  }}
+                />
+              </View>
+              {isRated ? (
+                <View style={styles.ratedText}>
+                  <MuliText
+                    style={{
+                      color: colors.gray,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    Bạn đã đánh giá cho yêu cầu này
+                  </MuliText>
+                </View>
+              ) : (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.submitRating();
+                    }}
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <View style={styles.buttonContainer}>
+                      <MuliText
+                        style={{
+                          color: 'white',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        Gửi
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Home');
+                    }}
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <View style={styles.buttonContainer}>
+                      <MuliText
+                        style={{
+                          color: 'white',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        Để sau
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </View>
     );
@@ -154,6 +210,11 @@ const styles = StyleSheet.create({
     width: 100,
     backgroundColor: colors.darkGreenTitle,
     borderRadius: 6,
+  },
+  ratedText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
   },
   reportContainer: {
     marginTop: 10,
