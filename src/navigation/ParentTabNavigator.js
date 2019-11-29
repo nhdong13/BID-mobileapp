@@ -20,7 +20,6 @@ import SittingHistory from 'screens/setting/SittingHistory';
 // import MyNetwork from '../screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
 import CircleScreens from 'screens/parent/CircleScreens';
-import ReportScreen from 'screens/ReportScreen';
 import CreateCodeScreen from 'screens/parent/CreateCodeScreen';
 import AddToCircle from 'screens/parent/AddToCircle';
 
@@ -109,7 +108,6 @@ const SettingsStack = createStackNavigator(
   {
     Settings: ParentSetting,
     Profile: ProfileDetail,
-    ReportScreen: ReportScreen,
     Payment: PaymentStripe,
     SittingHistory: SittingHistory,
     Feedback: Feedback,
