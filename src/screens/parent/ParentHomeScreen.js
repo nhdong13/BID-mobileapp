@@ -153,11 +153,9 @@ class ParentHomeScreen extends Component {
       const selectedDateRequest = requests.filter(
         (request) =>
           request.sittingDate == date &&
-          (request.status != 'DONE' && request.status != 'CANCELED'),
+          (request.status == 'PENDING' || request.status == 'CONFIRMED' || request.status == 'ONGOING'),
       );
-      selectedDateRequest.sort((a, b) => {
-        return this.compareInviteByDate(a, b);
-      });
+      selectedDateRequest.sort((a, b) => this.compareInviteByDate(a, b));
       this.setState({ selectedDateRequest });
     }
   };
@@ -218,10 +216,10 @@ class ParentHomeScreen extends Component {
               shadowRadius: 10,
             },
             buttonCancel: {
-              backgroundColor: '#e74c3c',
+              backgroundColor: colors.canceled,
             },
             buttonConfirm: {
-              backgroundColor: '#4da6ff',
+              backgroundColor: colors.buttonConfirm,
             },
           }}
         />
@@ -250,7 +248,7 @@ class ParentHomeScreen extends Component {
           daySelectionAnimation={{
             type: 'background',
             duration: 200,
-            highlightColor: '#1edcb7',
+            highlightColor: colors.lightGreen,
           }}
           style={{
             flex: 0.2,
@@ -258,22 +256,22 @@ class ParentHomeScreen extends Component {
             paddingBottom: 10,
           }}
           calendarHeaderStyle={{
-            color: '#527395',
+            color: colors.calendarHeader,
             marginBottom: 20,
           }}
           calendarColor="white"
           dateNumberStyle={{
-            color: '#315f61',
+            color: colors.darkGreenTitle,
             fontFamily: 'muli',
             fontSize: 13,
           }}
-          dateNameStyle={{ color: '#95a5a6', fontFamily: 'muli' }}
+          dateNameStyle={{ color: colors.dateName, fontFamily: 'muli' }}
           highlightDateNumberStyle={{ color: 'white' }}
           highlightDateNameStyle={{ color: 'white' }}
-          disabledDateNameStyle={{ color: '#bdc3c7' }}
-          disabledDateNumberStyle={{ color: '#bdc3c7' }}
-          weekendDateNameStyle={{ color: '#e74c3c', fontFamily: 'muli' }}
-          weekendDateNumberStyle={{ color: '#bdc3c7', fontFamily: 'muli' }}
+          disabledDateNameStyle={{ color: colors.gray }}
+          disabledDateNumberStyle={{ color: colors.gray }}
+          weekendDateNameStyle={{ color: colors.canceled, fontFamily: 'muli' }}
+          weekendDateNumberStyle={{ color: colors.gray, fontFamily: 'muli' }}
           iconContainer={{ flex: 0.1 }}
           onDateSelected={(date) => {
             this.onSelectedDate(date.format('YYYY-MM-DD'));
@@ -345,12 +343,6 @@ ParentHomeScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  borderText: {
-    borderRadius: 1,
-    borderColor: colors.gray,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-  },
   textParentRequest: {
     marginVertical: 10,
     paddingHorizontal: 10,
@@ -359,31 +351,16 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     color: colors.gray,
   },
-  textBsitterRequest: {
-    color: colors.gray,
-  },
   container: {
     flex: 1,
-    backgroundColor: '#ecf0f1',
-  },
-  containerBsitter: {
-    flex: 1,
-    backgroundColor: '#dfe6e9',
+    backgroundColor: colors.homeColor,
   },
   textParent: {
     marginTop: 20,
     fontSize: 19,
-    color: '#315f61',
+    color: colors.darkGreenTitle,
     fontWeight: 'bold',
     lineHeight: 20,
-  },
-  textBsitter: {
-    marginTop: 20,
-    fontSize: 19,
-    color: '#315f61',
-    fontWeight: 'bold',
-    lineHeight: 20,
-    alignItems: 'flex-start',
   },
   noRequest: {
     flex: 1,
@@ -397,7 +374,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingTop: 10,
     fontSize: 18,
-    color: '#315f61',
+    color: colors.darkGreenTitle,
     fontWeight: 'bold',
   },
   noRequestImage: {
@@ -409,21 +386,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 25,
-    backgroundColor: '#fff',
-  },
-  scheduleContainerBsitter: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginTop: 25,
-    paddingLeft: 30,
-    flex: 0.25,
-    backgroundColor: '#fff',
-  },
-  date: {
-    marginTop: 5,
-    marginBottom: 10,
-    color: colors.darkGreenTitle,
-    fontWeight: '400',
-    fontSize: 15,
+    backgroundColor: colors.white,
   },
 });

@@ -102,7 +102,7 @@ export default class InvitationDetail extends Component {
                 name="ios-calendar"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformationDate}>
                 {moment(this.state.date).format('dddd Do MMMM')}
@@ -113,7 +113,7 @@ export default class InvitationDetail extends Component {
                 name="ios-cash"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {formater(this.state.price)} VND
@@ -124,7 +124,7 @@ export default class InvitationDetail extends Component {
                 name="ios-timer"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {moment.utc(this.state.startTime, 'HH:mm').format('HH:mm')} -
@@ -136,7 +136,7 @@ export default class InvitationDetail extends Component {
                 name="ios-home"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {this.state.address}
@@ -147,7 +147,7 @@ export default class InvitationDetail extends Component {
                 name="ios-megaphone"
                 size={17}
                 style={{ marginBottom: -5 }}
-                color="#bdc3c7"
+                color={colors.gray}
               />
               <MuliText style={styles.contentInformation}>
                 {this.state.invitationStatus == 'PENDING' && (
@@ -190,6 +190,20 @@ export default class InvitationDetail extends Component {
                     {this.state.invitationStatus}
                   </MuliText>
                 )}
+                {this.state.invitationStatus == 'SITTER_NOT_CHECKIN' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.invitationStatus}
+                  </MuliText>
+                )}
+                {this.state.invitationStatus == 'PARENT_CANCELED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.invitationStatus}
+                  </MuliText>
+                )}
               </MuliText>
             </View>
           </View>
@@ -212,7 +226,7 @@ export default class InvitationDetail extends Component {
                       name="ios-chatbubbles"
                       size={22}
                       style={{ marginBottom: -5, marginLeft: 10 }}
-                      color="#adffcb"
+                      color={colors.lightGreen}
                     />
                   </TouchableOpacity>
                 </View>
@@ -228,15 +242,15 @@ export default class InvitationDetail extends Component {
               >
                 <View style={{ flexDirection: 'row' }}>
                   <View style={styles.childrenInformationContainer}>
-                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                    <View style={styles.detailChildrenContainer}>
                       <Ionicons
                         name="ios-man"
                         size={22}
                         style={{ marginBottom: -5, marginLeft: 15 }}
-                        color="#adffcb"
+                        color={colors.lightGreen}
                       />
                       <View>
-                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>
+                        <MuliText style={styles.textChildrenInformation}>
                           {this.state.childrenNumber}
                         </MuliText>
                       </View>
@@ -246,15 +260,15 @@ export default class InvitationDetail extends Component {
                     </MuliText>
                   </View>
                   <View style={styles.childrenInformationContainer}>
-                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
+                    <View style={styles.detailChildrenContainer}>
                       <Ionicons
                         name="ios-happy"
                         size={22}
                         style={{ marginBottom: -5, marginLeft: 15 }}
-                        color="#adffcb"
+                        color={colors.lightGreen}
                       />
                       <View>
-                        <MuliText style={{ marginLeft: 15, fontSize: 15 }}>
+                        <MuliText style={styles.textChildrenInformation}>
                           {this.state.minAgeOfChildren}
                         </MuliText>
                       </View>
@@ -288,7 +302,7 @@ export default class InvitationDetail extends Component {
                       name="ios-cash"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -305,7 +319,7 @@ export default class InvitationDetail extends Component {
                       name="ios-car"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -322,7 +336,7 @@ export default class InvitationDetail extends Component {
                       name="ios-text"
                       size={22}
                       style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color="#bdc3c7"
+                      color={colors.gray}
                     />
                     <View style={styles.textOption}>
                       <MuliText style={styles.optionInformation}>
@@ -345,7 +359,7 @@ export default class InvitationDetail extends Component {
                   style={styles.submitButton}
                   onPress={() => this.onButtonClick('DENIED')}
                 >
-                  <MuliText style={{ color: 'red', fontSize: 15 }}>
+                  <MuliText style={{ color: colors.canceled, fontSize: 15 }}>
                     Từ chối
                   </MuliText>
                 </TouchableOpacity>
@@ -353,7 +367,7 @@ export default class InvitationDetail extends Component {
                   style={styles.acceptButton}
                   onPress={() => this.onButtonClick('ACCEPTED')}
                 >
-                  <MuliText style={{ color: '#2ecc71', fontSize: 15 }}>
+                  <MuliText style={{ color: colors.done, fontSize: 15 }}>
                     Chấp nhận
                   </MuliText>
                 </TouchableOpacity>
@@ -370,6 +384,14 @@ InvitationDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  detailChildrenContainer: {
+    flexDirection: 'row',
+    marginTop: 25,
+  },
+  textChildrenInformation: {
+    marginLeft: 15,
+    fontSize: 15,
+  },
   childrenInformationContainer: {
     flex: 1,
     backgroundColor: 'white',
@@ -379,10 +401,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 80,
     width: 140,
-    // shadowColor: '#000',
-    // shadowOffset: { width: 1, height: 5 },
-    // shadowOpacity: 0.8,
-    // shadowRadius: 5,
     elevation: 2,
   },
   rightInformation: {
@@ -422,21 +440,17 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: '#2ecc71',
+    borderColor: colors.done,
     borderWidth: 2,
     backgroundColor: 'white',
   },
   headerTitle: {
     fontSize: 15,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     marginBottom: 5,
     fontWeight: '800',
   },
-  optionsText: {
-    fontSize: 15,
-    color: 'gray',
-    fontWeight: 'bold',
-  },
+
   profileImg: {
     width: 70,
     height: 70,
@@ -445,32 +459,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
   },
-  textAndDayContainer: {
-    flexDirection: 'row',
-  },
   informationText: {
     fontSize: 13,
     marginTop: 15,
     flexDirection: 'row',
-    color: '#bdc3c7',
-    // backgroundColor: 'red',
+    color: colors.gray,
   },
   contentInformation: {
     fontSize: 10,
     paddingLeft: 10,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
   },
   contentInformationDate: {
     fontSize: 12,
     paddingLeft: 10,
-    color: '#315F61',
+    color: colors.darkGreenTitle,
     fontWeight: '700',
-  },
-  priceText: {
-    fontSize: 15,
-    marginLeft: 150,
-    marginTop: 25,
-    flexDirection: 'row',
   },
   detailInformationContainer: {
     flex: 1,
@@ -478,20 +482,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginLeft: 5,
   },
-  detailOptionsContainer: {
-    flex: 1,
-    marginTop: 10,
-  },
-  optionText: {
-    fontSize: 15,
-    marginLeft: 25,
-    marginTop: 15,
-    flexDirection: 'row',
-  },
+
   pictureInformation: {
     fontSize: 13,
     fontWeight: '400',
-    color: '#bdc3c7',
+    color: colors.gray,
   },
   optionInformation: {
     fontSize: 13,
@@ -499,7 +494,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   grayOptionInformation: {
-    color: '#bdc3c7',
+    color: colors.gray,
     fontSize: 11,
     paddingLeft: 10,
     fontWeight: '200',

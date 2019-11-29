@@ -3,6 +3,7 @@ import { Image, View } from 'react-native';
 import moment from 'moment';
 import { MuliText } from 'components/StyledText';
 import { withNavigation } from 'react-navigation';
+import colors from 'assets/Color';
 
 export class CircleItem extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export class CircleItem extends Component {
         key={item.userId}
         style={{
           alignItems: 'center',
-          marginHorizontal: 20,
+          marginHorizontal: 10,
           marginVertical: 10,
         }}
       >
@@ -36,18 +37,18 @@ export class CircleItem extends Component {
           source={require('assets/images/Phuc.png')}
           style={{
             opacity: null,
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
             marginBottom: 5,
-            borderRadius: 60 / 2,
+            borderRadius: 120 / 2,
             overflow: 'hidden',
           }}
         />
         <View>
           <MuliText
             style={{
-              color: 'black',
-              fontSize: 11,
+              color: colors.darkGreenTitle,
+              fontSize: 14,
             }}
           >
             {item.friend.user.nickname}

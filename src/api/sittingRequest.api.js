@@ -1,7 +1,31 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { retrieveToken } from 'utils/handleToken';
 import qs from 'qs';
 import apiUrl, { sittingRequestAPI } from 'utils/Connection';
+
+export async function getRequestDetail(requestId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+  const options = {
+    method: 'GET',
+    url: `${sittingRequestAPI.getRequestDetail}${requestId}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => {
+    if (requestId != 0) console.log('PHUC: getRequests -> error', error);
+  });
+
+  if (response.data) {
+    return response.data;
+  }
+  return { message: 'ERROR IN getRequestDetail - sittingRequestAPI' };
+}
 
 export async function recommend(requestId, request) {
   const { token } = await retrieveToken();
@@ -53,8 +77,8 @@ export async function startSitting(requestId, sitterId) {
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
 
-  let url = `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`;
-  console.log("Duong: startSitting -> url", url)
+  const url = `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`;
+  console.log('Duong: startSitting -> url', url);
   const options = {
     method: 'GET',
     url: `${sittingRequestAPI.startSittingRequest}${requestId}&${sitterId}`,
@@ -72,7 +96,7 @@ export async function doneSitting(requestId, sitterId) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
-  let url = `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`;
+  const url = `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`;
   const options = {
     method: 'GET',
     url: `${sittingRequestAPI.doneSittingRequest}${requestId}&${sitterId}`,

@@ -15,7 +15,7 @@ import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
 import PaymentStripe from 'utils/PaymentStripe';
-import SittingList from 'screens/parent/SittingList';
+import SittingHistory from 'screens/setting/SittingHistory';
 
 // import MyNetwork from '../screens/circle/MyNetwork';
 import QRcodeScannerScreen from 'utils/qrScanner';
@@ -58,6 +58,9 @@ const HomeStack = createStackNavigator(
     },
     SitterProfile: {
       screen: BsitterProfile,
+      navigationOptions: () => ({
+        title: 'Thông tin người giữ trẻ',
+      }),
     },
     QrScanner: QRcodeScannerScreen,
   },
@@ -81,6 +84,9 @@ const CircleStack = createStackNavigator(
     Circles: CircleScreens,
     AddToCircle: {
       screen: AddToCircle,
+      navigationOptions: () => ({
+        title: 'Thêm phụ huynh mà bạn biết',
+      }),
     },
     // QrScanner: QRcodeScannerScreen,
   },
@@ -105,10 +111,13 @@ const SettingsStack = createStackNavigator(
     Profile: ProfileDetail,
     ReportScreen: ReportScreen,
     Payment: PaymentStripe,
-    GetSitting: SittingList,
+    SittingHistory: SittingHistory,
     Feedback: Feedback,
     CreateCodeScreen: {
       screen: CreateCodeScreen,
+      navigationOptions: () => ({
+        title: 'Tạo mã cá nhân',
+      }),
     },
   },
   config,

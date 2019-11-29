@@ -1,6 +1,12 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
@@ -23,6 +29,7 @@ export default class CircleScreens extends Component {
       hidedCircle: true,
       hidedHiredSitter: true,
       hidedFriendSitter: true,
+      refreshing: false,
     };
   }
 
@@ -49,6 +56,11 @@ export default class CircleScreens extends Component {
       });
   }
 
+  _onRefresh = () => {
+    // this.setState({ loading: true });
+    this.getCircle();
+  };
+
   hidedCircle() {
     if (this.state.hidedCircle) {
       this.setState({ hidedCircle: false });
@@ -73,13 +85,14 @@ export default class CircleScreens extends Component {
     }
   }
 
-  showToast() {
-    this.refs.toast.show("Cặc", DURATION.LENGTH_LONG);
-  }
-
   render() {
     return (
-      <ScrollView style={{ backgroundColor: 'white' }}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
+        }
+        style={{ backgroundColor: colors.white }}
+      >
         <Toast ref="toast" position="top" />
         {/* Header vòng tròn tin tưởng của tôi */}
         {this.state.circle.length > 0 ? (
@@ -92,7 +105,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={24}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -101,18 +114,13 @@ export default class CircleScreens extends Component {
               </MuliText>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{
-                marginLeft: 'auto',
-                marginTop: 14,
-                color: colors.lightGreen,
-                marginRight: 10,
-              }}
+              style={styles.circleItem}
               onPress={() =>
                 this.props.navigation.navigate('AddToCircle', {
                   ownerId: this.state.userId,
                   onGoBack: () => {
                     this.getCircle();
-                  }
+                  },
                 })
               }
             >
@@ -126,7 +134,7 @@ export default class CircleScreens extends Component {
             <View style={{ flexDirection: 'row' }}>
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={24}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -135,19 +143,14 @@ export default class CircleScreens extends Component {
               </MuliText>
             </View>
             <TouchableOpacity
-              style={{
-                marginLeft: 'auto',
-                marginTop: 13,
-                color: colors.lightGreen,
-                marginRight: 10,
-              }}
+              style={styles.circleItem}
               onPress={() =>
                 this.props.navigation.navigate('AddToCircle', {
                   ownerId: this.state.userId,
                 })
               }
             >
-              <MuliText style={{ color: colors.done, fontSize: 13 }}>
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>
                 Thêm
               </MuliText>
             </TouchableOpacity>
@@ -183,7 +186,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={19}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -223,7 +226,7 @@ export default class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={17}
+                size={19}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />
@@ -260,142 +263,39 @@ CircleScreens.navigationOptions = {
   title: 'Vòng tròn tin tưởng',
 };
 const styles = StyleSheet.create({
+  circleItem: {
+    marginLeft: 'auto',
+    marginTop: 14,
+    color: colors.lightGreen,
+    marginRight: 10,
+  },
   itemContainer: {
-    backgroundColor: '#fff',
-    borderWidth: 0,
-    borderBottomWidth: 6,
-    borderColor: colors.gray,
+    backgroundColor: colors.white,
   },
   firstHeaderContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     borderWidth: 0,
     borderBottomWidth: 2,
     borderColor: colors.gray,
     flexDirection: 'row',
     marginTop: 10,
-    backgroundColor: '#fff',
-    height: 40,
+    backgroundColor: colors.white,
+    height: 45,
   },
   headerContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     borderColor: colors.gray,
     borderWidth: 0,
     borderBottomWidth: 2,
     flexDirection: 'row',
     marginTop: 6,
-    backgroundColor: '#fff',
-    height: 40,
+    backgroundColor: colors.white,
+    height: 45,
   },
   headerText: {
-    marginTop: 13,
-    fontSize: 13,
+    marginTop: 18,
+    fontSize: 10,
     color: colors.darkGreenTitle,
     marginLeft: 10,
-  },
-  textDeselect: {
-    marginTop: 5,
-    fontSize: 10,
-    color: colors.lightGreen,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#dfe6e9',
-    paddingBottom: 10,
-  },
-  textInput: {
-    borderColor: '#EEEEEE',
-    width: 300,
-    height: 60,
-    borderWidth: 2,
-    borderRadius: 30,
-    padding: 10,
-    fontFamily: 'muli',
-  },
-  sectionContainer2: {
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    marginTop: 10,
-    height: 300,
-  },
-  sectionContainer: {
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    marginTop: 10,
-  },
-  headerSection: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#bdc3c7',
-    height: 60,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  notfoundMessage: {
-    backgroundColor: 'white',
-    flex: 1,
-    padding: 20,
-    marginTop: 10,
-  },
-  bsitterContainer: {
-    marginTop: 5,
-  },
-  bsitterItem: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  upperText: {
-    flexDirection: 'row',
-    marginHorizontal: 10,
-    marginLeft: 15,
-    flex: 1,
-    alignItems: 'center',
-  },
-  lowerText: {
-    marginLeft: 18,
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  submitButton: {
-    width: 300,
-    height: 60,
-    padding: 10,
-    backgroundColor: '#315F61',
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inviteButton: {
-    alignItems: 'center',
-    alignContent: 'center',
-    marginTop: 20,
-    marginRight: 10,
-  },
-  bsitterName: {
-    fontSize: 13,
-    fontWeight: '400',
-    color: '#315F61',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  buttonContainer: {
-    paddingTop: 30,
-    alignItems: 'center',
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  textContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  sitterImage: {
-    width: 65,
-    height: 65,
-    borderRadius: 20,
-    resizeMode: 'contain',
   },
 });

@@ -6,7 +6,6 @@ import { MuliText } from 'components/StyledText';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createCode } from 'api/parent.api';
 import Toast, { DURATION } from 'react-native-easy-toast';
-import colors from 'assets/Color';
 
 export default class CreateCodeScreen extends Component {
   constructor(props) {
@@ -39,27 +38,19 @@ export default class CreateCodeScreen extends Component {
   render() {
     return (
       <ScrollView>
-        <View style={{ marginTop: 15, alignItems: 'center' }}>
-          <MuliText style={styles.headerTitle}>Tạo mã</MuliText>
-          <MuliText style={styles.grayOptionInformation}>
-            Tạo mã cá nhân của tôi
-          </MuliText>
-        </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: 40 }}>
           <Toast ref="toast" />
           <View
             style={{
+              width: 350,
               borderColor: 'gray',
               borderWidth: 1,
               marginHorizontal: 10,
-              borderRadius: 7,
-              height: 30,
             }}
           >
             <TextInput
               style={{
                 marginLeft: 10,
-                marginTop: 10,
               }}
               value={this.state.code}
               onChangeText={(code) => this.setState({ code })}
@@ -67,39 +58,15 @@ export default class CreateCodeScreen extends Component {
               editable={this.state.disableCreate}
             />
           </View>
-          {this.state.disableCreate && (
-            <View style={{ alignItems: 'center' }}>
-              <TouchableOpacity
-                style={{
-                  alignItems: 'center',
-                  marginTop: 15,
-                  borderColor: colors.done,
-                  borderWidth: 1,
-                  width: 90,
-                  borderRadius: 7,
-                }}
-                onPress={() => this.createNewCode()}
-              >
-                <MuliText style={{ color: colors.done }}>Tạo mã</MuliText>
-              </TouchableOpacity>
-            </View>
-          )}
+          {/* {this.state.disableCreate && ( */}
+          <TouchableOpacity style={{ alignItems: 'center', marginTop: 10 }}>
+            <MuliText onPress={() => this.createNewCode()}>Tạo mã</MuliText>
+          </TouchableOpacity>
+          {/* )} */}
         </View>
       </ScrollView>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  grayOptionInformation: {
-    color: '#bdc3c7',
-    fontSize: 11,
-    fontWeight: '200',
-  },
-  headerTitle: {
-    fontSize: 15,
-    color: '#315F61',
-    marginBottom: 10,
-    fontWeight: '800',
-  },
-});
+const styles = StyleSheet.create({});
