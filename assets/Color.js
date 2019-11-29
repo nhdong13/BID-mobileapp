@@ -17,6 +17,7 @@ const colors = {
   buttonConfirm: '#4da6ff',
   calendarHeader: '#527395',
   dateName: '#95a5a6',
+  star: '#27ae60',
 };
 
 export default colors;
