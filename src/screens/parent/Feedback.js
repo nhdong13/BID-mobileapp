@@ -67,11 +67,11 @@ export default class Feedback extends Component {
       Api.post('feedback/', body);
       this.setState({ isRated: true });
     }
-  }
+  };
 
   handleInput = (e) => {
     this.setState({ description: e.target.value });
-  }
+  };
 
   callDetail() {
     if (this.state.isModalVisible) {
@@ -83,9 +83,9 @@ export default class Feedback extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={{ flex: 1 }}>
         <KeyboardAvoidingView
-          style={{ flex: 1, justifyContent: 'center' }}
+          style={{ flex: 1, alignItems: 'center' }}
           keyboardVerticalOffset={60}
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         >
@@ -130,7 +130,7 @@ export default class Feedback extends Component {
                 onPress={() => {
                   this.submitRating();
                   this.props.navigation.navigate('Home');
-              }}
+                }}
                 style={{
                   alignItems: 'center',
                   justifyContent: 'center',
