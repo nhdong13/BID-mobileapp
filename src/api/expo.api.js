@@ -9,6 +9,7 @@ export async function registerExpoToken(request) {
     userAgent: request.userId,
     token: request.token,
   };
+  console.log('PHUC: registerExpoToken -> token', data.token);
 
   const { token } = await retrieveToken();
   let trimpedToken = '';

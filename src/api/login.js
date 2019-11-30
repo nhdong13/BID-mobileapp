@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
 import axios from 'axios';
 import qs from 'qs';
@@ -70,7 +71,6 @@ export async function checkOtp(phoneNumber, otp) {
     .then(async (res) => {
       const { token, userId, roleId } = res.data;
       if ((token, userId, roleId)) {
-        await saveToken(token, userId, roleId, tokenExpo);
         const tokenExpo = await registerPushNotifications(res.data.userId)
           .then((result) => {
             console.log('PHUC: checkOtp -> result', result);
@@ -79,6 +79,10 @@ export async function checkOtp(phoneNumber, otp) {
             }
           })
           .catch((error) => console.log(error));
+        console.log('PHUC: checkOtp -> tokenExpo', tokenExpo);
+        if (tokenExpo) {
+          await saveToken(token, userId, roleId, tokenExpo);
+        }
       }
 
       return res;
