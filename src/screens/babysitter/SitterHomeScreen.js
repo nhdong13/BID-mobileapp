@@ -54,6 +54,12 @@ class SitterHomeScreen extends Component {
         { key: 'Pending', title: 'Lời mời' },
         { key: 'Waiting', title: 'Đang chờ' },
       ],
+      alertOptions: {
+        showConfirm: true,
+        textConfirm: 'Có',
+        showCancel: true,
+        textCancel: 'Không',
+      },
     };
   }
 
@@ -177,6 +183,7 @@ class SitterHomeScreen extends Component {
           notification: notification,
           notificationMessage: notification.data.message,
           title: notification.data.title,
+          alertOptions: notification.data.options,
         },
         () => {
           this.AlertPro.open();
@@ -189,6 +196,7 @@ class SitterHomeScreen extends Component {
           notification: notification,
           notificationMessage: notification.data.message,
           title: notification.data.title,
+          alertOptions: notification.data.options,
         },
         () => {
           const { notification } = this.state;
@@ -243,6 +251,7 @@ class SitterHomeScreen extends Component {
       title,
       notificationMessage,
       loading,
+      alertOptions,
     } = this.state;
     const {
       containerBsitter,
@@ -319,8 +328,10 @@ class SitterHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title={title}
           message={notificationMessage}
-          textCancel="Không"
-          textConfirm="Có"
+          showConfirm={alertOptions.showConfirm}
+          showCancel={alertOptions.showCancel}
+          textCancel={alertOptions.textCancel}
+          textConfirm={alertOptions.textConfirm}
           customStyles={{
             mask: {
               backgroundColor: 'transparent',
