@@ -43,6 +43,12 @@ class ParentHomeScreen extends Component {
       notification: [],
       notificationMessage: '',
       title: '',
+      alertOptions: {
+        showConfirm: true,
+        textConfirm: 'Có',
+        showCancel: true,
+        textCancel: 'Không',
+      },
       loading: false,
       selectedDateRequest: [],
       selectedDate: new moment().format('YYYY-MM-DD'),
@@ -53,6 +59,7 @@ class ParentHomeScreen extends Component {
     this.setState({ loading: true });
     await this.getRequestData();
     this.onSelectedDate();
+    
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );
@@ -83,6 +90,7 @@ class ParentHomeScreen extends Component {
           notification: notification,
           notificationMessage: notification.data.message,
           title: notification.data.title,
+          alertOptions: notification.data.options,
         },
         () => {
           this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
@@ -95,6 +103,7 @@ class ParentHomeScreen extends Component {
           notification: notification,
           notificationMessage: notification.data.message,
           title: notification.data.title,
+          alertOptions: notification.data.options,
         },
         () => {
           const { notification } = this.state;
@@ -184,6 +193,7 @@ class ParentHomeScreen extends Component {
       selectedDateRequest,
       selectedDate,
       sittingDates,
+      alertOptions,
     } = this.state;
 
     const {
@@ -206,8 +216,10 @@ class ParentHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title={title}
           message={notificationMessage}
-          textCancel="Không"
-          textConfirm="Có"
+          showConfirm={alertOptions.showConfirm}
+          showCancel={alertOptions.showCancel}
+          textCancel={alertOptions.textCancel}
+          textConfirm={alertOptions.textConfirm}
           customStyles={{
             mask: {
               backgroundColor: 'transparent',
