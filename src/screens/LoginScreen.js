@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { login, checkOtp } from 'api/login';
 import Toast, { DURATION } from 'react-native-easy-toast';
+import { retrieveToken, saveViolation } from 'utils/handleToken';
 
 import Modal from 'react-native-modal';
 import {
@@ -42,7 +43,7 @@ class LoginScreen extends Component {
       firstTime: false,
       textConfirm: 'Tiếp tục',
       showConfirm: false,
-      violated: this.props.navigation.getParam('violated') || false,
+      violated: 'false',
     };
     console.log(
       'PHUC: LoginScreen -> constructor -> violated',
@@ -50,18 +51,33 @@ class LoginScreen extends Component {
     );
   }
 
+  async componentDidMount() {
+    const { violated } = await retrieveToken();
+    console.log(
+      'PHUC: LoginScreen -> componentDidMount -> userToken',
+      violated,
+    );
+    if (violated == 'true') {
+      this.setState({
+        violated,
+        title: 'Đăng nhập bằng thiết bị khác với thiết bị đã đăng ký',
+        message:
+          'Bạn không thể đăng nhập bằng thiết bị khác với đăng ký, nếu đây là thiết bị đã đăng ký xin vui lòng liên hệ cho ban quản trị để  biết thông tin chi tiết',
+        textCancel: 'Ẩn',
+      });
+
+      this.AlertPro.open();
+    }
+  }
+
   onLogin = async () => {
     const { phoneNumber, password } = this.state;
     await login(phoneNumber, password)
       .then((res) => {
-        console.log('PHUC: LoginScreen -> onLogin -> res', res);
-
         if (res && res != 400) {
           const { roleId, userId } = res.data;
           if (res.data.roleId && res.data.roleId == 3) {
             const { secret, firstTime } = res.data;
-            console.log('PHUC: LoginScreen -> onLogin -> secret', secret);
-            console.log('PHUC: LoginScreen -> onLogin -> firstTime', firstTime);
             if (firstTime) {
               this.setState({
                 roleId,
@@ -99,10 +115,11 @@ class LoginScreen extends Component {
 
   onSubmitOTP = async () => {
     const { phoneNumber, OTP } = this.state;
-    await checkOtp(phoneNumber, OTP).then((result) => {
+    await checkOtp(phoneNumber, OTP).then(async (result) => {
       console.log('PHUC: LoginScreen -> onSubmitOTP -> result', result.status);
       if (result.status !== 401) {
         const { roleId, userId } = this.state;
+        // await saveViolation(false);
         this.props.navigation.navigate('AuthLoading', {
           roleId: roleId,
           userId: userId,

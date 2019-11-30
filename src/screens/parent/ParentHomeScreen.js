@@ -59,7 +59,7 @@ class ParentHomeScreen extends Component {
     this.setState({ loading: true });
     await this.getRequestData();
     this.onSelectedDate();
-    
+
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification,
     );

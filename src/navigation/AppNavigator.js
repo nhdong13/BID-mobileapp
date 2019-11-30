@@ -2,6 +2,7 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
+import LoginScreen from 'screens/LoginScreen';
 import ParentTabNavigator from 'navigation/ParentTabNavigator';
 import BsitterTabNavigator from 'navigation/BsitterTabNavigator';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
@@ -12,6 +13,7 @@ export default createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       Auth: AuthTabNavigator,
+      Login: LoginScreen,
       ParentMain: ParentTabNavigator,
       BsitterMain: BsitterTabNavigator,
     },

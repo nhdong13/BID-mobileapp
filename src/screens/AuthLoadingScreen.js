@@ -3,12 +3,13 @@ import { ActivityIndicator, StatusBar, StyleSheet, View } from 'react-native';
 import { retrieveToken } from 'utils/handleToken';
 
 export default class AuthLoadingScreen extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this._bootstrapAsync();
   }
 
   _bootstrapAsync = async () => {
+    // destroyToken();
     await retrieveToken().then((res) => {
       const userToken = res;
       console.log(
@@ -16,10 +17,18 @@ export default class AuthLoadingScreen extends React.Component {
         userToken,
       );
 
-      if (userToken.roleId == 2 && userToken.token) {
-        this.props.navigation.navigate('ParentMain');
-      } else if (userToken.roleId == 3 && userToken.token) {
-        this.props.navigation.navigate('BsitterMain');
+      if (
+        userToken.token &&
+        userToken.tokenExpo &&
+        userToken.violated != 'true'
+      ) {
+        if (userToken.roleId == 2) {
+          this.props.navigation.navigate('ParentMain');
+        } else if (userToken.roleId == 3) {
+          this.props.navigation.navigate('BsitterMain');
+        } else {
+          this.props.navigation.navigate('Auth');
+        }
       } else {
         this.props.navigation.navigate('Auth');
       }

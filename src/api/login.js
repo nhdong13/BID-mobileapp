@@ -2,9 +2,9 @@
 /* eslint-disable no-else-return */
 import axios from 'axios';
 import qs from 'qs';
-import { saveToken } from 'utils/handleToken';
+import { saveToken, saveTokenExpo, saveViolation } from 'utils/handleToken';
 import apiUrl, { authenticationAPI } from 'utils/Connection';
-import registerPushNotifications from 'utils/Notification';
+import { registerPushNotifications } from 'utils/Notification';
 
 export async function login(phoneNumber, password) {
   // De day cho nho, ko ai dc xoa
@@ -12,6 +12,7 @@ export async function login(phoneNumber, password) {
   console.log("Can't Login ? Did you change your fucking IP you FAT FUCK ?");
   console.log('PHUC: login -> apiUrl.baseUrl', apiUrl.baseUrl);
   console.log('------------------');
+
   const data = {
     phoneNumber: phoneNumber,
     password: password,
@@ -30,10 +31,15 @@ export async function login(phoneNumber, password) {
       const { token, userId, roleId } = res.data;
       if (token && roleId == 2) {
         await saveToken(token, userId, roleId);
-        const tokenExpo = await registerPushNotifications(res.data.userId)
-          .then((response) => {
-            if (response) {
-              console.log('PHUC: login -> response', response);
+        await registerPushNotifications(res.data.userId)
+          .then(async (res) => {
+            console.log('PHUC: login -> res', res);
+            if (res.status === 401) {
+              console.log('co gi do hay ho da xay ra');
+              await saveViolation(true);
+            } else {
+              await saveTokenExpo(res.data.token);
+              await saveViolation(false);
             }
           })
           .catch((error) => console.log('loi token roi', error));
@@ -71,18 +77,20 @@ export async function checkOtp(phoneNumber, otp) {
     .then(async (res) => {
       const { token, userId, roleId } = res.data;
       if ((token, userId, roleId)) {
-        const tokenExpo = await registerPushNotifications(res.data.userId)
-          .then((result) => {
+        await saveToken(token, userId, roleId);
+        await registerPushNotifications(res.data.userId)
+          .then(async (result) => {
             console.log('PHUC: checkOtp -> result', result);
-            if (result) {
-              console.log('PHUC: checkOtp -> response', result);
+            if (result.status === 401) {
+              await saveViolation(true);
+            } else {
+              await saveTokenExpo(res.data.token);
+              await saveViolation(false);
             }
           })
-          .catch((error) => console.log(error));
-        console.log('PHUC: checkOtp -> tokenExpo', tokenExpo);
-        if (tokenExpo) {
-          await saveToken(token, userId, roleId, tokenExpo);
-        }
+          .catch((error) =>
+            console.log('loi tai ham check otp -- login api', error),
+          );
       }
 
       return res;

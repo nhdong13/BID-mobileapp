@@ -1,9 +1,10 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-undef */
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import { registerExpoToken } from 'api/expo.api';
 
-export default async function registerPushNotifications(userId) {
+export async function registerPushNotifications(userId) {
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS,
   );
@@ -31,7 +32,16 @@ export default async function registerPushNotifications(userId) {
     token: token,
   };
 
-  registerExpoToken(request)
-    .then((res) => res)
-    .catch((error) => console.log(error));
+  const result = await registerExpoToken(request)
+    .then(async (res) => {
+      // console.log('PHUC: registerPushNotifications -> res', res);
+      // await saveTokenExpo(res);
+
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+  // console.log('PHUC: registerPushNotifications -> result', result);
+  return result;
 }
