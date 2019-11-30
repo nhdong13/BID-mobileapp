@@ -84,7 +84,7 @@ export async function checkOtp(phoneNumber, otp) {
             if (result.status === 401) {
               await saveViolation(true);
             } else {
-              await saveTokenExpo(res.data.token);
+              await saveTokenExpo(result.data.token);
               await saveViolation(false);
             }
           })

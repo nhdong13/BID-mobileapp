@@ -55,8 +55,8 @@ export class PaymentStripe extends React.Component {
 
   componentDidMount() {
     getUser().then((res) => {
-      if (res.data) {
-        const { nickname: name, email, id: userId } = res.data;
+      if (res) {
+        const { nickname: name, email, id: userId } = res;
         this.setState({ name, email, userId }, () => {
           this.getStripeCustomer().catch((error) => {
             console.log(
@@ -83,6 +83,7 @@ export class PaymentStripe extends React.Component {
   _onFocus = (field) => console.log('focusing', field);
 
   createStripeCustomer = async () => {
+    console.log('chay vao day roi ');
     if (this.state.formData != null) {
       const {
         values: { number, cvc, expiry },
@@ -113,11 +114,6 @@ export class PaymentStripe extends React.Component {
       } = result;
 
       if (token && cardId) {
-        // console.log(
-        //   'PHUC: PaymentStripe -> createStripeCustomer -> cardId',
-        //   cardId,
-        // );
-        // console.log('PHUC: PaymentStripe -> openStripe -> token', token);
         const { email, userId, name } = this.state;
         if (email != null && userId != null && name != null) {
           const customer = await createCustomer(
@@ -129,10 +125,6 @@ export class PaymentStripe extends React.Component {
           );
 
           if (customer.code) {
-            // console.log(
-            //   'PHUC: PaymentStripe -> createStripeCustomer -> customer',
-            //   customer,
-            // );
             this.setState({
               title: customer.code,
               message: customer.message,
@@ -235,21 +227,22 @@ export class PaymentStripe extends React.Component {
                 onFocus={this._onFocus}
                 onChange={this._onChange}
               />
-              <View
-                style={{
-                  marginTop: 20,
-                  height: 150,
-                  marginHorizontal: 30,
-                  alignItems: 'center',
-                }}
+
+              <TouchableOpacity
+                onPress={() => this.createStripeCustomer()}
+                style={{ marginHorizontal: 10 }}
               >
-                <TouchableOpacity
-                  onPress={() => this.createStripeCustomer()}
-                  style={{ marginHorizontal: 10 }}
+                <View
+                  style={{
+                    marginTop: 20,
+                    height: 150,
+                    marginHorizontal: 30,
+                    alignItems: 'center',
+                  }}
                 >
-                  <MuliText style={{ color: 'white' }}>Lưu thẻ</MuliText>
-                </TouchableOpacity>
-              </View>
+                  <MuliText>Lưu thẻ</MuliText>
+                </View>
+              </TouchableOpacity>
             </View>
           )}
         </View>
