@@ -53,6 +53,7 @@ const SettingsStack = createStackNavigator(
     Payment: PaymentStripe,
     SitterSittingHistory: SitterSittingHistory,
     CalendarScreen: CalendarScreen,
+    InvitationDetail: InvitationDetail,
   },
   config,
 );

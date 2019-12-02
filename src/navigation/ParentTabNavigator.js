@@ -117,6 +117,12 @@ const SettingsStack = createStackNavigator(
         title: 'Tạo mã cá nhân',
       }),
     },
+    RequestDetail: {
+      screen: RequestDetail,
+      navigationOptions: () => ({
+        title: 'Yêu cầu chi tiết',
+      }),
+    },
   },
   config,
 );

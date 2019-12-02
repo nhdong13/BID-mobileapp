@@ -54,18 +54,20 @@ class SitterHomeScreen extends Component {
         { key: 'Pending', title: 'Lời mời' },
         { key: 'Waiting', title: 'Đang chờ' },
       ],
-      alertOptions: {
-        showConfirm: true,
-        textConfirm: 'Có',
-        showCancel: true,
-        textCancel: 'Không',
-      },
+      showConfirm: true,
+      textConfirm: 'Có',
+      showCancel: true,
+      textCancel: 'Không',
     };
   }
 
   async componentDidMount() {
     await retrieveToken().then((res) => {
       const { userId } = res;
+      console.log(
+        'PHUC: SitterHomeScreen -> componentDidMount -> userId',
+        userId,
+      );
       this.setState({ userId });
       this._notificationSubscription = Notifications.addListener(
         this.handleNotification,
@@ -106,11 +108,11 @@ class SitterHomeScreen extends Component {
           id: userId,
         };
         if (userId != 0) {
-        //   registerPushNotifications(requestBody.id).then((response) => {
-        //     if (response) {
-        //       console.log('PHUC: App -> response', response.data);
-        //     }
-        //   });
+          //   registerPushNotifications(requestBody.id).then((response) => {
+          //     if (response) {
+          //       console.log('PHUC: App -> response', response.data);
+          //     }
+          //   });
         }
         await this.getInvitationData();
       }
@@ -140,13 +142,18 @@ class SitterHomeScreen extends Component {
 
         const invitationsUpcoming = invitations.filter(
           (invitation) =>
-            invitation.sittingRequest.status == 'CONFIRMED' ||
-            invitation.sittingRequest.status == 'ONGOING',
+            (invitation.sittingRequest.status == 'CONFIRMED' ||
+              invitation.sittingRequest.status == 'ONGOING') &&
+            invitation.sittingRequest.acceptedBabysitter == userId,
         );
         console.log(
           'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
           invitationsUpcoming,
         );
+        // console.log(
+        //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
+        //   invitationsUpcoming,
+        // );
 
         this.setState({
           invitationsPending,
@@ -157,9 +164,9 @@ class SitterHomeScreen extends Component {
       })
       .catch((error) => {
         this.setState({ loading: false });
-        console.log(
-          'HomeScreen - getDataAccordingToRole - Invitations ' + error,
-        );
+        // console.log(
+        //   'HomeScreen - getDataAccordingToRole - Invitations ' + error,
+        // );
       });
   };
 
@@ -173,19 +180,23 @@ class SitterHomeScreen extends Component {
   };
 
   handleNotification = (notification) => {
-    console.log(
-      'PHUC: SitterHomeScreen -> handleNotification -> notification',
-      notification,
-    );
-    const { origin } = notification;
+    // console.log(
+    //   'PHUC: SitterHomeScreen -> handleNotification -> notification',
+    //   notification,
+    // );
+    const { origin, data } = notification;
+    const { message, title, option } = data;
     if (origin == 'received') {
       this._onRefresh();
       this.setState(
         {
           notification: notification,
-          notificationMessage: notification.data.message,
-          title: notification.data.title,
-          alertOptions: notification.data.options,
+          notificationMessage: message,
+          title: title,
+          showConfirm: option.showConfirm,
+          showCancel: option.showCancel,
+          textCancel: option.textCancel,
+          textConfirm: option.textConfirm,
         },
         () => {
           this.AlertPro.open();
@@ -196,9 +207,12 @@ class SitterHomeScreen extends Component {
       this.setState(
         {
           notification: notification,
-          notificationMessage: notification.data.message,
-          title: notification.data.title,
-          alertOptions: notification.data.options,
+          notificationMessage: message,
+          title: title,
+          showConfirm: option.showConfirm,
+          showCancel: option.showCancel,
+          textCancel: option.textCancel,
+          textConfirm: option.textConfirm,
         },
         () => {
           const { notification } = this.state;
@@ -253,7 +267,10 @@ class SitterHomeScreen extends Component {
       title,
       notificationMessage,
       loading,
-      alertOptions,
+      showCancel,
+      showConfirm,
+      textCancel,
+      textConfirm,
     } = this.state;
     const {
       containerBsitter,
@@ -330,10 +347,10 @@ class SitterHomeScreen extends Component {
           onCancel={() => this.AlertPro.close()}
           title={title}
           message={notificationMessage}
-          showConfirm={alertOptions.showConfirm}
-          showCancel={alertOptions.showCancel}
-          textCancel={alertOptions.textCancel}
-          textConfirm={alertOptions.textConfirm}
+          showConfirm={showConfirm}
+          showCancel={showCancel}
+          textCancel={textCancel}
+          textConfirm={textConfirm}
           customStyles={{
             mask: {
               backgroundColor: 'transparent',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, StatusBar, StyleSheet, View } from 'react-native';
-import { retrieveToken } from 'utils/handleToken';
+import { retrieveToken, destroyToken } from 'utils/handleToken';
 
 export default class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -9,13 +9,13 @@ export default class AuthLoadingScreen extends React.Component {
   }
 
   _bootstrapAsync = async () => {
-    // destroyToken();
+    // await destroyToken();
     await retrieveToken().then((res) => {
       const userToken = res;
-      console.log(
-        'PHUC: AuthLoadingScreen -> _bootstrapAsync -> userToken',
-        userToken,
-      );
+      // console.log(
+      //   'PHUC: AuthLoadingScreen -> _bootstrapAsync -> userToken',
+      //   userToken,
+      // );
 
       if (
         userToken.token &&

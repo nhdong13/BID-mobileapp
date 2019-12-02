@@ -36,6 +36,7 @@ export default class InvitationDetail extends Component {
       childrenNumber: 1,
       minAgeOfChildren: 1,
       createUserId: 0,
+      requestId: 0,
     };
   }
 
@@ -59,6 +60,7 @@ export default class InvitationDetail extends Component {
           price: resp.sittingRequest.totalPrice,
           childrenNumber: resp.sittingRequest.childrenNumber,
           minAgeOfChildren: resp.sittingRequest.minAgeOfChildren,
+          requestId: resp.sittingRequest.id,
         });
       },
     );

@@ -340,7 +340,7 @@ class LoginScreen extends Component {
                     vui lòng liên hệ lại với ban quản trị
                   </MuliText>
                   <View style={styles.textContainer}>
-                    <MuliText style={{ color: 'red' }}>{secret}</MuliText>
+                    <MuliText>{secret}</MuliText>
                   </View>
                   <View>
                     <TouchableOpacity
@@ -359,7 +359,6 @@ class LoginScreen extends Component {
                     style={{
                       marginTop: 30,
                       alignItems: 'center',
-                      backgroundColor: 'red',
                     }}
                   >
                     <View style={styles.finishButton}>

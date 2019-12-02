@@ -56,11 +56,11 @@ export default function App(props) {
   );
 }
 
-Sentry.init({
-  dsn: 'https://2679a5d414c3489b921ec4f0d2e28f55@sentry.io/1774707',
-  enableInExpoDevelopment: true,
-  debug: true,
-});
+// Sentry.init({
+//   dsn: 'https://2679a5d414c3489b921ec4f0d2e28f55@sentry.io/1774707',
+//   enableInExpoDevelopment: true,
+//   debug: true,
+// });
 
 async function loadResourcesAsync() {
   await Promise.all([

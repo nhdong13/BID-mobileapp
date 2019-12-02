@@ -66,6 +66,8 @@ export const destroyToken = async () => {
     await AsyncStorage.removeItem('@jwt_token');
     await AsyncStorage.removeItem('@userId');
     await AsyncStorage.removeItem('@roleId');
+    await AsyncStorage.removeItem('@violated');
+    await AsyncStorage.removeItem('@token_expo');
   } catch (error) {
     console.log(error);
   }
