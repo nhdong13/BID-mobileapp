@@ -64,10 +64,10 @@ class SitterHomeScreen extends Component {
   async componentDidMount() {
     await retrieveToken().then((res) => {
       const { userId } = res;
-      console.log(
-        'PHUC: SitterHomeScreen -> componentDidMount -> userId',
-        userId,
-      );
+      // console.log(
+      //   'PHUC: SitterHomeScreen -> componentDidMount -> userId',
+      //   userId,
+      // );
       this.setState({ userId });
       this._notificationSubscription = Notifications.addListener(
         this.handleNotification,
@@ -146,10 +146,10 @@ class SitterHomeScreen extends Component {
               invitation.sittingRequest.status == 'ONGOING') &&
             invitation.sittingRequest.acceptedBabysitter == userId,
         );
-        console.log(
-          'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
-          invitationsUpcoming,
-        );
+        // console.log(
+        //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
+        //   invitationsUpcoming,
+        // );
         // console.log(
         //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
         //   invitationsUpcoming,

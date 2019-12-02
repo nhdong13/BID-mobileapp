@@ -47,7 +47,7 @@ export default class InvitationDetail extends Component {
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(
       (resp) => {
-        console.log('PHUC: InvitationDetail -> getData -> resp', resp);
+        // console.log('PHUC: InvitationDetail -> getData -> resp', resp);
         this.setState({
           createUserId: resp.sittingRequest.user.id,
           parentName: resp.sittingRequest.user.nickname,

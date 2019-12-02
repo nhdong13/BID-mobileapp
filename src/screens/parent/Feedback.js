@@ -42,8 +42,13 @@ export default class Feedback extends Component {
     });
     await Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
       (res) => {
+        console.log('PHUC: Feedback -> componentDidMount -> res', res);
         if (res != null) {
-          this.setState({ starCount: res[0].rating, isRated: true });
+          this.setState({
+            starCount: res[0].rating,
+            isRated: true,
+            description: res[0].description,
+          });
         }
       },
     );
@@ -80,7 +85,7 @@ export default class Feedback extends Component {
   }
 
   render() {
-    const { isRated } = this.state;
+    const { isRated, description } = this.state;
 
     return (
       <View style={{ flex: 1 }}>
@@ -119,6 +124,7 @@ export default class Feedback extends Component {
                   underlineColorAndroid="transparent"
                   onChangeText={(text) => this.setState({ description: text })}
                   style={styles.textReport}
+                  value={description}
                 />
               </View>
               {isRated ? (

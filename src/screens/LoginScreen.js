@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { login, checkOtp } from 'api/login';
 import Toast, { DURATION } from 'react-native-easy-toast';
-import { retrieveToken, saveViolation } from 'utils/handleToken';
+import { retrieveToken } from 'utils/handleToken';
 
 import Modal from 'react-native-modal';
 import {
@@ -27,7 +27,7 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '02',
+      phoneNumber: '0965474202',
       password: '12341234',
       OTP: null,
       isModalVisible: false,
