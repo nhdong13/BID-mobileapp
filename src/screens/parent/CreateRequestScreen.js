@@ -13,18 +13,17 @@ import {
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
-import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import {
   updateRequest,
   getOverlapSittingRequest,
 } from 'api/sittingRequest.api';
-import { CheckBox } from 'native-base';
+import { CheckBox, StyleProvider, Picker } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
-
-// const { width, height } = Dimensions.get('window');
+import { getPricings } from 'api/pricing.api';
+import { getUser } from 'api/user.api';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -38,32 +37,37 @@ class CreateRequestScreen extends Component {
         new moment().format('YYYY-MM-DD'),
       startTime: null,
       endTime: null,
+      duration: 1,
+      durationList: ['a', '2', '3'],
       sittingAddress: null,
-      price: 0,
       childrenNumber: 0,
-      minAgeOfChildren: 99,
-      child: null,
+      minAgeOfChildren: 0,
+      children: [],
       totalPrice: 0,
-      spPrice: null,
       overlapRequests: [],
       noticeTitle: '',
       noticeMessage: '',
       cancelAlert: '',
       confirmAlert: '',
       showConfirm: false,
+      pricings: [],
     };
     console.log(this.props.navigation.getParam('selectedDate'));
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     await this.getDataAccordingToRole();
 
-    Api.get('users/' + this.state.userId.toString()).then((res) => {
+    await getUser().then((parent) => {
       this.setState({
-        loggedUser: res,
-        sittingAddress: res.address,
-        child: res.parent.children,
+        loggedUser: parent,
+        sittingAddress: parent.address,
+        children: parent.parent.children,
       });
+    });
+
+    await getPricings().then((pricings) => {
+      this.setState({ pricings });
     });
   }
 
@@ -208,7 +212,7 @@ class CreateRequestScreen extends Component {
   calculate = () => {
     let childCounter = 0;
     let minAge = 99;
-    this.state.child.forEach((element) => {
+    this.state.children.forEach((element) => {
       if (element.checked) {
         childCounter += 1;
         if (minAge > element.age) minAge = element.age;
@@ -218,41 +222,22 @@ class CreateRequestScreen extends Component {
   };
 
   updatePrice = async () => {
-    if (this.state.startTime == null || this.state.endTime == null) return;
-    await Api.get('configuration/' + this.state.sittingDate.toString()).then(
-      (res) => {
-        this.setState({
-          spPrice: res,
-        });
-      },
-    );
-
-    const startP = parseInt(
-      this.state.startTime[0] + this.state.startTime[1],
-      10,
-    );
-    const endP = parseInt(this.state.endTime[0] + this.state.endTime[1], 10);
-    let i;
-
-    let tempTotal = 0.0;
-    // eslint-disable-next-line no-plusplus
-    for (i = startP + 1; i < endP; i++) {
-      const temp = this.state.spPrice[i.toString()];
-      if (temp == null) tempTotal += this.state.spPrice.base;
-      else tempTotal += temp;
+    if (
+      this.state.startTime == null ||
+      this.state.endTime == null ||
+      this.state.duration == null ||
+      this.state.children.length <= 0
+    ) {
+      return;
     }
-    let temp = 0.0;
-    temp =
-      (60 - parseInt(this.state.startTime[3] + this.state.startTime[4], 10)) /
-      60.0;
-    let price = this.state.spPrice[startP.toString()];
-    if (price == null) tempTotal += this.state.spPrice.base * temp;
-    else tempTotal += temp * price;
-    temp = parseInt(this.state.endTime[3] + this.state.endTime[4], 10) / 60.0;
-    price = this.state.spPrice[endP.toString()];
-    if (price == null) tempTotal += this.state.spPrice.base * temp;
-    else tempTotal += temp * price;
-    this.setState({ price: Math.floor(tempTotal) });
+
+    let isHolyday = false;
+    let officeHours = 0; // khoảng thời gian trong giờ hành chính của request này
+    let OTHours = 0; // khoảng thời gian ngoài giờ hành chính của request này
+
+    if (this.state.starTime >= '8:30' && this.state.endTime <= '17:30') {
+      officeHours = this.state.duration;
+    }
   };
 
   render() {
@@ -262,6 +247,10 @@ class CreateRequestScreen extends Component {
       cancelAlert,
       confirmAlert,
     } = this.state;
+
+    const durationItems = this.state.durationList.map((s, i) => {
+      return <Picker.Item key={i} value={s} label={s} />;
+    });
 
     return (
       <ScrollView>
@@ -390,6 +379,28 @@ class CreateRequestScreen extends Component {
                   marginTop: 10,
                 }}
               />
+              <StyleProvider style={getTheme()}>
+                <Picker
+                  selectedValue={this.state.duration}
+                  style={{ height: 50, width: 150 }}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({ duration: itemValue })
+                  }
+                  mode="dropdown"
+                >
+                  {durationItems}
+                </Picker>
+              </StyleProvider>
+            </View>
+            {/* <View style={styles.input}>
+              <Ionicons
+                name="ios-time"
+                size={20}
+                color={colors.gray}
+                style={{
+                  marginTop: 10,
+                }}
+              />
               <DatePicker
                 style={styles.pickedTime}
                 // minDate={this.state.startTime}
@@ -423,7 +434,7 @@ class CreateRequestScreen extends Component {
                 showIcon={false}
                 // minuteInterval={15}
               />
-            </View>
+            </View> */}
           </View>
           <View style={styles.inputAddress}>
             <Ionicons
@@ -439,13 +450,13 @@ class CreateRequestScreen extends Component {
             </MuliText>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            {this.state.child != null ? (
+            {this.state.children != null ? (
               <View style={styles.detailContainerChild}>
                 <MuliText style={styles.headerTitleChild}>
                   Trẻ của bạn:
                 </MuliText>
                 <View style={styles.detailPictureContainer}>
-                  {this.state.child.map((item) => (
+                  {this.state.children.map((item) => (
                     <TouchableOpacity
                       key={item.id}
                       onPress={() => {
