@@ -16,7 +16,7 @@ import colors from 'assets/Color';
 export default class SitterSetting extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: '' };
+    this.state = { name: '', image: null };
   }
 
   componentDidMount() {
@@ -41,20 +41,20 @@ export default class SitterSetting extends Component {
       this.setState({ userId });
     });
 
-    await Api.get('users/' + this.state.userId.toString()).then((res) => {
-      this.setState({ name: res.nickname });
-      // console.log(res);
-    });
+    await Api.get('users/' + this.state.userId.toString()).then(
+      async (result) => {
+        const { nickname, image } = result;
+        await this.setState({ name: nickname, image: image });
+      },
+    );
   };
 
   render() {
+    const { image } = this.state;
     return (
       <ScrollView>
         <View style={{ alignItems: 'center', marginTop: 25 }}>
-          <Image
-            source={require('assets/images/Phuc.png')}
-            style={styles.picture}
-          />
+          <Image source={{ uri: image }} style={styles.picture} />
           <View style={{ marginTop: 10, alignItems: 'center' }}>
             <MuliText style={styles.headerTitle}>{this.state.name}</MuliText>
             <MuliText style={styles.blueOptionInformation}>

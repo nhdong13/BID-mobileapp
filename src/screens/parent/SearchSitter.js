@@ -9,6 +9,7 @@ import {
   View,
   Image,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
@@ -23,10 +24,15 @@ import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
+import Modal from 'react-native-modal';
+import { getCircle } from 'api/circle.api';
+import { TextInput } from 'react-native-gesture-handler';
+import { getAllBabysitter } from 'api/babysitter.api';
+import ItemSearchSitter from 'screens/parent/ItemSearchSitter';
 
 // const { width, height } = Dimensions.get('window');
 
-class CreateRequestScreen extends Component {
+class SearchSitter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,12 +57,16 @@ class CreateRequestScreen extends Component {
       cancelAlert: '',
       confirmAlert: '',
       showConfirm: false,
+      isModalVisible: false,
+      hiredSitter: null,
+      searchValue: '',
+      listBabysitter: null,
+      data: null,
     };
-    console.log(this.props.navigation.getParam('selectedDate'));
   }
 
   async componentDidMount() {
-    await this.getDataAccordingToRole();
+    await this.getUserData();
 
     Api.get('users/' + this.state.userId.toString()).then((res) => {
       this.setState({
@@ -66,6 +76,53 @@ class CreateRequestScreen extends Component {
       });
     });
   }
+
+  beforeSearch = async () => {
+    if (this.state.startTime == null || this.state.endTime == null) {
+      this.refs.toast.show(
+        'Vui lòng chọn thời gian trông trẻ',
+        DURATION.LENGTH_LONG,
+      );
+      return;
+    }
+
+    const start = moment(this.state.startTime, 'HH:mm');
+    const end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
+    if (end.isBefore(start)) {
+      this.refs.toast.show(
+        'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
+        DURATION.LENGTH_LONG,
+      );
+      return;
+    }
+
+    if (this.state.childrenNumber == 0) {
+      this.refs.toast.show(
+        'Vui lòng chọn ít nhất một trẻ',
+        DURATION.LENGTH_LONG,
+      );
+      return;
+    }
+
+    await getAllBabysitter().then(async (res) => {
+      if (res) {
+        // console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
+        await this.setState({ listBabysitter: res.data });
+      }
+    });
+
+    this.toggleModalCreateRequest();
+  };
+
+  searchFilter = (text) => {
+    const newData = this.state.listBabysitter.filter((sitter) => {
+      const itemData = `${sitter.user.nickname.toUpperCase()}`;
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+
+    this.setState({ data: newData });
+  };
 
   beforeRecommend = () => {
     if (this.state.startTime == null || this.state.endTime == null) {
@@ -140,6 +197,43 @@ class CreateRequestScreen extends Component {
       });
   };
 
+  getCircle = async () => {
+    const { userId } = this.state;
+
+    getCircle(userId)
+      .then((result) => {
+        const { hiredSitter } = result.data;
+        this.setState({
+          //   circle: result.data.circle,
+          hiredSitter,
+          //   friendSitter: result.data.friendSitter,
+        });
+      })
+      .catch((error) => {
+        console.log('Duong: CircleScreens -> getCircle -> error', error);
+      });
+  };
+
+  close = () => {
+    this.setState({ isModalVisible: false });
+  };
+
+  changeInviteStatus = (receiverId) => {
+    this.setState((prevState) => ({
+      listMatched: prevState.listMatched.map((el) =>
+        el.userId == receiverId ? Object.assign(el, { isInvited: true }) : el,
+      ),
+      recommendList: prevState.recommendList.map((el) =>
+        el.userId == receiverId ? Object.assign(el, { isInvited: true }) : el,
+      ),
+    }));
+  };
+
+  setRequestId = (requestId) => {
+    this.setState({ requestId: requestId });
+    this.props.navigation.state.params.onGoBack(requestId);
+  };
+
   toRecommendScreen = () => {
     const request = {
       requestId: this.state.requestId != 0 ? this.state.requestId : 0,
@@ -187,15 +281,15 @@ class CreateRequestScreen extends Component {
     });
   };
 
-  getDataAccordingToRole = async () => {
+  getUserData = async () => {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      // console.log(
-      // 'PHUC: CreateRequestScreen -> getDataAccordingToRole -> roleId',
-      // roleId + this.state.roleId,
-      // );
     });
+  };
+
+  toggleModalCreateRequest = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   toggleHidden = (key) => {
@@ -261,6 +355,7 @@ class CreateRequestScreen extends Component {
       noticeMessage,
       cancelAlert,
       confirmAlert,
+      isModalVisible,
       sittingDate,
       startTime,
       endTime,
@@ -296,6 +391,60 @@ class CreateRequestScreen extends Component {
             },
           }}
         />
+
+        <Modal
+          isVisible={isModalVisible}
+          coverScreen={true}
+          hasBackdrop={true}
+          propagateSwipe={true}
+          onBackButtonPress={() => this.toggleModalCreateRequest()}
+          onBackdropPress={() => this.toggleModalCreateRequest()}
+          style={{
+            justifyContent: 'flex-end',
+            margin: 0,
+          }}
+        >
+          <View
+            style={{
+              flex: 0.5,
+              backgroundColor: 'white',
+              borderTopRightRadius: 20,
+              borderTopLeftRadius: 20,
+              paddingTop: 10,
+            }}
+          >
+            <ScrollView>
+              <View style={{ marginHorizontal: 10 }}>
+                <View style={styles.detailContainerParent}>
+                  <TextInput
+                    style={styles.searchParent}
+                    // value={this.state.searchValue}
+                    onChangeText={async (text) => {
+                      // await this.setState({ searchValue: text });
+                      this.searchFilter(text);
+                    }}
+                    placeholder="Nhập tên người giữ trẻ cần tìm"
+                  />
+                </View>
+                {this.state.data && this.state.data.length != 0 && (
+                  <FlatList
+                    data={this.state.data}
+                    renderItem={({ item }) => (
+                      <ItemSearchSitter
+                        changeInviteStatus={this.changeInviteStatus}
+                        setRequestId={this.setRequestId}
+                        requestId={this.state.requestId}
+                        request={this.state.request}
+                        item={item}
+                      />
+                    )}
+                    keyExtractor={(item) => item.user.id.toString()}
+                  />
+                )}
+              </View>
+            </ScrollView>
+          </View>
+        </Modal>
         <View style={styles.containerInformationRequest}>
           <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
           <View>
@@ -587,7 +736,11 @@ class CreateRequestScreen extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
-                onPress={this.beforeRecommend}
+                onPress={() => {
+                  // this.toggleModalCreateRequest();
+                  this.beforeSearch();
+                  //   this.beforeRecommend();
+                }}
               >
                 <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
@@ -613,10 +766,10 @@ class CreateRequestScreen extends Component {
   }
 }
 
-export default CreateRequestScreen;
+export default SearchSitter;
 
-CreateRequestScreen.navigationOptions = {
-  title: 'Tạo yêu cầu giữ trẻ',
+SearchSitter.navigationOptions = {
+  title: 'Tạo yêu cầu trong vòng tròn tin tưởng',
 };
 
 const styles = StyleSheet.create({
@@ -663,7 +816,7 @@ const styles = StyleSheet.create({
   },
   containerInformationRequest: {
     marginHorizontal: 15,
-    marginTop: 30,
+    marginTop: 10,
   },
   headerTitleChild: {
     fontSize: 20,
@@ -704,5 +857,41 @@ const styles = StyleSheet.create({
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,
+  },
+  modalBottom: {
+    flex: 3,
+    height: 100,
+    backgroundColor: 'white',
+    marginVertical: 10,
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
+    justifyContent: 'center',
+    marginLeft: 5,
+    paddingLeft: 10,
+  },
+  headModalBottom: {
+    flex: 1,
+    marginVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.lightGreen,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopRightRadius: 3,
+    borderBottomRightRadius: 3,
+  },
+  searchParent: {
+    width: 290,
+    marginLeft: 10,
+    marginTop: 5,
+  },
+  detailContainerParent: {
+    borderRadius: 7,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginHorizontal: 10,
+    marginBottom: 20,
   },
 });
