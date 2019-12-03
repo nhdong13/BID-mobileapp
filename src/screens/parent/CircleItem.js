@@ -24,6 +24,7 @@ export class CircleItem extends Component {
 
   render() {
     const { item } = this.props;
+    // console.log('PHUC: CircleItem -> render -> item', item);
     return (
       <View
         key={item.userId}
@@ -34,7 +35,7 @@ export class CircleItem extends Component {
         }}
       >
         <Image
-          source={require('assets/images/Phuc.png')}
+          source={{ uri: item.friend.user.image }}
           style={{
             opacity: null,
             width: 80,

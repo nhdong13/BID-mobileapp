@@ -29,6 +29,7 @@ export const babysitterAPI = {
   getProfile: `${url}/babysitters/`,
   getProfileByRequest: `${url}/babysitters/readByRequest/`,
   updateProfile: `${url}/babysitters/`,
+  getAllBabysitter: `${url}/babysitters/`,
 };
 
 export const circleAPI = {

@@ -3,9 +3,9 @@ import { retrieveToken } from 'utils/handleToken';
 import { circleAPI } from 'utils/Connection';
 import qs from 'qs';
 
-export async function getCircle() {
+export async function getCircle(userId) {
   const { token } = await retrieveToken();
-  const { userId } = await retrieveToken();
+
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
 

@@ -22,14 +22,86 @@ import localization from 'moment/locale/vi';
 import { Notifications } from 'expo';
 import AlertPro from 'react-native-alert-pro';
 import CalendarStrip from 'react-native-calendar-strip';
-import registerPushNotifications from 'utils/Notification';
 import { markDates } from 'utils/markedDates';
 import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
 import Loader from 'utils/Loader';
+import Modal from 'react-native-modal';
+import { Feather } from '@expo/vector-icons/';
 
 moment.updateLocale('vi', localization);
 
+const styles = StyleSheet.create({
+  textParentRequest: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    borderRadius: 1,
+    color: colors.gray,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.homeColor,
+  },
+  textParent: {
+    marginTop: 20,
+    fontSize: 19,
+    color: colors.darkGreenTitle,
+    fontWeight: 'bold',
+    lineHeight: 20,
+  },
+  noRequest: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    marginTop: 15,
+    paddingHorizontal: 5,
+    paddingTop: 10,
+  },
+  noRequestText: {
+    marginVertical: 10,
+    paddingTop: 10,
+    fontSize: 18,
+    color: colors.darkGreenTitle,
+    fontWeight: 'bold',
+  },
+  noRequestImage: {
+    width: 290,
+    height: 230,
+    marginVertical: 20,
+  },
+  scheduleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 25,
+    backgroundColor: colors.white,
+  },
+  modalCreate: {
+    flex: 3,
+    height: 100,
+    backgroundColor: 'white',
+    marginVertical: 10,
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
+    justifyContent: 'center',
+    marginLeft: 5,
+    paddingLeft: 10,
+  },
+  headModalCreate: {
+    flex: 1,
+    marginVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.lightGreen,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopRightRadius: 3,
+    borderBottomRightRadius: 3,
+  },
+});
 class ParentHomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +122,7 @@ class ParentHomeScreen extends Component {
       loading: false,
       selectedDateRequest: [],
       selectedDate: new moment().format('YYYY-MM-DD'),
+      isModalVisible: false,
     };
   }
 
@@ -126,6 +199,10 @@ class ParentHomeScreen extends Component {
         },
       );
     }
+  };
+
+  toggleModalCreateRequest = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   confirmModalPopup = () => {
@@ -209,6 +286,7 @@ class ParentHomeScreen extends Component {
       showCancel,
       textCancel,
       textConfirm,
+      isModalVisible,
     } = this.state;
 
     const {
@@ -218,6 +296,8 @@ class ParentHomeScreen extends Component {
       noRequest,
       noRequestText,
       noRequestImage,
+      modalCreate,
+      headModalCreate,
     } = styles;
     return (
       <View key={this.state.agenda} style={container}>
@@ -252,14 +332,89 @@ class ParentHomeScreen extends Component {
             },
           }}
         />
+        <Modal
+          isVisible={isModalVisible}
+          coverScreen={true}
+          onBackButtonPress={() => this.toggleModalCreateRequest()}
+          onBackdropPress={() => this.toggleModalCreateRequest()}
+        >
+          <View style={{ flex: 0.5 }}>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleModalCreateRequest();
+                navigation.navigate('CreateRequest', {
+                  selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
+                });
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={headModalCreate}>
+                  <Feather
+                    name="calendar"
+                    size={40}
+                    style={{ marginBottom: -5 }}
+                    color={colors.white}
+                  />
+                </View>
+                <View style={modalCreate}>
+                  <MuliText>Tạo yêu cầu giữ trẻ theo ngày</MuliText>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleModalCreateRequest();
+                navigation.navigate('SearchSitter', {
+                  selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
+                });
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={headModalCreate}>
+                  <Feather
+                    name="user-check"
+                    size={40}
+                    style={{ marginBottom: -5 }}
+                    color={colors.white}
+                  />
+                </View>
+                <View style={modalCreate}>
+                  <MuliText>
+                    Tạo yêu cầu với người giữ trẻ trong Vòng tròn tin tưởng
+                  </MuliText>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleModalCreateRequest();
+                // navigation.navigate('CreateRequest', {
+                //   selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
+                // });
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={headModalCreate}>
+                  <Feather
+                    name="repeat"
+                    size={40}
+                    style={{ marginBottom: -5 }}
+                    color={colors.white}
+                  />
+                </View>
+                <View style={modalCreate}>
+                  <MuliText>Tạo yêu cầu giữ trẻ định kỳ</MuliText>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <View style={scheduleContainer}>
           <MuliText style={textParent}>Khi nào bạn cần người giữ trẻ?</MuliText>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('CreateRequest', {
-                selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
-              })
-            }
+            onPress={() => {
+              this.toggleModalCreateRequest();
+            }}
           >
             <MuliText style={styles.textParentRequest}>
               Nhấn vào đây để tạo yêu cầu
@@ -331,11 +486,9 @@ class ParentHomeScreen extends Component {
                 }
               >
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('CreateRequest', {
-                      selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
-                    })
-                  }
+                  onPress={() => {
+                    this.toggleModalCreateRequest();
+                  }}
                 >
                   <View style={noRequest}>
                     <MuliText style={noRequestText}>
@@ -370,51 +523,3 @@ export default withNavigationFocus(ParentHomeScreen);
 ParentHomeScreen.navigationOptions = {
   header: null,
 };
-
-const styles = StyleSheet.create({
-  textParentRequest: {
-    marginVertical: 10,
-    paddingHorizontal: 10,
-    borderColor: colors.gray,
-    borderWidth: 1,
-    borderRadius: 1,
-    color: colors.gray,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: colors.homeColor,
-  },
-  textParent: {
-    marginTop: 20,
-    fontSize: 19,
-    color: colors.darkGreenTitle,
-    fontWeight: 'bold',
-    lineHeight: 20,
-  },
-  noRequest: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    marginTop: 15,
-    paddingHorizontal: 5,
-    paddingTop: 10,
-  },
-  noRequestText: {
-    marginVertical: 10,
-    paddingTop: 10,
-    fontSize: 18,
-    color: colors.darkGreenTitle,
-    fontWeight: 'bold',
-  },
-  noRequestImage: {
-    width: 290,
-    height: 230,
-    marginVertical: 20,
-  },
-  scheduleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 25,
-    backgroundColor: colors.white,
-  },
-});

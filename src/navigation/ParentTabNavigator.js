@@ -22,6 +22,7 @@ import QRcodeScannerScreen from 'utils/qrScanner';
 import CircleScreens from 'screens/parent/CircleScreens';
 import CreateCodeScreen from 'screens/parent/CreateCodeScreen';
 import AddToCircle from 'screens/parent/AddToCircle';
+import SearchSitter from 'screens/parent/SearchSitter';
 
 const config = Platform.select({
   default: {},
@@ -62,6 +63,7 @@ const HomeStack = createStackNavigator(
       }),
     },
     QrScanner: QRcodeScannerScreen,
+    SearchSitter: SearchSitter,
   },
   config,
 );
@@ -80,7 +82,12 @@ HomeStack.path = '';
 
 const CircleStack = createStackNavigator(
   {
-    Circles: CircleScreens,
+    Circles: {
+      screen: CircleScreens,
+      navigationOptions: () => ({
+        title: 'Vòng tròn tin tưởng',
+      }),
+    },
     AddToCircle: {
       screen: AddToCircle,
       navigationOptions: () => ({
