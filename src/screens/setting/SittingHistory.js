@@ -40,7 +40,7 @@ export class SittingHistory extends Component {
 
     const { userId } = this.state;
     await getRequests(userId).then((res) => {
-      console.log('PHUC: SittingHistory -> getSittingRequest -> res', res);
+      // console.log('PHUC: SittingHistory -> getSittingRequest -> res', res);
       // hien tat cac cac request ngoai tru request voi status pending, ongoing, confirmed
 
       const requests = res.filter(
@@ -50,10 +50,10 @@ export class SittingHistory extends Component {
           request.status != 'CONFIRMED',
       );
 
-      console.log(
-        'PHUC: SittingHistory -> getSittingRequest -> requests',
-        requests,
-      );
+      // console.log(
+      //   'PHUC: SittingHistory -> getSittingRequest -> requests',
+      //   requests,
+      // );
 
       this.setState({ requests: requests });
     });

@@ -46,10 +46,10 @@ export class SitterSittingHistory extends Component {
 
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {
-        console.log(
-          'PHUC: SitterSittingHistory -> getInvitationData -> invitations',
-          invitations,
-        );
+        // console.log(
+        //   'PHUC: SitterSittingHistory -> getInvitationData -> invitations',
+        //   invitations,
+        // );
         invitations.sort((a, b) => this.compareInviteByDate(a, b));
 
         const sittingHistory = invitations.filter(
@@ -58,10 +58,10 @@ export class SitterSittingHistory extends Component {
             invitation.sittingRequest.status !== 'ONGOING' &&
             invitation.sittingRequest.status !== 'CONFIRMED',
         );
-        console.log(
-          'PHUC: SitterSittingHistory -> getInvitationData -> sittingHistory',
-          sittingHistory,
-        );
+        // console.log(
+        //   'PHUC: SitterSittingHistory -> getInvitationData -> sittingHistory',
+        //   sittingHistory,
+        // );
         this.setState({
           sittingHistory,
           loading: false,

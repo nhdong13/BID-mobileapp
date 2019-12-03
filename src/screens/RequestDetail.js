@@ -384,6 +384,7 @@ export class RequestDetail extends Component {
       showConfirm,
       refreshing,
       loading,
+      sittingRequestsID: requestId,
     } = this.state;
     return (
       <ScrollView
@@ -818,6 +819,23 @@ export class RequestDetail extends Component {
               >
                 <MuliText style={{ color: colors.overlap, fontSize: 11 }}>
                   Xác nhận công việc hoàn thành
+                </MuliText>
+              </TouchableOpacity>
+            )}
+            {(this.state.status == 'DONE' ||
+              this.state.status == 'DONE_UNCONFIMRED' ||
+              this.state.status == 'DONE_BY_NEWSTART' ||
+              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={() => {
+                  this.props.navigation.navigate('Feedback', {
+                    requestId: requestId,
+                  });
+                }}
+              >
+                <MuliText style={{ color: colors.blueAqua, fontSize: 11 }}>
+                  Đánh giá cho yêu cầu trông trẻ này
                 </MuliText>
               </TouchableOpacity>
             )}

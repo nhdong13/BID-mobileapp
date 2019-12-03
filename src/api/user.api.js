@@ -4,16 +4,16 @@ import { userAPI } from 'utils/Connection';
 import { retrieveToken } from 'utils/handleToken';
 
 export async function getUser() {
-  const { userId } = await retrieveToken();
-  console.log('PHUC: getUser -> userId', userId);
+  const { userId: id } = await retrieveToken();
+  console.log('PHUC: getUser -> userId', id);
 
   const options = {
     method: 'GET',
-    url: `${userAPI.getUser}${userId}`,
+    url: `${userAPI.getUser}${id}`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    data: qs.stringify(userId),
+    data: qs.stringify(id),
   };
 
   const response = await axios(options)

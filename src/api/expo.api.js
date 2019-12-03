@@ -22,16 +22,16 @@ export async function registerExpoToken(request) {
     data: qs.stringify(data),
   };
 
-  const response = await axios(options).catch((error) => {
-    if (error && error.message.includes('Token exist!!')) {
-      console.log('PHUC: registerExpoToken -> error', error);
-    }
-  });
+  const response = await axios(options)
+    .then((res) => {
+      // console.log('PHUC: registerExpoToken -> res', res);
+      return res;
+    })
+    .catch((error) => {
+      console.log('PHUC: registerExpoToken -> error', error.response);
+
+      return error.response;
+    });
   // console.log('PHUC: registerExpoToken -> response', response);
-
-  if (response) {
-    return response;
-  }
-
-  return { message: 'error trying to get data from response' };
+  return response;
 }

@@ -16,7 +16,7 @@ import colors from 'assets/Color';
 export default class ParentSetting extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: '' };
+    this.state = { nickname: '', image: null };
   }
 
   componentDidMount() {
@@ -42,21 +42,20 @@ export default class ParentSetting extends Component {
     });
 
     await Api.get('users/' + this.state.userId.toString()).then((res) => {
-      this.setState({ name: res.nickname });
+      const { nickname, image } = res;
+      this.setState({ nickname: nickname, image: image });
       // console.log(res);
     });
   };
 
   render() {
+    const { nickname, image } = this.state;
     return (
       <ScrollView>
         <View style={{ alignItems: 'center', marginTop: 25 }}>
-          <Image
-            source={require('assets/images/Phuc.png')}
-            style={styles.picture}
-          />
+          <Image source={{ uri: image }} style={styles.picture} />
           <View style={{ marginTop: 10, alignItems: 'center' }}>
-            <MuliText style={styles.headerTitle}>{this.state.name}</MuliText>
+            <MuliText style={styles.headerTitle}>{nickname}</MuliText>
             <MuliText style={styles.blueOptionInformation}>Phụ huynh</MuliText>
           </View>
         </View>

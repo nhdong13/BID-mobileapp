@@ -1,8 +1,10 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-else-return */
 import axios from 'axios';
 import qs from 'qs';
-import { saveToken } from 'utils/handleToken';
-import apiUrl from 'utils/Connection';
-import registerPushNotifications from 'utils/Notification';
+import { saveToken, saveTokenExpo, saveViolation } from 'utils/handleToken';
+import apiUrl, { authenticationAPI } from 'utils/Connection';
+import { registerPushNotifications } from 'utils/Notification';
 
 export async function login(phoneNumber, password) {
   // De day cho nho, ko ai dc xoa
@@ -10,13 +12,14 @@ export async function login(phoneNumber, password) {
   console.log("Can't Login ? Did you change your fucking IP you FAT FUCK ?");
   console.log('PHUC: login -> apiUrl.baseUrl', apiUrl.baseUrl);
   console.log('------------------');
+
   const data = {
     phoneNumber: phoneNumber,
     password: password,
   };
   const options = {
     method: 'POST',
-    url: apiUrl.login,
+    url: authenticationAPI.login,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -25,13 +28,25 @@ export async function login(phoneNumber, password) {
 
   const response = await axios(options)
     .then(async (res) => {
-      await saveToken(res.data.token, res.data.userId, res.data.roleId);
-      await registerPushNotifications(res.data.userId).then((response) => {
-        if (response) {
-          console.log('PHUC: App -> response', response.data);
-        }
-      });
-      return res;
+      const { token, userId, roleId } = res.data;
+      if (token && roleId == 2) {
+        await saveToken(token, userId, roleId);
+        await registerPushNotifications(res.data.userId)
+          .then(async (res) => {
+            console.log('PHUC: login -> res', res);
+            if (res.status === 401) {
+              console.log('co gi do hay ho da xay ra');
+              await saveViolation(true);
+            } else {
+              await saveTokenExpo(res.data.token);
+              await saveViolation(false);
+            }
+          })
+          .catch((error) => console.log('loi token roi', error));
+        return res;
+      } else {
+        return res;
+      }
     })
     .catch((error) => {
       if (error.response) {
@@ -40,5 +55,54 @@ export async function login(phoneNumber, password) {
         console.log(error.response.headers);
       } else console.log('onLogin error' + error);
     });
+
+  return response;
+}
+
+export async function checkOtp(phoneNumber, otp) {
+  const data = {
+    phoneNumber: phoneNumber,
+    otp: otp,
+  };
+  const options = {
+    method: 'POST',
+    url: authenticationAPI.checkOtp,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: qs.stringify(data),
+  };
+
+  const response = await axios(options)
+    .then(async (res) => {
+      const { token, userId, roleId } = res.data;
+      if ((token, userId, roleId)) {
+        await saveToken(token, userId, roleId);
+        await registerPushNotifications(res.data.userId)
+          .then(async (result) => {
+            console.log('PHUC: checkOtp -> result', result);
+            if (result.status === 401) {
+              await saveViolation(true);
+            } else {
+              await saveTokenExpo(result.data.token);
+              await saveViolation(false);
+            }
+          })
+          .catch((error) =>
+            console.log('loi tai ham check otp -- login api', error),
+          );
+      }
+
+      return res;
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        return error.response;
+      } else console.log('onLogin error' + error);
+    });
+
   return response;
 }

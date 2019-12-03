@@ -76,8 +76,8 @@ class CreateRequestScreen extends Component {
       return;
     }
 
-    let start = moment(this.state.startTime, 'HH:mm');
-    let end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
+    const start = moment(this.state.startTime, 'HH:mm');
+    const end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
     if (end.isBefore(start)) {
       this.refs.toast.show(
         'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
@@ -128,16 +128,15 @@ class CreateRequestScreen extends Component {
       .catch((error) => {
         if (error.response.status == 409) {
           this.refs.toast.show(
-            'Ngày giờ ở quá khứ, vui lòng chọn lại.',
+            'Không thể đặt yêu cầu cho ngày giờ ở quá khứ, vui lòng chọn lại.',
             DURATION.LENGTH_LONG,
           );
-        }else {
+        } else {
           this.refs.toast.show(
             'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
             DURATION.LENGTH_LONG,
           );
         }
-        
       });
   };
 
@@ -313,7 +312,7 @@ class CreateRequestScreen extends Component {
                 placeholder="Ngày"
                 format="YYYY-MM-DD"
                 minDate={moment().format('YYYY-MM-DD')}
-                maxDate="2019-12-01"
+                maxDate="2019-12-30"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{

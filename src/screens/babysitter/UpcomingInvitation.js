@@ -17,13 +17,16 @@ class UpcomingInvitation extends Component {
     const { invitation, navigation } = this.props;
     return (
       <View style={styles.container}>
-        {invitation.sittingRequest.status === 'CONFIRMED' && (
+        {(invitation.sittingRequest.status === 'CONFIRMED' ||
+          invitation.sittingRequest.status === 'ONGOING') && (
           <TouchableOpacity
             key={invitation.id}
             onPress={() =>
-              navigation.navigate('InvitationDetail', {
-                invitationId: invitation.id,
-              })
+              invitation.sittingRequest.status === 'CONFIRMED'
+                ? navigation.navigate('InvitationDetail', {
+                    invitationId: invitation.id,
+                  })
+                : null
             }
           >
             <View style={styles.requestItemSitter}>
@@ -48,11 +51,20 @@ class UpcomingInvitation extends Component {
               </View>
               <View style={styles.rightInformation}>
                 <View style={styles.statusBoxPending}>
-                  <MuliText
-                    style={{ fontWeight: '100', color: colors.pending }}
-                  >
-                    Đã xác nhận
-                  </MuliText>
+                  {invitation.sittingRequest.status === 'CONFIRMED' && (
+                    <MuliText
+                      style={{ fontWeight: '100', color: colors.pending }}
+                    >
+                      Đã xác nhận
+                    </MuliText>
+                  )}
+                  {invitation.sittingRequest.status === 'ONGOING' && (
+                    <MuliText
+                      style={{ fontWeight: '100', color: colors.blueAqua }}
+                    >
+                      Đang thực hiện
+                    </MuliText>
+                  )}
                 </View>
                 <MuliText style={{ fontSize: 10, marginTop: 10 }}>
                   Giá tiền {formater(invitation.sittingRequest.totalPrice)} đ

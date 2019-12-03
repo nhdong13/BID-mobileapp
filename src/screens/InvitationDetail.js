@@ -36,6 +36,7 @@ export default class InvitationDetail extends Component {
       childrenNumber: 1,
       minAgeOfChildren: 1,
       createUserId: 0,
+      requestId: 0,
     };
   }
 
@@ -46,7 +47,7 @@ export default class InvitationDetail extends Component {
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(
       (resp) => {
-        console.log('PHUC: InvitationDetail -> getData -> resp', resp);
+        // console.log('PHUC: InvitationDetail -> getData -> resp', resp);
         this.setState({
           createUserId: resp.sittingRequest.user.id,
           parentName: resp.sittingRequest.user.nickname,
@@ -59,6 +60,7 @@ export default class InvitationDetail extends Component {
           price: resp.sittingRequest.totalPrice,
           childrenNumber: resp.sittingRequest.childrenNumber,
           minAgeOfChildren: resp.sittingRequest.minAgeOfChildren,
+          requestId: resp.sittingRequest.id,
         });
       },
     );
