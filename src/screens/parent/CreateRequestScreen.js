@@ -64,42 +64,23 @@ class CreateRequestScreen extends Component {
         sittingAddress: res.address,
         child: res.parent.children,
       });
-      // console.log(
-      // 'PHUC: CreateRequestScreen -> componentDidMount -> loggedUser',
-      // this.state.loggedUser,
-      // );
     });
   }
-
-  onCreateRequest = () => {
-    if (this.state.childrenNumber == 0) {
-      return;
-    }
-    const request = {
-      createdUser: this.state.userId,
-      sittingDate: this.state.sittingDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      sittingAddress: this.state.sittingAddress,
-      childrenNumber: this.state.childrenNumber,
-      minAgeOfChildren: this.state.minAgeOfChildren,
-      status: 'PENDING',
-      totalPrice: this.state.price,
-    };
-    // console.log(request);
-    Api.post('sittingRequests', request)
-      .then((res) => {
-        if (res) {
-          this.props.navigation.navigate('Recommend', { requestId: res.id });
-        }
-      })
-      .catch((error) => console.log(error));
-  };
 
   beforeRecommend = () => {
     if (this.state.startTime == null || this.state.endTime == null) {
       this.refs.toast.show(
         'Vui lòng chọn thời gian trông trẻ',
+        // DURATION.LENGTH_LONG,
+      );
+      return;
+    }
+
+    let start = moment(this.state.startTime, 'HH:mm');
+    let end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
+    if (end.isBefore(start)) {
+      this.refs.toast.show(
+        'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
         // DURATION.LENGTH_LONG,
       );
       return;
@@ -145,14 +126,18 @@ class CreateRequestScreen extends Component {
         }
       })
       .catch((error) => {
-        console.log(
-          'Duong: CreateRequestScreen -> beforeRecommend -> error',
-          error,
-        );
-        this.refs.toast.show(
-          'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
-          DURATION.LENGTH_LONG,
-        );
+        if (error.response.status == 409) {
+          this.refs.toast.show(
+            'Ngày giờ ở quá khứ, vui lòng chọn lại.',
+            DURATION.LENGTH_LONG,
+          );
+        }else {
+          this.refs.toast.show(
+            'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+            DURATION.LENGTH_LONG,
+          );
+        }
+        
       });
   };
 
