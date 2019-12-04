@@ -1,6 +1,8 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 
+
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
+
 const apiUrl = {
   baseUrl: `${url}/`,
   registerExpoToken: `${url}/trackings/`,
@@ -55,6 +57,18 @@ export const sittingRequestAPI = {
   doneSittingRequest: `${url}/sittingRequests/doneSittingRequest/`,
   getOverlapRequests: `${url}/sittingRequests/getOverlapRequests`,
   getRequestDetail: `${url}/sittingRequests/`,
+};
+
+export const pricingAPI = {
+  listPricings: `${url}/pricings`,
+};
+
+export const holidayAPI = {
+  listHolidays: `${url}/holidays`,
+};
+
+export const configAPI = {
+  readFirst: `${url}/configuration`,
 };
 
 export default apiUrl;
