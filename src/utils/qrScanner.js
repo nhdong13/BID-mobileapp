@@ -8,7 +8,11 @@ import {
   Platform,
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
-import { withNavigationFocus } from 'react-navigation';
+import {
+  NavigationActions,
+  StackActions,
+  withNavigationFocus,
+} from 'react-navigation';
 import { startSitting, doneSitting } from 'api/sittingRequest.api';
 
 import io from 'socket.io-client';
@@ -132,9 +136,14 @@ export class QRcodeScannerScreen extends React.Component {
                 }
               }
             }
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({ routeName: 'Home' })],
+            });
 
             const { isDone, dataInvitation } = this.state;
             if (isDone) {
+              this.props.navigation.dispatch(resetAction);
               this.props.navigation.navigate('Feedback', {
                 requestId: dataInvitation.id,
               });

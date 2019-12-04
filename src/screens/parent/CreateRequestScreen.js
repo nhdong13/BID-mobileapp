@@ -328,7 +328,7 @@ class CreateRequestScreen extends Component {
                 placeholder="Ngày"
                 format="YYYY-MM-DD"
                 minDate={moment().format('YYYY-MM-DD')}
-                maxDate="2019-12-01"
+                maxDate="2019-12-30"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
