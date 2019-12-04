@@ -22,6 +22,11 @@ export async function getInvitations(userId) {
 }
 
 export async function createInvitation(requestId, invitation, request) {
+  const data = {
+    requestId,
+    invitation,
+    request,
+  };
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
@@ -35,7 +40,7 @@ export async function createInvitation(requestId, invitation, request) {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
     },
-    data: qs.stringify({ newInvite: JSON.stringify(invitation), newRequest: JSON.stringify(request) }),
+    data: qs.stringify(data),
   };
 
   const response = await axios(options).catch((error) => console.log(error));

@@ -62,6 +62,7 @@ class SearchSitter extends Component {
       searchValue: '',
       listBabysitter: null,
       data: null,
+      request: null,
     };
   }
 
@@ -104,10 +105,23 @@ class SearchSitter extends Component {
       return;
     }
 
+    const request = {
+      requestId: this.state.requestId != 0 ? this.state.requestId : 0,
+      createdUser: this.state.userId,
+      sittingDate: this.state.sittingDate,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      sittingAddress: this.state.sittingAddress,
+      childrenNumber: this.state.childrenNumber,
+      minAgeOfChildren: this.state.minAgeOfChildren,
+      status: 'PENDING',
+      totalPrice: this.state.price,
+    };
+
     await getAllBabysitter().then(async (res) => {
       if (res) {
         // console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
-        await this.setState({ listBabysitter: res.data });
+        await this.setState({ listBabysitter: res.data, request });
       }
     });
 
@@ -220,10 +234,7 @@ class SearchSitter extends Component {
 
   changeInviteStatus = (receiverId) => {
     this.setState((prevState) => ({
-      listMatched: prevState.listMatched.map((el) =>
-        el.userId == receiverId ? Object.assign(el, { isInvited: true }) : el,
-      ),
-      recommendList: prevState.recommendList.map((el) =>
+      data: prevState.data.map((el) =>
         el.userId == receiverId ? Object.assign(el, { isInvited: true }) : el,
       ),
     }));
@@ -359,6 +370,7 @@ class SearchSitter extends Component {
       sittingDate,
       startTime,
       endTime,
+      request,
     } = this.state;
 
     return (
@@ -418,9 +430,7 @@ class SearchSitter extends Component {
                 <View style={styles.detailContainerParent}>
                   <TextInput
                     style={styles.searchParent}
-                    // value={this.state.searchValue}
                     onChangeText={async (text) => {
-                      // await this.setState({ searchValue: text });
                       this.searchFilter(text);
                     }}
                     placeholder="Nhập tên người giữ trẻ cần tìm"
@@ -434,7 +444,7 @@ class SearchSitter extends Component {
                         changeInviteStatus={this.changeInviteStatus}
                         setRequestId={this.setRequestId}
                         requestId={this.state.requestId}
-                        request={this.state.request}
+                        request={request}
                         item={item}
                       />
                     )}

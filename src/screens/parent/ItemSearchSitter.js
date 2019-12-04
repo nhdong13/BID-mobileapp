@@ -107,15 +107,13 @@ export class ItemSearchSitter extends Component {
   };
 
   changeStateOnGoBack(receiverId, requestId) {
-    console.log('PHUC: changeStateOnGoBack -> receiverId', receiverId);
-    console.log('PHUC:changeStateOnGoBack -> requestId', requestId);
     this.props.changeInviteStatus(receiverId);
     this.props.setRequestId(requestId);
     this.setState({ requestId });
   }
 
   render() {
-    const { item, navigation, requestId, request } = this.props;
+    const { item } = this.props;
     return (
       <View key={item.userId} style={styles.ItemSearchSitterContainer}>
         <View style={styles.ItemSearchSitterItem}>
@@ -127,7 +125,7 @@ export class ItemSearchSitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.ItemSearchSitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}
                   tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
@@ -149,13 +147,6 @@ export class ItemSearchSitter extends Component {
               </View>
               <View style={styles.lowerText}>
                 <Ionicons
-                  name="ios-pin"
-                  size={19}
-                  style={{ marginLeft: 5 }}
-                  color={colors.lightGreen}
-                />
-                <MuliText> {item.distance} </MuliText>
-                <Ionicons
                   name="ios-star"
                   size={19}
                   style={{ marginLeft: 5 }}
@@ -165,7 +156,7 @@ export class ItemSearchSitter extends Component {
                 <MuliText
                   style={item.totalFeedback > 10 ? styles.green : styles.red}
                 >
-                  {item.averageRating.toFixed(0)} ({item.totalFeedback}){' '}
+                  {item.averageRating.toFixed(0)} ({item.totalFeedback})
                 </MuliText>
               </View>
             </View>
