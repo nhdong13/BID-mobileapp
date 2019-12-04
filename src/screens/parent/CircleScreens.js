@@ -17,8 +17,9 @@ import CircleItem from 'screens/parent/CircleItem';
 import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
 import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
 import Toast, { DURATION } from 'react-native-easy-toast';
+import { withNavigationFocus } from 'react-navigation';
 
-export default class CircleScreens extends Component {
+class CircleScreens extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,17 +34,27 @@ export default class CircleScreens extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getCircle();
   }
 
-  getCircle() {
-    retrieveToken().then((res) => {
+  async componentDidUpdate(prevProps) {
+    if (prevProps.isFocused != this.props.isFocused) {
+      if (this.props.isFocused) {
+        this.getCircle();
+      }
+    }
+  }
+
+  getCircle = async () => {
+    await retrieveToken().then((res) => {
       const { userId } = res;
       this.setState({ userId });
     });
 
-    getCircle()
+    const { userId } = this.state;
+
+    getCircle(userId)
       .then((result) => {
         this.setState({
           circle: result.data.circle,
@@ -54,7 +65,7 @@ export default class CircleScreens extends Component {
       .catch((error) => {
         console.log('Duong: CircleScreens -> getCircle -> error', error);
       });
-  }
+  };
 
   _onRefresh = () => {
     // this.setState({ loading: true });
@@ -89,7 +100,10 @@ export default class CircleScreens extends Component {
     return (
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
         }
         style={{ backgroundColor: colors.white }}
       >
@@ -259,6 +273,9 @@ export default class CircleScreens extends Component {
     );
   }
 }
+
+export default withNavigationFocus(CircleScreens);
+
 CircleScreens.navigationOptions = {
   title: 'Vòng tròn tin tưởng',
 };

@@ -30,7 +30,7 @@ export class CircleFriendSitter extends Component {
         <View style={styles.bsitterItem}>
           <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
             <Image
-              source={require('assets/images/Phuc.png')}
+              source={{ uri: item.user.image }}
               style={styles.sitterImage}
             />
             <View>

@@ -25,12 +25,13 @@ export class CircleHiredSitter extends Component {
 
   render() {
     const { item } = this.props;
+    // console.log('PHUC: CircleHiredSitter -> render -> item', item);
     return (
       <View key={item.id} style={styles.bsitterContainer}>
         <View style={styles.bsitterItem}>
           <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
             <Image
-              source={require('assets/images/Phuc.png')}
+              source={{ uri: item.user.image }}
               style={styles.sitterImage}
             />
             <View>
@@ -56,11 +57,6 @@ export class CircleHiredSitter extends Component {
                 )}
               </View>
               <View style={styles.lowerText}>
-                <Ionicons name="ios-pin" size={24} color={colors.lightGreen} />
-                <MuliText style={styles.bsitterName}>
-                  {' '}
-                  {item.distance} km{' '}
-                </MuliText>
                 <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
                 <MuliText style={styles.bsitterName}>
                   {' '}

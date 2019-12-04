@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   detailPictureContainer: {
     marginTop: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   detailContainer: {
     marginHorizontal: 25,

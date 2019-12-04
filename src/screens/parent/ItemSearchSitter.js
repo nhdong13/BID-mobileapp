@@ -5,7 +5,6 @@ import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { createInvitation } from 'api/invitation.api';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
-import images from 'assets/images/images';
 import colors from 'assets/Color';
 import { withNavigation } from 'react-navigation';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
@@ -13,7 +12,7 @@ import Api from 'api/api_helper';
 import { retrieveToken } from 'utils/handleToken';
 import { createCustomer } from 'api/payment.api';
 
-export class Bsitter extends Component {
+export class ItemSearchSitter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,30 +117,16 @@ export class Bsitter extends Component {
   render() {
     const { item, navigation, requestId, request } = this.props;
     return (
-      <View key={item.userId} style={styles.bsitterContainer}>
-        <View style={styles.bsitterItem}>
-          <TouchableOpacity
-            style={{ flexDirection: 'row', flexGrow: 2 }}
-            onPress={() =>
-              navigation.navigate('SitterProfile', {
-                userId: this.state.userId,
-                sitterId: item.userId,
-                requestId:
-                  this.state.requestId != 0 ? this.state.requestId : requestId,
-                request: request,
-                distance: item.distance,
-                onGoBack: (receiverId, requestId) =>
-                  this.changeStateOnGoBack(receiverId, requestId),
-              })
-            }
-          >
+      <View key={item.userId} style={styles.ItemSearchSitterContainer}>
+        <View style={styles.ItemSearchSitterItem}>
+          <TouchableOpacity style={{ flexDirection: 'row', flexGrow: 2 }}>
             <Image
               source={{ uri: item.user.image }}
               style={styles.sitterImage}
             />
             <View>
               <View style={styles.upperText}>
-                <MuliText style={styles.bsitterName}>
+                <MuliText style={styles.ItemSearchSitterName}>
                   {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
                   tuổi
                 </MuliText>
@@ -209,7 +194,7 @@ export class Bsitter extends Component {
   }
 }
 
-export default withNavigation(Bsitter);
+export default withNavigation(ItemSearchSitter);
 
 const styles = StyleSheet.create({
   green: {
@@ -225,10 +210,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     paddingBottom: 20,
   },
-  bsitterContainer: {
+  ItemSearchSitterContainer: {
     marginVertical: 8,
   },
-  bsitterItem: {
+  ItemSearchSitterItem: {
     flexDirection: 'row',
   },
   upperText: {
@@ -244,7 +229,7 @@ const styles = StyleSheet.create({
   inviteButton: {
     marginTop: 14,
   },
-  bsitterName: {
+  ItemSearchSitterName: {
     fontSize: 14,
     fontWeight: '400',
     color: colors.darkGreenTitle,
