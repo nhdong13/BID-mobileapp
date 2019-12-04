@@ -23,6 +23,8 @@ import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
 import { getPricings } from 'api/pricing.api';
+import { getHolidays } from 'api/holiday.api';
+import { getConfigs } from 'api/configuration.api';
 import { getUser } from 'api/user.api';
 
 class CreateRequestScreen extends Component {
@@ -49,6 +51,9 @@ class CreateRequestScreen extends Component {
       confirmAlert: '',
       showConfirm: false,
       pricings: [],
+      holidays: [],
+      officeHourStart: null,
+      officeHourEnd: null,
       selectedChildren: [],
     };
     console.log(this.props.navigation.getParam('selectedDate'));
@@ -65,8 +70,16 @@ class CreateRequestScreen extends Component {
       });
     });
 
-    await getPricings().then((pricings) => {
+    getPricings().then((pricings) => {
       this.setState({ pricings });
+    });
+
+    getHolidays().then((holidays) => {
+      this.setState({ holidays });
+    });
+
+    getConfigs().then((configs) => {
+      this.setState({ officeHourStart: configs.officeHourStart, officeHourEnd: configs.officeHourEnd });
     });
   }
 
@@ -226,8 +239,8 @@ class CreateRequestScreen extends Component {
   };
 
   updatePrice = async () => {
-    console.log('a');
     if (
+      this.state.sittingDate == null ||
       this.state.startTime == null ||
       this.state.endTime == null ||
       this.state.selectedChildren.length <= 0
@@ -238,7 +251,9 @@ class CreateRequestScreen extends Component {
 
     let totalPrice = 0;
 
-    let isHolyday = false;
+    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
+    const isHolyday = this.isHolyday(sittingDate);
+
     const officeHours = await this.getOfficeHours(); // khoảng thời gian trong giờ hành chính của request này (phút)
     const OTHours = await this.getOTHours(); // khoảng thời gian ngoài giờ hành chính của request này (phút)
     const totalDuration = officeHours + OTHours;
@@ -267,7 +282,8 @@ class CreateRequestScreen extends Component {
             this.state.pricings[3].overtime *
             OTHoursPercentage;
 
-          totalPrice += this.state.pricings[3].baseAmount * officeHoursPercentage;
+          totalPrice +=
+            this.state.pricings[3].baseAmount * officeHoursPercentage;
         }
       } else if (child.age < 1.8) {
         if (isHolyday) {
@@ -281,7 +297,8 @@ class CreateRequestScreen extends Component {
             this.state.pricings[2].overtime *
             OTHoursPercentage;
 
-          totalPrice += this.state.pricings[2].baseAmount * officeHoursPercentage;
+          totalPrice +=
+            this.state.pricings[2].baseAmount * officeHoursPercentage;
         }
       } else if (child.age < 6) {
         if (isHolyday) {
@@ -295,7 +312,8 @@ class CreateRequestScreen extends Component {
             this.state.pricings[1].overtime *
             OTHoursPercentage;
 
-          totalPrice += this.state.pricings[1].baseAmount * officeHoursPercentage;
+          totalPrice +=
+            this.state.pricings[1].baseAmount * officeHoursPercentage;
         }
       }
 
@@ -305,10 +323,17 @@ class CreateRequestScreen extends Component {
 
   getOfficeHours = async () => {
     let officeHours = 0;
+
     const startTime = moment(this.state.startTime, 'HH:mm');
     const endTime = moment(this.state.endTime, 'HH:mm');
-    const officeHStart = moment('08:00', 'HH:mm');
-    const officeHEnd = moment('17:00', 'HH:mm');
+    const officeHStart = moment(this.state.officeHourStart, 'HH:mm');
+    const officeHEnd = moment(this.state.officeHourEnd, 'HH:mm');
+
+    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
+    // Thứ 7, CN
+    if (sittingDate.day() == 0 || sittingDate.day() == 6) {
+      return officeHours;
+    }
 
     if (
       startTime.isSameOrAfter(officeHStart) &&
@@ -346,10 +371,18 @@ class CreateRequestScreen extends Component {
 
   getOTHours = async () => {
     let OTHours = 0;
+
     const startTime = moment(this.state.startTime, 'HH:mm');
     const endTime = moment(this.state.endTime, 'HH:mm');
-    const officeHStart = moment('08:00', 'HH:mm');
-    const officeHEnd = moment('17:00', 'HH:mm');
+    const officeHStart = moment(this.state.officeHourStart, 'HH:mm');
+    const officeHEnd = moment(this.state.officeHourEnd, 'HH:mm');
+
+    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
+    // Thứ 7, CN
+    if (sittingDate.day() == 0 || sittingDate.day() == 6) {
+      OTHours = endTime.diff(startTime, 'minutes');
+      return OTHours;
+    }
 
     if (
       startTime.isSameOrAfter(officeHStart) &&
@@ -382,6 +415,19 @@ class CreateRequestScreen extends Component {
       OTHours += endTime.diff(officeHEnd, 'minutes');
       return OTHours;
     }
+  };
+
+  isHolyday = (date) => {
+    let result = false;
+    const sittingDate = date.format('DD/MM');
+    this.state.holidays.forEach((element) => {
+      if (sittingDate == element.date) {
+        result = true;
+        return;
+      }
+    });
+
+    return result;
   };
 
   render() {
