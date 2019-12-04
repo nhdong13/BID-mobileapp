@@ -13,7 +13,6 @@ import {
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
 import { Ionicons } from '@expo/vector-icons/';
-import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import {
   updateRequest,
@@ -23,8 +22,10 @@ import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AlertPro from 'react-native-alert-pro';
-
-// const { width, height } = Dimensions.get('window');
+import { getPricings } from 'api/pricing.api';
+import { getHolidays } from 'api/holiday.api';
+import { getConfigs } from 'api/configuration.api';
+import { getUser } from 'api/user.api';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -39,31 +40,46 @@ class CreateRequestScreen extends Component {
       startTime: null,
       endTime: null,
       sittingAddress: null,
-      price: 0,
       childrenNumber: 0,
-      minAgeOfChildren: 99,
-      child: null,
+      minAgeOfChildren: 0,
+      children: [],
       totalPrice: 0,
-      spPrice: null,
       overlapRequests: [],
       noticeTitle: '',
       noticeMessage: '',
       cancelAlert: '',
       confirmAlert: '',
       showConfirm: false,
+      pricings: [],
+      holidays: [],
+      officeHourStart: null,
+      officeHourEnd: null,
+      selectedChildren: [],
     };
     console.log(this.props.navigation.getParam('selectedDate'));
   }
 
-  async componentDidMount() {
-    await this.getDataAccordingToRole();
+  async componentWillMount() {
+    this.getDataAccordingToRole();
 
-    Api.get('users/' + this.state.userId.toString()).then((res) => {
+    getUser().then((parent) => {
       this.setState({
-        loggedUser: res,
-        sittingAddress: res.address,
-        child: res.parent.children,
+        loggedUser: parent,
+        sittingAddress: parent.address,
+        children: parent.parent.children,
       });
+    });
+
+    getPricings().then((pricings) => {
+      this.setState({ pricings });
+    });
+
+    getHolidays().then((holidays) => {
+      this.setState({ holidays });
+    });
+
+    getConfigs().then((configs) => {
+      this.setState({ officeHourStart: configs.officeHourStart, officeHourEnd: configs.officeHourEnd });
     });
   }
 
@@ -104,7 +120,7 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.price,
+      totalPrice: this.state.totalPrice,
     };
 
     getOverlapSittingRequest(request)
@@ -151,7 +167,7 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.price,
+      totalPrice: this.state.totalPrice,
     };
 
     this.props.navigation.navigate('Recommend', {
@@ -174,7 +190,7 @@ class CreateRequestScreen extends Component {
       childrenNumber: this.state.childrenNumber,
       minAgeOfChildren: this.state.minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.price,
+      totalPrice: this.state.totalPrice,
     };
 
     // console.log(request);
@@ -191,68 +207,227 @@ class CreateRequestScreen extends Component {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
       this.setState({ userId, roleId });
-      // console.log(
-      // 'PHUC: CreateRequestScreen -> getDataAccordingToRole -> roleId',
-      // roleId + this.state.roleId,
-      // );
     });
   };
 
-  toggleHidden = (key) => {
+  toggleHidden = async (key) => {
     // eslint-disable-next-line no-unused-expressions
     key.checked == null ? (key.checked = true) : (key.checked = !key.checked);
     this.forceUpdate();
-    this.calculate();
+    await this.calculate();
+    this.updatePrice();
   };
 
-  calculate = () => {
+  calculate = async () => {
     let childCounter = 0;
     let minAge = 99;
-    this.state.child.forEach((element) => {
+    let selectedChildren = [];
+    this.state.children.forEach((element) => {
       if (element.checked) {
         childCounter += 1;
         if (minAge > element.age) minAge = element.age;
+
+        selectedChildren.push(element);
       }
     });
-    this.setState({ childrenNumber: childCounter, minAgeOfChildren: minAge });
+
+    this.setState({
+      childrenNumber: childCounter,
+      minAgeOfChildren: minAge,
+      selectedChildren,
+    });
   };
 
   updatePrice = async () => {
-    if (this.state.startTime == null || this.state.endTime == null) return;
-    await Api.get('configuration/' + this.state.sittingDate.toString()).then(
-      (res) => {
-        this.setState({
-          spPrice: res,
-        });
-      },
-    );
-
-    const startP = parseInt(
-      this.state.startTime[0] + this.state.startTime[1],
-      10,
-    );
-    const endP = parseInt(this.state.endTime[0] + this.state.endTime[1], 10);
-    let i;
-
-    let tempTotal = 0.0;
-    // eslint-disable-next-line no-plusplus
-    for (i = startP + 1; i < endP; i++) {
-      const temp = this.state.spPrice[i.toString()];
-      if (temp == null) tempTotal += this.state.spPrice.base;
-      else tempTotal += temp;
+    if (
+      this.state.sittingDate == null ||
+      this.state.startTime == null ||
+      this.state.endTime == null ||
+      this.state.selectedChildren.length <= 0
+    ) {
+      this.setState({ totalPrice: 0 });
+      return;
     }
-    let temp = 0.0;
-    temp =
-      (60 - parseInt(this.state.startTime[3] + this.state.startTime[4], 10)) /
-      60.0;
-    let price = this.state.spPrice[startP.toString()];
-    if (price == null) tempTotal += this.state.spPrice.base * temp;
-    else tempTotal += temp * price;
-    temp = parseInt(this.state.endTime[3] + this.state.endTime[4], 10) / 60.0;
-    price = this.state.spPrice[endP.toString()];
-    if (price == null) tempTotal += this.state.spPrice.base * temp;
-    else tempTotal += temp * price;
-    this.setState({ price: Math.floor(tempTotal) });
+
+    let totalPrice = 0;
+
+    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
+    const isHolyday = this.isHolyday(sittingDate);
+
+    const officeHours = await this.getOfficeHours(); // khoảng thời gian trong giờ hành chính của request này (phút)
+    const OTHours = await this.getOTHours(); // khoảng thời gian ngoài giờ hành chính của request này (phút)
+    const totalDuration = officeHours + OTHours;
+    console.log(
+      'Duong: CreateRequestScreen -> updatePrice -> officeHours',
+      officeHours,
+    );
+    console.log(
+      'Duong: CreateRequestScreen -> updatePrice -> OTHours',
+      OTHours,
+    );
+    const officeHoursPercentage = officeHours / 60;
+    const OTHoursPercentage = OTHours / 60;
+    const totalDurationPercentage = totalDuration / 60;
+
+    this.state.selectedChildren.forEach((child) => {
+      if (child.age < 0.6) {
+        if (isHolyday) {
+          totalPrice +=
+            this.state.pricings[3].baseAmount *
+            this.state.pricings[3].holiday *
+            totalDurationPercentage;
+        } else {
+          totalPrice +=
+            this.state.pricings[3].baseAmount *
+            this.state.pricings[3].overtime *
+            OTHoursPercentage;
+
+          totalPrice +=
+            this.state.pricings[3].baseAmount * officeHoursPercentage;
+        }
+      } else if (child.age < 1.8) {
+        if (isHolyday) {
+          totalPrice +=
+            this.state.pricings[2].baseAmount *
+            this.state.pricings[2].holiday *
+            totalDurationPercentage;
+        } else {
+          totalPrice +=
+            this.state.pricings[2].baseAmount *
+            this.state.pricings[2].overtime *
+            OTHoursPercentage;
+
+          totalPrice +=
+            this.state.pricings[2].baseAmount * officeHoursPercentage;
+        }
+      } else if (child.age < 6) {
+        if (isHolyday) {
+          totalPrice +=
+            this.state.pricings[1].baseAmount *
+            this.state.pricings[1].holiday *
+            totalDurationPercentage;
+        } else {
+          totalPrice +=
+            this.state.pricings[1].baseAmount *
+            this.state.pricings[1].overtime *
+            OTHoursPercentage;
+
+          totalPrice +=
+            this.state.pricings[1].baseAmount * officeHoursPercentage;
+        }
+      }
+
+      this.setState({ totalPrice });
+    });
+  };
+
+  getOfficeHours = async () => {
+    let officeHours = 0;
+
+    const startTime = moment(this.state.startTime, 'HH:mm');
+    const endTime = moment(this.state.endTime, 'HH:mm');
+    const officeHStart = moment(this.state.officeHourStart, 'HH:mm');
+    const officeHEnd = moment(this.state.officeHourEnd, 'HH:mm');
+
+    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
+    // Thứ 7, CN
+    if (sittingDate.day() == 0 || sittingDate.day() == 6) {
+      return officeHours;
+    }
+
+    if (
+      startTime.isSameOrAfter(officeHStart) &&
+      endTime.isSameOrBefore(officeHEnd)
+    ) {
+      officeHours = endTime.diff(startTime, 'minutes');
+      return officeHours;
+    }
+
+    if (startTime.isBefore(officeHStart) && endTime.isAfter(officeHEnd)) {
+      officeHours = officeHEnd.diff(officeHStart, 'minutes');
+      return officeHours;
+    }
+
+    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHStart)) {
+      officeHours = 0;
+      return officeHours;
+    }
+
+    if (startTime.isAfter(officeHEnd) && endTime.isAfter(officeHEnd)) {
+      officeHours = 0;
+      return officeHours;
+    }
+
+    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHEnd)) {
+      officeHours = endTime.diff(officeHStart, 'minutes');
+      return officeHours;
+    }
+
+    if (startTime.isAfter(officeHStart) && endTime.isAfter(officeHEnd)) {
+      officeHours = officeHEnd.diff(startTime, 'minutes');
+      return officeHours;
+    }
+  };
+
+  getOTHours = async () => {
+    let OTHours = 0;
+
+    const startTime = moment(this.state.startTime, 'HH:mm');
+    const endTime = moment(this.state.endTime, 'HH:mm');
+    const officeHStart = moment(this.state.officeHourStart, 'HH:mm');
+    const officeHEnd = moment(this.state.officeHourEnd, 'HH:mm');
+
+    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
+    // Thứ 7, CN
+    if (sittingDate.day() == 0 || sittingDate.day() == 6) {
+      OTHours = endTime.diff(startTime, 'minutes');
+      return OTHours;
+    }
+
+    if (
+      startTime.isSameOrAfter(officeHStart) &&
+      endTime.isSameOrBefore(officeHEnd)
+    ) {
+      return OTHours;
+    }
+
+    if (startTime.isBefore(officeHStart) && endTime.isAfter(officeHEnd)) {
+      OTHours += officeHStart.diff(startTime, 'minutes');
+
+      OTHours += endTime.diff(officeHEnd, 'minutes');
+      return OTHours;
+    }
+
+    if (
+      (startTime.isBefore(officeHStart) && endTime.isBefore(officeHStart)) ||
+      (startTime.isAfter(officeHEnd) && endTime.isAfter(officeHEnd))
+    ) {
+      OTHours += endTime.diff(startTime, 'minutes');
+      return OTHours;
+    }
+
+    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHEnd)) {
+      OTHours += officeHStart.diff(startTime, 'minutes');
+      return OTHours;
+    }
+
+    if (startTime.isAfter(officeHStart) && endTime.isAfter(officeHEnd)) {
+      OTHours += endTime.diff(officeHEnd, 'minutes');
+      return OTHours;
+    }
+  };
+
+  isHolyday = (date) => {
+    let result = false;
+    const sittingDate = date.format('DD/MM');
+    this.state.holidays.forEach((element) => {
+      if (sittingDate == element.date) {
+        result = true;
+        return;
+      }
+    });
+
+    return result;
   };
 
   render() {
@@ -377,7 +552,6 @@ class CreateRequestScreen extends Component {
                 is24Hour
                 onDateChange={async (time) => {
                   await this.setState({ startTime: time });
-                  console.log(this.state.startTime);
                   this.updatePrice();
                 }}
                 showIcon={false}
@@ -420,7 +594,6 @@ class CreateRequestScreen extends Component {
                 is24Hour
                 onDateChange={async (time) => {
                   await this.setState({ endTime: time });
-                  console.log(this.state.endTime);
                   this.updatePrice();
                 }}
                 showIcon={false}
@@ -442,17 +615,17 @@ class CreateRequestScreen extends Component {
             </MuliText>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            {this.state.child != null ? (
+            {this.state.children != null ? (
               <View style={styles.detailContainerChild}>
                 <MuliText style={styles.headerTitleChild}>
                   Trẻ của bạn:
                 </MuliText>
                 <View style={styles.detailPictureContainer}>
-                  {this.state.child.map((item) => (
+                  {this.state.children.map((item) => (
                     <TouchableOpacity
                       key={item.id}
-                      onPress={() => {
-                        this.toggleHidden(item);
+                      onPress={async () => {
+                        await this.toggleHidden(item);
                       }}
                     >
                       <View
@@ -579,7 +752,7 @@ class CreateRequestScreen extends Component {
                 Tổng tiền thanh toán:
               </MuliText>
               <MuliText style={styles.price}>
-                {formater(this.state.price)} Đồng
+                {formater(this.state.totalPrice)} Đồng
               </MuliText>
             </View>
           </View>
