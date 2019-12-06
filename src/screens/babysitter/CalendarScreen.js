@@ -165,13 +165,13 @@ export default class CalendarScreen extends Component {
 
         <View style={{ marginTop: 30, marginBottom: 15, alignItems: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
+            <MuliText style={styles.dayText}>CN</MuliText>
             <MuliText style={styles.dayText}>T2</MuliText>
             <MuliText style={styles.dayText}>T3</MuliText>
             <MuliText style={styles.dayText}>T4</MuliText>
             <MuliText style={styles.dayText}>T5</MuliText>
             <MuliText style={styles.dayText}>T6</MuliText>
             <MuliText style={styles.dayText}>T7</MuliText>
-            <MuliText style={styles.dayText}>CN</MuliText>
           </View>
         </View>
 
@@ -184,6 +184,11 @@ export default class CalendarScreen extends Component {
               marginLeft: -15,
             }}
           >
+            <CheckBox
+              style={styles.radioButton}
+              checked={sun}
+              onPress={() => this.setState({ sun: !this.state.sun })}
+            />
             <CheckBox
               style={styles.radioButton}
               checked={mon}
@@ -213,11 +218,6 @@ export default class CalendarScreen extends Component {
               style={styles.radioButton}
               checked={sat}
               onPress={() => this.setState({ sat: !this.state.sat })}
-            />
-            <CheckBox
-              style={styles.radioButton}
-              checked={sun}
-              onPress={() => this.setState({ sun: !this.state.sun })}
             />
           </View>
           {/* End Radio button */}

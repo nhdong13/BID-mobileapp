@@ -40,6 +40,10 @@ export async function registerPushNotifications(userId) {
       return res;
     })
     .catch((error) => {
+      console.log(
+        'PHUC: registerPushNotifications -> erro -> loi deo gi day',
+        error,
+      );
       return error;
     });
   // console.log('PHUC: registerPushNotifications -> result', result);

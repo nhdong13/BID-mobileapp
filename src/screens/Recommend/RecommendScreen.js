@@ -29,9 +29,29 @@ export default class RecommendScreen extends Component {
     };
   }
 
-  componentWillMount() {
-    const requestId = this.props.navigation.getParam('requestId');
-    const request = this.props.navigation.getParam('request');
+  componentDidMount() {
+    const {
+      requestId,
+      request,
+      repeatedData,
+    } = this.props.navigation.state.params;
+    console.log(
+      'PHUC: RecommendScreen -> componentDidMount -> requestId',
+      requestId,
+    );
+    console.log(
+      'PHUC: RecommendScreen -> componentDidMount -> request',
+      request,
+    );
+
+    if (repeatedData) {
+      console.log('co du lieu ne');
+      console.log(
+        'PHUC: RecommendScreen -> componentDidMount -> repeatedData',
+        repeatedData,
+      );
+    }
+
     if (requestId && requestId != 0) {
       this.setState({ requestId }, () => this.getRecommendation());
     } else if (request !== undefined && request !== null) {
