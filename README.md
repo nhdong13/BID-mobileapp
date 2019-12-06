@@ -9,20 +9,12 @@ This boilerplate launches with a [React Native app](https://facebook.github.io/r
 Specifically:
 
 - A shared React and React Native structure
-- **Flux architecture**
-  - [Redux](https://redux.js.org/docs/introduction/)
-  - Redux Wrapper: [Rematch](https://github.com/rematch/rematch)
 - **Routing and navigation**
   - [React Native Router Flux](https://github.com/aksonov/react-native-router-flux) for native mobile
-  - [React Router](https://github.com/ReactTraining/react-router) for web
-- **Data Caching / Offline**
-  - [Redux Persist](https://github.com/rt2zz/redux-persist)
 - **UI Toolkit/s**
   - [Native Base](https://nativebase.io/) for native mobile
 - **Simpler mobile app development** through
   - [Expo](https://expo.io/)
-- **User authentication** example through
-  - [Firebase](https://firebase.google.com/)
 - **Code Linting** with
   - [Airbnb's JS Linting](https://github.com/airbnb/javascript) guidelines
 
@@ -39,8 +31,6 @@ npm install -g expo-cli
 ```
 
 #### 1. Clone and Install
-
-_\*It's recommended that you install [React Native Debugger](https://github.com/jhen0409/react-native-debugger/releases) and open before `yarn start`._
 
 ```bash
 # Clone the repo
@@ -59,7 +49,7 @@ yarn start
 
 Instructions are shown in the terminal. You can select to open it in:
 
-- An emulator (either iOS or Android) (iOS thi dung Xcode, android thi dung Android studio nha)
+- An emulator (either iOS or Android) (iOS use Xcode, android use Android studio)
 - Your mobile device with the [Expo app](https://expo.io/). It will reload if you save edits to your files and you will see build errors and logs in the terminal.
 
 * mr khanh:
