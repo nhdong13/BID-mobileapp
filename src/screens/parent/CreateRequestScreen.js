@@ -55,6 +55,9 @@ class CreateRequestScreen extends Component {
       officeHourStart: null,
       officeHourEnd: null,
       selectedChildren: [],
+      messageOvertime:
+        'Giá tăng do nhu cầu công việc tăng cao vào thời điểm này',
+      showOvertime: false,
     };
     console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -79,7 +82,10 @@ class CreateRequestScreen extends Component {
     });
 
     getConfigs().then((configs) => {
-      this.setState({ officeHourStart: configs.officeHourStart, officeHourEnd: configs.officeHourEnd });
+      this.setState({
+        officeHourStart: configs.officeHourStart,
+        officeHourEnd: configs.officeHourEnd,
+      });
     });
   }
 
@@ -221,7 +227,7 @@ class CreateRequestScreen extends Component {
   calculate = async () => {
     let childCounter = 0;
     let minAge = 99;
-    let selectedChildren = [];
+    const selectedChildren = [];
     this.state.children.forEach((element) => {
       if (element.checked) {
         childCounter += 1;
@@ -317,7 +323,7 @@ class CreateRequestScreen extends Component {
         }
       }
 
-      this.setState({ totalPrice });
+      this.setState({ totalPrice: Math.round(totalPrice) });
     });
   };
 
