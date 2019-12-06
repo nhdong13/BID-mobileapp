@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-useless-return */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
@@ -26,6 +28,8 @@ import { getPricings } from 'api/pricing.api';
 import { getHolidays } from 'api/holiday.api';
 import { getConfigs } from 'api/configuration.api';
 import { getUser } from 'api/user.api';
+import { Switch } from 'react-native-gesture-handler';
+import Modal from 'react-native-modal';
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -58,6 +62,15 @@ class CreateRequestScreen extends Component {
       messageOvertime:
         'Giá tăng do nhu cầu công việc tăng cao vào thời điểm này',
       showOvertime: false,
+      isRepeated: false,
+      isModalVisible: false,
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
     };
     console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -65,7 +78,7 @@ class CreateRequestScreen extends Component {
   async componentWillMount() {
     this.getDataAccordingToRole();
 
-    getUser().then((parent) => {
+    await getUser().then((parent) => {
       this.setState({
         loggedUser: parent,
         sittingAddress: parent.address,
@@ -73,15 +86,15 @@ class CreateRequestScreen extends Component {
       });
     });
 
-    getPricings().then((pricings) => {
+    await getPricings().then((pricings) => {
       this.setState({ pricings });
     });
 
-    getHolidays().then((holidays) => {
+    await getHolidays().then((holidays) => {
       this.setState({ holidays });
     });
 
-    getConfigs().then((configs) => {
+    await getConfigs().then((configs) => {
       this.setState({
         officeHourStart: configs.officeHourStart,
         officeHourEnd: configs.officeHourEnd,
@@ -116,17 +129,28 @@ class CreateRequestScreen extends Component {
       return;
     }
 
+    const {
+      userId,
+      sittingDate,
+      startTime,
+      endTime,
+      sittingAddress,
+      childrenNumber,
+      minAgeOfChildren,
+      totalPrice,
+    } = this.state;
+
     const request = {
       requestId: this.state.requestId != 0 ? this.state.requestId : 0,
-      createdUser: this.state.userId,
-      sittingDate: this.state.sittingDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      sittingAddress: this.state.sittingAddress,
-      childrenNumber: this.state.childrenNumber,
-      minAgeOfChildren: this.state.minAgeOfChildren,
+      createdUser: userId,
+      sittingDate: sittingDate,
+      startTime: startTime,
+      endTime: endTime,
+      sittingAddress: sittingAddress,
+      childrenNumber: childrenNumber,
+      minAgeOfChildren: minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.totalPrice,
+      totalPrice: totalPrice,
     };
 
     getOverlapSittingRequest(request)
@@ -144,7 +168,8 @@ class CreateRequestScreen extends Component {
           //
           this.AlertPro.open();
         } else {
-          this.toRecommendScreen();
+          this.checkRepeatedRequest();
+          // this.toRecommendScreen();
         }
       })
       .catch((error) => {
@@ -260,8 +285,10 @@ class CreateRequestScreen extends Component {
     const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
     const isHolyday = this.isHolyday(sittingDate);
 
-    const officeHours = await this.getOfficeHours(); // khoảng thời gian trong giờ hành chính của request này (phút)
-    const OTHours = await this.getOTHours(); // khoảng thời gian ngoài giờ hành chính của request này (phút)
+    // khoảng thời gian trong giờ hành chính của request này (phút)
+    const officeHours = await this.getOfficeHours();
+    // khoảng thời gian ngoài giờ hành chính của request này (phút)
+    const OTHours = await this.getOTHours();
     const totalDuration = officeHours + OTHours;
     console.log(
       'Duong: CreateRequestScreen -> updatePrice -> officeHours',
@@ -436,6 +463,55 @@ class CreateRequestScreen extends Component {
     return result;
   };
 
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+  // toggleModalCreate request     modal modal modal
+  //
+
+  toggleModalCreateRequest = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
+  checkRepeatedRequest = () => {
+    const { mon, tue, wed, thu, fri, sat, sun, isRepeated } = this.state;
+    const repeatedDays = [];
+
+    if (mon) repeatedDays.push('MON');
+    if (tue) repeatedDays.push('TUE');
+    if (wed) repeatedDays.push('WED');
+    if (thu) repeatedDays.push('THU');
+    if (fri) repeatedDays.push('FRI');
+    if (sat) repeatedDays.push('SAT');
+    if (sun) repeatedDays.push('SUN');
+
+    const stringRepeatedDays = repeatedDays.join();
+
+    const body = {
+      isRepeated: isRepeated,
+      repeatedDays: stringRepeatedDays,
+    };
+    console.log('PHUC: CreateRequestScreen -> updateSchedule -> body', body);
+  };
+
   render() {
     const {
       noticeTitle,
@@ -445,6 +521,7 @@ class CreateRequestScreen extends Component {
       sittingDate,
       startTime,
       endTime,
+      isModalVisible,
     } = this.state;
 
     return (
@@ -477,6 +554,76 @@ class CreateRequestScreen extends Component {
             },
           }}
         />
+        <Modal
+          isVisible={isModalVisible}
+          coverScreen={true}
+          hasBackdrop={true}
+          propagateSwipe={true}
+          onBackButtonPress={() => this.toggleModalCreateRequest()}
+          onBackdropPress={() => this.toggleModalCreateRequest()}
+          style={{}}
+        >
+          <View
+            style={{
+              flex: 0.4,
+              backgroundColor: 'white',
+              padding: 10,
+              borderRadius: 10,
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+                marginTop: 10,
+                marginBottom: 10,
+              }}
+            >
+              <MuliText style={{ fontSize: 18, fontWeight: 'bold' }}>
+                Đặt lịch lặp lại là gì ?
+              </MuliText>
+            </View>
+            <MuliText
+              style={{ marginHorizontal: 15, marginVertical: 7, fontSize: 12 }}
+            >
+              Tính năng này dành cho khách hàng có nhu cầu TRÔNG TRẺ CỐ ĐỊNH vào
+              các ngày trong tuần.
+            </MuliText>
+            <MuliText
+              style={{ marginHorizontal: 15, marginVertical: 7, fontSize: 12 }}
+            >
+              Hệ thống sẽ tự động đăng việc vào các ngày bạn đã chọn. Bạn có thể
+              chủ động thay đổi, dừng hoặc tiếp tục lịch lặp lại tại "Việc đã
+              đăng" -> "Lặp lại"
+            </MuliText>
+            <MuliText
+              style={{ marginHorizontal: 15, marginVertical: 7, fontSize: 12 }}
+            >
+              Đối với công việc đã được đăng lên bạn vui lòng thao tác trực tiếp
+              trên từng công việc
+            </MuliText>
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleModalCreateRequest();
+              }}
+              style={{
+                flex: 1,
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <View
+                style={{
+                  width: 120,
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <MuliText style={{ color: colors.star }}>Đồng ý</MuliText>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <View style={styles.containerInformationRequest}>
           <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
           <View>
@@ -620,6 +767,175 @@ class CreateRequestScreen extends Component {
               Địa chỉ: {this.state.sittingAddress}
             </MuliText>
           </View>
+          <View style={styles.repeatedRequest}>
+            <View style={{ flex: 1 }}>
+              <MuliText style={{ color: colors.loginText }}>
+                Lặp lại hàng tuần
+              </MuliText>
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleModalCreateRequest();
+                }}
+              >
+                <MuliText style={{ fontSize: 10, color: colors.lightGreen }}>
+                  Nghĩa là gì ?
+                </MuliText>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+              }}
+            >
+              <Switch
+                value={this.state.isRepeated}
+                onValueChange={() => {
+                  if (!this.state.isRepeated) {
+                    this.toggleModalCreateRequest();
+                  }
+                  this.setState({
+                    isRepeated: !this.state.isRepeated,
+                  });
+                }}
+              />
+            </View>
+          </View>
+
+          {this.state.isRepeated ? (
+            <View style={styles.repeatedRequest}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#ecf0f1',
+                  flex: 1,
+                  height: 40,
+                  borderRadius: 5,
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ sun: !this.state.sun })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.sun ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      CN
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ mon: !this.state.mon })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.mon ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      T2
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ tue: !this.state.tue })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.tue ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      T3
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ wed: !this.state.wed })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.wed ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      T4
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ thu: !this.state.thu })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.thu ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      T5
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ fri: !this.state.fri })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.fri ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      T6
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this.setState({ sat: !this.state.sat })}
+                >
+                  <View style={{ alignItems: 'center' }}>
+                    <MuliText
+                      style={{
+                        color: this.state.sat ? colors.lightGreen : '#95a5a6',
+                      }}
+                    >
+                      T7
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : null}
+
           <View style={{ flexDirection: 'row' }}>
             {this.state.children != null ? (
               <View style={styles.detailContainerChild}>
@@ -836,6 +1152,19 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   contentInformation: {
+    marginHorizontal: 15,
+    marginBottom: 5,
+    fontSize: 12,
+  },
+  repeatedRequest: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginHorizontal: 15,
+    marginBottom: 5,
+    fontSize: 12,
+  },
+  moreCriteria: {
+    marginTop: 20,
     marginHorizontal: 15,
     marginBottom: 5,
     fontSize: 12,
