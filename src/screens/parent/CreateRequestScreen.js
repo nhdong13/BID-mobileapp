@@ -168,8 +168,7 @@ class CreateRequestScreen extends Component {
           //
           this.AlertPro.open();
         } else {
-          this.checkRepeatedRequest();
-          // this.toRecommendScreen();
+          this.toRecommendScreen();
         }
       })
       .catch((error) => {
@@ -187,25 +186,78 @@ class CreateRequestScreen extends Component {
       });
   };
 
+  checkRepeatedRequest = () => {
+    const { mon, tue, wed, thu, fri, sat, sun, isRepeated } = this.state;
+    const repeatedDays = [];
+
+    if (mon) repeatedDays.push('MON');
+    if (tue) repeatedDays.push('TUE');
+    if (wed) repeatedDays.push('WED');
+    if (thu) repeatedDays.push('THU');
+    if (fri) repeatedDays.push('FRI');
+    if (sat) repeatedDays.push('SAT');
+    if (sun) repeatedDays.push('SUN');
+
+    const stringRepeatedDays = repeatedDays.join();
+
+    const body = {
+      isRepeated: isRepeated,
+      repeatedDays: stringRepeatedDays,
+    };
+    // goi api luu lich lap lai o day nhan body lam du lieu dau vao
+
+    // hoac chi can lay du lieu tu ham nay tra ra de dua vao ham to Recommend Screen
+
+    return body;
+  };
+
   toRecommendScreen = () => {
+    const repeatedData = this.checkRepeatedRequest();
+    console.log(
+      'PHUC: CreateRequestScreen -> toRecommendScreen -> repeatedData',
+      repeatedData,
+    );
+
+    const {
+      requestId,
+      userId: createdUser,
+      sittingDate,
+      startTime,
+      endTime,
+      sittingAddress,
+      childrenNumber,
+      minAgeOfChildren,
+      totalPrice,
+      isRepeated,
+    } = this.state;
+
     const request = {
-      requestId: this.state.requestId != 0 ? this.state.requestId : 0,
-      createdUser: this.state.userId,
-      sittingDate: this.state.sittingDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      sittingAddress: this.state.sittingAddress,
-      childrenNumber: this.state.childrenNumber,
-      minAgeOfChildren: this.state.minAgeOfChildren,
+      requestId: requestId != 0 ? requestId : 0,
+      createdUser,
+      sittingDate,
+      startTime,
+      endTime,
+      sittingAddress,
+      childrenNumber,
+      minAgeOfChildren,
       status: 'PENDING',
-      totalPrice: this.state.totalPrice,
+      totalPrice,
     };
 
-    this.props.navigation.navigate('Recommend', {
-      requestId: this.state.requestId,
-      request: request,
-      onGoBack: (requestId) => this.setState({ requestId: requestId }),
-    });
+    if (isRepeated) {
+      this.props.navigation.navigate('Recommend', {
+        requestId,
+        request,
+        repeatedData,
+        onGoBack: (requestId) => this.setState({ requestId: requestId }),
+      });
+    } else {
+      this.props.navigation.navigate('Recommend', {
+        requestId,
+        request,
+        onGoBack: (requestId) => this.setState({ requestId: requestId }),
+      });
+    }
 
     this.AlertPro.close();
   };
@@ -463,53 +515,8 @@ class CreateRequestScreen extends Component {
     return result;
   };
 
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-  // toggleModalCreate request     modal modal modal
-  //
-
   toggleModalCreateRequest = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-
-  checkRepeatedRequest = () => {
-    const { mon, tue, wed, thu, fri, sat, sun, isRepeated } = this.state;
-    const repeatedDays = [];
-
-    if (mon) repeatedDays.push('MON');
-    if (tue) repeatedDays.push('TUE');
-    if (wed) repeatedDays.push('WED');
-    if (thu) repeatedDays.push('THU');
-    if (fri) repeatedDays.push('FRI');
-    if (sat) repeatedDays.push('SAT');
-    if (sun) repeatedDays.push('SUN');
-
-    const stringRepeatedDays = repeatedDays.join();
-
-    const body = {
-      isRepeated: isRepeated,
-      repeatedDays: stringRepeatedDays,
-    };
-    console.log('PHUC: CreateRequestScreen -> updateSchedule -> body', body);
   };
 
   render() {
