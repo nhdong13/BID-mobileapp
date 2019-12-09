@@ -13,6 +13,8 @@ import colors from 'assets/Color';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import StarRating from 'react-native-star-rating';
 import Api from 'api/api_helper';
+import { retrieveToken } from 'utils/handleToken';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class Feedback extends Component {
   constructor(props) {
@@ -20,11 +22,20 @@ export default class Feedback extends Component {
     this.state = {
       sittingRequestsID: this.props.navigation.state.params.requestId,
       bsitter: null,
+      user: null,
       isModalVisible: false,
-      starCount: 5,
+      starCount: 0,
       isRated: false,
       description: '',
+      roleId: 2,
     };
+  }
+
+  componentWillMount() {
+    retrieveToken().then((res) => {
+      const { roleId } = res;
+      this.setState({ roleId });
+    });
   }
 
   async componentDidMount() {
@@ -38,12 +49,13 @@ export default class Feedback extends Component {
         address: resp.sittingAddress,
         bsitter: resp.bsitter,
         price: resp.totalPrice,
+        user: resp.user,
       });
     });
     await Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
       (res) => {
-        console.log('PHUC: Feedback -> componentDidMount -> res', res);
-        if (res != null) {
+        console.log(res[0]);
+        if (res != null && res[0].reporter == (this.state.roleId == 2)) {
           this.setState({
             starCount: res[0].rating,
             isRated: true,
@@ -61,13 +73,14 @@ export default class Feedback extends Component {
   }
 
   submitRating = () => {
-    const { starCount, sittingRequestsID, description } = this.state;
+    const { starCount, sittingRequestsID, description, roleId } = this.state;
     const body = {
       rating: starCount,
       requestId: sittingRequestsID,
       description: description,
+      isReport: false,
+      reporter: roleId == 2,
     };
-    console.log('PHUC: Feedback -> submitRating -> body', body);
 
     if (!this.state.isRated) {
       Api.post('feedback/', body);
@@ -101,11 +114,18 @@ export default class Feedback extends Component {
               style={styles.avatar}
             />
             <View style={{ alignItems: 'center' }}>
-              {this.state.bsitter && (
+              {this.state.roleId == 2 && this.state.bsitter && (
                 <MuliText
                   style={{ fontWeight: 'bold', fontSize: 25, marginTop: 60 }}
                 >
                   {this.state.bsitter.nickname}
+                </MuliText>
+              )}
+              {this.state.roleId == 3 && this.state.user && (
+                <MuliText
+                  style={{ fontWeight: 'bold', fontSize: 25, marginTop: 60 }}
+                >
+                  {this.state.user.nickname}
                 </MuliText>
               )}
               <StarRating

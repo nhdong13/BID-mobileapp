@@ -43,6 +43,7 @@ export class SitterSittingHistory extends Component {
       id: userId,
     };
     this.setState({ loading: true });
+    console.log(requestBody);
 
     await Api.post('invitations/sitterInvitation', requestBody)
       .then((invitations) => {

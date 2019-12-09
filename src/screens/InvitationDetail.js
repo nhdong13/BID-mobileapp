@@ -375,6 +375,37 @@ export default class InvitationDetail extends Component {
                 </TouchableOpacity>
               </View>
             )}
+            {(this.state.status == 'DONE' ||
+              this.state.status == 'DONE_UNCONFIMRED' ||
+              this.state.status == 'DONE_BY_NEWSTART' ||
+              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={() => {
+                  this.props.navigation.navigate('Feedback', {
+                    requestId: this.state.requestId,
+                  });
+                }}
+              >
+                <MuliText style={{ color: colors.blueAqua, fontSize: 11 }}>
+                  Đánh giá cho yêu cầu trông trẻ này
+                </MuliText>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={{ flexDirection: 'row', marginTop: 20 }}>
+            <TouchableOpacity
+              onPress={() => { this.submitRating(); }}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <Ionicons name="ios-warning" size={25} color="red" />
+                <MuliText style={({ color: "red" })}>Báo cáo vi phạm</MuliText>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -393,6 +424,14 @@ const styles = StyleSheet.create({
   textChildrenInformation: {
     marginLeft: 15,
     fontSize: 15,
+  },
+  submitButton: {
+    width: 250,
+    height: 30,
+    padding: 5,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   childrenInformationContainer: {
     flex: 1,
@@ -426,14 +465,6 @@ const styles = StyleSheet.create({
   },
   detailContainer: {
     marginVertical: 15,
-  },
-  submitButton: {
-    width: 90,
-    height: 35,
-    padding: 5,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   acceptButton: {
     width: 100,
