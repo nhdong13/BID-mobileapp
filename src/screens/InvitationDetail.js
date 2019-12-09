@@ -375,6 +375,8 @@ export default class InvitationDetail extends Component {
                 </TouchableOpacity>
               </View>
             )}
+          </View>
+          <View>
             {(this.state.status == 'DONE' ||
               this.state.status == 'DONE_UNCONFIMRED' ||
               this.state.status == 'DONE_BY_NEWSTART' ||
@@ -392,20 +394,31 @@ export default class InvitationDetail extends Component {
                 </MuliText>
               </TouchableOpacity>
             )}
-          </View>
-          <View style={{ flexDirection: 'row', marginTop: 20 }}>
-            <TouchableOpacity
-              onPress={() => { this.submitRating(); }}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <View style={{ flexDirection: 'row' }}>
-                <Ionicons name="ios-warning" size={25} color="red" />
-                <MuliText style={({ color: "red" })}>Báo cáo vi phạm</MuliText>
+            {(this.state.status == 'DONE' ||
+              this.state.status == 'DONE_UNCONFIMRED' ||
+              this.state.status == 'DONE_BY_NEWSTART' ||
+              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('ReportScreen', {
+                      requestId: this.state.requestId,
+                    });
+                  }}
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <View style={{ flexDirection: 'row' }}>
+                    <Ionicons name="ios-warning" size={25} color="red" />
+                    <MuliText style={{ color: 'red' }}>
+                      Báo cáo vi phạm
+                    </MuliText>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -459,8 +472,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 25,
-    marginHorizontal: 35,
-    justifyContent: 'space-between',
+    // marginHorizontal: 35,
+    // justifyContent: 'space-between',
     paddingBottom: 10,
   },
   detailContainer: {

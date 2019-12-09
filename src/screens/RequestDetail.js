@@ -870,18 +870,27 @@ export class RequestDetail extends Component {
           )}
           {/* end */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => { this.submitRating(); }}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <View style={{ flexDirection: 'row' }}>
-                <Ionicons name="ios-warning" size={25} color="red" />
-                <MuliText style={({ color: "red" })}>Báo cáo vi phạm</MuliText>
-              </View>
-            </TouchableOpacity>
+            {(this.state.status == 'DONE' ||
+              this.state.status == 'DONE_UNCONFIMRED' ||
+              this.state.status == 'DONE_BY_NEWSTART' ||
+              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('ReportScreen', {
+                    requestId: this.state.sittingRequestsID,
+                  });
+                }}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <Ionicons name="ios-warning" size={25} color="red" />
+                  <MuliText style={{ color: 'red' }}>Báo cáo vi phạm</MuliText>
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </ScrollView>
