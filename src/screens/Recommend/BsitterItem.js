@@ -5,7 +5,6 @@ import { MuliText } from 'components/StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import { createInvitation } from 'api/invitation.api';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
-import images from 'assets/images/images';
 import colors from 'assets/Color';
 import { withNavigation } from 'react-navigation';
 import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
@@ -24,7 +23,7 @@ export class Bsitter extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     Stripe.setOptionsAsync({
       publishableKey: stripeKey,
       androidPayMode: 'test',
@@ -65,10 +64,10 @@ export class Bsitter extends Component {
       distance: item.distance,
     };
     // console.log(request);
-    await Api.get('trackings/' + this.state.userId).then((res) => {
+    await Api.get('trackings/' + this.state.userId).then(async (res) => {
       // console.log(res.customerId);
       if (res.customerId == null || res.cardId == null) {
-        this.createCard().then(async (res) => {
+        await this.createCard().then(async (res) => {
           if (res) {
             await createInvitation(requestId, invitation, request)
               .then((response) => {
@@ -80,7 +79,7 @@ export class Bsitter extends Component {
           }
         });
       } else {
-        createInvitation(requestId, invitation, request)
+        await createInvitation(requestId, invitation, request)
           .then((response) => {
             // console.log(response);
             this.props.changeInviteStatus(receiverId);
@@ -116,7 +115,7 @@ export class Bsitter extends Component {
   }
 
   render() {
-    const { item, navigation, requestId, request } = this.props;
+    const { item, navigation, requestId, request, repeatedData } = this.props;
     return (
       <View key={item.userId} style={styles.bsitterContainer}>
         <View style={styles.bsitterItem}>
@@ -130,6 +129,7 @@ export class Bsitter extends Component {
                   this.state.requestId != 0 ? this.state.requestId : requestId,
                 request: request,
                 distance: item.distance,
+                repeatedData: repeatedData,
                 onGoBack: (receiverId, requestId) =>
                   this.changeStateOnGoBack(receiverId, requestId),
               })
@@ -142,7 +142,7 @@ export class Bsitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.bsitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}
                   tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
