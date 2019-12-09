@@ -12,6 +12,7 @@ import { recommend } from 'api/sittingRequest.api';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Bsitter from 'screens/Recommend/BsitterItem';
 import colors from 'assets/Color';
+import { createRepeatedRequest } from 'api/repeatedRequest.api';
 
 export default class RecommendScreen extends Component {
   constructor(props) {
@@ -26,30 +27,46 @@ export default class RecommendScreen extends Component {
       isModalVisible: true,
       isModalVisible2: true,
       loading: true,
+      repeatedData: null,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       requestId,
       request,
       repeatedData,
     } = this.props.navigation.state.params;
-    console.log(
-      'PHUC: RecommendScreen -> componentDidMount -> requestId',
-      requestId,
-    );
-    console.log(
-      'PHUC: RecommendScreen -> componentDidMount -> request',
-      request,
-    );
 
     if (repeatedData) {
-      console.log('co du lieu ne');
-      console.log(
-        'PHUC: RecommendScreen -> componentDidMount -> repeatedData',
-        repeatedData,
-      );
+      const {
+        sittingDate: startDate,
+        startTime,
+        endTime,
+        sittingAddress,
+        createdUser,
+      } = request;
+
+      const { repeatedDays } = repeatedData;
+
+      const data = {
+        startDate,
+        startTime,
+        endTime,
+        sittingAddress,
+        repeatedDays,
+        createdUser,
+        request,
+      };
+
+      console.log('PHUC: Bsitter -> sendInvitation -> data', data);
+
+      await createRepeatedRequest(data).catch((error) => {
+        console.log(
+          'PHUC: BsitterProfile -> repeatedRequest -> error',
+          error.response,
+        );
+      });
     }
 
     if (requestId && requestId != 0) {
@@ -114,7 +131,7 @@ export default class RecommendScreen extends Component {
 
   // netstat -ano | findstr 3000
   render() {
-    const { loading } = this.state;
+    const { loading, repeatedData } = this.state;
     return (
       <ScrollView style={{ backgroundColor: colors.homeColor }}>
         <View style={styles.container}>
@@ -156,6 +173,7 @@ export default class RecommendScreen extends Component {
                                 setRequestId={this.setRequestId}
                                 requestId={this.state.requestId}
                                 request={this.state.request}
+                                repeatedData={repeatedData}
                                 item={item}
                               />
                             )}
@@ -202,6 +220,7 @@ export default class RecommendScreen extends Component {
                                 setRequestId={this.setRequestId}
                                 requestId={this.state.requestId}
                                 request={this.state.request}
+                                repeatedData={repeatedData}
                                 item={item}
                               />
                             )}

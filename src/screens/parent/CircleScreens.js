@@ -200,7 +200,7 @@ class CircleScreens extends Component {
             >
               <Ionicons
                 name="ios-person"
-                size={19}
+                size={24}
                 style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
                 color={colors.darkGreenTitle}
               />

@@ -10,6 +10,7 @@ import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
+// import { createRepeatedRequest } from 'api/repeatedRequest.api';
 
 export default class BsitterProfile extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export default class BsitterProfile extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     Stripe.setOptionsAsync({
       publishableKey: stripeKey,
       androidPayMode: 'test',
@@ -87,7 +88,7 @@ export default class BsitterProfile extends Component {
       distance: this.state.distance,
     };
     // console.log(invitation);
-    await Api.get('trackings/' + this.state.userId).then((res) => {
+    await Api.get('trackings/' + this.state.userId).then(async (res) => {
       if (res.customerId == null || res.cardId == null) {
         this.createCard().then(async (res) => {
           if (res) {
@@ -101,10 +102,39 @@ export default class BsitterProfile extends Component {
                 );
               })
               .catch((error) => console.log(error));
+            // if (repeatedData) {
+            //   const {
+            //     sittingDate: startDate,
+            //     startTime,
+            //     endTime,
+            //     sittingAddress,
+            //     createdUser,
+            //   } = request;
+
+            //   const { repeatedDays } = repeatedData;
+
+            //   const data = {
+            //     startDate,
+            //     startTime,
+            //     endTime,
+            //     sittingAddress,
+            //     repeatedDays,
+            //     createdUser,
+            //   };
+
+            //   console.log('PHUC: Bsitter -> sendInvitation -> data', data);
+
+            //   await createRepeatedRequest(data).catch((error) => {
+            //     console.log(
+            //       'PHUC: BsitterProfile -> repeatedRequest -> error',
+            //       error,
+            //     );
+            //   });
+            // }
           }
         });
       } else {
-        createInvitation(requestId, invitation, request)
+        await createInvitation(requestId, invitation, request)
           .then((response) => {
             if (invitation.requestId == 0) {
               this.changeInviteStatus(sitterId);
@@ -126,6 +156,35 @@ export default class BsitterProfile extends Component {
               error,
             ),
           );
+        // if (repeatedData) {
+        //   const {
+        //     sittingDate: startDate,
+        //     startTime,
+        //     endTime,
+        //     sittingAddress,
+        //     createdUser,
+        //   } = request;
+
+        //   const { repeatedDays } = repeatedData;
+
+        //   const data = {
+        //     startDate,
+        //     startTime,
+        //     endTime,
+        //     sittingAddress,
+        //     repeatedDays,
+        //     createdUser,
+        //   };
+
+        //   console.log('PHUC: Bsitter -> sendInvitation -> data', data);
+
+        //   await createRepeatedRequest(data).catch((error) => {
+        //     console.log(
+        //       'PHUC: BsitterProfile -> repeatedRequest -> error',
+        //       error,
+        //     );
+        //   });
+        // }
       }
     });
   };
