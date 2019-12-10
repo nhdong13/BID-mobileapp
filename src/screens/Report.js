@@ -31,14 +31,11 @@ export default class Feedback extends Component {
     };
   }
 
-  componentWillMount() {
-    retrieveToken().then((res) => {
+  async componentDidMount() {
+    await retrieveToken().then((res) => {
       const { roleId } = res;
       this.setState({ roleId });
     });
-  }
-
-  async componentDidMount() {
     await Api.get(
       'sittingRequests/' + this.state.sittingRequestsID.toString(),
     ).then((resp) => {
@@ -54,17 +51,8 @@ export default class Feedback extends Component {
     });
     await Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
       (res) => {
-        // console.log(res[0]);
-        // if (res != null && res[0].reporter == (this.state.roleId == 2)) {
-        //   this.setState({
-        //     starCount: res[0].rating,
-        //     isRated: true,
-        //     description: res[0].description,
-        //   });
-        // }
         if (res != null) {
-          const tmp = this.state.roleId == 2 ? 1 : 2;
-          console.log(tmp)
+          const tmp = this.state.roleId == 2 ? 3 : 4;
           res.map((item, index) => {
             if (item.order == tmp) {
               this.setState({
@@ -75,6 +63,17 @@ export default class Feedback extends Component {
             }
           });
         }
+        // if (
+        //   res != null &&
+        //   res[0].reporter == (this.state.roleId == 2) &&
+        //   res[0].isReport == true
+        // ) {
+        //   this.setState({
+        //     starCount: res[0].rating,
+        //     isRated: true,
+        //     description: res[0].description,
+        //   });
+        // }
       },
     );
   }
@@ -91,12 +90,13 @@ export default class Feedback extends Component {
       rating: starCount,
       requestId: sittingRequestsID,
       description: description,
-      isReport: false,
+      isReport: true,
       reporter: roleId == 2,
-      order: roleId == 2 ? 1 : 2,
+      status: 'Unsolve',
+      order: roleId == 2 ? 3 : 4,
     };
 
-    if (!this.state.isRated) {
+    if (!this.state.isRated && description != '') {
       Api.post('feedback/', body);
       this.setState({ isRated: true });
       this.props.navigation.navigate('Home');
@@ -142,15 +142,14 @@ export default class Feedback extends Component {
                   {this.state.user.nickname}
                 </MuliText>
               )}
-              <StarRating
-                starStyle={styles.starContainer}
-                fullStarColor={colors.star}
-                starSize={55}
-                disabled={false}
-                maxStars={5}
-                rating={this.state.starCount}
-                selectedStar={(rating) => this.onStarRatingPress(rating)}
-              />
+              <View style={{ padding: 20 }}>
+                <MuliText style={styles.doneReport}>
+                  Xin vui lòng báo cáo vi phạm của{' '}
+                  {this.state.roleId == 2 ? 'người giữ trẻ' : 'phụ huynh'}. Phản
+                  hồi của quý khách sẽ nhanh chóng được xử lí. Xin chân thành
+                  xin lỗi vì sự bất tiện này.
+                </MuliText>
+              </View>
               <View style={styles.reportContainer}>
                 <TextInput
                   multiline
@@ -164,7 +163,8 @@ export default class Feedback extends Component {
               {isRated ? (
                 <View style={styles.ratedText}>
                   <MuliText style={styles.doneReport}>
-                    Bạn đã đánh giá cho yêu cầu này
+                    Bạn đã gửi báo cáo vi phạm cho yêu cầu này. Chúng tôi sẽ
+                    nhanh chóng xử lí yêu cầu của bạn.
                   </MuliText>
                 </View>
               ) : (
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   header: {
-    backgroundColor: colors.darkGreenTitle,
+    backgroundColor: 'red',
     height: 170,
   },
   avatar: {
@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    padding: 20,
   },
   reportContainer: {
     marginTop: 20,
