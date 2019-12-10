@@ -43,20 +43,18 @@ export async function createRepeatedRequest(repeatedRequest) {
   return response;
 }
 
-export async function createCode(userId, code) {
+export async function listRepeatedRequest(userId) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
 
-  const url = parentAPI.createCode;
   const options = {
-    method: 'PUT',
-    url: url,
+    method: 'GET',
+    url: `${apiUrl.baseUrl}repeatedRequests/listRepeatedRequest/${userId}`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
     },
-    data: qs.stringify({ userId: userId, code: code }),
   };
 
   const response = await axios(options).catch((error) => console.log(error));

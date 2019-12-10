@@ -23,6 +23,7 @@ import CircleScreens from 'screens/parent/CircleScreens';
 import CreateCodeScreen from 'screens/parent/CreateCodeScreen';
 import AddToCircle from 'screens/parent/AddToCircle';
 import SearchSitter from 'screens/parent/SearchSitter';
+import RepeatedRequest from 'screens/setting/RepeatedRequest';
 
 const config = Platform.select({
   default: {},
@@ -118,6 +119,7 @@ const SettingsStack = createStackNavigator(
     Payment: PaymentStripe,
     SittingHistory: SittingHistory,
     Feedback: Feedback,
+    RepeatedRequest: RepeatedRequest,
     CreateCodeScreen: {
       screen: CreateCodeScreen,
       navigationOptions: () => ({
