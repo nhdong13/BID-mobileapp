@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -40,17 +41,22 @@ export default class RecommendScreen extends Component {
 
     if (repeatedData) {
       const {
-        sittingDate: startDate,
+        sittingDate,
+        createdUser,
+        requestId,
         startTime,
         endTime,
         sittingAddress,
-        createdUser,
+        childrenNumber,
+        minAgeOfChildren,
+        status,
+        totalPrice,
       } = request;
 
       const { repeatedDays } = repeatedData;
 
       const data = {
-        startDate,
+        startDate: sittingDate,
         startTime,
         endTime,
         sittingAddress,
@@ -60,20 +66,53 @@ export default class RecommendScreen extends Component {
 
       console.log('PHUC: Bsitter -> sendInvitation -> data', data);
       // tao request tai repeated request tai thoi diem di vao trang recommend, ko can cho xac nhan
-      await createRepeatedRequest(data).catch((error) => {
-        console.log(
-          'PHUC: BsitterProfile -> repeatedRequest -> error',
-          error.response,
-        );
-      });
-    }
+      const repeatedRequest = await createRepeatedRequest(data).catch(
+        (error) => {
+          console.log(
+            'PHUC: BsitterProfile -> repeatedRequest -> error',
+            error.response,
+          );
+        },
+      );
+      console.log(
+        'PHUC: RecommendScreen -> componentDidMount -> repeatedRequest',
+        repeatedRequest,
+      );
+      if (repeatedRequest.data) {
+        const { id: repeatedRequestId } = repeatedRequest.data;
 
-    if (requestId && requestId != 0) {
-      this.setState({ requestId }, () => this.getRecommendation());
-    } else if (request !== undefined && request !== null) {
-      this.setState({ request }, () => this.getRecommendation());
+        const newRequest = {
+          requestId,
+          createdUser,
+          sittingDate,
+          startTime,
+          endTime,
+          sittingAddress,
+          childrenNumber,
+          minAgeOfChildren,
+          status,
+          totalPrice,
+          repeatedRequestId,
+        };
+
+        if (requestId && requestId != 0) {
+          this.setState({ requestId }, () => this.getRecommendation());
+        } else if (request !== undefined && request !== null) {
+          this.setState({ request: newRequest }, () =>
+            this.getRecommendation(),
+          );
+        } else {
+          console.log('requestId not found - RecommendScreen');
+        }
+      }
     } else {
-      console.log('requestId not found - RecommendScreen');
+      if (requestId && requestId != 0) {
+        this.setState({ requestId }, () => this.getRecommendation());
+      } else if (request !== undefined && request !== null) {
+        this.setState({ request }, () => this.getRecommendation());
+      } else {
+        console.log('requestId not found - RecommendScreen');
+      }
     }
   }
 
