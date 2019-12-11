@@ -14,14 +14,12 @@ import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
-import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { listByRequestAndStatus } from 'api/invitation.api';
 import {
   acceptBabysitter,
   updateRequestStatus,
   cancelRequest,
-  getRequests,
   getRequestDetail,
 } from 'api/sittingRequest.api';
 import { getRequestTransaction } from 'api/transaction.api';
@@ -62,7 +60,6 @@ export class RequestDetail extends Component {
       confirmAlert: 'Có',
       showConfirm: true,
       refreshing: false,
-      loading: false,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -872,6 +869,29 @@ export class RequestDetail extends Component {
             </View>
           )}
           {/* end */}
+          <View style={styles.buttonContainer}>
+            {(this.state.status == 'DONE' ||
+              this.state.status == 'DONE_UNCONFIMRED' ||
+              this.state.status == 'DONE_BY_NEWSTART' ||
+              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('ReportScreen', {
+                    requestId: this.state.sittingRequestsID,
+                  });
+                }}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <Ionicons name="ios-warning" size={25} color="red" />
+                  <MuliText style={{ color: 'red' }}>Báo cáo vi phạm</MuliText>
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </ScrollView>
     );

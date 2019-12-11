@@ -25,10 +25,17 @@ export class RepeatedRequest extends Component {
       userId: 0,
       loading: false,
       refreshing: false,
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
     };
   }
 
-  componentWillMount() {
+  async componentDidMount() {
     this.getRepeatedRequest();
   }
 
@@ -45,13 +52,6 @@ export class RepeatedRequest extends Component {
 
         this.setState({ requests });
       }
-      // console.log('PHUC: RepeatedRequest -> getRepeatedRequest -> res', res);
-      // hien tat cac cac request ngoai tru request voi status pending, ongoing, confirmed
-
-      // console.log(
-      //   'PHUC: RepeatedRequest -> getRepeatedRequest -> requests',
-      //   requests,
-      // );
     });
   };
 

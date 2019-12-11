@@ -11,6 +11,7 @@ import ParentSetting from 'screens/ParentSetting';
 import CreateRequestScreen from 'screens/parent/CreateRequestScreen';
 import RequestDetail from 'screens/RequestDetail';
 import Feedback from 'screens/parent/Feedback';
+import ReportScreen from 'screens/Report';
 import RecommendBabysitter from 'screens/Recommend/RecommendScreen';
 import BsitterProfile from 'screens/Recommend/BsitterProfile';
 import ProfileDetail from 'screens/ProfileDetail';
@@ -120,6 +121,7 @@ const SettingsStack = createStackNavigator(
     SittingHistory: SittingHistory,
     Feedback: Feedback,
     RepeatedRequest: RepeatedRequest,
+    ReportScreen: ReportScreen,
     CreateCodeScreen: {
       screen: CreateCodeScreen,
       navigationOptions: () => ({
