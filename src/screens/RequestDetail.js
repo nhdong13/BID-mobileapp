@@ -120,16 +120,20 @@ export class RequestDetail extends Component {
     //   .catch((error) => {
     //     console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
     //   });
+    const { status } = this.state;
+    if (status === 'CONFIRMED') {
+      console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
 
-    const transaction = await getRequestTransaction(requestId).then();
-    console.log(
-      'PHUC: RequestDetail -> componentDidMount -> requestId',
-      requestId,
-    );
-    if (transaction) {
-      const { chargeId, amount } = transaction;
-      if (chargeId && amount) {
-        this.setState({ chargeId, amount });
+      const transaction = await getRequestTransaction(requestId).then();
+      console.log(
+        'PHUC: RequestDetail -> componentDidMount -> requestId',
+        requestId,
+      );
+      if (transaction) {
+        const { chargeId, amount } = transaction;
+        if (chargeId && amount) {
+          this.setState({ chargeId, amount });
+        }
       }
     }
   }
@@ -163,13 +167,23 @@ export class RequestDetail extends Component {
   };
 
   onCancel = async () => {
-    this.setState({
-      title: 'Bạn có thật sự muốn hủy ?',
-      notificationMessage:
-        'Nếu hủy bạn sẽ bị trừ 10% phí dịch vụ vào số tiền đã trả',
-      showConfirm: true,
-    });
-    this.AlertPro.open();
+    const { status } = this.state;
+    if (status === 'CONFIRMED') {
+      this.setState({
+        title: 'Bạn có thật sự muốn hủy ?',
+        notificationMessage:
+          'Nếu hủy bạn sẽ bị trừ 10% phí dịch vụ vào số tiền đã trả',
+        showConfirm: true,
+      });
+      this.AlertPro.open();
+    } else {
+      this.setState({
+        title: 'Bạn có thật sự muốn hủy ?',
+        notificationMessage: 'Bạn có muốn hủy yêu cầu này ?',
+        showConfirm: true,
+      });
+      this.AlertPro.open();
+    }
   };
 
   confirmCancel = async (status) => {
