@@ -56,11 +56,10 @@ export default class RecommendScreen extends Component {
         sittingAddress,
         repeatedDays,
         createdUser,
-        request,
       };
 
       console.log('PHUC: Bsitter -> sendInvitation -> data', data);
-
+      // tao request tai repeated request tai thoi diem di vao trang recommend, ko can cho xac nhan
       await createRepeatedRequest(data).catch((error) => {
         console.log(
           'PHUC: BsitterProfile -> repeatedRequest -> error',

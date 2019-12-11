@@ -74,6 +74,8 @@ export default class InvitationDetail extends Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
+  // hoi ban co chac chan muon chap nhan khong, hoi ban co chac chan muon tu choi ko
+
   onButtonClick = (targetStatus) => {
     const ivBody = {
       id: this.state.invitationID,
@@ -354,24 +356,49 @@ export default class InvitationDetail extends Component {
             )}
           </View>
 
-          <View style={styles.buttonContainer}>
+          <View style={{ alignItems: 'center', flex: 1 }}>
             {this.state.invitationStatus == 'PENDING' && (
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  style={styles.submitButton}
+                  style={{ flex: 1 }}
                   onPress={() => this.onButtonClick('DENIED')}
                 >
-                  <MuliText style={{ color: colors.canceled, fontSize: 15 }}>
-                    Từ chối
-                  </MuliText>
+                  <View
+                    style={{
+                      flex: 1,
+                      height: 35,
+                      padding: 5,
+                      marginHorizontal: 10,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <MuliText style={{ color: colors.canceled, fontSize: 15 }}>
+                      Từ chối
+                    </MuliText>
+                  </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.acceptButton}
+                  style={{ flex: 1 }}
                   onPress={() => this.onButtonClick('ACCEPTED')}
                 >
-                  <MuliText style={{ color: colors.done, fontSize: 15 }}>
-                    Chấp nhận
-                  </MuliText>
+                  <View
+                    style={{
+                      flex: 1,
+                      height: 35,
+                      padding: 5,
+                      marginHorizontal: 10,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderColor: colors.done,
+                      borderWidth: 1,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <MuliText style={{ color: colors.done, fontSize: 15 }}>
+                      Chấp nhận
+                    </MuliText>
+                  </View>
                 </TouchableOpacity>
               </View>
             )}
@@ -472,9 +499,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 25,
-    // marginHorizontal: 35,
-    // justifyContent: 'space-between',
-    paddingBottom: 10,
+    marginBottom: 20,
+    // marginHorizontal: 10,
+    // backgroundColor: 'blue',
   },
   detailContainer: {
     marginVertical: 15,
