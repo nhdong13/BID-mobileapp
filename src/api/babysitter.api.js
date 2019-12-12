@@ -76,7 +76,7 @@ export async function getAllBabysitter() {
 
   const options = {
     method: 'GET',
-    url: babysitterAPI.getAllBabysitter,
+    url: babysitterAPI.getAllBabysitterWithSchedule,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,

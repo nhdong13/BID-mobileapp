@@ -143,12 +143,32 @@ class SearchSitter extends Component {
 
     await getAllBabysitter().then(async (res) => {
       if (res) {
-        // console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
+        console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
         await this.setState({ listBabysitter: res.data, request });
       }
     });
 
     this.toggleModalCreateRequest();
+  };
+
+  parseSchedule = (scheduleTime) => {
+    try {
+      const arr = scheduleTime.split(' ');
+
+      const obj = {
+        startTime: arr[0],
+        endTime: arr[1],
+        dayOfMonth: arr[2],
+        month: arr[3],
+        year: arr[4],
+        date: moment(`${arr[4]}-${arr[3]}-${arr[2]}`, 'YYYY-MM-DD').format(
+          'YYYY-MM-DD',
+        ),
+      };
+      return obj;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   searchFilter = (text) => {
