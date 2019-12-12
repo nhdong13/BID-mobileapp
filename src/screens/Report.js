@@ -28,6 +28,15 @@ export default class Feedback extends Component {
       isRated: false,
       description: '',
       roleId: 2,
+      selectedComment: [],
+      clickedComment: -1,
+      bsitterComments: [
+        'Số lượng trẻ không đúng như yêu cầu',
+        'Địa chỉ không đúng',
+        'Khách bắt làm quá thời gian',
+        'Công việc không đúng như mô tả',
+      ],
+      parentComments: ['Mất đồ', 'Người giữ trẻ không đến', 'Trẻ em bị đánh'],
     };
   }
 
@@ -84,8 +93,22 @@ export default class Feedback extends Component {
     }
   }
 
-  submitRating = () => {
-    const { starCount, sittingRequestsID, description, roleId } = this.state;
+  submitRating = async () => {
+    const {
+      starCount,
+      sittingRequestsID,
+      roleId,
+      selectedComment,
+    } = this.state;
+    let { description } = this.state;
+    if (description && description != '')
+      description = '- ' + description + '\n';
+    await selectedComment.forEach((item, index) => {
+      if (this.state.roleId == 3) {
+        description += '- ' + this.state.bsitterComments[item] + '\n';
+      } else description += '- ' + this.state.parentComments[item] + '\n';
+    });
+
     const body = {
       rating: starCount,
       requestId: sittingRequestsID,
@@ -103,6 +126,14 @@ export default class Feedback extends Component {
     }
   };
 
+  onClickComment = () => {
+    const { selectedComment, clickedComment } = this.state;
+    if (selectedComment.indexOf(clickedComment) != -1) {
+      selectedComment.splice(selectedComment.indexOf(clickedComment), 1);
+    } else selectedComment.push(clickedComment);
+    this.setState({ selectedComment: selectedComment });
+  };
+
   callDetail() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
@@ -112,7 +143,12 @@ export default class Feedback extends Component {
   }
 
   render() {
-    const { isRated, description } = this.state;
+    const {
+      isRated,
+      description,
+      bsitterComments,
+      selectedComment,
+    } = this.state;
 
     return (
       <View style={{ flex: 1 }}>
@@ -150,6 +186,74 @@ export default class Feedback extends Component {
                   xin lỗi vì sự bất tiện này.
                 </MuliText>
               </View>
+
+              {/* babysitter report */}
+              {!isRated && this.state.roleId == 3 && (
+                <View style={styles.commentContainer}>
+                  {bsitterComments.map((comment, index) => (
+                    <View style={{ flexDirection: 'row' }} key={comment}>
+                      <TouchableOpacity
+                        onPress={async () => {
+                          await this.setState({ clickedComment: index });
+                          this.onClickComment();
+                        }}
+                      >
+                        <View
+                          style={{
+                            marginTop: 15,
+                            height: 30,
+                            borderRadius: 6,
+                            padding: 5,
+                            backgroundColor:
+                              selectedComment.indexOf(index) != -1
+                                ? colors.darkGreenTitle
+                                : 'gray',
+                          }}
+                        >
+                          <MuliText style={{ color: 'white' }}>
+                            {comment}
+                          </MuliText>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+              {/*  */}
+
+              {/* parent report */}
+              {!isRated && this.state.roleId == 2 && (
+                <View style={styles.commentContainer}>
+                  {this.state.parentComments.map((comment, index) => (
+                    <View style={{ flexDirection: 'row' }} key={comment}>
+                      <TouchableOpacity
+                        onPress={async () => {
+                          await this.setState({ clickedComment: index });
+                          this.onClickComment();
+                        }}
+                      >
+                        <View
+                          style={{
+                            marginTop: 15,
+                            height: 30,
+                            borderRadius: 6,
+                            padding: 5,
+                            backgroundColor:
+                              selectedComment.indexOf(index) != -1
+                                ? colors.darkGreenTitle
+                                : 'gray',
+                          }}
+                        >
+                          <MuliText style={{ color: 'white' }}>
+                            {comment}
+                          </MuliText>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+              {/*  */}
               <View style={styles.reportContainer}>
                 <TextInput
                   multiline
@@ -210,6 +314,10 @@ Feedback.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  commentContainer: {
+    alignSelf: 'flex-start',
+    marginLeft: 40,
+  },
   textButton: {
     color: 'white',
     alignItems: 'center',
@@ -256,6 +364,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkGreenTitle,
     borderRadius: 6,
   },
+  // buttonComment: {
+  //   marginTop: 15,
+  //   height: 20,
+  //   borderRadius: 6,
+  // },
   ratedText: {
     alignItems: 'center',
     justifyContent: 'center',
