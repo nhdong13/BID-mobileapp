@@ -58,3 +58,21 @@ export async function listRepeatedRequest(userId) {
   const response = await axios(options).catch((error) => console.log(error));
   return response;
 }
+
+export async function getRepeatedRequest(requestId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const options = {
+    method: 'GET',
+    url: `${apiUrl.baseUrl}repeatedRequests/getRepeatedRequest/${requestId}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}

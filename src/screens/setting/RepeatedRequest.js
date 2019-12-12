@@ -25,13 +25,6 @@ export class RepeatedRequest extends Component {
       userId: 0,
       loading: false,
       refreshing: false,
-      mon: false,
-      tue: false,
-      wed: false,
-      thu: false,
-      fri: false,
-      sat: false,
-      sun: false,
     };
   }
 

@@ -64,7 +64,7 @@ export default class RecommendScreen extends Component {
         createdUser,
       };
 
-      console.log('PHUC: Bsitter -> sendInvitation -> data', data);
+      // console.log('PHUC: Bsitter -> sendInvitation -> data', data);
       // tao request tai repeated request tai thoi diem di vao trang recommend, ko can cho xac nhan
       const repeatedRequest = await createRepeatedRequest(data).catch(
         (error) => {
@@ -74,10 +74,10 @@ export default class RecommendScreen extends Component {
           );
         },
       );
-      console.log(
-        'PHUC: RecommendScreen -> componentDidMount -> repeatedRequest',
-        repeatedRequest,
-      );
+      // console.log(
+      //   'PHUC: RecommendScreen -> componentDidMount -> repeatedRequest',
+      //   repeatedRequest,
+      // );
       if (repeatedRequest.data) {
         const { id: repeatedRequestId } = repeatedRequest.data;
 
