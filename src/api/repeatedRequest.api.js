@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { retrieveToken } from 'utils/handleToken';
 import qs from 'qs';
-import apiUrl, { parentAPI } from 'utils/Connection';
+import apiUrl from 'utils/Connection';
 
 export async function createRepeatedRequest(repeatedRequest) {
   const {
@@ -11,7 +11,6 @@ export async function createRepeatedRequest(repeatedRequest) {
     sittingAddress,
     repeatedDays,
     createdUser,
-    request,
   } = repeatedRequest;
 
   const data = {
@@ -22,7 +21,6 @@ export async function createRepeatedRequest(repeatedRequest) {
     repeatedDays,
     status: 'ACTIVE',
     createdUser,
-    request,
   };
   const { token } = await retrieveToken();
   let trimpedToken = '';
@@ -51,6 +49,24 @@ export async function listRepeatedRequest(userId) {
   const options = {
     method: 'GET',
     url: `${apiUrl.baseUrl}repeatedRequests/listRepeatedRequest/${userId}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}
+
+export async function getRepeatedRequest(requestId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const options = {
+    method: 'GET',
+    url: `${apiUrl.baseUrl}repeatedRequests/getRepeatedRequest/${requestId}`,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,

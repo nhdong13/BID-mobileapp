@@ -142,7 +142,7 @@ export class Bsitter extends Component {
             <View>
               <View style={styles.upperText}>
                 <MuliText style={styles.bsitterName}>
-                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}
+                  {item.user.nickname} - {this.calAge(item.user.dateOfBirth)}{' '}
                   tuổi
                 </MuliText>
                 {item.user.gender == 'MALE' && (
@@ -180,7 +180,7 @@ export class Bsitter extends Component {
                 <MuliText
                   style={item.totalFeedback > 10 ? styles.green : styles.red}
                 >
-                  {item.averageRating.toFixed(0)} ({item.totalFeedback}){' '}
+                  {item.averageRating.toFixed(0)} ({item.totalFeedback})
                 </MuliText>
               </View>
             </View>

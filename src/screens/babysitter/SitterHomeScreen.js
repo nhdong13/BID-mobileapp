@@ -146,14 +146,6 @@ class SitterHomeScreen extends Component {
               invitation.sittingRequest.status == 'ONGOING') &&
             invitation.sittingRequest.acceptedBabysitter == userId,
         );
-        // console.log(
-        //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
-        //   invitationsUpcoming,
-        // );
-        // console.log(
-        //   'PHUC: SitterHomeScreen -> getInvitationData -> invitationsUpcoming',
-        //   invitationsUpcoming,
-        // );
 
         this.setState({
           invitationsPending,
@@ -164,15 +156,11 @@ class SitterHomeScreen extends Component {
       })
       .catch((error) => {
         this.setState({ loading: false });
-        // console.log(
-        //   'HomeScreen - getDataAccordingToRole - Invitations ' + error,
-        // );
       });
   };
 
   confirmModalPopup = () => {
     const { notification } = this.state;
-    // console.log('PHUC: confirmModalPopup -> notification', notification);
     this.props.navigation.push('InvitationDetail', {
       invitationId: notification.data.id,
     });
@@ -180,10 +168,6 @@ class SitterHomeScreen extends Component {
   };
 
   handleNotification = (notification) => {
-    // console.log(
-    //   'PHUC: SitterHomeScreen -> handleNotification -> notification',
-    //   notification,
-    // );
     const { origin, data } = notification;
     const { message, title, option } = data;
     if (origin == 'received') {

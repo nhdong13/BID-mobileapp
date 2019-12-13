@@ -15,7 +15,10 @@ import { MuliText } from 'components/StyledText';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 import colors from 'assets/Color';
-import { listByRequestAndStatus } from 'api/invitation.api';
+import {
+  listByRequestAndStatus,
+  listAllRequestInvitation,
+} from 'api/invitation.api';
 import {
   acceptBabysitter,
   updateRequestStatus,
@@ -120,16 +123,20 @@ export class RequestDetail extends Component {
     //   .catch((error) => {
     //     console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
     //   });
+    const { status } = this.state;
+    if (status === 'CONFIRMED') {
+      console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
 
-    const transaction = await getRequestTransaction(requestId).then();
-    console.log(
-      'PHUC: RequestDetail -> componentDidMount -> requestId',
-      requestId,
-    );
-    if (transaction) {
-      const { chargeId, amount } = transaction;
-      if (chargeId && amount) {
-        this.setState({ chargeId, amount });
+      const transaction = await getRequestTransaction(requestId).then();
+      console.log(
+        'PHUC: RequestDetail -> componentDidMount -> requestId',
+        requestId,
+      );
+      if (transaction) {
+        const { chargeId, amount } = transaction;
+        if (chargeId && amount) {
+          this.setState({ chargeId, amount });
+        }
       }
     }
   }
@@ -163,13 +170,23 @@ export class RequestDetail extends Component {
   };
 
   onCancel = async () => {
-    this.setState({
-      title: 'Bạn có thật sự muốn hủy ?',
-      notificationMessage:
-        'Nếu hủy bạn sẽ bị trừ 10% phí dịch vụ vào số tiền đã trả',
-      showConfirm: true,
-    });
-    this.AlertPro.open();
+    const { status } = this.state;
+    if (status === 'CONFIRMED') {
+      this.setState({
+        title: 'Bạn có thật sự muốn hủy ?',
+        notificationMessage:
+          'Nếu hủy bạn sẽ bị trừ 10% phí dịch vụ vào số tiền đã trả',
+        showConfirm: true,
+      });
+      this.AlertPro.open();
+    } else {
+      this.setState({
+        title: 'Bạn có thật sự muốn hủy ?',
+        notificationMessage: 'Bạn có muốn hủy yêu cầu này ?',
+        showConfirm: true,
+      });
+      this.AlertPro.open();
+    }
   };
 
   confirmCancel = async (status) => {
@@ -251,14 +268,37 @@ export class RequestDetail extends Component {
   };
 
   getAcceptedInvitations = async () => {
-    const data = await listByRequestAndStatus(
-      this.state.sittingRequestsID,
-      'ACCEPTED',
-    );
+    // const data = await listByRequestAndStatus(
+    //   this.state.sittingRequestsID,
+    //   'ACCEPTED',
+    // );
 
-    this.setState({
-      invitations: data,
-    });
+    await listAllRequestInvitation(this.state.sittingRequestsID).then(
+      (invitations) => {
+        if (invitations.data) {
+          const results = invitations.data;
+          const invitationsPending = results.filter(
+            (invitation) => invitation.status == 'PENDING',
+          );
+
+          const invitationsAccepted = results.filter(
+            (invitation) => invitation.status == 'ACCEPTED',
+          );
+
+          const invitationsDecline = results.filter(
+            (invitation) => invitation.status == 'DENIED',
+          );
+
+          const listInvitation = [
+            ...invitationsAccepted,
+            ...invitationsPending,
+            ...invitationsDecline,
+          ];
+
+          this.setState({ invitations: listInvitation });
+        }
+      },
+    );
   };
 
   getRequestDetail = async () => {
@@ -279,6 +319,10 @@ export class RequestDetail extends Component {
         totalPrice: price,
         createdUser: createUserId,
       } = res;
+      // console.log(
+      //   'PHUC: RequestDetail -> getRequestDetail -> bsitter',
+      //   bsitter,
+      // );
       this.setState({
         date,
         startTime,
@@ -571,7 +615,7 @@ export class RequestDetail extends Component {
                             </View>
                           </View>
                           <MuliText style={styles.grayOptionInformation}>
-                            Số trẻ:{' '}
+                            Số trẻ:
                           </MuliText>
                         </View>
                         <View style={styles.childrenInformationContainer}>
@@ -589,7 +633,7 @@ export class RequestDetail extends Component {
                             </View>
                           </View>
                           <MuliText style={styles.grayOptionInformation}>
-                            Nhỏ tuổi nhất:{' '}
+                            Nhỏ tuổi nhất:
                           </MuliText>
                         </View>
                       </View>
@@ -673,7 +717,7 @@ export class RequestDetail extends Component {
           {this.state.bsitter ? (
             <View style={styles.detailPictureContainer}>
               <Image
-                source={this.state.detailPictureSitter}
+                source={{ uri: this.state.bsitter.image }}
                 style={styles.profileImg}
               />
               <View style={styles.leftInformation}>
@@ -702,59 +746,141 @@ export class RequestDetail extends Component {
                 {this.state.invitations && this.state.invitations != [] ? (
                   this.state.invitations.map((item) => (
                     <View key={item.id} style={styles.detailPictureContainer}>
-                      <Image
-                        source={this.state.detailPictureSitter}
-                        style={styles.profileImg}
-                      />
-                      <View style={styles.leftInformationSitter}>
-                        <MuliText style={styles.pictureInformationSitter}>
-                          Người giữ trẻ
-                        </MuliText>
-                        <MuliText style={{ fontSize: 15 }}>
-                          {item.user.nickname}
-                        </MuliText>
-                        <View style={styles.lowerText}>
-                          <View style={{ flexDirection: 'row' }}>
-                            <Ionicons
-                              name="ios-pin"
-                              size={17}
-                              style={{ marginBottom: 2 }}
-                              color={colors.lightGreen}
-                            />
-                            <MuliText style={{ marginLeft: 3 }}>
-                              {item.distance}
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                        }}
+                      >
+                        <Image
+                          source={{ uri: item.user.image }}
+                          style={
+                            item.status != 'DENIED'
+                              ? styles.profileImg
+                              : styles.profileImgDenied
+                          }
+                        />
+
+                        <View style={styles.leftInformationSitter}>
+                          <MuliText style={styles.pictureInformationSitter}>
+                            Người giữ trẻ
+                          </MuliText>
+                          {item.status != 'DENIED' ? (
+                            <MuliText style={{ fontSize: 15 }}>
+                              {item.user.nickname}
                             </MuliText>
-                          </View>
-                          <View style={{ flexDirection: 'row' }}>
-                            <Ionicons
-                              name="ios-star"
-                              size={17}
-                              style={{ marginBottom: 2, marginLeft: 5 }}
-                              color={colors.lightGreen}
-                            />
-                            <MuliText style={{ marginLeft: 3 }}>
-                              {item.user.babysitter.averageRating}
+                          ) : (
+                            <MuliText
+                              style={{ fontSize: 15, color: colors.gray }}
+                            >
+                              {item.user.nickname}
                             </MuliText>
+                          )}
+                          <View style={styles.lowerText}>
+                            <View style={{ flexDirection: 'row' }}>
+                              <Ionicons
+                                name="ios-pin"
+                                size={17}
+                                style={{ marginBottom: 2 }}
+                                color={
+                                  item.status != 'DENIED'
+                                    ? colors.lightGreen
+                                    : colors.gray
+                                }
+                              />
+                              <MuliText
+                                style={
+                                  item.status != 'DENIED'
+                                    ? { marginLeft: 3 }
+                                    : { marginLeft: 3, color: colors.gray }
+                                }
+                              >
+                                {item.distance}
+                              </MuliText>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                              <Ionicons
+                                name="ios-star"
+                                size={17}
+                                style={{ marginBottom: 2, marginLeft: 5 }}
+                                color={
+                                  item.status != 'DENIED'
+                                    ? colors.lightGreen
+                                    : colors.gray
+                                }
+                              />
+                              <MuliText
+                                style={
+                                  item.status != 'DENIED'
+                                    ? { marginLeft: 3 }
+                                    : { marginLeft: 3, color: colors.gray }
+                                }
+                              >
+                                {item.user.babysitter.averageRating}
+                              </MuliText>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                      <View style={styles.rightInformationSitter}>
-                        <View>
-                          <TouchableOpacity
-                            style={styles.inviteButton}
-                            onPress={() =>
-                              this.acceptBabysitter(
-                                item.user.id,
-                                item.user.nickname,
-                              )
-                            }
+                      </TouchableOpacity>
+                      {item.status == 'ACCEPTED' && (
+                        <View style={styles.rightInformationSitter}>
+                          <View>
+                            <TouchableOpacity
+                              style={styles.inviteButton}
+                              onPress={() =>
+                                item.status != 'ACCEPTED'
+                                  ? null
+                                  : this.acceptBabysitter(
+                                      item.user.id,
+                                      item.user.nickname,
+                                    )
+                              }
+                            >
+                              <MuliText
+                                style={{ color: 'white', fontSize: 11 }}
+                              >
+                                Chấp nhận
+                              </MuliText>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      )}
+                      {item.status == 'PENDING' && (
+                        <View style={styles.rightInformationSitter}>
+                          <View
+                            style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              flex: 1,
+                              // backgroundColor: 'red',
+                              width: 80,
+                            }}
                           >
-                            <MuliText style={{ color: 'white', fontSize: 11 }}>
-                              Chấp nhận
+                            <MuliText
+                              style={{ color: colors.gray, fontSize: 11 }}
+                            >
+                              Đang chờ
                             </MuliText>
-                          </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
+                      )}
+                      {item.status == 'DENIED' && (
+                        <View style={styles.rightInformationSitter}>
+                          <View
+                            style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              flex: 1,
+                              width: 80,
+                            }}
+                          >
+                            <MuliText
+                              style={{ color: colors.canceled, fontSize: 11 }}
+                            >
+                              Đã từ chối
+                            </MuliText>
+                          </View>
+                        </View>
+                      )}
                     </View>
                   ))
                 ) : (
@@ -1034,12 +1160,21 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   profileImg: {
-    width: 70,
-    height: 70,
-    borderRadius: 140 / 2,
+    width: 60,
+    height: 60,
+    // borderRadius: 140 / 2,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
+    // borderWidth: 1,
+    // borderColor: 'black',
+  },
+  profileImgDenied: {
+    width: 60,
+    height: 60,
+    // borderRadius: 140 / 2,
+    overflow: 'hidden',
+    // borderWidth: 1,
+    // borderColor: 'black',
+    opacity: 0.1,
   },
   informationText: {
     fontSize: 13,

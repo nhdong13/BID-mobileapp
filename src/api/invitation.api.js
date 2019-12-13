@@ -89,3 +89,23 @@ export async function updateInvitation(request) {
   const response = await axios(options).catch((error) => console.log(error));
   return response;
 }
+
+export async function listAllRequestInvitation(requestId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const url = apiUrl.getInvitations + 'listAllRequestInvitation/' + requestId;
+
+  const options = {
+    method: 'GET',
+    url: url,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}
