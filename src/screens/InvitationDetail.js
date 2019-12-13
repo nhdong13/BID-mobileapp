@@ -26,6 +26,7 @@ export default class InvitationDetail extends Component {
     super(props);
     this.state = {
       userId: 0,
+      parentImage: '',
       invitationID: this.props.navigation.state.params.invitationId,
       date: '2019-10-03',
       startTime: '12:00 AM',
@@ -56,6 +57,7 @@ export default class InvitationDetail extends Component {
       fri: false,
       sat: false,
       sun: false,
+      isCancel: false,
     };
   }
 
@@ -76,6 +78,7 @@ export default class InvitationDetail extends Component {
             {
               createUserId: resp.sittingRequest.user.id,
               parentName: resp.sittingRequest.user.nickname,
+              parentImage: resp.sittingRequest.user.image,
               invitationStatus: resp.status,
               date: resp.sittingRequest.sittingDate,
               startTime: resp.sittingRequest.startTime,
@@ -94,6 +97,7 @@ export default class InvitationDetail extends Component {
           this.setState({
             createUserId: resp.sittingRequest.user.id,
             parentName: resp.sittingRequest.user.nickname,
+            parentImage: resp.sittingRequest.user.image,
             invitationStatus: resp.status,
             date: resp.sittingRequest.sittingDate,
             startTime: resp.sittingRequest.startTime,
@@ -202,6 +206,19 @@ export default class InvitationDetail extends Component {
     }
   };
 
+  cancelModalPopup = () => {
+    this.setState({
+      notificationMessage: 'Bạn có chăc chắn muốn từ chối lời mời này không ?',
+      title: 'Từ chối lời mời giữ trẻ',
+      showConfirm: true,
+      textConfirm: 'Có',
+      showCancel: true,
+      textCancel: 'Không',
+      isCancel: true,
+    });
+    this.AlertPro.open();
+  };
+
   callDetail() {
     if (this.state.isModalVisible) {
       this.setState({ isModalVisible: false });
@@ -225,7 +242,11 @@ export default class InvitationDetail extends Component {
           ref={(ref) => {
             this.AlertPro = ref;
           }}
-          onConfirm={() => this.onButtonClick('ACCEPTED')}
+          onConfirm={() =>
+            this.state.isCancel
+              ? this.onButtonClick('DENIED')
+              : this.onButtonClick('ACCEPTED')
+          }
           onCancel={() => this.AlertPro.close()}
           title={title}
           message={notificationMessage}
@@ -365,7 +386,7 @@ export default class InvitationDetail extends Component {
           <View style={styles.detailContainer}>
             <View style={styles.detailPictureContainer}>
               <Image
-                source={this.state.detailPictureParent}
+                source={{ uri: this.state.parentImage }}
                 style={styles.profileImg}
               />
               <View style={styles.leftInformation}>
@@ -645,7 +666,8 @@ export default class InvitationDetail extends Component {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={{ flex: 1 }}
-                  onPress={() => this.onButtonClick('DENIED')}
+                  // onPress={() => this.onButtonClick('DENIED')}
+                  onPress={() => this.cancelModalPopup()}
                 >
                   <View
                     style={{
@@ -810,12 +832,12 @@ const styles = StyleSheet.create({
   },
 
   profileImg: {
-    width: 70,
-    height: 70,
-    borderRadius: 140 / 2,
+    width: 60,
+    height: 60,
+    // borderRadius: 140 / 2,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
+    // borderWidth: 1,
+    // borderColor: 'black',
   },
   informationText: {
     fontSize: 13,

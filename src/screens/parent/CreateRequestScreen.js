@@ -385,7 +385,7 @@ class CreateRequestScreen extends Component {
           totalPrice +=
             this.state.pricings[2].baseAmount * officeHoursPercentage;
         }
-      } else if (child.age < 6) {
+      } else if (child.age <= 6) {
         if (isHolyday) {
           totalPrice +=
             this.state.pricings[1].baseAmount *
