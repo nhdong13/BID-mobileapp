@@ -10,7 +10,49 @@ const { height } = Dimensions.get('window');
 class RepeatedItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      mon: false,
+      tue: false,
+      wed: false,
+      thu: false,
+      fri: false,
+      sat: false,
+      sun: false,
+    };
+  }
+
+  componentDidMount() {
+    const { request } = this.props;
+
+    const workDays = request.repeatedDays.split(',');
+    workDays.forEach((day) => {
+      switch (day) {
+        case 'MON':
+          this.setState({ mon: true });
+          break;
+        case 'TUE':
+          this.setState({ tue: true });
+          break;
+        case 'WED':
+          this.setState({ wed: true });
+          break;
+        case 'THU':
+          this.setState({ thu: true });
+          break;
+        case 'FRI':
+          this.setState({ fri: true });
+          break;
+        case 'SAT':
+          this.setState({ sat: true });
+          break;
+        case 'SUN':
+          this.setState({ sun: true });
+          break;
+        default:
+          console.log('Error in getprofile sitter -> CalendarScreen -> switch');
+          break;
+      }
+    });
   }
 
   render() {

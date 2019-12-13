@@ -14,9 +14,8 @@ import {
   withNavigationFocus,
 } from 'react-navigation';
 import { startSitting, doneSitting } from 'api/sittingRequest.api';
-
 import io from 'socket.io-client';
-
+import randomstringPromise from 'randomstring-promise/react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import apiUrl from './Connection';
 
@@ -48,7 +47,21 @@ export class QRcodeScannerScreen extends React.Component {
     }
   }
 
-  triggerQr = () => {
+  triggerQr = async () => {
+    console.log('no chay vo ham trigger ne');
+    await randomstringPromise().then((result) => {
+      console.log(
+        'PHUC: QRcodeScannerScreen -> componentDidMount -> result',
+        result,
+      );
+      if (result) {
+        this.setState({ qr: result });
+        console.log(
+          'PHUC: QRcodeScannerScreen -> componentDidMount -> randomCode',
+          result,
+        );
+      }
+    });
     const socket = io(apiUrl.socket, {
       transports: ['websocket'],
     });
