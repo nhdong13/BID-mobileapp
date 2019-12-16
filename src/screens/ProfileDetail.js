@@ -191,7 +191,8 @@ export default class ProfileDetail extends Component {
                           ellipsizeMode="tail"
                           style={{ color: colors.gray, width: 150 }}
                         >
-                          Text feedback sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkj
+                          Text feedback
+                          sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk
                         </MuliText>
                       </View>
                     </View>
@@ -214,8 +215,13 @@ export default class ProfileDetail extends Component {
                             color={colors.done}
                           />
                         </MuliText>
-                        <MuliText style={{ color: colors.gray }}>
+                        <MuliText
+                          numberOfLines={3}
+                          ellipsizeMode="tail"
+                          style={{ color: colors.gray, width: 150 }}
+                        >
                           Text feedback
+                          sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk
                         </MuliText>
                       </View>
                     </View>
@@ -297,7 +303,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 5,
     borderRadius: 15,
-    height: 150,
+    height: 130,
+    width: 240,
     elevation: 2,
   },
   headerTitle: {
