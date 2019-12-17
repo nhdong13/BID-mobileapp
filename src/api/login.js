@@ -33,9 +33,10 @@ export async function login(phoneNumber, password) {
         await saveToken(token, userId, roleId);
         await registerPushNotifications(res.data.userId)
           .then(async (res) => {
-            console.log('PHUC: login -> res', res);
             if (res.status === 401) {
-              console.log('co gi do hay ho da xay ra');
+              console.log(
+                '---------------- nguoi dung dang nhap bang thiet bi khac dang ky  --------------------',
+              );
               await saveViolation(true);
             } else {
               await saveTokenExpo(res.data.token);
@@ -43,6 +44,8 @@ export async function login(phoneNumber, password) {
             }
           })
           .catch((error) => console.log('loi token roi', error));
+        // await saveViolation(false);
+
         return res;
       } else {
         return res;
@@ -82,6 +85,10 @@ export async function checkOtp(phoneNumber, otp) {
           .then(async (result) => {
             console.log('PHUC: checkOtp -> result', result);
             if (result.status === 401) {
+              console.log(
+                '---------------- nguoi dung dang nhap bang thiet bi khac dang ky  --------------------',
+              );
+
               await saveViolation(true);
             } else {
               await saveTokenExpo(result.data.token);
@@ -91,6 +98,8 @@ export async function checkOtp(phoneNumber, otp) {
           .catch((error) =>
             console.log('loi tai ham check otp -- login api', error),
           );
+
+        // await saveViolation(false);
       }
 
       return res;

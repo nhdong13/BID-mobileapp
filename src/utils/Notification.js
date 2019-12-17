@@ -9,6 +9,10 @@ export async function registerPushNotifications(userId) {
     Permissions.NOTIFICATIONS,
   );
   let finalStatus = existingStatus;
+  console.log(
+    'PHUC: registerPushNotifications -> existingStatus',
+    existingStatus,
+  );
 
   // only ask if permissions have not already been determined, because
   // iOS won't necessarily prompt the user a second time.
@@ -16,6 +20,7 @@ export async function registerPushNotifications(userId) {
     // Android remote notification permissions are granted during the app
     // install, so this will only ask on iOS
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    console.log('PHUC: registerPushNotifications -> status', status);
     finalStatus = status;
   }
 
@@ -25,7 +30,10 @@ export async function registerPushNotifications(userId) {
   }
 
   // Get the token that uniquely identifies this device
-  const token = await Notifications.getExpoPushTokenAsync();
+  let token = await Notifications.getExpoPushTokenAsync().catch((error) =>
+    console.log(error),
+  );
+  console.log('PHUC: registerPushNotifications -> token', token);
 
   const request = {
     userId: userId,

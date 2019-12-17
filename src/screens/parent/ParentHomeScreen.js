@@ -145,12 +145,20 @@ class ParentHomeScreen extends Component {
     );
     socketIO.on('connect', () => {
       socketIO.emit('userId', this.state.userId);
+
+      socketIO.on('pushNotification', (data) => {
+        console.log(
+          'parent got notification from socket -------------------------',
+          data,
+        );
+      });
     });
   }
 
   async componentDidUpdate(prevProps) {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
+        console.log('chay may lan day ');
         await this.getRequestData();
         this.onSelectedDate();
       }
