@@ -97,6 +97,10 @@ class SitterHomeScreen extends Component {
         });
       }
     });
+
+    socketIO.on('pushNotification', (data) => {
+      console.log('babysitter got notification from socket', data);
+    });
   }
 
   async componentDidUpdate(prevProps) {

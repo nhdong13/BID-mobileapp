@@ -29,6 +29,7 @@ export default class ProfileDetail extends Component {
       child: null,
       bsitter: null,
       code: null,
+      image: '',
     };
   }
 
@@ -49,6 +50,7 @@ export default class ProfileDetail extends Component {
         name: res.nickname,
         gender: res.gender,
         dob: res.dateOfBirth,
+        image: res.image,
       });
       // eslint-disable-next-line no-unused-expressions
       this.state.roleId == 2
@@ -75,10 +77,7 @@ export default class ProfileDetail extends Component {
             </MuliText>
           </View>
           <View style={{ alignItems: 'center', marginHorizontal: 40 }}>
-            <Image
-              source={require('assets/images/Phuc.png')}
-              style={styles.picture}
-            />
+            <Image source={{ uri: this.state.image }} style={styles.picture} />
             <View
               style={{
                 marginTop: 10,
@@ -110,7 +109,8 @@ export default class ProfileDetail extends Component {
                 }}
               >
                 <MuliText style={{ marginLeft: 10 }}>
-                  Được đánh giá: (Số sao)
+                  Được đánh giá: ({this.state.bsitter.totalFeedback}){' '}
+                  {this.state.bsitter.averageRating}
                 </MuliText>
                 <Ionicons
                   name="ios-star"
@@ -118,6 +118,10 @@ export default class ProfileDetail extends Component {
                   style={{ marginLeft: 5 }}
                   color={colors.done}
                 />
+                <MuliText style={{ marginLeft: 10 }}>
+                  Được đánh giá: ({this.state.bsitter.totalFeedback}){' '}
+                  {this.state.bsitter.averageRating}
+                </MuliText>
               </View>
             )}
             <MuliText style={styles.textDetail}>
@@ -145,16 +149,16 @@ export default class ProfileDetail extends Component {
                 Giờ làm việc từ:
               </MuliText>
               <MuliText>
-                Buổi sáng:
+                Giờ bắt đầu:{' '}
                 {moment
-                  .utc(this.state.bsitter.daytime, 'HH:mm')
-                  .format(' HH giờ đến mm giờ ')}
+                  .utc(this.state.bsitter.startTime, 'HH:mm')
+                  .format('HH:mm')}
               </MuliText>
               <MuliText>
-                Buổi chiều:
+                Giờ kết thúc:{' '}
                 {moment
-                  .utc(this.state.bsitter.evening, 'HH:mm')
-                  .format(' HH giờ đến mm giờ')}
+                  .utc(this.state.bsitter.endTime, 'HH:mm')
+                  .format('HH:mm')}
               </MuliText>
               <View style={styles.detailContainerFeedback}>
                 <MuliText style={styles.headerTitle}>

@@ -35,27 +35,25 @@ export async function registerPushNotifications(userId) {
   );
   console.log('PHUC: registerPushNotifications -> token', token);
 
-  if (token) {
-    const request = {
-      userId: userId,
-      token: token,
-    };
+  const request = {
+    userId: userId,
+    token: token,
+  };
 
-    const result = await registerExpoToken(request)
-      .then(async (res) => {
-        // console.log('PHUC: registerPushNotifications -> res', res);
-        // await saveTokenExpo(res);
+  const result = await registerExpoToken(request)
+    .then(async (res) => {
+      // console.log('PHUC: registerPushNotifications -> res', res);
+      // await saveTokenExpo(res);
 
-        return res;
-      })
-      .catch((error) => {
-        console.log(
-          'PHUC: registerPushNotifications -> erro -> loi deo gi day',
-          error,
-        );
-        return error;
-      });
-    // console.log('PHUC: registerPushNotifications -> result', result);
-    return result;
-  }
+      return res;
+    })
+    .catch((error) => {
+      console.log(
+        'PHUC: registerPushNotifications -> erro -> loi deo gi day',
+        error,
+      );
+      return error;
+    });
+  // console.log('PHUC: registerPushNotifications -> result', result);
+  return result;
 }

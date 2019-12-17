@@ -19,7 +19,7 @@ export default class AuthLoadingScreen extends React.Component {
 
       if (
         userToken.token &&
-        // userToken.tokenExpo &&
+        userToken.tokenExpo &&
         userToken.violated != 'true'
       ) {
         if (userToken.roleId == 2) {

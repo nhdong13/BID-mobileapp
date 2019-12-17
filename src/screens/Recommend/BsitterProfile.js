@@ -255,10 +255,10 @@ export default class BsitterProfile extends Component {
                     Lịch rảnh: {this.state.sitter.weeklySchedule}
                   </MuliText>
                   <MuliText style={styles.textField}>
-                    Buổi sáng: {this.state.sitter.daytime}
+                    Giờ bắt đầu: {this.state.sitter.startTime}
                   </MuliText>
                   <MuliText style={styles.textField}>
-                    Buổi tối: {this.state.sitter.evening}
+                    Giờ kết thúc: {this.state.sitter.endTime}
                   </MuliText>
                   <MuliText style={styles.textField}>
                     Có thể trông trẻ tối thiểu:{' '}
