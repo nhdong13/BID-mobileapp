@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import {
@@ -14,7 +15,6 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import StarRating from 'react-native-star-rating';
 import Api from 'api/api_helper';
 import { retrieveToken } from 'utils/handleToken';
-import { Ionicons } from '@expo/vector-icons';
 
 export default class Feedback extends Component {
   constructor(props) {
@@ -64,7 +64,7 @@ export default class Feedback extends Component {
         // }
         if (res != null) {
           const tmp = this.state.roleId == 2 ? 1 : 2;
-          console.log(tmp)
+          console.log(tmp);
           res.map((item, index) => {
             if (item.order == tmp) {
               this.setState({

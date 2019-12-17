@@ -74,50 +74,160 @@ export default class ProfileDetail extends Component {
               Hồ sơ cá nhân của bạn
             </MuliText>
           </View>
-          <View style={{ flexDirection: 'row', marginTop: 20 }}>
-            <MuliText style={{ marginLeft: 25 }}>
-              {this.state.name} - {moment().diff(this.state.dob, 'years')} -
-            </MuliText>
-            <Ionicons
-              name={this.state.gender == 'MALE' ? 'ios-male' : 'ios-female'}
-              size={20}
-              style={{ marginLeft: 5 }}
-              color={
-                this.state.gender == 'MALE' ? colors.blueAqua : colors.pinkLight
-              }
+          <View style={{ alignItems: 'center', marginHorizontal: 40 }}>
+            <Image
+              source={require('assets/images/Phuc.png')}
+              style={styles.picture}
             />
-          </View>
-        </View>
-        <MuliText style={styles.textDetail}>
-          Địa chỉ: {this.state.address}
-        </MuliText>
-        {this.state.bsitter != null ? (
-          <View>
-            <MuliText style={styles.textDetail}>
-              Ngày làm việc: {this.state.bsitter.weeklySchedule}
-            </MuliText>
             <View
               style={{
-                marginHorizontal: 25,
-                marginTop: 20,
+                marginTop: 10,
+                alignItems: 'center',
+                flexDirection: 'row',
               }}
             >
-              <View style={{ flexDirection: 'row' }}>
-                <MuliText
-                  style={{ marginRight: 10, fontSize: 16, marginBottom: 10 }}
-                >
-                  Sáng
+              <MuliText style={{ marginLeft: 10 }}>
+                {this.state.name} - {moment().diff(this.state.dob, 'years')}{' '}
+                tuổi -
+              </MuliText>
+              <Ionicons
+                name={this.state.gender == 'MALE' ? 'ios-male' : 'ios-female'}
+                size={20}
+                style={{ marginLeft: 5 }}
+                color={
+                  this.state.gender == 'MALE'
+                    ? colors.blueAqua
+                    : colors.pinkLight
+                }
+              />
+            </View>
+            {this.state.bsitter != null && (
+              <View
+                style={{
+                  marginTop: 20,
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}
+              >
+                <MuliText style={{ marginLeft: 10 }}>
+                  Được đánh giá: (Số sao)
                 </MuliText>
-                <MuliText>{this.state.bsitter.daytime}</MuliText>
+                <Ionicons
+                  name="ios-star"
+                  size={20}
+                  style={{ marginLeft: 5 }}
+                  color={colors.done}
+                />
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <MuliText
-                  style={{ marginRight: 10, fontSize: 16, marginBottom: 10 }}
-                >
-                  Chiều
+            )}
+            <MuliText style={styles.textDetail}>
+              Địa chỉ: {this.state.address}
+            </MuliText>
+          </View>
+        </View>
+        <View
+          style={{
+            borderBottomColor: colors.gray,
+            borderBottomWidth: 1,
+            marginHorizontal: 30,
+            marginTop: 20,
+          }}
+        />
+        {this.state.bsitter != null ? (
+          <View>
+            <View style={{ marginHorizontal: 30 }}>
+              <MuliText style={{ fontSize: 15, marginTop: 20 }}>
+                Ngày làm việc: {this.state.bsitter.weeklySchedule}
+              </MuliText>
+              <MuliText
+                style={{ fontSize: 15, marginTop: 20, marginBottom: 20 }}
+              >
+                Giờ làm việc từ:
+              </MuliText>
+              <MuliText>
+                Buổi sáng:
+                {moment
+                  .utc(this.state.bsitter.daytime, 'HH:mm')
+                  .format(' HH giờ đến mm giờ ')}
+              </MuliText>
+              <MuliText>
+                Buổi chiều:
+                {moment
+                  .utc(this.state.bsitter.evening, 'HH:mm')
+                  .format(' HH giờ đến mm giờ')}
+              </MuliText>
+              <View style={styles.detailContainerFeedback}>
+                <MuliText style={styles.headerTitle}>
+                  Phản hồi từ phụ huynh
                 </MuliText>
-                <MuliText>{this.state.bsitter.evening}</MuliText>
               </View>
+            </View>
+            <View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={styles.detailChildrenContainer}>
+                      <Image
+                        source={require('assets/images/Phuc.png')}
+                        style={styles.pictureFeedback}
+                      />
+                      <View style={{ marginRight: 10 }}>
+                        <MuliText style={styles.textChildrenInformation}>
+                          Name
+                        </MuliText>
+                        <MuliText style={{ color: colors.gray }}>
+                          Đã đánh giá: (5)
+                          <Ionicons
+                            name="ios-star"
+                            size={20}
+                            color={colors.done}
+                          />
+                        </MuliText>
+                        <MuliText
+                          numberOfLines={3}
+                          ellipsizeMode="tail"
+                          style={{ color: colors.gray, width: 150 }}
+                        >
+                          Text feedback
+                          sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk
+                        </MuliText>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.childrenInformationContainer}>
+                    <View style={styles.detailChildrenContainer}>
+                      <Image
+                        source={require('assets/images/Phuc.png')}
+                        style={styles.pictureFeedback}
+                      />
+                      <View>
+                        <MuliText style={styles.textChildrenInformation}>
+                          Name
+                        </MuliText>
+                        <MuliText style={{ color: colors.gray }}>
+                          Đã đánh giá: (5)
+                          <Ionicons
+                            name="ios-star"
+                            size={20}
+                            color={colors.done}
+                          />
+                        </MuliText>
+                        <MuliText
+                          numberOfLines={3}
+                          ellipsizeMode="tail"
+                          style={{ color: colors.gray, width: 150 }}
+                        >
+                          Text feedback
+                          sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk
+                        </MuliText>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </ScrollView>
             </View>
           </View>
         ) : (
@@ -178,22 +288,72 @@ ProfileDetail.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  textChildrenInformation: {
+    fontSize: 15,
+  },
+  detailChildrenContainer: {
+    flexDirection: 'row',
+    marginTop: 15,
+    marginLeft: 10,
+  },
+  childrenInformationContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    marginHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 5,
+    borderRadius: 15,
+    height: 130,
+    width: 240,
+    elevation: 2,
+  },
+  headerTitle: {
+    fontSize: 15,
+    color: colors.darkGreenTitle,
+    marginBottom: 5,
+    fontWeight: '800',
+  },
+  starContainer: {
+    marginLeft: 10,
+    marginTop: 10,
+    paddingHorizontal: 5,
+  },
+  pictureFeedback: {
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+    overflow: 'hidden',
+  },
+  picture: {
+    width: 100,
+    height: 100,
+    marginTop: 15,
+    borderRadius: 100 / 2,
+    overflow: 'hidden',
+  },
+  informationContainer: {
+    flexDirection: 'row',
+    marginLeft: 15,
+  },
+  sitterImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+  },
   grayOptionInformation: {
     color: colors.gray,
     fontSize: 11,
     fontWeight: '200',
   },
-  headerTitle: {
-    fontSize: 15,
-    color: colors.darkGreenTitle,
-    marginBottom: 10,
-    fontWeight: '800',
-  },
   textDetailCode: {
     marginBottom: 5,
   },
+  textDetailDayOFf: {
+    fontSize: 15,
+    marginTop: 20,
+  },
   textDetail: {
-    marginHorizontal: 25,
+    fontSize: 15,
     marginTop: 20,
   },
   profileImg: {
@@ -224,7 +384,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   detailContainer: {
-    marginHorizontal: 25,
-    marginTop: 20,
+    marginHorizontal: 30,
+    marginVertical: 20,
+  },
+  detailContainerFeedback: {
+    marginVertical: 20,
   },
 });

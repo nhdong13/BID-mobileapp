@@ -1,6 +1,5 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 
-console.log(HOST_ENDPOINT);
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 
 const apiUrl = {
