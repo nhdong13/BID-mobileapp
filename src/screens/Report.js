@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import {
@@ -101,9 +103,8 @@ export default class Feedback extends Component {
       selectedComment,
     } = this.state;
     let { description } = this.state;
-    if (description && description != '')
-      description = '- ' + description + '\n';
-    await selectedComment.forEach((item, index) => {
+    if (description && description != '') { description = '- ' + description + '\n'; }
+    await selectedComment.forEach((item, _index) => {
       if (this.state.roleId == 3) {
         description += '- ' + this.state.bsitterComments[item] + '\n';
       } else description += '- ' + this.state.parentComments[item] + '\n';
