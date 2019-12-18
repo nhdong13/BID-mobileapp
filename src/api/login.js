@@ -31,18 +31,19 @@ export async function login(phoneNumber, password) {
       const { token, userId, roleId } = res.data;
       if (token && roleId == 2) {
         await saveToken(token, userId, roleId);
-        await registerPushNotifications(res.data.userId)
-          .then(async (res) => {
-            console.log('PHUC: login -> res', res);
-            if (res.status === 401) {
-              console.log('co gi do hay ho da xay ra');
-              await saveViolation(true);
-            } else {
-              await saveTokenExpo(res.data.token);
-              await saveViolation(false);
-            }
-          })
-          .catch((error) => console.log('loi token roi', error));
+        // await registerPushNotifications(res.data.userId)
+        //   .then(async (res) => {
+        //     if (res.status === 401) {
+        //       console.log('co gi do hay ho da xay ra');
+        //       await saveViolation(true);
+        //     } else {
+        //       await saveTokenExpo(res.data.token);
+        //       await saveViolation(false);
+        //     }
+        //   })
+        //   .catch((error) => console.log('loi token roi', error));
+        await saveViolation(false);
+
         return res;
       } else {
         return res;
@@ -78,19 +79,21 @@ export async function checkOtp(phoneNumber, otp) {
       const { token, userId, roleId } = res.data;
       if ((token, userId, roleId)) {
         await saveToken(token, userId, roleId);
-        await registerPushNotifications(res.data.userId)
-          .then(async (result) => {
-            console.log('PHUC: checkOtp -> result', result);
-            if (result.status === 401) {
-              await saveViolation(true);
-            } else {
-              await saveTokenExpo(result.data.token);
-              await saveViolation(false);
-            }
-          })
-          .catch((error) =>
-            console.log('loi tai ham check otp -- login api', error),
-          );
+        // await registerPushNotifications(res.data.userId)
+        //   .then(async (result) => {
+        //     console.log('PHUC: checkOtp -> result', result);
+        //     if (result.status === 401) {
+        //       await saveViolation(true);
+        //     } else {
+        //       // await saveTokenExpo(result.data.token);
+        //       await saveViolation(false);
+        //     }
+        //   })
+        //   .catch((error) =>
+        //     console.log('loi tai ham check otp -- login api', error),
+        //   );
+
+        await saveViolation(false);
       }
 
       return res;

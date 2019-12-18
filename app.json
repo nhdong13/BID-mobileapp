@@ -17,18 +17,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "phuc",
-            "project": "capstone-rn",
-            "authToken": "2a33c321a7034ffe89593ea4a09f4dfab613204ae16348c59f0effdcd920938f"
-          }
-        }
-      ]
-    },
     "updates": {
       "enabled": true,
       "checkAutomatically": "ON_LOAD",

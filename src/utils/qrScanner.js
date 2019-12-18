@@ -49,19 +49,19 @@ export class QRcodeScannerScreen extends React.Component {
 
   triggerQr = async () => {
     console.log('no chay vo ham trigger ne');
-    await randomstringPromise().then((result) => {
-      console.log(
-        'PHUC: QRcodeScannerScreen -> componentDidMount -> result',
-        result,
-      );
-      if (result) {
-        this.setState({ qr: result });
-        console.log(
-          'PHUC: QRcodeScannerScreen -> componentDidMount -> randomCode',
-          result,
-        );
-      }
-    });
+    // await randomstringPromise().then((result) => {
+    //   console.log(
+    //     'PHUC: QRcodeScannerScreen -> componentDidMount -> result',
+    //     result,
+    //   );
+    //   if (result) {
+    //     this.setState({ qr: result });
+    //     console.log(
+    //       'PHUC: QRcodeScannerScreen -> componentDidMount -> randomCode',
+    //       result,
+    //     );
+    //   }
+    // });
     const socket = io(apiUrl.socket, {
       transports: ['websocket'],
     });
