@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
-
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 import { MuliText } from 'components/StyledText';
-import { Gender } from 'utils/Enum';
+import { Ionicons } from '@expo/vector-icons';
 import { getProfileByRequest, getProfile } from 'api/babysitter.api';
 import { createInvitation } from 'api/invitation.api';
 import { createCustomer } from 'api/payment.api';
@@ -10,6 +15,7 @@ import { STRIPE_PUBLISHABLE_KEY as stripeKey } from 'react-native-dotenv';
 import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
+import moment from 'moment';
 // import { createRepeatedRequest } from 'api/repeatedRequest.api';
 
 export default class BsitterProfile extends Component {
@@ -224,52 +230,42 @@ export default class BsitterProfile extends Component {
                     Thông tin cơ bản
                   </MuliText>
                 </View>
-                <View>
-                  <MuliText style={styles.textField}>
-                    Tên: {this.state.user.nickname}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Địa chỉ: {this.state.user.address}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Giới tính:{' '}
-                    {this.state.user.gender == 'MALE'
-                      ? Gender.MALE
-                      : Gender.FEMALE}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Cách bạn: {this.state.distance}
-                  </MuliText>
-                </View>
-              </View>
-            )}
-            {this.state.sitter && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.headerSection}>
-                  <MuliText style={styles.textInformation}>
-                    Yêu cầu làm việc
-                  </MuliText>
-                </View>
-                <View>
-                  <MuliText style={styles.textField}>
-                    Lịch rảnh: {this.state.sitter.weeklySchedule}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Giờ bắt đầu: {this.state.sitter.startTime}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Giờ kết thúc: {this.state.sitter.endTime}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Có thể trông trẻ tối thiểu:{' '}
-                    {this.state.sitter.minAgeOfChildren} tuổi
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Có thể trông tối đa: {this.state.sitter.maxNumOfChildren}{' '}
-                    trẻ
-                  </MuliText>
-                </View>
-                {this.state.sitter && (
+                <View style={{ flexDirection: 'row', marginRight: 10 }}>
+                  <View>
+                    <Image
+                      source={{ uri: this.state.user.image }}
+                      style={styles.picture}
+                    />
+                  </View>
+
+                  <View style={{ marginLeft: 10 }}>
+                    <MuliText style={styles.textField}>
+                      Tên: {this.state.user.nickname}
+                    </MuliText>
+
+                    <MuliText style={styles.textField}>
+                      Giới tính:{' '}
+                      {this.state.user.gender == 'MALE' && (
+                        <Ionicons
+                          name="ios-male"
+                          size={18}
+                          style={{ marginBottom: -3, marginLeft: 5 }}
+                          color={colors.blueAqua}
+                        />
+                      )}
+                      {this.state.user.gender == 'FEMALE' && (
+                        <Ionicons
+                          name="ios-female"
+                          size={18}
+                          style={{ marginBottom: -3, marginLeft: 5 }}
+                          color={colors.pinkLight}
+                        />
+                      )}
+                    </MuliText>
+                    <MuliText style={styles.textField}>
+                      Cách bạn: {this.state.distance}
+                    </MuliText>
+                  </View>
                   <View style={styles.buttonContainer}>
                     {!this.state.sitter.isInvited && (
                       <TouchableOpacity
@@ -301,7 +297,44 @@ export default class BsitterProfile extends Component {
                       </MuliText>
                     )}
                   </View>
-                )}
+                </View>
+                <MuliText style={styles.textField}>
+                  Địa chỉ: {this.state.user.address}
+                </MuliText>
+              </View>
+            )}
+            {this.state.sitter && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.headerSection}>
+                  <MuliText style={styles.textInformation}>
+                    Lịch làm việc
+                  </MuliText>
+                </View>
+                <View>
+                  <MuliText style={styles.textField}>
+                    Lịch làm việc: {this.state.sitter.weeklySchedule}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Giờ bắt đầu:{' '}
+                    {moment
+                      .utc(this.state.sitter.startTime, 'HH:mm')
+                      .format('HH:mm giờ')}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Giờ kết thúc:{' '}
+                    {moment
+                      .utc(this.state.sitter.endTime, 'HH:mm')
+                      .format('HH:mm giờ')}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Trông trẻ nhỏ nhất: {this.state.sitter.minAgeOfChildren}{' '}
+                    tuổi
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Số trẻ nhiều nhất có thể trông:{' '}
+                    {this.state.sitter.maxNumOfChildren} trẻ
+                  </MuliText>
+                </View>
               </View>
             )}
           </ScrollView>
@@ -312,18 +345,22 @@ export default class BsitterProfile extends Component {
 }
 
 const styles = StyleSheet.create({
+  picture: {
+    width: 80,
+    height: 80,
+    borderRadius: 80 / 2,
+    overflow: 'hidden',
+  },
   textInformation: {
-    fontSize: 15,
+    fontSize: 20,
     color: colors.darkGreenTitle,
     marginLeft: 10,
   },
   grayOptionInformation: {
     color: colors.gray,
-    fontSize: 11,
     fontWeight: '200',
   },
   headerTitle: {
-    fontSize: 15,
     color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
@@ -336,7 +373,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     backgroundColor: 'white',
-    paddingBottom: 20,
+    paddingBottom: 5,
     marginTop: 10,
   },
   headerSection: {
@@ -351,11 +388,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonContainer: {
-    paddingTop: 30,
+    marginTop: 20,
+    marginLeft: 'auto',
     alignItems: 'center',
   },
   textField: {
+    marginHorizontal: 10,
     marginBottom: 10,
-    fontSize: 11,
   },
 });

@@ -182,51 +182,6 @@ export default class SitterSetting extends Component {
                 />
               </View>
             </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.containerInformation}>
-          <MuliText style={styles.headerTitleGray}>Chức năng khác</MuliText>
-          <View>
-            <TouchableOpacity style={styles.detailInformationContainer}>
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-settings"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color={colors.gray}
-                />
-                <MuliText style={styles.contentInformation}>Tùy chỉnh</MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color={colors.gray}
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-information-circle-outline"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color={colors.gray}
-                />
-                <MuliText style={styles.contentInformation}>
-                  Giúp đỡ và thông tin liên quan
-                </MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color={colors.gray}
-                />
-              </View>
-            </TouchableOpacity>
             <TouchableOpacity
               style={styles.detailInformationContainer}
               onPress={this.onLogout}

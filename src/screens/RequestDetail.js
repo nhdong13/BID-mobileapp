@@ -15,10 +15,7 @@ import { MuliText } from 'components/StyledText';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 import colors from 'assets/Color';
-import {
-  listByRequestAndStatus,
-  listAllRequestInvitation,
-} from 'api/invitation.api';
+import { listAllRequestInvitation } from 'api/invitation.api';
 import {
   acceptBabysitter,
   updateRequestStatus,
@@ -638,75 +635,6 @@ export class RequestDetail extends Component {
                         </View>
                       </View>
                     </ScrollView>
-                  </View>
-                </View>
-                <View style={styles.detailContainer}>
-                  <MuliText style={styles.headerTitle}>Tùy chọn khác</MuliText>
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-cash"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Trả bằng thẻ
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Thẻ tùy vào người giữ trẻ
-                      </MuliText>
-                    </View>
-                  </View>
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-car"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Người giữ trẻ không có xe
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Tôi sẽ đưa người giữ trẻ về nhà
-                      </MuliText>
-                    </View>
-                  </View>
-
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-text"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Tiếng Việt
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Tôi muốn người giữ trẻ nói tiếng địa phương
-                      </MuliText>
-                    </View>
-                  </View>
-
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-man"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 10 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Bảo hiểm
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Tôi không có bảo hiểm
-                      </MuliText>
-                    </View>
                   </View>
                 </View>
               </View>

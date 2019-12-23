@@ -219,14 +219,6 @@ export default class InvitationDetail extends Component {
     this.AlertPro.open();
   };
 
-  callDetail() {
-    if (this.state.isModalVisible) {
-      this.setState({ isModalVisible: false });
-    } else {
-      this.setState({ isModalVisible: true });
-    }
-  }
-
   render() {
     const {
       notificationMessage,
@@ -395,18 +387,6 @@ export default class InvitationDetail extends Component {
                   {this.state.parentName}
                 </MuliText>
               </View>
-              <View style={styles.rightInformation}>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity>
-                    <Ionicons
-                      name="ios-chatbubbles"
-                      size={22}
-                      style={{ marginBottom: -5, marginLeft: 10 }}
-                      color={colors.lightGreen}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
             </View>
           </View>
           <View style={styles.detailContainer}>
@@ -456,76 +436,6 @@ export default class InvitationDetail extends Component {
                 </View>
               </ScrollView>
             </View>
-          </View>
-          <View style={{ marginTop: 10 }}>
-            <TouchableOpacity
-              onPress={() => {
-                this.callDetail();
-              }}
-              title="Show more detail"
-              style={{ marginLeft: 10 }}
-            >
-              <MuliText style={{ color: colors.blueAqua }}>
-                {this.state.isModalVisible ? 'Ẩn đi' : 'Xem thêm'}
-              </MuliText>
-            </TouchableOpacity>
-            {this.state.isModalVisible && (
-              <View>
-                <View style={styles.detailContainer}>
-                  <MuliText style={styles.headerTitle}>Chức năng khác</MuliText>
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-cash"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Trả bằng thẻ{' '}
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Phụ huynh trả bằng thẻ
-                      </MuliText>
-                    </View>
-                  </View>
-
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-car"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Đưa đón
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Đón trẻ tại trường
-                      </MuliText>
-                    </View>
-                  </View>
-
-                  <View style={styles.informationText}>
-                    <Ionicons
-                      name="ios-text"
-                      size={22}
-                      style={{ marginBottom: -5, marginHorizontal: 5 }}
-                      color={colors.gray}
-                    />
-                    <View style={styles.textOption}>
-                      <MuliText style={styles.optionInformation}>
-                        Tiếng Việt
-                      </MuliText>
-                      <MuliText style={styles.grayOptionInformation}>
-                        Bạn cần biết tiếng địa phương
-                      </MuliText>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            )}
           </View>
           {this.state.repeatedRequestId != null ? (
             <View style={styles.repeatedRequest}>
@@ -723,7 +633,7 @@ export default class InvitationDetail extends Component {
                   });
                 }}
               >
-                <MuliText style={{ color: colors.blueAqua, fontSize: 11 }}>
+                <MuliText style={{ color: colors.blueAqua, marginLeft: 10 }}>
                   Đánh giá cho yêu cầu trông trẻ này
                 </MuliText>
               </TouchableOpacity>
@@ -744,9 +654,9 @@ export default class InvitationDetail extends Component {
                     justifyContent: 'center',
                   }}
                 >
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row', marginLeft: 10 }}>
                     <Ionicons name="ios-warning" size={25} color="red" />
-                    <MuliText style={{ color: 'red' }}>
+                    <MuliText style={{ color: 'red', marginLeft: 5 }}>
                       Báo cáo vi phạm
                     </MuliText>
                   </View>
