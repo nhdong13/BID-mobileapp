@@ -11,11 +11,13 @@ import {
   FlatList,
   Dimensions,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { MuliText } from 'components/StyledText';
 import { withNavigationFocus } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons/';
 // import Loader from 'utils/Loader';
 import WaitingInvitation from 'screens/babysitter/WaitingInvitation';
 import PendingInvitation from 'screens/babysitter/PendingInvitation';
@@ -31,8 +33,9 @@ import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
 import UpcomingInvitation from 'screens/babysitter/UpcomingInvitation';
 import { getRequests } from 'api/sittingRequest.api';
+import Modal from 'react-native-modal';
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 moment.updateLocale('vi', localization);
 
@@ -43,6 +46,7 @@ class SitterHomeScreen extends Component {
       invitationsPending: null,
       invitationsUpcoming: null,
       invitationsWaiting: null,
+      ongoingInvitation: null,
       userId: 0,
       refreshing: false,
       notificationMessage: 'Your request have been accepted',
@@ -58,6 +62,8 @@ class SitterHomeScreen extends Component {
       textConfirm: 'Có',
       showCancel: true,
       textCancel: 'Không',
+      isModalVisible: false,
+      ongoingParent: '',
     };
   }
 
@@ -151,16 +157,47 @@ class SitterHomeScreen extends Component {
             invitation.sittingRequest.acceptedBabysitter == userId,
         );
 
-        this.setState({
-          invitationsPending,
-          invitationsUpcoming,
-          invitationsWaiting,
-          loading: false,
-        });
+        const ongoingInvitation = invitations.filter(
+          (invitation) =>
+            invitation.sittingRequest.status == 'ONGOING' &&
+            invitation.sittingRequest.acceptedBabysitter == userId,
+        );
+        // console.log(
+        //   'PHUC: SitterHomeScreen -> getInvitationData -> ongoingInvitation',
+        //   ongoingInvitation[0],
+        // );
+
+        // console.log(
+        //   'PHUC: SitterHomeScreen -> getInvitationData -> ongoingInvitation',
+        //   ongoingInvitation[0].sittingRequest.user.image,
+        // );
+
+        if (ongoingInvitation && ongoingInvitation.length > 0) {
+          this.setState({
+            invitationsPending,
+            invitationsUpcoming,
+            invitationsWaiting,
+            ongoingInvitation: ongoingInvitation[0],
+            ongoingParent: ongoingInvitation[0].sittingRequest.user.image,
+            isModalVisible: true,
+            loading: false,
+          });
+        } else {
+          this.setState({
+            invitationsPending,
+            invitationsUpcoming,
+            invitationsWaiting,
+            loading: false,
+          });
+        }
       })
       .catch((error) => {
         this.setState({ loading: false });
       });
+  };
+
+  toggleModalOngoing = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   confirmModalPopup = () => {
@@ -326,6 +363,15 @@ class SitterHomeScreen extends Component {
 
     return (
       <View style={containerBsitter}>
+        <TouchableOpacity
+          onPress={() => {
+            this.toggleModalOngoing();
+          }}
+        >
+          <MuliText style={styles.textParentRequest}>
+            nhan vao day de ongoing
+          </MuliText>
+        </TouchableOpacity>
         <Loader loading={loading} />
         <AlertPro
           ref={(ref) => {
@@ -363,6 +409,74 @@ class SitterHomeScreen extends Component {
           fadeOutDuration={1000}
           opacity={0.8}
         />
+        <Modal
+          isVisible={this.state.isModalVisible}
+          hasBackdrop={true}
+          backdropOpacity={0.9}
+          backdropColor="gray"
+          onBackButtonPress={() => this.toggleModalOngoing()}
+          onBackdropPress={() => this.toggleModalOngoing()}
+          style={{ margin: 0, justifyContent: 'flex-end' }}
+        >
+          <View
+            style={{
+              flex: 0.5,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'white',
+              borderRadius: 10,
+            }}
+          >
+            {this.state.ongoingInvitation && (
+              <View
+                style={{
+                  flex: 1,
+                  width: width,
+                  marginTop: 20,
+                  paddingHorizontal: 20,
+                }}
+              >
+                <View>
+                  <MuliText>Trạng Thái</MuliText>
+                  <MuliText style={{ color: colors.ongoing, fontSize: 20 }}>
+                    {this.state.ongoingInvitation.sittingRequest.status &&
+                      'Đang thực hiện'}
+                  </MuliText>
+                </View>
+                <View style={{ marginTop: 20 }}>
+                  <MuliText>Thực hiện trông trẻ cho</MuliText>
+                </View>
+                <View style={styles.detailContainer}>
+                  <View style={styles.detailPictureContainer}>
+                    <Image
+                      source={{
+                        uri: this.state.ongoingParent,
+                      }}
+                      style={styles.profileImg}
+                    />
+                    <View style={styles.leftInformation}>
+                      <MuliText style={{ color: colors.gray, fontSize: 14 }}>
+                        Phụ huynh
+                      </MuliText>
+                      <MuliText style={{ fontSize: 15 }}>
+                        {
+                          this.state.ongoingInvitation.sittingRequest.user
+                            .nickname
+                        }
+                      </MuliText>
+                    </View>
+                  </View>
+                </View>
+                <View style={{ marginTop: 20 }}>
+                  <MuliText>Địa chỉ</MuliText>
+                  <MuliText style={{ fontSize: 14, marginHorizontal: 20 }}>
+                    {this.state.ongoingInvitation.sittingRequest.sittingAddress}
+                  </MuliText>
+                </View>
+              </View>
+            )}
+          </View>
+        </Modal>
         <View style={scheduleContainerBsitter}>
           <MuliText style={textBsitter}>Lịch giữ trẻ của bạn</MuliText>
         </View>
@@ -453,5 +567,36 @@ const styles = StyleSheet.create({
   horizontalUpcoming: {
     height: 200,
     backgroundColor: 'white',
+  },
+  textParentRequest: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    borderColor: colors.gray,
+    borderWidth: 1,
+    borderRadius: 1,
+    color: colors.gray,
+  },
+
+  detailContainer: {
+    marginVertical: 15,
+  },
+  detailPictureContainer: {
+    flexDirection: 'row',
+  },
+  rightInformation: {
+    marginLeft: 'auto',
+    marginTop: 10,
+  },
+  leftInformation: {
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  profileImg: {
+    width: 60,
+    height: 60,
+    // borderRadius: 140 / 2,
+    overflow: 'hidden',
+    // borderWidth: 1,
+    // borderColor: 'black',
   },
 });

@@ -42,14 +42,14 @@ class ParentRequest extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    {request.status}
+                    Đang chờ
                   </MuliText>
                 </View>
               )}
               {request.status == 'DONE' && (
                 <View style={styles.statusBoxPending}>
                   <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                    {request.status}
+                    Đã Hoàn thành
                   </MuliText>
                 </View>
               )}
@@ -58,7 +58,7 @@ class ParentRequest extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.ongoing }}
                   >
-                    {request.status}
+                    Đang thực hiện
                   </MuliText>
                 </View>
               )}
@@ -67,7 +67,7 @@ class ParentRequest extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {request.status}
+                    Đã hủy
                   </MuliText>
                 </View>
               )}
@@ -76,7 +76,7 @@ class ParentRequest extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.confirmed }}
                   >
-                    {request.status}
+                    Đã xác nhận
                   </MuliText>
                 </View>
               )}
@@ -85,7 +85,7 @@ class ParentRequest extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {request.status}
+                    Đã hết hạn
                   </MuliText>
                 </View>
               )}

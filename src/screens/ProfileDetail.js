@@ -118,10 +118,6 @@ export default class ProfileDetail extends Component {
                   style={{ marginLeft: 5 }}
                   color={colors.done}
                 />
-                <MuliText style={{ marginLeft: 10 }}>
-                  Được đánh giá: ({this.state.bsitter.totalFeedback}){' '}
-                  {this.state.bsitter.averageRating}
-                </MuliText>
               </View>
             )}
             <MuliText style={styles.textDetail}>

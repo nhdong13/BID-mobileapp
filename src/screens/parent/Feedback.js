@@ -42,6 +42,7 @@ export default class Feedback extends Component {
     await Api.get(
       'sittingRequests/' + this.state.sittingRequestsID.toString(),
     ).then((resp) => {
+      console.log('PHUC: Feedback -> componentDidMount -> resp', resp);
       this.setState({
         date: resp.sittingDate,
         startTime: resp.startTime,
@@ -52,6 +53,7 @@ export default class Feedback extends Component {
         user: resp.user,
       });
     });
+
     await Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
       (res) => {
         // console.log(res[0]);
@@ -124,7 +126,7 @@ export default class Feedback extends Component {
           <ScrollView>
             <View style={styles.header} />
             <Image
-              source={require('assets/images/Phuc.png')}
+              source={{ uri: this.state.user.image }}
               style={styles.avatar}
             />
             <View style={{ alignItems: 'center' }}>

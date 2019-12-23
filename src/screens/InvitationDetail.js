@@ -791,17 +791,7 @@ const styles = StyleSheet.create({
     width: 140,
     elevation: 2,
   },
-  rightInformation: {
-    marginLeft: 'auto',
-    marginTop: 10,
-  },
-  leftInformation: {
-    marginTop: 5,
-    marginLeft: 5,
-  },
-  detailPictureContainer: {
-    flexDirection: 'row',
-  },
+
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -813,6 +803,24 @@ const styles = StyleSheet.create({
   detailContainer: {
     marginVertical: 15,
   },
+  detailPictureContainer: {
+    flexDirection: 'row',
+  },
+  rightInformation: {
+    marginLeft: 'auto',
+    marginTop: 10,
+  },
+  leftInformation: {
+    marginTop: 5,
+    marginLeft: 5,
+  },
+
+  pictureInformation: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: colors.gray,
+  },
+
   acceptButton: {
     width: 100,
     height: 35,
@@ -863,11 +871,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 
-  pictureInformation: {
-    fontSize: 13,
-    fontWeight: '400',
-    color: colors.gray,
-  },
   optionInformation: {
     fontSize: 13,
     paddingLeft: 10,
