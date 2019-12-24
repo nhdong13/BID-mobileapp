@@ -363,7 +363,7 @@ class SitterHomeScreen extends Component {
 
     return (
       <View style={containerBsitter}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             this.toggleModalOngoing();
           }}
@@ -371,7 +371,7 @@ class SitterHomeScreen extends Component {
           <MuliText style={styles.textParentRequest}>
             nhan vao day de ongoing
           </MuliText>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Loader loading={loading} />
         <AlertPro
           ref={(ref) => {

@@ -30,6 +30,7 @@ export default class ReportScreen extends Component {
       isModalVisible: false,
       starCount: 0,
       isRated: false,
+      imageSitter: '',
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -44,6 +45,7 @@ export default class ReportScreen extends Component {
           address: resp.sittingAddress,
           bsitter: resp.bsitter,
           price: resp.totalPrice,
+          imageSitter: resp.bsitter.image,
         });
       },
     );

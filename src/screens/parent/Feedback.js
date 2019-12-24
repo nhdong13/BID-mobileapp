@@ -28,6 +28,7 @@ export default class Feedback extends Component {
       isRated: false,
       description: '',
       roleId: 2,
+      userImage: '',
     };
   }
 
@@ -42,7 +43,6 @@ export default class Feedback extends Component {
     await Api.get(
       'sittingRequests/' + this.state.sittingRequestsID.toString(),
     ).then((resp) => {
-      console.log('PHUC: Feedback -> componentDidMount -> resp', resp);
       this.setState({
         date: resp.sittingDate,
         startTime: resp.startTime,
@@ -51,6 +51,7 @@ export default class Feedback extends Component {
         bsitter: resp.bsitter,
         price: resp.totalPrice,
         user: resp.user,
+        userImage: resp.bsitter.image,
       });
     });
 
@@ -126,7 +127,7 @@ export default class Feedback extends Component {
           <ScrollView>
             <View style={styles.header} />
             <Image
-              source={{ uri: this.state.user.image }}
+              source={{ uri: this.state.userImage }}
               style={styles.avatar}
             />
             <View style={{ alignItems: 'center' }}>
