@@ -192,11 +192,7 @@ export default class ProfileDetail extends Component {
                             }}
                           >
                             <Image
-                              source={
-                                feedback.sitting.user.image
-                                  ? { uri: feedback.sitting.user.image }
-                                  : { uri: '' }
-                              }
+                              source={{ uri: feedback.sitting.user.image }}
                               style={styles.pictureFeedback}
                             />
                           </View>

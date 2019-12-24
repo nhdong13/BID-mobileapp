@@ -65,6 +65,11 @@ class SitterHomeScreen extends Component {
       ongoingParent: '',
       invitationId: null,
     };
+
+    console.log(
+      'PHUC: SitterHomeScreen -> constructor -> index',
+      this.state.index,
+    );
   }
 
   async componentDidMount() {
@@ -75,9 +80,9 @@ class SitterHomeScreen extends Component {
       //   userId,
       // );
       this.setState({ userId });
-      this._notificationSubscription = Notifications.addListener(
-        this.handleNotification,
-      );
+      // this._notificationSubscription = Notifications.addListener(
+      //   this.handleNotification,
+      // );
     });
     await this.getInvitationData();
 
@@ -89,7 +94,7 @@ class SitterHomeScreen extends Component {
       socketIO.emit('userId', this.state.userId);
     });
 
-    socketIO.on('reloading', (notification) => {
+    socketIO.on('reloading', () => {
       this.onRefresh();
       // const { notificationMessage, title } = notification;
       // this.setState({ notificationMessage, title });
@@ -109,6 +114,10 @@ class SitterHomeScreen extends Component {
         'babysitter got notification from socket ----------------',
         data,
       );
+      if (data.title == 'Yêu cầu trong trẻ đã bị hủy') {
+        console.log('yeu cau tron trer bi huy roi');
+        this.props.navigation.navigate('Home');
+      }
       this.handleSocketNotification(data);
     });
   }
@@ -325,6 +334,8 @@ class SitterHomeScreen extends Component {
       showConfirm,
       textCancel,
       textConfirm,
+      index,
+      routes,
     } = this.state;
     const {
       containerBsitter,
@@ -527,7 +538,7 @@ class SitterHomeScreen extends Component {
           </View>
         ) : null}
         <TabView
-          navigationState={this.state}
+          navigationState={{ index, routes }}
           renderScene={SceneMap({
             Pending: InvitationPending,
             Waiting: InvitationWaiting,
