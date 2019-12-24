@@ -101,14 +101,15 @@ export class RequestDetail extends Component {
     });
     const { status } = this.state;
     if (status === 'CONFIRMED') {
-      console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
+      // console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
 
       const transaction = await getRequestTransaction(requestId).then();
-      console.log(
-        'PHUC: RequestDetail -> componentDidMount -> requestId',
-        requestId,
-      );
-      if (transaction.status == 200) {
+      // console.log('PHUC: componentDidMount -> transaction', transaction);
+      // console.log(
+      //   'PHUC: RequestDetail -> componentDidMount -> requestId',
+      //   requestId,
+      // );
+      if (transaction.status != 400) {
         const { chargeId, amount } = transaction.data;
         if (chargeId && amount) {
           this.setState({ chargeId, amount });
@@ -345,6 +346,7 @@ export class RequestDetail extends Component {
                   createUserId: userId,
                 } = this.state;
                 if (requestId != 0 && price != 0 && userId != 0) {
+                  console.log('PHUC: acceptBabysitter -> price', price);
                   await createCharge(price, userId, requestId).then((res) => {
                     if (res) {
                       this.setState({ loading: false });

@@ -694,7 +694,7 @@ class CreateRequestScreen extends Component {
                 format="HH:mm"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
-                androidMode="spinner"
+                // androidMode="spinner"
                 customStyles={{
                   dateInput: {
                     borderWidth: 0,
@@ -736,7 +736,7 @@ class CreateRequestScreen extends Component {
                 format="HH:mm"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
-                androidMode="spinner"
+                // androidMode="spinner"
                 customStyles={{
                   dateInput: {
                     borderWidth: 0,

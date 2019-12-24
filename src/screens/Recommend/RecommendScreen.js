@@ -283,7 +283,8 @@ export default class RecommendScreen extends Component {
                     marginHorizontal: 50,
                   }}
                 >
-                  Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn
+                  Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn.
+                  Vui lòng thử lại sau một khoảng thời gian
                 </MuliText>
               )}
             </View>

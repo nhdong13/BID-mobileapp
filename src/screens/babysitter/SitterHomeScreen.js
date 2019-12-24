@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unused-state */
 /* eslint-disable react/no-string-refs */
 import React, { Component } from 'react';
 import { retrieveToken } from 'utils/handleToken';
@@ -64,6 +63,7 @@ class SitterHomeScreen extends Component {
       textCancel: 'Không',
       isModalVisible: false,
       ongoingParent: '',
+      invitationId: null,
     };
   }
 
@@ -90,7 +90,7 @@ class SitterHomeScreen extends Component {
     });
 
     socketIO.on('reloading', (notification) => {
-      this._onRefresh();
+      this.onRefresh();
       // const { notificationMessage, title } = notification;
       // this.setState({ notificationMessage, title });
     });
@@ -105,7 +105,11 @@ class SitterHomeScreen extends Component {
     });
 
     socketIO.on('pushNotification', (data) => {
-      console.log('babysitter got notification from socket', data);
+      console.log(
+        'babysitter got notification from socket ----------------',
+        data,
+      );
+      this.handleSocketNotification(data);
     });
   }
 
@@ -201,18 +205,41 @@ class SitterHomeScreen extends Component {
   };
 
   confirmModalPopup = () => {
-    const { notification } = this.state;
+    const { invitationId } = this.state;
     this.props.navigation.push('InvitationDetail', {
-      invitationId: notification.data.id,
+      invitationId: invitationId,
     });
     this.AlertPro.close();
   };
 
-  handleNotification = (notification) => {
+  handleSocketNotification = async (notification) => {
+    await this.onRefresh();
+
+    if (notification) {
+      const { id, message, title, option } = notification;
+      this.setState(
+        {
+          notificationMessage: message,
+          title: title,
+          showConfirm: option.showConfirm,
+          showCancel: option.showCancel,
+          textCancel: option.textCancel,
+          textConfirm: option.textConfirm,
+          invitationId: id,
+        },
+        () => {
+          this.refs.toast.show(notification.message, DURATION.LENGTH_LONG);
+          this.AlertPro.open();
+        },
+      );
+    }
+  };
+
+  handleNotification = async (notification) => {
     const { origin, data } = notification;
-    const { message, title, option } = data;
+    const { message, title, option, id } = data;
+    this.onRefresh();
     if (origin == 'received') {
-      this._onRefresh();
       this.setState(
         {
           notification: notification,
@@ -222,6 +249,7 @@ class SitterHomeScreen extends Component {
           showCancel: option.showCancel,
           textCancel: option.textCancel,
           textConfirm: option.textConfirm,
+          invitationId: id,
         },
         () => {
           this.AlertPro.open();
@@ -238,6 +266,7 @@ class SitterHomeScreen extends Component {
           showCancel: option.showCancel,
           textCancel: option.textCancel,
           textConfirm: option.textConfirm,
+          invitationId: id,
         },
         () => {
           const { notification } = this.state;
@@ -250,7 +279,7 @@ class SitterHomeScreen extends Component {
     }
   };
 
-  _onRefresh = () => {
+  onRefresh = () => {
     this.setState({ refreshing: true });
     this.getInvitationData().then(() => {
       this.setState({ refreshing: false });
@@ -313,7 +342,7 @@ class SitterHomeScreen extends Component {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={this._onRefresh}
+              onRefresh={this.onRefresh}
             />
           }
           data={invitationsPending}
@@ -340,7 +369,7 @@ class SitterHomeScreen extends Component {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={this._onRefresh}
+              onRefresh={this.onRefresh}
             />
           }
           data={invitationsWaiting}

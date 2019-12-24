@@ -123,6 +123,7 @@ class ParentHomeScreen extends Component {
       selectedDateRequest: [],
       selectedDate: new moment().format('YYYY-MM-DD'),
       isModalVisible: false,
+      requestId: null,
     };
   }
 
@@ -131,9 +132,9 @@ class ParentHomeScreen extends Component {
     await this.getRequestData();
     this.onSelectedDate();
 
-    this._notificationSubscription = Notifications.addListener(
-      this.handleNotification,
-    );
+    // this._notificationSubscription = Notifications.addListener(
+    //   this.handleNotification,
+    // );
 
     const socketIO = io(apiUrl.socket, {
       transports: ['websocket'],
@@ -151,6 +152,7 @@ class ParentHomeScreen extends Component {
           'parent got notification from socket -------------------------',
           data,
         );
+        this.handleSocketNotification(data);
       });
     });
   }
@@ -158,19 +160,44 @@ class ParentHomeScreen extends Component {
   async componentDidUpdate(prevProps) {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
-        console.log('chay may lan day ');
+        // console.log('chay may lan day ');
         await this.getRequestData();
         this.onSelectedDate();
       }
     }
   }
 
+  handleSocketNotification = async (notification) => {
+    await this.getRequestData().then(() => {
+      // this.setState({ refreshing: false });
+    });
+
+    if (notification) {
+      const { id, message, title, option } = notification;
+      this.setState(
+        {
+          notificationMessage: message,
+          title: title,
+          showConfirm: option.showConfirm,
+          showCancel: option.showCancel,
+          textCancel: option.textCancel,
+          textConfirm: option.textConfirm,
+          requestId: id,
+        },
+        () => {
+          this.refs.toast.show(notification.message, DURATION.LENGTH_LONG);
+          this.AlertPro.open();
+        },
+      );
+    }
+  };
+
   handleNotification = async (notification) => {
     await this.getRequestData().then(() => {
       // this.setState({ refreshing: false });
     });
     const { origin, data } = notification;
-    const { message, title, option } = data;
+    const { message, title, option, id } = data;
     if (origin == 'received') {
       this.setState(
         {
@@ -181,6 +208,7 @@ class ParentHomeScreen extends Component {
           showCancel: option.showCancel,
           textCancel: option.textCancel,
           textConfirm: option.textConfirm,
+          requestId: id,
         },
         () => {
           this.refs.toast.show(notification.data.message, DURATION.LENGTH_LONG);
@@ -197,6 +225,7 @@ class ParentHomeScreen extends Component {
           showCancel: option.showCancel,
           textCancel: option.textCancel,
           textConfirm: option.textConfirm,
+          requestId: id,
         },
         () => {
           const { notification } = this.state;
@@ -214,11 +243,15 @@ class ParentHomeScreen extends Component {
   };
 
   confirmModalPopup = () => {
-    const { notification } = this.state;
-    this.props.navigation.push('RequestDetail', {
-      requestId: notification.data.id,
-    });
-    this.AlertPro.close();
+    const { requestId } = this.state;
+    if (requestId) {
+      this.props.navigation.push('RequestDetail', {
+        requestId,
+      });
+      this.AlertPro.close();
+    } else {
+      this.AlertPro.close();
+    }
   };
 
   getRequestData = async () => {
