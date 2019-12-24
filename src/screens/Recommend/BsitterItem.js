@@ -130,6 +130,7 @@ export class Bsitter extends Component {
                 request: request,
                 distance: item.distance,
                 repeatedData: repeatedData,
+                isFromDetail: false,
                 onGoBack: (receiverId, requestId) =>
                   this.changeStateOnGoBack(receiverId, requestId),
               })

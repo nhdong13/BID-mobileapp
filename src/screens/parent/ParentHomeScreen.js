@@ -379,7 +379,7 @@ class ParentHomeScreen extends Component {
           onBackButtonPress={() => this.toggleModalCreateRequest()}
           onBackdropPress={() => this.toggleModalCreateRequest()}
         >
-          <View style={{ flex: 0.5 }}>
+          <View style={{ flex: 0.5, justifyContent: 'center' }}>
             <TouchableOpacity
               onPress={() => {
                 this.toggleModalCreateRequest();
@@ -420,13 +420,11 @@ class ParentHomeScreen extends Component {
                   />
                 </View>
                 <View style={modalCreate}>
-                  <MuliText>
-                    Tạo yêu cầu với người giữ trẻ trong Vòng tròn tin tưởng
-                  </MuliText>
+                  <MuliText>Tìm và tạo yêu cầu với người giữ trẻ</MuliText>
                 </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 this.toggleModalCreateRequest();
                 // navigation.navigate('CreateRequest', {
@@ -447,7 +445,7 @@ class ParentHomeScreen extends Component {
                   <MuliText>Tạo yêu cầu giữ trẻ định kỳ</MuliText>
                 </View>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </Modal>
         <View style={scheduleContainer}>

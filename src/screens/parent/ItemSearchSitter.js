@@ -165,7 +165,10 @@ export class ItemSearchSitter extends Component {
           {!item.isInvited && (
             <TouchableOpacity
               style={styles.inviteButton}
-              onPress={() => this.sendInvitation(item.userId)}
+              onPress={() => {
+                this.sendInvitation(item.userId);
+                this.props.navigation.navigate('Home');
+              }}
             >
               <MuliText style={{ color: colors.lightGreen, fontSize: 13 }}>
                 Mời
