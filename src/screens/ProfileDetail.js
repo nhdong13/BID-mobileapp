@@ -13,6 +13,7 @@ import moment from 'moment';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getAllFeedbackByUserId } from 'api/feedback.api';
 
 export default class ProfileDetail extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class ProfileDetail extends Component {
       bsitter: null,
       code: null,
       image: '',
+      listFeedbacks: null,
     };
   }
 
@@ -64,9 +66,18 @@ export default class ProfileDetail extends Component {
         ? this.setState({ bsitter: res.babysitter })
         : this.setState({ bsitter: null });
     });
+
+    await getAllFeedbackByUserId(this.state.userId).then((res) => {
+      if (res.status == 200) {
+        this.setState({
+          listFeedbacks: res.data,
+        });
+      }
+    });
   };
 
   render() {
+    const { listFeedbacks } = this.state;
     return (
       <ScrollView>
         <View>
@@ -167,66 +178,72 @@ export default class ProfileDetail extends Component {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               >
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={styles.childrenInformationContainer}>
-                    <View style={styles.detailChildrenContainer}>
-                      <Image
-                        source={require('assets/images/Phuc.png')}
-                        style={styles.pictureFeedback}
-                      />
-                      <View style={{ marginRight: 10 }}>
-                        <MuliText style={styles.textChildrenInformation}>
-                          Name
-                        </MuliText>
-                        <MuliText style={{ color: colors.gray }}>
-                          Đã đánh giá: (5)
-                          <Ionicons
-                            name="ios-star"
-                            size={20}
-                            color={colors.done}
-                          />
-                        </MuliText>
-                        <MuliText
-                          numberOfLines={3}
-                          ellipsizeMode="tail"
-                          style={{ color: colors.gray, width: 150 }}
-                        >
-                          Text feedback
-                          sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk
-                        </MuliText>
+                {listFeedbacks && listFeedbacks.length > 0 ? (
+                  listFeedbacks.map((feedback) => (
+                    <View style={{ flexDirection: 'row' }} key={feedback.id}>
+                      <View style={styles.childrenInformationContainer}>
+                        <View style={styles.detailChildrenContainer}>
+                          <View
+                            style={{
+                              // backgroundColor: 'red',
+                              // justifyContent: 'center',
+                              marginTop: 20,
+                              marginLeft: 5,
+                            }}
+                          >
+                            <Image
+                              source={
+                                feedback.sitting.user.image
+                                  ? { uri: feedback.sitting.user.image }
+                                  : { uri: '' }
+                              }
+                              style={styles.pictureFeedback}
+                            />
+                          </View>
+
+                          <View
+                            style={{
+                              marginHorizontal: 5,
+                              // backgroundColor: 'red',
+                              // justifyContent: 'center',
+                              marginTop: 15,
+                            }}
+                          >
+                            <View style={{ marginHorizontal: 10 }}>
+                              <MuliText style={styles.textChildrenInformation}>
+                                {feedback.sitting.user.nickname}
+                              </MuliText>
+                            </View>
+
+                            <View style={{ marginHorizontal: 10 }}>
+                              <MuliText style={{ color: colors.gray }}>
+                                Đã đánh giá: {feedback.rating}{' '}
+                                <Ionicons
+                                  name="ios-star"
+                                  size={20}
+                                  color={colors.done}
+                                />
+                              </MuliText>
+                            </View>
+                            <View
+                              style={{ marginTop: 10, marginHorizontal: 10 }}
+                            >
+                              <MuliText
+                                numberOfLines={3}
+                                ellipsizeMode="tail"
+                                style={{ width: 150 }}
+                              >
+                                {feedback.description}
+                              </MuliText>
+                            </View>
+                          </View>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                  <View style={styles.childrenInformationContainer}>
-                    <View style={styles.detailChildrenContainer}>
-                      <Image
-                        source={require('assets/images/Phuc.png')}
-                        style={styles.pictureFeedback}
-                      />
-                      <View>
-                        <MuliText style={styles.textChildrenInformation}>
-                          Name
-                        </MuliText>
-                        <MuliText style={{ color: colors.gray }}>
-                          Đã đánh giá: (5)
-                          <Ionicons
-                            name="ios-star"
-                            size={20}
-                            color={colors.done}
-                          />
-                        </MuliText>
-                        <MuliText
-                          numberOfLines={3}
-                          ellipsizeMode="tail"
-                          style={{ color: colors.gray, width: 150 }}
-                        >
-                          Text feedback
-                          sdasadasdsadsdasdasdajljlkjljlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlkjlk
-                        </MuliText>
-                      </View>
-                    </View>
-                  </View>
-                </View>
+                  ))
+                ) : (
+                  <View />
+                )}
               </ScrollView>
             </View>
           </View>
@@ -293,8 +310,11 @@ const styles = StyleSheet.create({
   },
   detailChildrenContainer: {
     flexDirection: 'row',
-    marginTop: 15,
-    marginLeft: 10,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // backgroundColor: 'green',
+    marginTop: 5,
+    flex: 1,
   },
   childrenInformationContainer: {
     flex: 1,
@@ -303,9 +323,11 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 5,
     borderRadius: 15,
-    height: 130,
-    width: 240,
+    height: 150,
+    width: 250,
     elevation: 2,
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   headerTitle: {
     fontSize: 15,

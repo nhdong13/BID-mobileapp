@@ -23,6 +23,7 @@ import colors from 'assets/Color';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AlertPro from 'react-native-alert-pro';
 import { changePassword } from 'api/user.api';
+import Loader from 'utils/Loader';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -47,6 +48,7 @@ class LoginScreen extends Component {
       showConfirm: false,
       violated: 'false',
       isChangePassword: false,
+      loading: false,
     };
     console.log(
       'PHUC: LoginScreen -> constructor -> violated',
@@ -112,10 +114,12 @@ class LoginScreen extends Component {
   };
 
   onSubmitOTP = async () => {
+    this.setState({ loading: true });
     const { phoneNumber, OTP } = this.state;
     await checkOtp(phoneNumber, OTP).then(async (result) => {
       console.log('PHUC: LoginScreen -> onSubmitOTP -> result', result.status);
       if (result.status !== 401) {
+        this.setState({ loading: false });
         const { roleId, userId } = this.state;
         // await saveViolation(false);
         this.props.navigation.navigate('AuthLoading', {
@@ -123,6 +127,7 @@ class LoginScreen extends Component {
           userId: userId,
         });
       } else {
+        this.setState({ loading: false });
         this.refs.toast.show(
           'Mã otp sai hoặc đã bị vô hiệu hóa, vui lòng liên hệ với tổng đài để kích hoạt lại',
         );
@@ -260,10 +265,12 @@ class LoginScreen extends Component {
       showConfirm,
       textCancel,
       textConfirm,
+      loading,
     } = this.state;
 
     return (
       <ScrollView>
+        <Loader loading={loading} />
         <AlertPro
           ref={(ref) => {
             this.AlertPro = ref;
@@ -519,7 +526,6 @@ class LoginScreen extends Component {
                             }
                             placeholder="Mật khẩu cũ"
                             disableFullscreenUI={false}
-                            value={this.state.password}
                             keyboardType="number-pad"
                             secureTextEntry={true}
                           />

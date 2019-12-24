@@ -29,7 +29,7 @@ export async function getRequestTransaction(requestId) {
     });
   if (response.data) {
     console.log('PHUC: getRequestTransaction -> response', response.data);
-    return response.data;
+    return response;
   }
   return { message: 'Error in TransactionAPI -> getRequestTransaction' };
 }

@@ -18,9 +18,9 @@ export default class AuthLoadingScreen extends React.Component {
       // );
 
       if (
-        userToken.token &&
+        // userToken.violated != 'true' &&
         // userToken.tokenExpo &&
-        userToken.violated != 'true'
+        userToken.token
       ) {
         if (userToken.roleId == 2) {
           this.props.navigation.navigate('ParentMain');

@@ -83,7 +83,7 @@ export default class ReportScreen extends Component {
         <View style={styles.colorTop} />
         <View style={{ alignItems: 'center' }}>
           <Image
-            source={require('assets/images/Phuc.png')}
+            source={{ uri: this.state.imageSitter }}
             style={styles.pictureReport}
           />
           <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>

@@ -16,6 +16,7 @@ import { PaymentsStripe as Stripe } from 'expo-payments-stripe';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import moment from 'moment';
+import { getAllFeedbackByUserId } from 'api/feedback.api';
 // import { createRepeatedRequest } from 'api/repeatedRequest.api';
 
 export default class BsitterProfile extends Component {
@@ -29,10 +30,12 @@ export default class BsitterProfile extends Component {
       distance: 0,
       sitter: {},
       user: {},
+      sitterImage: '',
+      listFeedbacks: null,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     Stripe.setOptionsAsync({
       publishableKey: stripeKey,
       androidPayMode: 'test',
@@ -56,6 +59,13 @@ export default class BsitterProfile extends Component {
         },
         () => this.getBabysitter(),
       );
+      await getAllFeedbackByUserId(sitterId).then((res) => {
+        if (res.status == 200) {
+          this.setState({
+            listFeedbacks: res.data,
+          });
+        }
+      });
     } else {
       console.log('Recommend/BsitterProfile - sitterId not found');
     }
@@ -68,6 +78,7 @@ export default class BsitterProfile extends Component {
       this.setState({
         sitter: data,
         user: data.user,
+        sitterImage: data.user.image,
       });
 
       return data;
@@ -78,6 +89,7 @@ export default class BsitterProfile extends Component {
       this.setState({
         sitter: data,
         user: data.user,
+        sitterImage: data.user.image,
       });
 
       return data;
@@ -219,6 +231,7 @@ export default class BsitterProfile extends Component {
 
   // netstat -ano | findstr 3000
   render() {
+    const { listFeedbacks } = this.state;
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -233,7 +246,7 @@ export default class BsitterProfile extends Component {
                 <View style={{ flexDirection: 'row', marginRight: 10 }}>
                   <View>
                     <Image
-                      source={{ uri: this.state.user.image }}
+                      source={{ uri: this.state.sitterImage }}
                       style={styles.picture}
                     />
                   </View>
@@ -335,6 +348,79 @@ export default class BsitterProfile extends Component {
                     {this.state.sitter.maxNumOfChildren} trẻ
                   </MuliText>
                 </View>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {listFeedbacks && listFeedbacks.length > 0 ? (
+                    listFeedbacks.map((feedback) => (
+                      <View style={{ flexDirection: 'row' }} key={feedback.id}>
+                        <View style={styles.childrenInformationContainer}>
+                          <View style={styles.detailChildrenContainer}>
+                            <View
+                              style={{
+                                // backgroundColor: 'red',
+                                // justifyContent: 'center',
+                                marginTop: 20,
+                                marginLeft: 5,
+                              }}
+                            >
+                              <Image
+                                source={
+                                  feedback.sitting.user.image
+                                    ? { uri: feedback.sitting.user.image }
+                                    : { uri: '' }
+                                }
+                                style={styles.pictureFeedback}
+                              />
+                            </View>
+
+                            <View
+                              style={{
+                                marginHorizontal: 5,
+                                // backgroundColor: 'red',
+                                // justifyContent: 'center',
+                                marginTop: 15,
+                              }}
+                            >
+                              <View style={{ marginHorizontal: 10 }}>
+                                <MuliText
+                                  style={styles.textChildrenInformation}
+                                >
+                                  {feedback.sitting.user.nickname}
+                                </MuliText>
+                              </View>
+
+                              <View style={{ marginHorizontal: 10 }}>
+                                <MuliText style={{ color: colors.gray }}>
+                                  Đã đánh giá: {feedback.rating}{' '}
+                                  <Ionicons
+                                    name="ios-star"
+                                    size={20}
+                                    color={colors.done}
+                                  />
+                                </MuliText>
+                              </View>
+                              <View
+                                style={{ marginTop: 10, marginHorizontal: 10 }}
+                              >
+                                <MuliText
+                                  numberOfLines={3}
+                                  ellipsizeMode="tail"
+                                  style={{ width: 150 }}
+                                >
+                                  {feedback.description}
+                                </MuliText>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    ))
+                  ) : (
+                    <View />
+                  )}
+                </ScrollView>
               </View>
             )}
           </ScrollView>
@@ -395,5 +481,28 @@ const styles = StyleSheet.create({
   textField: {
     marginHorizontal: 10,
     marginBottom: 10,
+  },
+  childrenInformationContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    marginHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 5,
+    borderRadius: 15,
+    height: 150,
+    width: 250,
+    elevation: 2,
+  },
+  detailChildrenContainer: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginLeft: 10,
+  },
+
+  pictureFeedback: {
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+    overflow: 'hidden',
   },
 });

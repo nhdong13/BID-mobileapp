@@ -28,7 +28,8 @@ export default class Feedback extends Component {
       isRated: false,
       description: '',
       roleId: 2,
-      userImage: '',
+      sitterImage: '',
+      parentImage: '',
     };
   }
 
@@ -51,7 +52,8 @@ export default class Feedback extends Component {
         bsitter: resp.bsitter,
         price: resp.totalPrice,
         user: resp.user,
-        userImage: resp.bsitter.image,
+        sitterImage: resp.bsitter.image,
+        parentImage: resp.user.image,
       });
     });
 
@@ -82,11 +84,11 @@ export default class Feedback extends Component {
     );
   }
 
-  onStarRatingPress(rating) {
+  onStarRatingPress = (rating) => {
     if (!this.state.isRated) {
       this.setState({ starCount: rating });
     }
-  }
+  };
 
   submitRating = () => {
     const { starCount, sittingRequestsID, description, roleId } = this.state;
@@ -126,10 +128,18 @@ export default class Feedback extends Component {
         >
           <ScrollView>
             <View style={styles.header} />
-            <Image
-              source={{ uri: this.state.userImage }}
-              style={styles.avatar}
-            />
+            {this.state.roleId == 2 && this.state.bsitter && (
+              <Image
+                source={{ uri: this.state.sitterImage }}
+                style={styles.avatar}
+              />
+            )}
+            {this.state.roleId == 3 && this.state.user && (
+              <Image
+                source={{ uri: this.state.parentImage }}
+                style={styles.avatar}
+              />
+            )}
             <View style={{ alignItems: 'center' }}>
               {this.state.roleId == 2 && this.state.bsitter && (
                 <MuliText

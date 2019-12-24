@@ -174,6 +174,7 @@ export default class InvitationDetail extends Component {
     };
     updateInvitation(ivBody)
       .then(() => {
+        this.AlertPro.close();
         this.props.navigation.navigate('Home', { loading: false });
       })
       .catch((error) => console.log(error));
