@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
-import { userAPI } from 'utils/Connection';
+import apiUrl, { userAPI } from 'utils/Connection';
 import { retrieveToken } from 'utils/handleToken';
 
 export async function getUser() {
@@ -31,4 +31,29 @@ export async function getUser() {
     return response.data;
   }
   return { message: 'Error in userApi' };
+}
+
+export async function changePassword(data) {
+  // data bao gom phoneNumber, password, newPassword
+  const options = {
+    method: 'PUT',
+    url: `${apiUrl.baseUrl}auth/changePassword/`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: qs.stringify(data),
+  };
+
+  const response = await axios(options)
+    .then(async (res) => res)
+    .catch((error) => {
+      if (error.response) {
+        console.log('Error in user.api.js -> getUser');
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else console.log('onLogin error' + error);
+    });
+
+  return response;
 }

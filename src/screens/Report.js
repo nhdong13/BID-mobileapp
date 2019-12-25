@@ -39,6 +39,8 @@ export default class Feedback extends Component {
         'Công việc không đúng như mô tả',
       ],
       parentComments: ['Mất đồ', 'Người giữ trẻ không đến', 'Trẻ em bị đánh'],
+      parentImage: '',
+      sitterImage: '',
     };
   }
 
@@ -58,6 +60,8 @@ export default class Feedback extends Component {
         bsitter: resp.bsitter,
         price: resp.totalPrice,
         user: resp.user,
+        parentImage: resp.user.image,
+        sitterImage: resp.bsitter.image,
       });
     });
     await Api.get('feedback/' + this.state.sittingRequestsID.toString()).then(
@@ -103,7 +107,9 @@ export default class Feedback extends Component {
       selectedComment,
     } = this.state;
     let { description } = this.state;
-    if (description && description != '') { description = '- ' + description + '\n'; }
+    if (description && description != '') {
+      description = '- ' + description + '\n';
+    }
     await selectedComment.forEach((item, _index) => {
       if (this.state.roleId == 3) {
         description += '- ' + this.state.bsitterComments[item] + '\n';
@@ -160,10 +166,19 @@ export default class Feedback extends Component {
         >
           <ScrollView>
             <View style={styles.header} />
-            <Image
-              source={require('assets/images/Phuc.png')}
-              style={styles.avatar}
-            />
+            {this.state.roleId == 2 && this.state.bsitter && (
+              <Image
+                source={{ uri: this.state.sitterImage }}
+                style={styles.avatar}
+              />
+            )}
+            {this.state.roleId == 3 && this.state.user && (
+              <Image
+                source={{ uri: this.state.parentImage }}
+                style={styles.avatar}
+              />
+            )}
+
             <View style={{ alignItems: 'center' }}>
               {this.state.roleId == 2 && this.state.bsitter && (
                 <MuliText

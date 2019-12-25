@@ -22,6 +22,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import colors from 'assets/Color';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AlertPro from 'react-native-alert-pro';
+import { changePassword } from 'api/user.api';
+import Loader from 'utils/Loader';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -29,6 +31,7 @@ class LoginScreen extends Component {
     this.state = {
       phoneNumber: '0965474202',
       password: '12341234',
+      newPassword: '',
       OTP: null,
       isModalVisible: false,
       roleId: null,
@@ -44,6 +47,8 @@ class LoginScreen extends Component {
       textConfirm: 'Tiếp tục',
       showConfirm: false,
       violated: 'false',
+      isChangePassword: false,
+      loading: false,
     };
     console.log(
       'PHUC: LoginScreen -> constructor -> violated',
@@ -53,10 +58,6 @@ class LoginScreen extends Component {
 
   async componentDidMount() {
     const { violated } = await retrieveToken();
-    console.log(
-      'PHUC: LoginScreen -> componentDidMount -> userToken',
-      violated,
-    );
     if (violated == 'true') {
       this.setState({
         violated,
@@ -84,7 +85,8 @@ class LoginScreen extends Component {
                 userId,
                 secret: secret.base32,
                 firstTime,
-                isModalVisible: true,
+                isModalVisible: false,
+                isChangePassword: true,
               });
             } else {
               this.setState({
@@ -92,6 +94,7 @@ class LoginScreen extends Component {
                 userId,
                 firstTime,
                 isModalVisible: true,
+                isChangePassword: false,
               });
             }
           } else {
@@ -102,10 +105,7 @@ class LoginScreen extends Component {
             });
           }
         } else {
-          this.refs.toast.show(
-            'Sai thông tin đăng nhập hoặc mật khẩu',
-            // DURATION.LENGTH_LONG,
-          );
+          this.refs.toast.show('Sai thông tin đăng nhập hoặc mật khẩu');
         }
       })
       .catch((error) => {
@@ -114,10 +114,12 @@ class LoginScreen extends Component {
   };
 
   onSubmitOTP = async () => {
+    this.setState({ loading: true });
     const { phoneNumber, OTP } = this.state;
     await checkOtp(phoneNumber, OTP).then(async (result) => {
       console.log('PHUC: LoginScreen -> onSubmitOTP -> result', result.status);
       if (result.status !== 401) {
+        this.setState({ loading: false });
         const { roleId, userId } = this.state;
         // await saveViolation(false);
         this.props.navigation.navigate('AuthLoading', {
@@ -125,10 +127,40 @@ class LoginScreen extends Component {
           userId: userId,
         });
       } else {
+        this.setState({ loading: false });
         this.refs.toast.show(
           'Mã otp sai hoặc đã bị vô hiệu hóa, vui lòng liên hệ với tổng đài để kích hoạt lại',
-          // DURATION.LENGTH_LONG,
         );
+      }
+    });
+  };
+
+  onChangePassword = async () => {
+    // thuc hien thay doi mat khau
+    if (this.state.newPassword != '') {
+      this.setState({
+        title: 'Thay đổi mật khẩu cho lần đăng nhập đầu',
+        message: 'Bạn có chắc chắn muốn đổi mật khẩu này ?',
+        textCancel: 'Quay lại',
+        textConfirm: 'Tiếp tục',
+        showConfirm: true,
+      });
+      this.AlertPro.open();
+    }
+  };
+
+  submitChangePassword = async () => {
+    const { password, newPassword, phoneNumber } = this.state;
+    const data = {
+      phoneNumber,
+      password,
+      newPassword,
+    };
+
+    await changePassword(data).then((result) => {
+      if (result.status === 200) {
+        // doi pass thanh cong, mo modal lay otp
+        this.setState({ isChangePassword: false, isModalVisible: true });
       }
     });
   };
@@ -137,10 +169,7 @@ class LoginScreen extends Component {
     const { secret } = this.state;
     Clipboard.setString(secret);
     await Clipboard.getString();
-    this.refs.toast.show(
-      'Lưu mã code thành công',
-      // DURATION.LENGTH_LONG,
-    );
+    this.refs.toast.show('Lưu mã code thành công');
   };
 
   onFinish = async () => {
@@ -230,45 +259,53 @@ class LoginScreen extends Component {
       secret,
       firstTime,
       isModalVisible,
+      isChangePassword,
       title,
       message,
       showConfirm,
       textCancel,
       textConfirm,
+      loading,
     } = this.state;
 
     return (
       <ScrollView>
+        <Loader loading={loading} />
+        <AlertPro
+          ref={(ref) => {
+            this.AlertPro = ref;
+          }}
+          onCancel={() => this.AlertPro.close()}
+          onConfirm={() =>
+            this.state.isChangePassword
+              ? this.submitChangePassword()
+              : this.onConfirmFinish()
+          }
+          title={title}
+          message={message}
+          showConfirm={showConfirm}
+          closeOnPressMask={false}
+          onClose={() => LocalAuthentication.cancelAuthenticate()}
+          textCancel={textCancel}
+          textConfirm={textConfirm}
+          customStyles={{
+            mask: {
+              backgroundColor: 'transparent',
+            },
+            container: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+            },
+          }}
+        />
         <KeyboardAvoidingView
           style={{ flex: 1, justifyContent: 'center' }}
           keyboardVerticalOffset={60}
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         >
           <Toast ref="toast" position="top" />
-          <AlertPro
-            ref={(ref) => {
-              this.AlertPro = ref;
-            }}
-            onCancel={() => this.AlertPro.close()}
-            onConfirm={() => this.onConfirmFinish()}
-            title={title}
-            message={message}
-            showConfirm={showConfirm}
-            closeOnPressMask={false}
-            onClose={() => LocalAuthentication.cancelAuthenticate()}
-            textCancel={textCancel}
-            textConfirm={textConfirm}
-            customStyles={{
-              mask: {
-                backgroundColor: 'transparent',
-              },
-              container: {
-                shadowColor: '#000000',
-                shadowOpacity: 0.1,
-                shadowRadius: 10,
-              },
-            }}
-          />
+
           <View style={styles.welcomeContainer}>
             <Image
               source={require('assets/images/logo.png')}
@@ -324,6 +361,34 @@ class LoginScreen extends Component {
               onBackButtonPress={() => this.toggleModal()}
             >
               <Toast ref="toast" position="top" />
+              <AlertPro
+                ref={(ref) => {
+                  this.AlertPro = ref;
+                }}
+                onCancel={() => this.AlertPro.close()}
+                onConfirm={() =>
+                  this.state.isChangePassword
+                    ? this.submitChangePassword()
+                    : this.onConfirmFinish()
+                }
+                title={title}
+                message={message}
+                showConfirm={showConfirm}
+                closeOnPressMask={false}
+                onClose={() => LocalAuthentication.cancelAuthenticate()}
+                textCancel={textCancel}
+                textConfirm={textConfirm}
+                customStyles={{
+                  mask: {
+                    backgroundColor: 'transparent',
+                  },
+                  container: {
+                    shadowColor: '#000000',
+                    shadowOpacity: 0.1,
+                    shadowRadius: 10,
+                  },
+                }}
+              />
 
               {secret && firstTime ? (
                 <View
@@ -414,7 +479,94 @@ class LoginScreen extends Component {
               )}
             </Modal>
           ) : (
-            <View />
+            <View style={{ flex: 1 }}>
+              {isChangePassword ? (
+                <Modal
+                  isVisible={this.state.isChangePassword}
+                  hasBackdrop={true}
+                  backdropOpacity={0.9}
+                  backdropColor="white"
+                >
+                  <Toast ref="toast" position="top" />
+
+                  {firstTime ? (
+                    <View
+                      style={{
+                        flex: 0.7,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'white',
+                        paddingHorizontal: 10,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <View
+                        style={{
+                          marginHorizontal: 20,
+                          alignItems: 'center',
+                        }}
+                      >
+                        <MuliText
+                          style={{ color: colors.loginText, fontSize: 14 }}
+                        >
+                          Vui lòng thay đổi mật khấu cho lần đăng nhập đầu tiên
+                        </MuliText>
+                      </View>
+
+                      <View>
+                        <View style={styles.textContainer}>
+                          <MuliText>Mật khẩu cũ</MuliText>
+                        </View>
+
+                        <View style={styles.textContainer}>
+                          <TextInput
+                            style={styles.textInput}
+                            onChangeText={(text) =>
+                              this.setState({ password: text })
+                            }
+                            placeholder="Mật khẩu cũ"
+                            disableFullscreenUI={false}
+                            keyboardType="number-pad"
+                            secureTextEntry={true}
+                          />
+                        </View>
+                      </View>
+                      <View>
+                        <View style={styles.textContainer}>
+                          <MuliText>Mật khẩu mới</MuliText>
+                        </View>
+
+                        <View style={styles.textContainer}>
+                          <TextInput
+                            style={styles.textInput}
+                            onChangeText={(text) =>
+                              this.setState({ newPassword: text })
+                            }
+                            placeholder="Mật khẩu mới"
+                            disableFullscreenUI={false}
+                            value={this.state.newPassword}
+                            keyboardType="number-pad"
+                            secureTextEntry={true}
+                          />
+                        </View>
+                      </View>
+                      <View>
+                        <TouchableOpacity
+                          onPress={() => this.onChangePassword()}
+                          style={{ marginTop: 30 }}
+                        >
+                          <View style={styles.submitOTPButton}>
+                            <MuliText style={{ color: 'white', fontSize: 16 }}>
+                              Thay đổi
+                            </MuliText>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ) : null}
+                </Modal>
+              ) : null}
+            </View>
           )}
 
           <View style={styles.welcomeContainer}>

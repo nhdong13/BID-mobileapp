@@ -30,6 +30,7 @@ export default class ReportScreen extends Component {
       isModalVisible: false,
       starCount: 0,
       isRated: false,
+      imageSitter: '',
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -44,6 +45,7 @@ export default class ReportScreen extends Component {
           address: resp.sittingAddress,
           bsitter: resp.bsitter,
           price: resp.totalPrice,
+          imageSitter: resp.bsitter.image,
         });
       },
     );
@@ -81,7 +83,7 @@ export default class ReportScreen extends Component {
         <View style={styles.colorTop} />
         <View style={{ alignItems: 'center' }}>
           <Image
-            source={require('assets/images/Phuc.png')}
+            source={{ uri: this.state.imageSitter }}
             style={styles.pictureReport}
           />
           <MuliText style={{ fontWeight: 'bold', fontSize: 25 }}>

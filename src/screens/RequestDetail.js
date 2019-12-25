@@ -99,38 +99,18 @@ export class RequestDetail extends Component {
         createUserId,
       });
     });
-    // dong's code
-    // Api.get('sittingRequests/' + requestId.toString())
-    //   .then((resp) => {
-    //     this.setState({
-    //       date: resp.sittingDate,
-    //       startTime: resp.startTime,
-    //       endTime: resp.endTime,
-    //       address: resp.sittingAddress,
-    //       status: resp.status,
-    //       childrenNumber: resp.childrenNumber,
-    //       minAgeOfChildren: resp.minAgeOfChildren,
-    //       bsitter: resp.bsitter,
-    //       canCheckIn: resp.canCheckIn,
-    //       canCheckOut: resp.canCheckOut,
-    //       price: resp.totalPrice,
-    //       createUserId: resp.createdUser,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log('PHUC: RequestDetail -> componentDidMount -> error', error);
-    //   });
     const { status } = this.state;
     if (status === 'CONFIRMED') {
-      console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
+      // console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
 
       const transaction = await getRequestTransaction(requestId).then();
-      console.log(
-        'PHUC: RequestDetail -> componentDidMount -> requestId',
-        requestId,
-      );
-      if (transaction) {
-        const { chargeId, amount } = transaction;
+      // console.log('PHUC: componentDidMount -> transaction', transaction);
+      // console.log(
+      //   'PHUC: RequestDetail -> componentDidMount -> requestId',
+      //   requestId,
+      // );
+      if (transaction.status != 400) {
+        const { chargeId, amount } = transaction.data;
         if (chargeId && amount) {
           this.setState({ chargeId, amount });
         }
@@ -337,7 +317,7 @@ export class RequestDetail extends Component {
     });
   };
 
-  acceptBabysitter = (sitterId, name) => {
+  acceptBabysitter = async (sitterId, name) => {
     const msg =
       'Bạn có chắc chắn chọn ' +
       name +
@@ -354,19 +334,25 @@ export class RequestDetail extends Component {
         },
         {
           text: 'Xác nhận',
-          onPress: () => {
+          onPress: async () => {
+            this.setState({ loading: true });
+
             // xác nhận thanh toán + accept babysitter
-            acceptBabysitter(this.state.sittingRequestsID, sitterId)
-              .then(() => {
+            await acceptBabysitter(this.state.sittingRequestsID, sitterId)
+              .then(async () => {
                 const {
                   sittingRequestsID: requestId,
                   price,
                   createUserId: userId,
                 } = this.state;
                 if (requestId != 0 && price != 0 && userId != 0) {
-                  createCharge(price, userId, requestId).then((res) => {
+                  console.log('PHUC: acceptBabysitter -> price', price);
+                  await createCharge(price, userId, requestId).then((res) => {
                     if (res) {
+                      this.setState({ loading: false });
                       this.props.navigation.navigate('Home');
+                    } else {
+                      this.setState({ loading: false });
                     }
                   });
                 }
@@ -566,6 +552,13 @@ export class RequestDetail extends Component {
                   </MuliText>
                 )}
                 {this.state.status == 'EXPIRED' && (
+                  <MuliText
+                    style={{ fontWeight: '100', color: colors.canceled }}
+                  >
+                    {this.state.status}
+                  </MuliText>
+                )}{' '}
+                {this.state.status == 'STAFF_CANCELED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
@@ -876,7 +869,8 @@ export class RequestDetail extends Component {
             {(this.state.status == 'DONE' ||
               this.state.status == 'DONE_UNCONFIMRED' ||
               this.state.status == 'DONE_BY_NEWSTART' ||
-              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              this.state.status == 'SITTER_NOT_CHECKIN' ||
+              this.state.status == 'STAFF_CANCELED') && (
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => {
@@ -927,7 +921,8 @@ export class RequestDetail extends Component {
             {(this.state.status == 'DONE' ||
               this.state.status == 'DONE_UNCONFIMRED' ||
               this.state.status == 'DONE_BY_NEWSTART' ||
-              this.state.status == 'SITTER_NOT_CHECKIN') && (
+              this.state.status == 'SITTER_NOT_CHECKIN' ||
+              this.state.status == 'STAFF_CANCELED') && (
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('ReportScreen', {
@@ -1090,18 +1085,12 @@ const styles = StyleSheet.create({
   profileImg: {
     width: 60,
     height: 60,
-    // borderRadius: 140 / 2,
     overflow: 'hidden',
-    // borderWidth: 1,
-    // borderColor: 'black',
   },
   profileImgDenied: {
     width: 60,
     height: 60,
-    // borderRadius: 140 / 2,
     overflow: 'hidden',
-    // borderWidth: 1,
-    // borderColor: 'black',
     opacity: 0.1,
   },
   informationText: {
