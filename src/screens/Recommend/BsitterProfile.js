@@ -32,6 +32,8 @@ export default class BsitterProfile extends Component {
       user: {},
       sitterImage: '',
       listFeedbacks: null,
+      isFromDetail: false,
+      loading: false,
     };
   }
 
@@ -40,14 +42,15 @@ export default class BsitterProfile extends Component {
       publishableKey: stripeKey,
       androidPayMode: 'test',
     });
+
     const {
       sitterId,
       requestId,
       request,
       distance,
       userId,
+      isFromDetail,
     } = this.props.navigation.state.params;
-
     if (sitterId && sitterId != 0) {
       this.setState(
         {
@@ -56,6 +59,7 @@ export default class BsitterProfile extends Component {
           request,
           distance,
           userId,
+          isFromDetail,
         },
         () => this.getBabysitter(),
       );
@@ -73,7 +77,7 @@ export default class BsitterProfile extends Component {
 
   getBabysitter = async () => {
     const { sitterId, requestId } = this.state;
-    if (sitterId != 0 && requestId != 0) {
+    if (sitterId != 0 && requestId != 0 && requestId) {
       const data = await getProfileByRequest(sitterId, requestId);
       this.setState({
         sitter: data,
@@ -99,112 +103,114 @@ export default class BsitterProfile extends Component {
   };
 
   sendInvitation = async (sitterId, requestId, request) => {
-    const invitation = {
-      requestId: requestId,
-      status: 'PENDING',
-      receiver: sitterId,
-      distance: this.state.distance,
-    };
-    // console.log(invitation);
-    await Api.get('trackings/' + this.state.userId).then(async (res) => {
-      if (res.customerId == null || res.cardId == null) {
-        this.createCard().then(async (res) => {
-          if (res) {
-            await createInvitation(requestId, invitation, request)
-              .then((response) => {
-                this.changeInviteStatus();
-                this.setState({ requestId: response.data.newRequest.id });
+    if (this.state.isFromDetail == false) {
+      const invitation = {
+        requestId: requestId,
+        status: 'PENDING',
+        receiver: sitterId,
+        distance: this.state.distance,
+      };
+      // console.log(invitation);
+      await Api.get('trackings/' + this.state.userId).then(async (res) => {
+        if (res.customerId == null || res.cardId == null) {
+          this.createCard().then(async (res) => {
+            if (res) {
+              await createInvitation(requestId, invitation, request)
+                .then((response) => {
+                  this.changeInviteStatus();
+                  this.setState({ requestId: response.data.newRequest.id });
+                  this.props.navigation.state.params.onGoBack(
+                    sitterId,
+                    response.data.newRequest.id,
+                  );
+                })
+                .catch((error) => console.log(error));
+              // if (repeatedData) {
+              //   const {
+              //     sittingDate: startDate,
+              //     startTime,
+              //     endTime,
+              //     sittingAddress,
+              //     createdUser,
+              //   } = request;
+
+              //   const { repeatedDays } = repeatedData;
+
+              //   const data = {
+              //     startDate,
+              //     startTime,
+              //     endTime,
+              //     sittingAddress,
+              //     repeatedDays,
+              //     createdUser,
+              //   };
+
+              //   console.log('PHUC: Bsitter -> sendInvitation -> data', data);
+
+              //   await createRepeatedRequest(data).catch((error) => {
+              //     console.log(
+              //       'PHUC: BsitterProfile -> repeatedRequest -> error',
+              //       error,
+              //     );
+              //   });
+              // }
+            }
+          });
+        } else {
+          await createInvitation(requestId, invitation, request)
+            .then((response) => {
+              if (invitation.requestId == 0) {
+                this.changeInviteStatus(sitterId);
                 this.props.navigation.state.params.onGoBack(
                   sitterId,
                   response.data.newRequest.id,
                 );
-              })
-              .catch((error) => console.log(error));
-            // if (repeatedData) {
-            //   const {
-            //     sittingDate: startDate,
-            //     startTime,
-            //     endTime,
-            //     sittingAddress,
-            //     createdUser,
-            //   } = request;
+              } else if (invitation.requestId != 0) {
+                this.changeInviteStatus(sitterId);
+                this.props.navigation.state.params.onGoBack(
+                  sitterId,
+                  invitation.requestId,
+                );
+              }
+            })
+            .catch((error) =>
+              console.log(
+                'Error in BsitterProfile -> CreateInvitation when have card',
+                error,
+              ),
+            );
+          // if (repeatedData) {
+          //   const {
+          //     sittingDate: startDate,
+          //     startTime,
+          //     endTime,
+          //     sittingAddress,
+          //     createdUser,
+          //   } = request;
 
-            //   const { repeatedDays } = repeatedData;
+          //   const { repeatedDays } = repeatedData;
 
-            //   const data = {
-            //     startDate,
-            //     startTime,
-            //     endTime,
-            //     sittingAddress,
-            //     repeatedDays,
-            //     createdUser,
-            //   };
+          //   const data = {
+          //     startDate,
+          //     startTime,
+          //     endTime,
+          //     sittingAddress,
+          //     repeatedDays,
+          //     createdUser,
+          //   };
 
-            //   console.log('PHUC: Bsitter -> sendInvitation -> data', data);
+          //   console.log('PHUC: Bsitter -> sendInvitation -> data', data);
 
-            //   await createRepeatedRequest(data).catch((error) => {
-            //     console.log(
-            //       'PHUC: BsitterProfile -> repeatedRequest -> error',
-            //       error,
-            //     );
-            //   });
-            // }
-          }
-        });
-      } else {
-        await createInvitation(requestId, invitation, request)
-          .then((response) => {
-            if (invitation.requestId == 0) {
-              this.changeInviteStatus(sitterId);
-              this.props.navigation.state.params.onGoBack(
-                sitterId,
-                response.data.newRequest.id,
-              );
-            } else if (invitation.requestId != 0) {
-              this.changeInviteStatus(sitterId);
-              this.props.navigation.state.params.onGoBack(
-                sitterId,
-                invitation.requestId,
-              );
-            }
-          })
-          .catch((error) =>
-            console.log(
-              'Error in BsitterProfile -> CreateInvitation when have card',
-              error,
-            ),
-          );
-        // if (repeatedData) {
-        //   const {
-        //     sittingDate: startDate,
-        //     startTime,
-        //     endTime,
-        //     sittingAddress,
-        //     createdUser,
-        //   } = request;
-
-        //   const { repeatedDays } = repeatedData;
-
-        //   const data = {
-        //     startDate,
-        //     startTime,
-        //     endTime,
-        //     sittingAddress,
-        //     repeatedDays,
-        //     createdUser,
-        //   };
-
-        //   console.log('PHUC: Bsitter -> sendInvitation -> data', data);
-
-        //   await createRepeatedRequest(data).catch((error) => {
-        //     console.log(
-        //       'PHUC: BsitterProfile -> repeatedRequest -> error',
-        //       error,
-        //     );
-        //   });
-        // }
-      }
-    });
+          //   await createRepeatedRequest(data).catch((error) => {
+          //     console.log(
+          //       'PHUC: BsitterProfile -> repeatedRequest -> error',
+          //       error,
+          //     );
+          //   });
+          // }
+        }
+      });
+    }
   };
 
   changeInviteStatus = () => {
@@ -231,54 +237,56 @@ export default class BsitterProfile extends Component {
 
   // netstat -ano | findstr 3000
   render() {
-    const { listFeedbacks } = this.state;
+    const { listFeedbacks, loading } = this.state;
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <ScrollView>
-            {this.state.sitter && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.headerSection}>
-                  <MuliText style={styles.textInformation}>
-                    Thông tin cơ bản
-                  </MuliText>
-                </View>
-                <View style={{ flexDirection: 'row', marginRight: 10 }}>
-                  <View>
+      <View style={styles.container}>
+        <ScrollView>
+          {this.state.sitter && (
+            <View style={styles.sectionContainer}>
+              <View style={styles.headerSection}>
+                <MuliText style={styles.textInformation}>
+                  Thông tin cơ bản
+                </MuliText>
+              </View>
+              <View style={{ flexDirection: 'row', marginRight: 10 }}>
+                <View>
+                  {this.state.sitterImage != '' && (
                     <Image
                       source={{ uri: this.state.sitterImage }}
                       style={styles.picture}
                     />
-                  </View>
+                  )}
+                </View>
 
-                  <View style={{ marginLeft: 10 }}>
-                    <MuliText style={styles.textField}>
-                      Tên: {this.state.user.nickname}
-                    </MuliText>
+                <View style={{ marginLeft: 10 }}>
+                  <MuliText style={styles.textField}>
+                    Tên: {this.state.user.nickname}
+                  </MuliText>
 
-                    <MuliText style={styles.textField}>
-                      Giới tính:{' '}
-                      {this.state.user.gender == 'MALE' && (
-                        <Ionicons
-                          name="ios-male"
-                          size={18}
-                          style={{ marginBottom: -3, marginLeft: 5 }}
-                          color={colors.blueAqua}
-                        />
-                      )}
-                      {this.state.user.gender == 'FEMALE' && (
-                        <Ionicons
-                          name="ios-female"
-                          size={18}
-                          style={{ marginBottom: -3, marginLeft: 5 }}
-                          color={colors.pinkLight}
-                        />
-                      )}
-                    </MuliText>
-                    <MuliText style={styles.textField}>
-                      Cách bạn: {this.state.distance}
-                    </MuliText>
-                  </View>
+                  <MuliText style={styles.textField}>
+                    Giới tính:{' '}
+                    {this.state.user.gender == 'MALE' && (
+                      <Ionicons
+                        name="ios-male"
+                        size={18}
+                        style={{ marginBottom: -3, marginLeft: 5 }}
+                        color={colors.blueAqua}
+                      />
+                    )}
+                    {this.state.user.gender == 'FEMALE' && (
+                      <Ionicons
+                        name="ios-female"
+                        size={18}
+                        style={{ marginBottom: -3, marginLeft: 5 }}
+                        color={colors.pinkLight}
+                      />
+                    )}
+                  </MuliText>
+                  <MuliText style={styles.textField}>
+                    Cách bạn: {this.state.distance}
+                  </MuliText>
+                </View>
+                {this.state.isFromDetail == false ? (
                   <View style={styles.buttonContainer}>
                     {!this.state.sitter.isInvited && (
                       <TouchableOpacity
@@ -310,122 +318,121 @@ export default class BsitterProfile extends Component {
                       </MuliText>
                     )}
                   </View>
-                </View>
-                <MuliText style={styles.textField}>
-                  Địa chỉ: {this.state.user.address}
+                ) : (
+                  <View />
+                )}
+              </View>
+              <MuliText style={styles.textField}>
+                Địa chỉ: {this.state.user.address}
+              </MuliText>
+            </View>
+          )}
+          {this.state.sitter && (
+            <View style={styles.sectionContainer}>
+              <View style={styles.headerSection}>
+                <MuliText style={styles.textInformation}>
+                  Lịch làm việc
                 </MuliText>
               </View>
-            )}
-            {this.state.sitter && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.headerSection}>
-                  <MuliText style={styles.textInformation}>
-                    Lịch làm việc
-                  </MuliText>
-                </View>
-                <View>
-                  <MuliText style={styles.textField}>
-                    Lịch làm việc: {this.state.sitter.weeklySchedule}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Giờ bắt đầu:{' '}
-                    {moment
-                      .utc(this.state.sitter.startTime, 'HH:mm')
-                      .format('HH:mm giờ')}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Giờ kết thúc:{' '}
-                    {moment
-                      .utc(this.state.sitter.endTime, 'HH:mm')
-                      .format('HH:mm giờ')}
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Trông trẻ nhỏ nhất: {this.state.sitter.minAgeOfChildren}{' '}
-                    tuổi
-                  </MuliText>
-                  <MuliText style={styles.textField}>
-                    Số trẻ nhiều nhất có thể trông:{' '}
-                    {this.state.sitter.maxNumOfChildren} trẻ
-                  </MuliText>
-                </View>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {listFeedbacks && listFeedbacks.length > 0 ? (
-                    listFeedbacks.map((feedback) => (
-                      <View style={{ flexDirection: 'row' }} key={feedback.id}>
-                        <View style={styles.childrenInformationContainer}>
-                          <View style={styles.detailChildrenContainer}>
-                            <View
-                              style={{
-                                // backgroundColor: 'red',
-                                // justifyContent: 'center',
-                                marginTop: 20,
-                                marginLeft: 5,
-                              }}
-                            >
-                              <Image
-                                source={
-                                  feedback.sitting.user.image
-                                    ? { uri: feedback.sitting.user.image }
-                                    : { uri: '' }
-                                }
-                                style={styles.pictureFeedback}
-                              />
+              <View>
+                <MuliText style={styles.textField}>
+                  Lịch làm việc: {this.state.sitter.weeklySchedule}
+                </MuliText>
+                <MuliText style={styles.textField}>
+                  Giờ bắt đầu:{' '}
+                  {moment
+                    .utc(this.state.sitter.startTime, 'HH:mm')
+                    .format('HH:mm giờ')}
+                </MuliText>
+                <MuliText style={styles.textField}>
+                  Giờ kết thúc:{' '}
+                  {moment
+                    .utc(this.state.sitter.endTime, 'HH:mm')
+                    .format('HH:mm giờ')}
+                </MuliText>
+                <MuliText style={styles.textField}>
+                  Trông trẻ nhỏ nhất: {this.state.sitter.minAgeOfChildren} tuổi
+                </MuliText>
+                <MuliText style={styles.textField}>
+                  Số trẻ nhiều nhất có thể trông:{' '}
+                  {this.state.sitter.maxNumOfChildren} trẻ
+                </MuliText>
+              </View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                {listFeedbacks && listFeedbacks.length > 0 ? (
+                  listFeedbacks.map((feedback) => (
+                    <View style={{ flexDirection: 'row' }} key={feedback.id}>
+                      <View style={styles.childrenInformationContainer}>
+                        <View style={styles.detailChildrenContainer}>
+                          <View
+                            style={{
+                              // backgroundColor: 'red',
+                              // justifyContent: 'center',
+                              marginTop: 20,
+                              marginLeft: 5,
+                            }}
+                          >
+                            <Image
+                              source={
+                                feedback.sitting.user.image
+                                  ? { uri: feedback.sitting.user.image }
+                                  : { uri: '' }
+                              }
+                              style={styles.pictureFeedback}
+                            />
+                          </View>
+
+                          <View
+                            style={{
+                              marginHorizontal: 5,
+                              // backgroundColor: 'red',
+                              // justifyContent: 'center',
+                              marginTop: 15,
+                            }}
+                          >
+                            <View style={{ marginHorizontal: 10 }}>
+                              <MuliText style={styles.textChildrenInformation}>
+                                {feedback.sitting.user.nickname}
+                              </MuliText>
                             </View>
 
+                            <View style={{ marginHorizontal: 10 }}>
+                              <MuliText style={{ color: colors.gray }}>
+                                Đã đánh giá: {feedback.rating}{' '}
+                                <Ionicons
+                                  name="ios-star"
+                                  size={20}
+                                  color={colors.done}
+                                />
+                              </MuliText>
+                            </View>
                             <View
-                              style={{
-                                marginHorizontal: 5,
-                                // backgroundColor: 'red',
-                                // justifyContent: 'center',
-                                marginTop: 15,
-                              }}
+                              style={{ marginTop: 10, marginHorizontal: 10 }}
                             >
-                              <View style={{ marginHorizontal: 10 }}>
-                                <MuliText
-                                  style={styles.textChildrenInformation}
-                                >
-                                  {feedback.sitting.user.nickname}
-                                </MuliText>
-                              </View>
-
-                              <View style={{ marginHorizontal: 10 }}>
-                                <MuliText style={{ color: colors.gray }}>
-                                  Đã đánh giá: {feedback.rating}{' '}
-                                  <Ionicons
-                                    name="ios-star"
-                                    size={20}
-                                    color={colors.done}
-                                  />
-                                </MuliText>
-                              </View>
-                              <View
-                                style={{ marginTop: 10, marginHorizontal: 10 }}
+                              <MuliText
+                                numberOfLines={3}
+                                ellipsizeMode="tail"
+                                style={{ width: 150 }}
                               >
-                                <MuliText
-                                  numberOfLines={3}
-                                  ellipsizeMode="tail"
-                                  style={{ width: 150 }}
-                                >
-                                  {feedback.description}
-                                </MuliText>
-                              </View>
+                                {feedback.description}
+                              </MuliText>
                             </View>
                           </View>
                         </View>
                       </View>
-                    ))
-                  ) : (
-                    <View />
-                  )}
-                </ScrollView>
-              </View>
-            )}
-          </ScrollView>
-        </View>
-      </ScrollView>
+                    </View>
+                  ))
+                ) : (
+                  <View />
+                )}
+              </ScrollView>
+            </View>
+          )}
+        </ScrollView>
+      </View>
     );
   }
 }

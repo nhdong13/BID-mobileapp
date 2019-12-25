@@ -143,7 +143,7 @@ class SearchSitter extends Component {
 
     await getAllBabysitter().then(async (res) => {
       if (res) {
-        console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
+        // console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
         await this.setState({ listBabysitter: res.data, request });
       }
     });
@@ -728,7 +728,7 @@ class SearchSitter extends Component {
                 format="HH:mm"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
-                androidMode="spinner"
+                // androidMode="spinner"
                 customStyles={{
                   dateInput: {
                     borderWidth: 0,
@@ -771,7 +771,7 @@ class SearchSitter extends Component {
                 format="HH:mm"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
-                androidMode="spinner"
+                // androidMode="spinner"
                 customStyles={{
                   dateInput: {
                     borderWidth: 0,

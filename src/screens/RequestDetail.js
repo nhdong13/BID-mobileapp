@@ -69,7 +69,7 @@ export class RequestDetail extends Component {
 
     const { sittingRequestsID: requestId } = this.state;
     // rewrite api get request data
-    await getRequestDetail(requestId).then((res) => {
+    await getRequestDetail(requestId).then(async (res) => {
       const {
         sittingDate: date,
         startTime,
@@ -84,7 +84,7 @@ export class RequestDetail extends Component {
         totalPrice: price,
         createdUser: createUserId,
       } = res;
-      this.setState({
+      await this.setState({
         date,
         startTime,
         endTime,
@@ -121,13 +121,15 @@ export class RequestDetail extends Component {
   async componentDidUpdate(prevProps) {
     if (prevProps.isFocused != this.props.isFocused) {
       if (this.props.isFocused) {
-        const { sittingRequestsID: requestId } = this.state;
-        const { chargeId, amount } = await getRequestTransaction(requestId);
+        const { sittingRequestsID: requestId, status } = this.state;
+        if (status === 'CONFIRMED') {
+          const { chargeId, amount } = await getRequestTransaction(requestId);
 
-        if (chargeId && amount) {
-          this.setState({ chargeId, amount });
-        } else {
-          console.log('get request transaction ko chay roi');
+          if (chargeId && amount) {
+            this.setState({ chargeId, amount });
+          } else {
+            console.log('get request transaction ko chay roi');
+          }
         }
       }
     }
@@ -168,10 +170,10 @@ export class RequestDetail extends Component {
 
   confirmCancel = async (status) => {
     const { sittingRequestsID: requestId, chargeId, amount } = this.state;
-    console.log('PHUC: RequestDetail -> confirmCancel -> amount', amount);
-    console.log('PHUC: RequestDetail -> confirmCancel -> chargeId', chargeId);
-    console.log('PHUC: RequestDetail -> confirmCancel -> requestId', requestId);
-    console.log('PHUC: RequestDetail -> confirmCancel -> status', status);
+    // console.log('PHUC: RequestDetail -> confirmCancel -> amount', amount);
+    // console.log('PHUC: RequestDetail -> confirmCancel -> chargeId', chargeId);
+    // console.log('PHUC: RequestDetail -> confirmCancel -> requestId', requestId);
+    // console.log('PHUC: RequestDetail -> confirmCancel -> status', status);
 
     if (requestId != 0 && chargeId != 0 && amount != 0) {
       this.setState({ loading: true });
@@ -179,7 +181,7 @@ export class RequestDetail extends Component {
         if (res.data) {
           this.setState({ loading: false });
 
-          console.log('PHUC: RequestDetail -> confirmCancel -> res', res.data);
+          // console.log('PHUC: RequestDetail -> confirmCancel -> res', res.data);
           this.AlertPro.close();
           this.props.navigation.navigate('Home', { loading: false });
         } else if (res.message.includes('Error')) {
@@ -199,10 +201,10 @@ export class RequestDetail extends Component {
           if (res.data) {
             this.setState({ loading: false });
 
-            console.log(
-              'PHUC: RequestDetail -> confirmCancel -> res',
-              res.data,
-            );
+            // console.log(
+            //   'PHUC: RequestDetail -> confirmCancel -> res',
+            //   res.data,
+            // );
             this.AlertPro.close();
             this.props.navigation.navigate('Home', { loading: false });
           } else if (res.message.includes('Error')) {
@@ -671,6 +673,12 @@ export class RequestDetail extends Component {
                         style={{
                           flexDirection: 'row',
                         }}
+                        onPress={() =>
+                          this.props.navigation.navigate('SitterProfile', {
+                            isFromDetail: true,
+                            sitterId: item.user.id,
+                          })
+                        }
                       >
                         <Image
                           source={{ uri: item.user.image }}
