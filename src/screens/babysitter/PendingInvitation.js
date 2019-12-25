@@ -54,7 +54,7 @@ class PendingInvitation extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    Chờ phê duyệt
+                    Lời mời đang chờ
                   </MuliText>
                 </View>
                 <MuliText style={{ fontSize: 9, marginTop: 10 }}>

@@ -47,13 +47,69 @@ class ItemHistory extends Component {
                   <View style={styles.statusBoxPending}>
                     <MuliText
                       style={{
-                        fontWeight: '100',
-                        color: colors.darkGreenTitle,
                         fontSize: 12,
                         marginRight: 5,
                       }}
                     >
-                      {request.status}
+                      {request.status == 'PENDING' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.pending }}
+                        >
+                          Đang chờ
+                        </MuliText>
+                      )}
+                      {request.status == 'ACCEPTED' && (
+                        <MuliText
+                          style={{
+                            fontWeight: '100',
+                            color: colors.lightGreen,
+                          }}
+                        >
+                          Đã chấp nhận
+                        </MuliText>
+                      )}
+                      {request.status == 'DONE' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.done }}
+                        >
+                          Đã hoàn thành
+                        </MuliText>
+                      )}
+                      {request.status == 'ONGOING' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.ongoing }}
+                        >
+                          Đang thực hiện
+                        </MuliText>
+                      )}
+                      {request.status == 'EXPIRED' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.canceled }}
+                        >
+                          Đã hết hạn
+                        </MuliText>
+                      )}
+                      {request.status == 'CONFIRMED' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.confirmed }}
+                        >
+                          Đã xác nhận
+                        </MuliText>
+                      )}
+                      {request.status == 'SITTER_NOT_CHECKIN' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.canceled }}
+                        >
+                          Không check-in
+                        </MuliText>
+                      )}
+                      {request.status == 'CANCELED' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.canceled }}
+                        >
+                          Hủy do phụ huynh yêu cầu
+                        </MuliText>
+                      )}
                     </MuliText>
                   </View>
                   <MuliText style={{ fontSize: 10, marginTop: 10 }}>

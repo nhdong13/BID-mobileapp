@@ -113,7 +113,7 @@ class CreateRequestScreen extends Component {
 
     const start = moment(this.state.startTime, 'HH:mm');
     const end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
-    if (end.isBefore(start)) {
+    if (end.isSameOrBefore(start)) {
       this.refs.toast.show(
         'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
         // DURATION.LENGTH_LONG,
@@ -428,27 +428,27 @@ class CreateRequestScreen extends Component {
       return officeHours;
     }
 
-    if (startTime.isBefore(officeHStart) && endTime.isAfter(officeHEnd)) {
+    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
       officeHours = officeHEnd.diff(officeHStart, 'minutes');
       return officeHours;
     }
 
-    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHStart)) {
+    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHStart)) {
       officeHours = 0;
       return officeHours;
     }
 
-    if (startTime.isAfter(officeHEnd) && endTime.isAfter(officeHEnd)) {
+    if (startTime.isSameOrAfter(officeHEnd) && endTime.isSameOrAfter(officeHEnd)) {
       officeHours = 0;
       return officeHours;
     }
 
-    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHEnd)) {
+    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHEnd)) {
       officeHours = endTime.diff(officeHStart, 'minutes');
       return officeHours;
     }
 
-    if (startTime.isAfter(officeHStart) && endTime.isAfter(officeHEnd)) {
+    if (startTime.isSameOrAfter(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
       officeHours = officeHEnd.diff(startTime, 'minutes');
       return officeHours;
     }
@@ -476,7 +476,7 @@ class CreateRequestScreen extends Component {
       return OTHours;
     }
 
-    if (startTime.isBefore(officeHStart) && endTime.isAfter(officeHEnd)) {
+    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
       OTHours += officeHStart.diff(startTime, 'minutes');
 
       OTHours += endTime.diff(officeHEnd, 'minutes');
@@ -484,19 +484,19 @@ class CreateRequestScreen extends Component {
     }
 
     if (
-      (startTime.isBefore(officeHStart) && endTime.isBefore(officeHStart)) ||
-      (startTime.isAfter(officeHEnd) && endTime.isAfter(officeHEnd))
+      (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHStart)) ||
+      (startTime.isSameOrAfter(officeHEnd) && endTime.isSameOrAfter(officeHEnd))
     ) {
       OTHours += endTime.diff(startTime, 'minutes');
       return OTHours;
     }
 
-    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHEnd)) {
+    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHEnd)) {
       OTHours += officeHStart.diff(startTime, 'minutes');
       return OTHours;
     }
 
-    if (startTime.isAfter(officeHStart) && endTime.isAfter(officeHEnd)) {
+    if (startTime.isSameOrAfter(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
       OTHours += endTime.diff(officeHEnd, 'minutes');
       return OTHours;
     }

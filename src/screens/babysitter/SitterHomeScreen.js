@@ -101,6 +101,7 @@ class SitterHomeScreen extends Component {
     });
 
     socketIO.on('triggerQr', (data) => {
+      this.setState({ isModalVisible: false });
       if (data.qr && this.state.userId != 0) {
         this.props.navigation.navigate('QrSitter', {
           qrData: data.qr,

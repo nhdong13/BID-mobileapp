@@ -323,54 +323,54 @@ export default class InvitationDetail extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    {this.state.invitationStatus}
+                    Đang chờ
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'ACCEPTED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.lightGreen }}
                   >
-                    {this.state.invitationStatus}
+                    Đã chấp nhận
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'DONE' && (
                   <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                    {this.state.invitationStatus}
+                    Đã hoàn thành
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'ONGOING' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.ongoing }}
                   >
-                    {this.state.invitationStatus}
+                    Đang thực hiện
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'EXPIRED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.invitationStatus}
+                    Đã hết hạn
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'CONFIRMED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.confirmed }}
                   >
-                    {this.state.invitationStatus}
+                    Đã xác nhận
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'SITTER_NOT_CHECKIN' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.invitationStatus}
+                    Không check-in
                   </MuliText>
                 )}
                 {this.state.invitationStatus == 'PARENT_CANCELED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.invitationStatus}
+                    Đã hủy bởi phụ huynh
                   </MuliText>
                 )}
               </MuliText>

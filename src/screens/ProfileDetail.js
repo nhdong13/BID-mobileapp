@@ -69,8 +69,11 @@ export default class ProfileDetail extends Component {
 
     await getAllFeedbackByUserId(this.state.userId).then((res) => {
       if (res.status == 200) {
+        const listFeedback = res.data.filter(
+          (feedback) => !feedback.isReport && feedback.reporter,
+        );
         this.setState({
-          listFeedbacks: res.data,
+          listFeedbacks: listFeedback,
         });
       }
     });

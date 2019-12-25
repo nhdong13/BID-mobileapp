@@ -91,27 +91,6 @@ export default class SitterSetting extends Component {
                 />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.detailInformationContainer}>
-              <View style={styles.informationText}>
-                <Ionicons
-                  name="ios-home"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color={colors.gray}
-                />
-                <MuliText style={styles.contentInformation}>
-                  Lịch trông trẻ
-                </MuliText>
-              </View>
-              <View>
-                <Ionicons
-                  name="ios-arrow-forward"
-                  size={22}
-                  style={{ marginBottom: -5 }}
-                  color={colors.gray}
-                />
-              </View>
-            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('CalendarScreen')}
               style={styles.detailInformationContainer}

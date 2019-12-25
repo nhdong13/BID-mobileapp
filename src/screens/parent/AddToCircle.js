@@ -24,30 +24,48 @@ export default class AddToCircle extends Component {
       ownerId: 0,
       code: null,
       friend: null,
+      userImage: '',
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const ownerId = this.props.navigation.getParam('ownerId');
     console.log('Duong: AddToCircle -> componentWillMount -> ownerId', ownerId);
 
     this.setState({ ownerId });
   }
 
-  findParent() {
-    findByCode(this.state.ownerId, this.state.code)
+  async findParent() {
+    await findByCode(this.state.ownerId, this.state.code)
       .then((result) => {
-        if (result.data.user.id == this.state.ownerId) {
+        console.log('PHUC: AddToCircle -> findParent -> result', result);
+        if (result.status != 400) {
+          if (result.data.user.id == this.state.ownerId) {
+            this.refs.toast.show(
+              'Bạn không thể thêm chính mình',
+              DURATION.LENGTH_LONG,
+            );
+          } else {
+            this.setState({
+              friend: result.data,
+              userImage: result.data.user.image,
+            });
+          }
+        } else {
           this.refs.toast.show(
-            'Bạn không thể thêm chính mình',
+            'Không tìm thấy người dùng với mã code trên',
             DURATION.LENGTH_LONG,
           );
-        } else {
-          this.setState({ friend: result.data });
         }
       })
       .catch((error) => {
         console.log('Duong: AddToCircle -> findParent -> error', error);
+        if (error) {
+          this.refs.toast.show(
+            'Không tìm thấy người dùng với mã code trên',
+            DURATION.LENGTH_LONG,
+          );
+        }
       });
   }
 
@@ -101,7 +119,10 @@ export default class AddToCircle extends Component {
               <View>
                 <MuliText style={styles.headerFindText}>Tìm thấy</MuliText>
                 <View style={styles.detailPictureContainer}>
-                  <Image source={images.parent} style={styles.sitterImage} />
+                  <Image
+                    source={{ uri: this.state.userImage }}
+                    style={styles.sitterImage}
+                  />
                   <View style={styles.leftInformation}>
                     <MuliText style={styles.pictureInformation}>
                       Phụ huynh
