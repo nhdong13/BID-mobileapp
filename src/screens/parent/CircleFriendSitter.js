@@ -57,11 +57,6 @@ export class CircleFriendSitter extends Component {
                 )}
               </View>
               <View style={styles.lowerText}>
-                <Ionicons name="ios-pin" size={24} color={colors.lightGreen} />
-                <MuliText style={styles.bsitterName}>
-                  {' '}
-                  {item.distance} km{' '}
-                </MuliText>
                 <Ionicons name="ios-star" size={24} color={colors.lightGreen} />
                 <MuliText style={styles.bsitterName}>
                   {' '}

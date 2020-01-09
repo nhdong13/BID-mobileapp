@@ -65,8 +65,15 @@ export default class BsitterProfile extends Component {
       );
       await getAllFeedbackByUserId(sitterId).then((res) => {
         if (res.status == 200) {
+          const listFeedback = res.data.filter(
+            (feedback) => !feedback.isReport && feedback.reporter,
+          );
+          // console.log(
+          //   'PHUC: BsitterProfile -> componentDidMount -> listFeedback',
+          //   listFeedback,
+          // );
           this.setState({
-            listFeedbacks: res.data,
+            listFeedbacks: listFeedback,
           });
         }
       });

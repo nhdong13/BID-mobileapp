@@ -51,9 +51,73 @@ class ItemSitterHistory extends Component {
                 <View style={styles.rightInformation}>
                   <View style={styles.statusBoxPending}>
                     <MuliText
-                      style={{ fontWeight: '100', color: colors.pending, fontSize: 12 }}
+                      style={{
+                        fontWeight: '100',
+                        color: colors.pending,
+                        fontSize: 12,
+                      }}
                     >
-                      {invitation.sittingRequest.status}
+                      {invitation.sittingRequest.status == 'PENDING' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.pending }}
+                        >
+                          Đang chờ
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status == 'ACCEPTED' && (
+                        <MuliText
+                          style={{
+                            fontWeight: '100',
+                            color: colors.lightGreen,
+                          }}
+                        >
+                          Đã chấp nhận
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status == 'DONE' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.done }}
+                        >
+                          Đã hoàn thành
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status == 'ONGOING' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.ongoing }}
+                        >
+                          Đang thực hiện
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status == 'EXPIRED' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.canceled }}
+                        >
+                          Đã hết hạn
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status == 'CONFIRMED' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.confirmed }}
+                        >
+                          Đã xác nhận
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status ==
+                        'SITTER_NOT_CHECKIN' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.canceled }}
+                        >
+                          Không check-in
+                        </MuliText>
+                      )}
+                      {invitation.sittingRequest.status ==
+                        'CANCELED' && (
+                        <MuliText
+                          style={{ fontWeight: '100', color: colors.canceled }}
+                        >
+                          Đã hủy bởi phụ huynh
+                        </MuliText>
+                      )}
                     </MuliText>
                   </View>
                   <MuliText style={{ fontSize: 10, marginTop: 10 }}>

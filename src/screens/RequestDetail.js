@@ -367,6 +367,7 @@ export class RequestDetail extends Component {
                       'Người giữ trẻ này không còn phù hợp với yêu cầu của bạn.',
                     showConfirm: false,
                     cancelAlert: 'Đóng',
+                    loading: false,
                   });
                   this.AlertPro.open();
 
@@ -507,64 +508,64 @@ export class RequestDetail extends Component {
                   <MuliText
                     style={{ fontWeight: '100', color: colors.pending }}
                   >
-                    {this.state.status}
+                    Đang chờ
                   </MuliText>
                 )}
                 {this.state.status == 'DONE_UNCONFIMRED' && (
                   <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                    {this.state.status}
+                    Hoàn thành nhưng chưa xác nhận
                   </MuliText>
                 )}
                 {this.state.status == 'SITTER_NOT_CHECKIN' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.status}
+                    Người giữ trẻ không check-in
                   </MuliText>
                 )}
                 {this.state.status == 'DONE_BY_NEWSTART' && (
                   <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                    {this.state.status}
+                    Hoàn thành do thực hiện yêu cầu khác
                   </MuliText>
                 )}
                 {this.state.status == 'DONE' && (
                   <MuliText style={{ fontWeight: '100', color: colors.done }}>
-                    {this.state.status}
+                    Đã hoàn thành
                   </MuliText>
                 )}
                 {this.state.status == 'ONGOING' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.ongoing }}
                   >
-                    {this.state.status}
+                    Đang thực hiện
                   </MuliText>
                 )}
                 {this.state.status == 'CANCELED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.status}
+                    Đã hủy
                   </MuliText>
                 )}
                 {this.state.status == 'CONFIRMED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.confirmed }}
                   >
-                    {this.state.status}
+                    Đã xác nhận
                   </MuliText>
                 )}
                 {this.state.status == 'EXPIRED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.status}
+                    Đã hết hạn
                   </MuliText>
                 )}{' '}
                 {this.state.status == 'STAFF_CANCELED' && (
                   <MuliText
                     style={{ fontWeight: '100', color: colors.canceled }}
                   >
-                    {this.state.status}
+                    Hủy do phụ huynh yêu cầu
                   </MuliText>
                 )}
               </MuliText>
@@ -677,6 +678,7 @@ export class RequestDetail extends Component {
                           this.props.navigation.navigate('SitterProfile', {
                             isFromDetail: true,
                             sitterId: item.user.id,
+                            distance: item.distance,
                           })
                         }
                       >

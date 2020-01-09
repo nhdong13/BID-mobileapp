@@ -29,7 +29,7 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: '0965474202',
+      phoneNumber: '0965474206',
       password: '12341234',
       newPassword: '',
       OTP: null,
