@@ -428,27 +428,42 @@ class CreateRequestScreen extends Component {
       return officeHours;
     }
 
-    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
+    if (
+      startTime.isSameOrBefore(officeHStart) &&
+      endTime.isSameOrAfter(officeHEnd)
+    ) {
       officeHours = officeHEnd.diff(officeHStart, 'minutes');
       return officeHours;
     }
 
-    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHStart)) {
+    if (
+      startTime.isSameOrBefore(officeHStart) &&
+      endTime.isSameOrBefore(officeHStart)
+    ) {
       officeHours = 0;
       return officeHours;
     }
 
-    if (startTime.isSameOrAfter(officeHEnd) && endTime.isSameOrAfter(officeHEnd)) {
+    if (
+      startTime.isSameOrAfter(officeHEnd) &&
+      endTime.isSameOrAfter(officeHEnd)
+    ) {
       officeHours = 0;
       return officeHours;
     }
 
-    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHEnd)) {
+    if (
+      startTime.isSameOrBefore(officeHStart) &&
+      endTime.isSameOrBefore(officeHEnd)
+    ) {
       officeHours = endTime.diff(officeHStart, 'minutes');
       return officeHours;
     }
 
-    if (startTime.isSameOrAfter(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
+    if (
+      startTime.isSameOrAfter(officeHStart) &&
+      endTime.isSameOrAfter(officeHEnd)
+    ) {
       officeHours = officeHEnd.diff(startTime, 'minutes');
       return officeHours;
     }
@@ -476,7 +491,10 @@ class CreateRequestScreen extends Component {
       return OTHours;
     }
 
-    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
+    if (
+      startTime.isSameOrBefore(officeHStart) &&
+      endTime.isSameOrAfter(officeHEnd)
+    ) {
       OTHours += officeHStart.diff(startTime, 'minutes');
 
       OTHours += endTime.diff(officeHEnd, 'minutes');
@@ -484,19 +502,26 @@ class CreateRequestScreen extends Component {
     }
 
     if (
-      (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHStart)) ||
+      (startTime.isSameOrBefore(officeHStart) &&
+        endTime.isSameOrBefore(officeHStart)) ||
       (startTime.isSameOrAfter(officeHEnd) && endTime.isSameOrAfter(officeHEnd))
     ) {
       OTHours += endTime.diff(startTime, 'minutes');
       return OTHours;
     }
 
-    if (startTime.isSameOrBefore(officeHStart) && endTime.isSameOrBefore(officeHEnd)) {
+    if (
+      startTime.isSameOrBefore(officeHStart) &&
+      endTime.isSameOrBefore(officeHEnd)
+    ) {
       OTHours += officeHStart.diff(startTime, 'minutes');
       return OTHours;
     }
 
-    if (startTime.isSameOrAfter(officeHStart) && endTime.isSameOrAfter(officeHEnd)) {
+    if (
+      startTime.isSameOrAfter(officeHStart) &&
+      endTime.isSameOrAfter(officeHEnd)
+    ) {
       OTHours += endTime.diff(officeHEnd, 'minutes');
       return OTHours;
     }
