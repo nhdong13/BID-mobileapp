@@ -1,4 +1,3 @@
-/* eslint-disable no-self-assign */
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -7,7 +6,6 @@ import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 import * as Sentry from 'sentry-expo';
 import { Ionicons } from '@expo/vector-icons';
 import NavigationService from './NavigationService.js';
-
 
 import AppNavigator from './src/navigation/AppNavigator';
 
@@ -20,19 +18,7 @@ export default function App(props) {
     'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, ' +
       '`cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
   ]);
-  // useEffect(() => {
-  //   retrieveToken().then((res) => {
-  //     // const { userId, roleId } = res;
 
-  //     // socketIO.on('connect_error', (error) => {
-  //     //   console.log('Bsitter connection error  ', error);
-  //     // });
-
-  //     // socketIO.on('error', (error) => {
-  //     //   console.log('Bsitter error in general ', error);
-  //     // });
-  //   });
-  // }, []);
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
