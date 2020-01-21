@@ -1,7 +1,5 @@
 import { HOST_ENDPOINT } from 'react-native-dotenv';
 
-
-
 const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 
 const apiUrl = {
@@ -34,6 +32,7 @@ export const babysitterAPI = {
   updateProfile: `${url}/babysitters/`,
   getAllBabysitter: `${url}/babysitters/`,
   getAllBabysitterWithSchedule: `${url}/babysitters/getAllBabysitterWithSchedule/`,
+  getRequestData: `${url}/babysitters/getRequestData/`,
 };
 
 export const circleAPI = {

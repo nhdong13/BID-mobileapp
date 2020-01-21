@@ -86,3 +86,22 @@ export async function getAllBabysitter() {
   const response = await axios(options).catch((error) => console.log(error));
   return response;
 }
+
+export async function getRequestData(sitterId) {
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const options = {
+    method: 'POST',
+    url: babysitterAPI.getRequestData,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(sitterId),
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}

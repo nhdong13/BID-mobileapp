@@ -143,6 +143,18 @@ class SitterHomeScreen extends Component {
     }
   }
 
+  getRequestData = async () => {
+    const { userId } = this.state;
+    getRequestData(userId).then((res) => {
+      if (res.data) {
+        console.log(res.data);
+        // this.setState({
+        //   UpcomingInvitation: res.data,
+        // });
+      }
+    });
+  };
+
   getInvitationData = async () => {
     // get data for the babysitter (invitations)
     const { userId } = this.state;
@@ -189,7 +201,7 @@ class SitterHomeScreen extends Component {
         if (ongoingInvitation && ongoingInvitation.length > 0) {
           this.setState({
             invitationsPending,
-            invitationsUpcoming,
+            //            invitationsUpcoming,
             invitationsWaiting,
             ongoingInvitation: ongoingInvitation[0],
             ongoingParent: ongoingInvitation[0].sittingRequest.user.image,
