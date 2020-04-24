@@ -32,6 +32,7 @@ import localization from 'moment/locale/vi';
 import io from 'socket.io-client';
 import UpcomingInvitation from 'screens/babysitter/UpcomingInvitation';
 import { getRequests } from 'api/sittingRequest.api';
+import { getRequestData } from 'api/babysitter.api';
 import Modal from 'react-native-modal';
 
 const { height, width } = Dimensions.get('window');
