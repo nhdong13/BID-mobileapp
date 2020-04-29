@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import QRCode from 'react-native-qrcode';
+import QRCode from 'react-native-qrcode-svg';
 import apiUrl from 'utils/Connection';
 import io from 'socket.io-client';
 import { withNavigation } from 'react-navigation';
@@ -50,8 +50,8 @@ class qrBsitter extends Component {
         <QRCode
           value={this.state.qrtext}
           size={250}
-          bgColor="black"
-          fgColor="white"
+          backgroundColor="white"
+          color="black"
         />
       </View>
     );
