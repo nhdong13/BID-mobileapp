@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { Ionicons } from '@expo/vector-icons/';
 import colors from 'assets/Color';
 import {
@@ -30,6 +32,63 @@ import { getConfigs } from 'api/configuration.api';
 import { getUser } from 'api/user.api';
 import { Switch } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
+import MultiSelect from 'react-native-multiple-select';
+
+const skills = [
+  {
+    id: '92iijs7yta',
+    Name: 'cooking',
+    Point: 1,
+    Active: true,
+  },
+  {
+    id: 'a0s0a8ssbsd',
+    name: 'bathing',
+    point: 1,
+    active: true,
+  },
+  {
+    id: '16hbajsabsd',
+    name: 'piano',
+    point: 1,
+    active: true,
+  },
+  {
+    id: 'nahs75a5sg',
+    name: 'storytelling',
+    point: 1,
+    active: true,
+  },
+];
+
+const certs = [
+  {
+    id: '667atsas',
+    name: 'medical',
+    point: 1,
+    active: true,
+  },
+  {
+    id: 'hsyasajs',
+    name: 'elementary',
+    point: 1,
+    active: true,
+  },
+  {
+    id: 'djsjudksjd',
+    name: 'junior',
+    point: 1,
+    active: true,
+  },
+  {
+    id: 'sdhyaysdj',
+    name: 'highschool',
+    point: 1,
+    active: true,
+  },
+];
+
+const items = skills.concat(certs);
 
 class CreateRequestScreen extends Component {
   constructor(props) {
@@ -71,8 +130,10 @@ class CreateRequestScreen extends Component {
       fri: false,
       sat: false,
       sun: false,
+      selectedItems: [],
+      requirements: [],
     };
-    console.log(this.props.navigation.getParam('selectedDate'));
+    // console.log(this.props.navigation.getParam('selectedDate'));
   }
 
   async componentWillMount() {
@@ -101,6 +162,10 @@ class CreateRequestScreen extends Component {
       });
     });
   }
+
+  onSelectedItemsChange = (selectedItems) => {
+    this.setState({ selectedItems });
+  };
 
   beforeRecommend = () => {
     if (this.state.startTime == null || this.state.endTime == null) {
@@ -554,6 +619,7 @@ class CreateRequestScreen extends Component {
       startTime,
       endTime,
       isModalVisible,
+      selectedItems,
     } = this.state;
 
     return (
@@ -675,7 +741,7 @@ class CreateRequestScreen extends Component {
                 placeholder="Ngày"
                 format="YYYY-MM-DD"
                 minDate={moment().format('YYYY-MM-DD')}
-                maxDate="2019-12-30"
+                maxDate="2020-12-30"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
@@ -1100,6 +1166,56 @@ class CreateRequestScreen extends Component {
             </View>
           </View>
           <View>
+            <MuliText style={styles.headerTitle}>Kỹ năng & Bằng cấp</MuliText>
+            <View>
+              <MultiSelect
+                hideTags
+                items={items}
+                uniqueKey="id"
+                ref={(component) => {
+                  this.multiSelect = component;
+                }}
+                onSelectedItemsChange={this.onSelectedItemsChange}
+                selectedItems={selectedItems}
+                selectText="Vui lòng chọn"
+                searchInputPlaceholderText="Tìm kiếm ..."
+                onChangeInput={(text) => console.log(text)}
+                altFontFamily="muli"
+                tagRemoveIconColor="#CCC"
+                tagBorderColor="#CCC"
+                tagTextColor="#CCC"
+                selectedItemTextColor="#CCC"
+                selectedItemIconColor="#CCC"
+                itemTextColor="#000"
+                displayKey="name"
+                searchInputStyle={{ color: '#CCC' }}
+                submitButtonColor={colors.darkGreenTitle}
+                submitButtonText="Chọn"
+              />
+            </View>
+            {this.state.selectedItems && this.state.selectedItems.length > 0 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {this.state.selectedItems.map((item) => (
+                  <TouchableOpacity key={item}>
+                    <View style={styles.smallbutton}>
+                      <MuliText style={{ color: '#ffffff' }}>
+                        {items.find((skill) => skill.id == item).name}
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <View />
+            )}
+          </View>
+          <View>
             <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
             <View style={styles.priceContainer}>
               <MuliText style={styles.contentInformation}>
@@ -1244,5 +1360,18 @@ const styles = StyleSheet.create({
   detailContainer: {
     marginHorizontal: 25,
     marginTop: 20,
+  },
+  smallbutton: {
+    flex: 1,
+    height: 30,
+    backgroundColor: colors.lightGreen,
+    margin: 8,
+    padding: 5,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#2E272B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 1,
   },
 });

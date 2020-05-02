@@ -76,14 +76,7 @@ class SitterHomeScreen extends Component {
   async componentDidMount() {
     await retrieveToken().then((res) => {
       const { userId } = res;
-      // console.log(
-      //   'PHUC: SitterHomeScreen -> componentDidMount -> userId',
-      //   userId,
-      // );
       this.setState({ userId });
-      // this._notificationSubscription = Notifications.addListener(
-      //   this.handleNotification,
-      // );
     });
     await this.getInvitationData();
 
@@ -97,8 +90,6 @@ class SitterHomeScreen extends Component {
 
     socketIO.on('reloading', () => {
       this.onRefresh();
-      // const { notificationMessage, title } = notification;
-      // this.setState({ notificationMessage, title });
     });
 
     socketIO.on('triggerQr', (data) => {
