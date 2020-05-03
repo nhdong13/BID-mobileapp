@@ -137,7 +137,7 @@ class CreateRequestScreen extends Component {
       selectedCerts: [],
       skills: [],
       certs: [],
-      requiredSkills: [],
+      requiredSkills: [{ skillId: 1 }],
     };
     // console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -351,9 +351,10 @@ class CreateRequestScreen extends Component {
       isRepeated,
       selectedSkills,
       selectedCerts,
+      requiredSkills,
     } = this.state;
 
-    const requiredSkills = selectedSkills.map((skill) => ({
+    const requiredSkillsPicked = selectedSkills.map((skill) => ({
       skillId: skill,
     }));
     const requiredCerts = selectedCerts.map((cert) => ({
@@ -372,8 +373,9 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren,
       status: 'PENDING',
       totalPrice,
-      requiredSkills,
-      requiredCerts,
+      requiredSkills:
+        requiredSkillsPicked.length > 0 ? requiredSkillsPicked : requiredSkills,
+      requiredCerts: requiredCerts.length > 0 ? requiredCerts : [],
       childrenDescription,
     };
 
@@ -476,14 +478,6 @@ class CreateRequestScreen extends Component {
     // khoảng thời gian ngoài giờ hành chính của request này (phút)
     const OTHours = await this.getOTHours();
     const totalDuration = officeHours + OTHours;
-    console.log(
-      'Duong: CreateRequestScreen -> updatePrice -> officeHours',
-      officeHours,
-    );
-    console.log(
-      'Duong: CreateRequestScreen -> updatePrice -> OTHours',
-      OTHours,
-    );
     const officeHoursPercentage = officeHours / 60;
     const OTHoursPercentage = OTHours / 60;
     const totalDurationPercentage = totalDuration / 60;

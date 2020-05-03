@@ -34,6 +34,8 @@ export default class BsitterProfile extends Component {
       listFeedbacks: null,
       isFromDetail: false,
       loading: false,
+      skills: [],
+      certs: [],
     };
   }
 
@@ -90,6 +92,8 @@ export default class BsitterProfile extends Component {
         sitter: data,
         user: data.user,
         sitterImage: data.user.image,
+        certs: data.user.sitterSkills,
+        skills: data.user.sitterCerts,
       });
 
       return data;
@@ -101,6 +105,8 @@ export default class BsitterProfile extends Component {
         sitter: data,
         user: data.user,
         sitterImage: data.user.image,
+        certs: data.user.sitterCerts,
+        skills: data.user.sitterSkills,
       });
 
       return data;
@@ -334,6 +340,43 @@ export default class BsitterProfile extends Component {
               </MuliText>
             </View>
           )}
+          {this.state.sitter && this.state.skills && (
+            <View style={styles.sectionContainer}>
+              <View style={styles.headerSection}>
+                <MuliText style={styles.textInformation}>
+                  Kỹ năng & Bằng cấp
+                </MuliText>
+              </View>
+              <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {this.state.skills.map((item, index) => (
+                    <TouchableOpacity key={item.skillId}>
+                      <View style={styles.smallbutton}>
+                        <MuliText style={{ color: colors.lightGreen }}>
+                          {item.skill.vname}
+                        </MuliText>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                  {this.state.certs.map((item, index) => (
+                    <TouchableOpacity key={item.certId}>
+                      <View style={styles.smallbutton}>
+                        <MuliText style={{ color: colors.lightGreen }}>
+                          {item.cert.vname}
+                        </MuliText>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            </View>
+          )}
           {this.state.sitter && (
             <View style={styles.sectionContainer}>
               <View style={styles.headerSection}>
@@ -518,5 +561,20 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 60 / 2,
     overflow: 'hidden',
+  },
+  smallbutton: {
+    height: 35,
+    backgroundColor: 'white',
+    margin: 5,
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#2E272B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 1,
+    borderWidth: 2,
+    borderColor: colors.lightGreen,
   },
 });

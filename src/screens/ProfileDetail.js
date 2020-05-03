@@ -32,6 +32,8 @@ export default class ProfileDetail extends Component {
       code: null,
       image: '',
       listFeedbacks: null,
+      skills: [],
+      certs: [],
     };
   }
 
@@ -53,6 +55,8 @@ export default class ProfileDetail extends Component {
         gender: res.gender,
         dob: res.dateOfBirth,
         image: res.image,
+        skills: res.sitterSkills,
+        certs: res.sitterCerts,
       });
       // eslint-disable-next-line no-unused-expressions
       this.state.roleId == 2
@@ -170,8 +174,42 @@ export default class ProfileDetail extends Component {
                   .utc(this.state.bsitter.endTime, 'HH:mm')
                   .format('HH:mm')}
               </MuliText>
+              <View style={{ marginTop: 15 }}>
+                <MuliText style={styles.textInformation}>
+                  Kỹ năng & Bằng cấp
+                </MuliText>
+              </View>
+              <View style={{ marginVertical: 10 }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {this.state.skills.map((item, index) => (
+                    <TouchableOpacity key={item.skillId}>
+                      <View style={styles.smallbutton}>
+                        <MuliText style={{ color: colors.lightGreen }}>
+                          {item.skill.vname}
+                        </MuliText>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                  {this.state.certs.map((item, index) => (
+                    <TouchableOpacity key={item.certId}>
+                      <View style={styles.smallbutton}>
+                        <MuliText style={{ color: colors.lightGreen }}>
+                          {item.cert.vname}
+                        </MuliText>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
               <View style={styles.detailContainerFeedback}>
-                <MuliText style={styles.headerTitle}>
+                <MuliText style={styles.textInformation}>
                   Phản hồi từ phụ huynh
                 </MuliText>
               </View>
@@ -409,6 +447,25 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   detailContainerFeedback: {
-    marginVertical: 20,
+    marginTop: 20,
+  },
+  smallbutton: {
+    height: 35,
+    backgroundColor: 'white',
+    margin: 5,
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#2E272B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 1,
+    borderWidth: 2,
+    borderColor: colors.lightGreen,
+  },
+  textInformation: {
+    fontSize: 20,
+    color: colors.darkGreenTitle,
   },
 });

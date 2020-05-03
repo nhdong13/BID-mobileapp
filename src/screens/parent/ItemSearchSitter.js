@@ -79,9 +79,10 @@ export class ItemSearchSitter extends Component {
           }
         });
       } else {
+        console.log('ItemSearchSitter: ------ ');
         createInvitation(requestId, invitation, request)
           .then((response) => {
-            // console.log(response);
+            console.log(response);
             this.props.changeInviteStatus(receiverId);
             this.props.setRequestId(response.data.newRequest.id);
           })

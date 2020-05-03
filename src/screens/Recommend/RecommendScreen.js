@@ -173,10 +173,10 @@ export default class RecommendScreen extends Component {
     return (
       <ScrollView style={{ backgroundColor: colors.homeColor }}>
         <View style={styles.container}>
-          {this.state.recommendList.length > 0 ||
-          this.state.listMatched.length > 0 ? (
+          {(this.state.recommendList && this.state.recommendList.length > 0) ||
+          (this.state.listMatched && this.state.listMatched.length > 0) ? (
             <View>
-              {this.state.recommendList.length > 0 && (
+              {this.state.recommendList && this.state.recommendList.length > 0 && (
                 <View style={styles.sectionContainer}>
                   <TouchableOpacity
                     onPress={() => {
@@ -223,7 +223,7 @@ export default class RecommendScreen extends Component {
                 </View>
               )}
 
-              {this.state.listMatched.length != 0 && (
+              {this.state.listMatched && this.state.listMatched.length > 0 && (
                 <View style={styles.sectionContainer}>
                   <TouchableOpacity
                     onPress={() => {
@@ -249,7 +249,7 @@ export default class RecommendScreen extends Component {
                   {this.state.isModalVisible2 && (
                     <ScrollView style={styles.sectionContainer2}>
                       {this.state.listMatched &&
-                        this.state.listMatched.length != 0 && (
+                        this.state.listMatched.length > 0 && (
                           <FlatList
                             data={this.state.listMatched}
                             renderItem={({ item }) => (
