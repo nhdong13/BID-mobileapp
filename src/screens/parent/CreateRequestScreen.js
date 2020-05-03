@@ -11,6 +11,7 @@ import {
   View,
   Image,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
@@ -31,15 +32,17 @@ import { getHolidays } from 'api/holiday.api';
 import { getConfigs } from 'api/configuration.api';
 import { getUser } from 'api/user.api';
 import { Switch } from 'react-native-gesture-handler';
+import { getCerts } from 'api/cert.api';
+import { getSkills } from 'api/skill.api';
 import Modal from 'react-native-modal';
 import MultiSelect from 'react-native-multiple-select';
 
 const skills = [
   {
     id: '92iijs7yta',
-    Name: 'cooking',
+    name: 'cooking',
     Point: 1,
-    Active: true,
+    active: true,
   },
   {
     id: 'a0s0a8ssbsd',
@@ -130,8 +133,10 @@ class CreateRequestScreen extends Component {
       fri: false,
       sat: false,
       sun: false,
-      selectedItems: [],
-      requirements: [],
+      selectedSkills: [],
+      selectedCerts: [],
+      skills: [],
+      certs: [],
     };
     // console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -163,8 +168,24 @@ class CreateRequestScreen extends Component {
     });
   }
 
-  onSelectedItemsChange = (selectedItems) => {
-    this.setState({ selectedItems });
+  onSelectedSkillsChange = (selectedSkills) => {
+    this.setState({ selectedSkills });
+  };
+
+  onSelectedCertsChange = (selectedCerts) => {
+    this.setState({ selectedCerts });
+  };
+
+  getChildrenDescriptions = () => {
+    let descriptions = [];
+    this.state.children.map((item) => {
+      this.state['description_' + item.name]
+        ? (descriptions = [
+            ...descriptions,
+            this.state['description_' + item.name],
+          ])
+        : [];
+    });
   };
 
   beforeRecommend = () => {
@@ -307,6 +328,7 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren,
       status: 'PENDING',
       totalPrice,
+      requiredSkills: [{}],
     };
 
     if (isRepeated) {
@@ -364,6 +386,7 @@ class CreateRequestScreen extends Component {
     this.forceUpdate();
     await this.calculate();
     this.updatePrice();
+    this.getChildrenDescriptions();
   };
 
   calculate = async () => {
@@ -619,7 +642,8 @@ class CreateRequestScreen extends Component {
       startTime,
       endTime,
       isModalVisible,
-      selectedItems,
+      selectedSkills,
+      selectedCerts,
     } = this.state;
 
     return (
@@ -1165,18 +1189,98 @@ class CreateRequestScreen extends Component {
               </MuliText>
             </View>
           </View>
+          {this.state.children && this.state.children.length > 0 ? (
+            <View>
+              {this.state.children.map((child) => (
+                <View key={child.id}>
+                  {child.checked ? (
+                    <View>
+                      <MuliText style={styles.headerTitle}>
+                        {child.name}
+                      </MuliText>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          alignContent: 'space-between',
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignItems: 'center',
+                            margin: 5,
+                          }}
+                        >
+                          <Image
+                            source={{ uri: child.image }}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 120 / 2,
+                              overflow: 'hidden',
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            alignItems: 'center',
+                            margin: 5,
+                          }}
+                        >
+                          <MuliText>Độ tuổi: {child.age}</MuliText>
+                        </View>
+                      </View>
+                      <View>
+                        <MuliText style={styles.mediumTitle}>
+                          Mô tả công việc cho {child.name}
+                        </MuliText>
+                        <MuliText style={styles.mediumSubTitle}>
+                          vd: bé có sốt nhẹ, bé đã có sẵn đồ ăn, ...
+                        </MuliText>
+                        <TextInput
+                          style={{
+                            marginTop: 10,
+                            height: 80,
+                            borderColor: 'gray',
+                            borderWidth: 1,
+                            padding: 5,
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5,
+                            borderBottomRightRadius: 5,
+                            borderBottomLeftRadius: 5,
+                          }}
+                          onChangeText={(text) =>
+                            this.setState({
+                              ['description_' + child.name]: text,
+                            })
+                          }
+                          value={this.state['description_' + child.name]}
+                        />
+                      </View>
+                    </View>
+                  ) : (
+                    <View />
+                  )}
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View />
+          )}
           <View>
             <MuliText style={styles.headerTitle}>Kỹ năng & Bằng cấp</MuliText>
             <View>
+              <MuliText style={styles.mediumTitle}>Kỹ Năng</MuliText>
               <MultiSelect
                 hideTags
-                items={items}
+                items={skills}
                 uniqueKey="id"
                 ref={(component) => {
                   this.multiSelect = component;
                 }}
-                onSelectedItemsChange={this.onSelectedItemsChange}
-                selectedItems={selectedItems}
+                onSelectedItemsChange={this.onSelectedSkillsChange}
+                selectedItems={selectedSkills}
                 selectText="Vui lòng chọn"
                 searchInputPlaceholderText="Tìm kiếm ..."
                 onChangeInput={(text) => console.log(text)}
@@ -1193,7 +1297,8 @@ class CreateRequestScreen extends Component {
                 submitButtonText="Chọn"
               />
             </View>
-            {this.state.selectedItems && this.state.selectedItems.length > 0 ? (
+            {this.state.selectedSkills &&
+            this.state.selectedSkills.length > 0 ? (
               <View
                 style={{
                   flexDirection: 'row',
@@ -1201,7 +1306,55 @@ class CreateRequestScreen extends Component {
                   flexWrap: 'wrap',
                 }}
               >
-                {this.state.selectedItems.map((item) => (
+                {this.state.selectedSkills.map((item) => (
+                  <TouchableOpacity key={item}>
+                    <View style={styles.smallbutton}>
+                      <MuliText style={{ color: '#ffffff' }}>
+                        {items.find((skill) => skill.id == item).name}
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <View />
+            )}
+            <View>
+              <MuliText style={styles.mediumTitle}>Bằng cấp</MuliText>
+              <MultiSelect
+                hideTags
+                items={certs}
+                uniqueKey="id"
+                ref={(component) => {
+                  this.multiSelect = component;
+                }}
+                onSelectedItemsChange={this.onSelectedCertsChange}
+                selectedItems={selectedCerts}
+                selectText="Vui lòng chọn"
+                searchInputPlaceholderText="Tìm kiếm ..."
+                onChangeInput={(text) => console.log(text)}
+                altFontFamily="muli"
+                tagRemoveIconColor="#CCC"
+                tagBorderColor="#CCC"
+                tagTextColor="#CCC"
+                selectedItemTextColor="#CCC"
+                selectedItemIconColor="#CCC"
+                itemTextColor="#000"
+                displayKey="name"
+                searchInputStyle={{ color: '#CCC' }}
+                submitButtonColor={colors.darkGreenTitle}
+                submitButtonText="Chọn"
+              />
+            </View>
+            {this.state.selectedCerts && this.state.selectedCerts.length > 0 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {this.state.selectedCerts.map((item) => (
                   <TouchableOpacity key={item}>
                     <View style={styles.smallbutton}>
                       <MuliText style={{ color: '#ffffff' }}>
@@ -1334,6 +1487,20 @@ const styles = StyleSheet.create({
     color: colors.darkGreenTitle,
     marginBottom: 10,
     fontWeight: '800',
+  },
+  mediumSubTitle: {
+    marginHorizontal: 10,
+    fontSize: 10,
+    color: colors.darkGreenTitle,
+    fontWeight: '800',
+  },
+  mediumTitle: {
+    marginHorizontal: 10,
+    marginTop: 20,
+    marginBottom: 20,
+    fontSize: 15,
+    color: 'black',
+    fontWeight: '500',
   },
   submitButton: {
     width: 170,

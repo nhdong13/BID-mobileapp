@@ -72,4 +72,12 @@ export const configAPI = {
   readFirst: `${url}/configuration`,
 };
 
+export const skillAPI = {
+  getAll: `${url}/skills`,
+};
+
+export const certAPI = {
+  getAll: `${url}/certs`,
+};
+
 export default apiUrl;
