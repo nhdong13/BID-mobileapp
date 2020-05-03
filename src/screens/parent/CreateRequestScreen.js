@@ -137,6 +137,7 @@ class CreateRequestScreen extends Component {
       selectedCerts: [],
       skills: [],
       certs: [],
+      requiredSkills: [],
     };
     // console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -150,6 +151,14 @@ class CreateRequestScreen extends Component {
         sittingAddress: parent.address,
         children: parent.parent.children,
       });
+    });
+
+    await getCerts().then((certs) => {
+      certs.status == 200 ? this.setState({ certs: certs.data }) : [];
+    });
+
+    await getSkills().then((skills) => {
+      skills.status == 200 ? this.setState({ skills: skills.data }) : [];
     });
 
     await getPricings().then((pricings) => {
@@ -182,10 +191,35 @@ class CreateRequestScreen extends Component {
       this.state['description_' + item.name]
         ? (descriptions = [
             ...descriptions,
-            this.state['description_' + item.name],
+            {
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              age: item.age,
+              descriptions: this.state['description_' + item.name],
+            },
           ])
         : [];
     });
+
+    return descriptions;
+  };
+
+  getSkillList = () => {
+    const { skills, selectedSkills, selectedCerts } = this.state;
+
+    const requiredSkills = selectedSkills.map((skill) => ({
+      skillId: skill,
+    }));
+    const requiredCerts = selectedCerts.map((cert) => ({
+      certId: cert,
+    }));
+    const des = this.getChildrenDescriptions();
+
+    console.log('REQ_CERTS: ', requiredCerts);
+    console.log('REQ_SKILLS: ', requiredSkills);
+
+    console.log('DESCRIPTION: ', des);
   };
 
   beforeRecommend = () => {
@@ -315,7 +349,17 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren,
       totalPrice,
       isRepeated,
+      selectedSkills,
+      selectedCerts,
     } = this.state;
+
+    const requiredSkills = selectedSkills.map((skill) => ({
+      skillId: skill,
+    }));
+    const requiredCerts = selectedCerts.map((cert) => ({
+      certId: cert,
+    }));
+    const childrenDescription = JSON.stringify(this.getChildrenDescriptions());
 
     const request = {
       requestId: requestId != 0 ? requestId : 0,
@@ -328,7 +372,9 @@ class CreateRequestScreen extends Component {
       minAgeOfChildren,
       status: 'PENDING',
       totalPrice,
-      requiredSkills: [{}],
+      requiredSkills,
+      requiredCerts,
+      childrenDescription,
     };
 
     if (isRepeated) {
@@ -1274,7 +1320,7 @@ class CreateRequestScreen extends Component {
               <MuliText style={styles.mediumTitle}>Kỹ Năng</MuliText>
               <MultiSelect
                 hideTags
-                items={skills}
+                items={this.state.skills}
                 uniqueKey="id"
                 ref={(component) => {
                   this.multiSelect = component;
@@ -1291,7 +1337,7 @@ class CreateRequestScreen extends Component {
                 selectedItemTextColor="#CCC"
                 selectedItemIconColor="#CCC"
                 itemTextColor="#000"
-                displayKey="name"
+                displayKey="vname"
                 searchInputStyle={{ color: '#CCC' }}
                 submitButtonColor={colors.darkGreenTitle}
                 submitButtonText="Chọn"
@@ -1310,7 +1356,10 @@ class CreateRequestScreen extends Component {
                   <TouchableOpacity key={item}>
                     <View style={styles.smallbutton}>
                       <MuliText style={{ color: '#ffffff' }}>
-                        {items.find((skill) => skill.id == item).name}
+                        {
+                          this.state.skills.find((skill) => skill.id == item)
+                            .vname
+                        }
                       </MuliText>
                     </View>
                   </TouchableOpacity>
@@ -1323,7 +1372,7 @@ class CreateRequestScreen extends Component {
               <MuliText style={styles.mediumTitle}>Bằng cấp</MuliText>
               <MultiSelect
                 hideTags
-                items={certs}
+                items={this.state.certs}
                 uniqueKey="id"
                 ref={(component) => {
                   this.multiSelect = component;
@@ -1340,7 +1389,7 @@ class CreateRequestScreen extends Component {
                 selectedItemTextColor="#CCC"
                 selectedItemIconColor="#CCC"
                 itemTextColor="#000"
-                displayKey="name"
+                displayKey="vname"
                 searchInputStyle={{ color: '#CCC' }}
                 submitButtonColor={colors.darkGreenTitle}
                 submitButtonText="Chọn"
@@ -1358,7 +1407,10 @@ class CreateRequestScreen extends Component {
                   <TouchableOpacity key={item}>
                     <View style={styles.smallbutton}>
                       <MuliText style={{ color: '#ffffff' }}>
-                        {items.find((skill) => skill.id == item).name}
+                        {
+                          this.state.certs.find((skill) => skill.id == item)
+                            .vname
+                        }
                       </MuliText>
                     </View>
                   </TouchableOpacity>
@@ -1384,6 +1436,7 @@ class CreateRequestScreen extends Component {
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={this.beforeRecommend}
+                // onPress={this.getSkillList}
               >
                 <MuliText style={{ color: 'white', fontSize: 11 }}>
                   Kế tiếp
