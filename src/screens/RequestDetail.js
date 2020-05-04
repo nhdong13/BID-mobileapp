@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   RefreshControl,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons/';
 import { MuliText } from 'components/StyledText';
@@ -60,6 +61,7 @@ export class RequestDetail extends Component {
       confirmAlert: 'Có',
       showConfirm: true,
       refreshing: false,
+      childrenDescription: null,
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -81,9 +83,11 @@ export class RequestDetail extends Component {
         bsitter,
         canCheckIn,
         canCheckOut,
+        childrenDescription,
         totalPrice: price,
         createdUser: createUserId,
       } = res;
+
       await this.setState({
         date,
         startTime,
@@ -97,8 +101,10 @@ export class RequestDetail extends Component {
         canCheckOut,
         price,
         createUserId,
+        childrenDescription: JSON.parse(childrenDescription),
       });
     });
+
     const { status } = this.state;
     if (status === 'CONFIRMED') {
       // console.log('PHUC: RequestDetail -> componentDidMount -> status', status);
@@ -585,6 +591,87 @@ export class RequestDetail extends Component {
             </TouchableOpacity>
             {this.state.isModalVisible && (
               <View>
+                <View style={styles.detailContainer}>
+                  <MuliText style={styles.headerTitle}>
+                    Mô tả công việc
+                  </MuliText>
+                  <View>
+                    {this.state.childrenDescription &&
+                    this.state.childrenDescription.length > 0 ? (
+                      <View>
+                        {this.state.childrenDescription.map((child) => (
+                          <View key={child.id} style={{ marginTop: 15 }}>
+                            <MuliText style={styles.headerTitle}>
+                              {child.name}
+                            </MuliText>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                alignContent: 'space-between',
+                              }}
+                            >
+                              <View
+                                style={{
+                                  alignItems: 'center',
+                                  margin: 5,
+                                }}
+                              >
+                                <Image
+                                  source={{ uri: child.image }}
+                                  style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 120 / 2,
+                                    overflow: 'hidden',
+                                  }}
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  alignItems: 'center',
+                                  margin: 5,
+                                }}
+                              >
+                                <MuliText>Độ tuổi: {child.age}</MuliText>
+                              </View>
+                            </View>
+                            <View>
+                              <MuliText style={styles.mediumTitle}>
+                                Mô tả công việc cho {child.name}
+                              </MuliText>
+                              <ScrollView
+                                contentContainerStyle={{
+                                  flexGrow: 1,
+                                  padding: 8,
+                                  marginTop: 10,
+                                }}
+                              >
+                                <MuliText
+                                  style={{
+                                    borderWidth: 2,
+                                    padding: 10,
+                                    borderColor: 'gray',
+                                    borderTopLeftRadius: 5,
+                                    borderTopRightRadius: 5,
+                                    borderBottomRightRadius: 5,
+                                    borderBottomLeftRadius: 5,
+                                  }}
+                                >
+                                  {child.descriptions}
+                                </MuliText>
+                              </ScrollView>
+                            </View>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <View />
+                    )}
+                  </View>
+                </View>
+
                 <View style={styles.detailContainer}>
                   <MuliText style={styles.headerTitle}>Trẻ em</MuliText>
                   <View>

@@ -1279,6 +1279,7 @@ class CreateRequestScreen extends Component {
                           vd: bé có sốt nhẹ, bé đã có sẵn đồ ăn, ...
                         </MuliText>
                         <TextInput
+                          multiline={true}
                           style={{
                             marginTop: 10,
                             height: 80,

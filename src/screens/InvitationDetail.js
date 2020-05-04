@@ -58,6 +58,7 @@ export default class InvitationDetail extends Component {
       sat: false,
       sun: false,
       isCancel: false,
+      childrenDescription: [],
     };
   }
 
@@ -90,6 +91,9 @@ export default class InvitationDetail extends Component {
               minAgeOfChildren: resp.sittingRequest.minAgeOfChildren,
               requestId: resp.sittingRequest.id,
               repeatedRequestId: resp.sittingRequest.repeatedRequestId,
+              childrenDescription: JSON.parse(
+                resp.sittingRequest.childrenDescription,
+              ),
             },
             () => this.getRepeatedRequest(),
           );
@@ -108,6 +112,9 @@ export default class InvitationDetail extends Component {
             childrenNumber: resp.sittingRequest.childrenNumber,
             minAgeOfChildren: resp.sittingRequest.minAgeOfChildren,
             requestId: resp.sittingRequest.id,
+            childrenDescription: JSON.parse(
+              resp.sittingRequest.childrenDescription,
+            ),
           });
         }
       },
@@ -436,6 +443,88 @@ export default class InvitationDetail extends Component {
                   </View>
                 </View>
               </ScrollView>
+              <View>
+                <View style={styles.detailContainer}>
+                  <MuliText style={styles.headerTitle}>
+                    Mô tả công việc
+                  </MuliText>
+                  <View>
+                    {this.state.childrenDescription &&
+                    this.state.childrenDescription.length > 0 ? (
+                      <View>
+                        {this.state.childrenDescription.map((child) => (
+                          <View key={child.id} style={{ marginTop: 15 }}>
+                            <MuliText style={styles.headerTitle}>
+                              {child.name}
+                            </MuliText>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                alignContent: 'space-between',
+                              }}
+                            >
+                              <View
+                                style={{
+                                  alignItems: 'center',
+                                  margin: 5,
+                                }}
+                              >
+                                <Image
+                                  source={{ uri: child.image }}
+                                  style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 120 / 2,
+                                    overflow: 'hidden',
+                                  }}
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  alignItems: 'center',
+                                  margin: 5,
+                                }}
+                              >
+                                <MuliText>Độ tuổi: {child.age}</MuliText>
+                              </View>
+                            </View>
+                            <View>
+                              <MuliText style={styles.mediumTitle}>
+                                Mô tả công việc cho {child.name}
+                              </MuliText>
+                              <ScrollView
+                                contentContainerStyle={{
+                                  flexGrow: 1,
+                                  padding: 8,
+                                  marginTop: 10,
+                                }}
+                              >
+                                <MuliText
+                                  style={{
+                                    borderWidth: 2,
+                                    padding: 10,
+                                    borderColor: 'gray',
+                                    borderTopLeftRadius: 5,
+                                    borderTopRightRadius: 5,
+                                    borderBottomRightRadius: 5,
+                                    borderBottomLeftRadius: 5,
+                                  }}
+                                >
+                                  {child.descriptions}
+                                </MuliText>
+                              </ScrollView>
+                            </View>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <View />
+                    )}
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
           {this.state.repeatedRequestId != null ? (
@@ -597,7 +686,6 @@ export default class InvitationDetail extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ flex: 1 }}
-                  // onPress={() => this.onButtonClick('ACCEPTED')}
                   onPress={() => this.confirmModalPopup()}
                 >
                   <View

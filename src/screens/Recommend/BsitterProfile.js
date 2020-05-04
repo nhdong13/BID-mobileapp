@@ -88,6 +88,7 @@ export default class BsitterProfile extends Component {
     const { sitterId, requestId } = this.state;
     if (sitterId != 0 && requestId != 0 && requestId) {
       const data = await getProfileByRequest(sitterId, requestId);
+      console.log('testo --------------', data.user.sitterSkills);
       this.setState({
         sitter: data,
         user: data.user,
@@ -101,6 +102,7 @@ export default class BsitterProfile extends Component {
 
     if (sitterId != 0) {
       const data = await getProfile(sitterId);
+      console.log('testo2 --------------', data.user.sitterSkills);
       this.setState({
         sitter: data,
         user: data.user,
@@ -355,24 +357,28 @@ export default class BsitterProfile extends Component {
                     flexWrap: 'wrap',
                   }}
                 >
-                  {this.state.skills.map((item, index) => (
-                    <TouchableOpacity key={item.skillId}>
-                      <View style={styles.smallbutton}>
-                        <MuliText style={{ color: colors.lightGreen }}>
-                          {item.skill.vname}
-                        </MuliText>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                  {this.state.certs.map((item, index) => (
-                    <TouchableOpacity key={item.certId}>
-                      <View style={styles.smallbutton}>
-                        <MuliText style={{ color: colors.lightGreen }}>
-                          {item.cert.vname}
-                        </MuliText>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
+                  {this.state.skills &&
+                    this.state.skills.length > 0 &&
+                    this.state.skills.map((item) => (
+                      <TouchableOpacity key={item.skillId}>
+                        <View style={styles.smallbutton}>
+                          <MuliText style={{ color: colors.lightGreen }}>
+                            {item.skill.vname}
+                          </MuliText>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  {this.state.certs &&
+                    this.state.certs.length > 0 &&
+                    this.state.certs.map((item, index) => (
+                      <TouchableOpacity key={item.certId}>
+                        <View style={styles.smallbutton}>
+                          <MuliText style={{ color: colors.lightGreen }}>
+                            {item.cert.vname}
+                          </MuliText>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
                 </View>
               </View>
             </View>
