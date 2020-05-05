@@ -420,7 +420,7 @@ class ParentHomeScreen extends Component {
                   />
                 </View>
                 <View style={modalCreate}>
-                  <MuliText>Tìm và tạo yêu cầu với người giữ trẻ</MuliText>
+                  <MuliText>Tìm và thêm người giữ trẻ </MuliText>
                 </View>
               </View>
             </TouchableOpacity>

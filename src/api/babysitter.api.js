@@ -105,3 +105,23 @@ export async function getRequestData(sitterId) {
   const response = await axios(options).catch((error) => console.log(error));
   return response;
 }
+
+export async function searchBabysitter(searchData) {
+  console.log('SEARCH DATA -------------------', searchData);
+  const { token } = await retrieveToken();
+  let trimpedToken = '';
+  if (token) trimpedToken = token.replace(/['"]+/g, '');
+
+  const options = {
+    method: 'POST',
+    url: babysitterAPI.searchBabysitter,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${trimpedToken}`,
+    },
+    data: qs.stringify(searchData),
+  };
+
+  const response = await axios(options).catch((error) => console.log(error));
+  return response;
+}

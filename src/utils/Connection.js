@@ -34,6 +34,7 @@ export const babysitterAPI = {
   getAllBabysitter: `${url}/babysitters/`,
   getAllBabysitterWithSchedule: `${url}/babysitters/getAllBabysitterWithSchedule/`,
   getRequestData: `${url}/babysitters/getRequestData/`,
+  searchBabysitter: `${url}/babysitters/search/`,
 };
 
 export const circleAPI = {

@@ -27,13 +27,15 @@ import AlertPro from 'react-native-alert-pro';
 import Modal from 'react-native-modal';
 import { getCircle } from 'api/circle.api';
 import { TextInput } from 'react-native-gesture-handler';
-import { getAllBabysitter } from 'api/babysitter.api';
+import { getAllBabysitter, searchBabysitter } from 'api/babysitter.api';
 import ItemSearchSitter from 'screens/parent/ItemSearchSitter';
 import { getPricings } from 'api/pricing.api';
 import { getHolidays } from 'api/holiday.api';
 import { getConfigs } from 'api/configuration.api';
 import { getUser } from 'api/user.api';
-
+import { getCerts } from 'api/cert.api';
+import { getSkills } from 'api/skill.api';
+import MultiSelect from 'react-native-multiple-select';
 // const { width, height } = Dimensions.get('window');
 
 class SearchSitter extends Component {
@@ -71,6 +73,13 @@ class SearchSitter extends Component {
       officeHourEnd: null,
       selectedChildren: [],
       request: null,
+      skills: [],
+      certs: [],
+
+      selectedSkills: [],
+      selectedCerts: [],
+      requiredSkills: [{ skillId: 1 }],
+      requiredCerts: [{ certId: 1 }],
     };
   }
 
@@ -85,174 +94,14 @@ class SearchSitter extends Component {
       });
     });
 
-    getPricings().then((pricings) => {
-      this.setState({ pricings });
+    await getCerts().then((certs) => {
+      certs.status == 200 ? this.setState({ certs: certs.data }) : [];
     });
 
-    getHolidays().then((holidays) => {
-      this.setState({ holidays });
-    });
-
-    getConfigs().then((configs) => {
-      this.setState({
-        officeHourStart: configs.officeHourStart,
-        officeHourEnd: configs.officeHourEnd,
-      });
+    await getSkills().then((skills) => {
+      skills.status == 200 ? this.setState({ skills: skills.data }) : [];
     });
   }
-
-  beforeSearch = async () => {
-    if (this.state.startTime == null || this.state.endTime == null) {
-      this.refs.toast.show(
-        'Vui lòng chọn thời gian trông trẻ',
-        DURATION.LENGTH_LONG,
-      );
-      return;
-    }
-
-    const start = moment(this.state.startTime, 'HH:mm');
-    const end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
-    if (end.isBefore(start)) {
-      this.refs.toast.show(
-        'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
-        DURATION.LENGTH_LONG,
-      );
-      return;
-    }
-
-    if (this.state.childrenNumber == 0) {
-      this.refs.toast.show(
-        'Vui lòng chọn ít nhất một trẻ',
-        DURATION.LENGTH_LONG,
-      );
-      return;
-    }
-
-    const request = {
-      requestId: this.state.requestId != 0 ? this.state.requestId : 0,
-      createdUser: this.state.userId,
-      sittingDate: this.state.sittingDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      sittingAddress: this.state.sittingAddress,
-      childrenNumber: this.state.childrenNumber,
-      minAgeOfChildren: this.state.minAgeOfChildren,
-      status: 'PENDING',
-      totalPrice: this.state.totalPrice,
-    };
-
-    await getAllBabysitter().then(async (res) => {
-      if (res) {
-        // console.log('PHUC: SearchSitter -> beforeSearch -> res', res.data);
-        await this.setState({ listBabysitter: res.data, request });
-      }
-    });
-
-    this.toggleModalCreateRequest();
-  };
-
-  parseSchedule = (scheduleTime) => {
-    try {
-      const arr = scheduleTime.split(' ');
-
-      const obj = {
-        startTime: arr[0],
-        endTime: arr[1],
-        dayOfMonth: arr[2],
-        month: arr[3],
-        year: arr[4],
-        date: moment(`${arr[4]}-${arr[3]}-${arr[2]}`, 'YYYY-MM-DD').format(
-          'YYYY-MM-DD',
-        ),
-      };
-      return obj;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  searchFilter = (text) => {
-    const newData = this.state.listBabysitter.filter((sitter) => {
-      const itemData = `${sitter.user.nickname.toUpperCase()}`;
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-
-    this.setState({ data: newData });
-  };
-
-  beforeRecommend = () => {
-    if (this.state.startTime == null || this.state.endTime == null) {
-      this.refs.toast.show(
-        'Vui lòng chọn thời gian trông trẻ',
-        // DURATION.LENGTH_LONG,
-      );
-      return;
-    }
-
-    const start = moment(this.state.startTime, 'HH:mm');
-    const end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
-    if (end.isBefore(start)) {
-      this.refs.toast.show(
-        'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
-        // DURATION.LENGTH_LONG,
-      );
-      return;
-    }
-
-    if (this.state.childrenNumber == 0) {
-      this.refs.toast.show(
-        'Vui lòng chọn ít nhất một trẻ',
-        DURATION.LENGTH_LONG,
-      );
-      return;
-    }
-
-    const request = {
-      requestId: this.state.requestId != 0 ? this.state.requestId : 0,
-      createdUser: this.state.userId,
-      sittingDate: this.state.sittingDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      sittingAddress: this.state.sittingAddress,
-      childrenNumber: this.state.childrenNumber,
-      minAgeOfChildren: this.state.minAgeOfChildren,
-      status: 'PENDING',
-      totalPrice: this.state.totalPrice,
-    };
-
-    getOverlapSittingRequest(request)
-      .then((result) => {
-        // is overlap with other request
-        if (result.data.length > 0) {
-          this.setState({
-            noticeTitle: 'Yêu cầu trùng lặp',
-            noticeMessage: `Bạn có ${result.data.length} yêu cầu đã tạo với khoảng thời trên. Tạo yêu cầu trông trẻ sẽ mất phí. Bạn có chắc muốn tạo thêm?`,
-            showConfirm: true,
-            cancelAlert: 'Hủy',
-            confirmAlert: 'Tiếp tục',
-            overlapRequests: result.data,
-          });
-          //
-          this.AlertPro.open();
-        } else {
-          this.toRecommendScreen();
-        }
-      })
-      .catch((error) => {
-        if (error.response.status == 409) {
-          this.refs.toast.show(
-            'Không thể đặt yêu cầu cho ngày giờ ở quá khứ, vui lòng chọn lại.',
-            DURATION.LENGTH_LONG,
-          );
-        } else {
-          this.refs.toast.show(
-            'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
-            DURATION.LENGTH_LONG,
-          );
-        }
-      });
-  };
 
   getCircle = async () => {
     const { userId } = this.state;
@@ -273,6 +122,44 @@ class SearchSitter extends Component {
 
   close = () => {
     this.setState({ isModalVisible: false });
+  };
+
+  searchSitters = async () => {
+    const {
+      selectedCerts,
+      selectedSkills,
+      sittingAddress,
+      requiredSkills,
+      requiredCerts,
+    } = this.state;
+    const requiredSkillsPicked = selectedSkills.map((skill) => ({
+      skillId: skill,
+    }));
+    const requiredCertsPicked = selectedCerts.map((cert) => ({
+      certId: cert,
+    }));
+
+    console.log('SKILLS -------------', requiredSkillsPicked);
+    console.log('CERTS -------------', requiredCertsPicked);
+
+    const searchData = {
+      name: '',
+      skills:
+        requiredSkillsPicked.length > 0 ? requiredSkillsPicked : requiredSkills,
+      certs:
+        requiredCertsPicked.length > 0 ? requiredCertsPicked : requiredCerts,
+      baseAddress: sittingAddress,
+    };
+
+    await searchBabysitter(searchData).then(async (res) => {
+      if (res.status == 200) {
+        console.log('COUNT --------------', res.data.count);
+        console.log('RESSSS ----------------- ', res.data.sitters);
+        await this.setState({ listBabysitter: res.data.sitters });
+      }
+    });
+
+    this.toggleModalCreateRequest();
   };
 
   changeInviteStatus = (receiverId) => {
@@ -311,30 +198,6 @@ class SearchSitter extends Component {
     this.AlertPro.close();
   };
 
-  updateRequest = async () => {
-    const request = {
-      id: this.state.requestId,
-      createdUser: this.state.userId,
-      sittingDate: this.state.sittingDate,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      sittingAddress: this.state.sittingAddress,
-      childrenNumber: this.state.childrenNumber,
-      minAgeOfChildren: this.state.minAgeOfChildren,
-      status: 'PENDING',
-      totalPrice: this.state.totalPrice,
-    };
-
-    // console.log(request);
-    await updateRequest(request).then(() => {
-      this.props.navigation.navigate('Recommend', {
-        requestId: this.state.requestId,
-        request: request,
-        onGoBack: (requestId) => this.setState({ requestId: requestId }),
-      });
-    });
-  };
-
   getUserData = async () => {
     await retrieveToken().then((res) => {
       const { userId, roleId } = res;
@@ -354,220 +217,23 @@ class SearchSitter extends Component {
     this.updatePrice();
   };
 
-  calculate = async () => {
-    let childCounter = 0;
-    let minAge = 99;
-    const selectedChildren = [];
-    this.state.children.forEach((element) => {
-      if (element.checked) {
-        childCounter += 1;
-        if (minAge > element.age) minAge = element.age;
-
-        selectedChildren.push(element);
-      }
-    });
-
-    this.setState({
-      childrenNumber: childCounter,
-      minAgeOfChildren: minAge,
-      selectedChildren,
-    });
+  onSelectedSkillsChange = (selectedSkills) => {
+    this.setState({ selectedSkills });
   };
 
-  updatePrice = async () => {
-    if (
-      this.state.sittingDate == null ||
-      this.state.startTime == null ||
-      this.state.endTime == null ||
-      this.state.selectedChildren.length <= 0
-    ) {
-      this.setState({ totalPrice: 0 });
-      return;
-    }
-
-    let totalPrice = 0;
-
-    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
-    const isHolyday = this.isHolyday(sittingDate);
-
-    const officeHours = await this.getOfficeHours(); // khoảng thời gian trong giờ hành chính của request này (phút)
-    const OTHours = await this.getOTHours(); // khoảng thời gian ngoài giờ hành chính của request này (phút)
-    const totalDuration = officeHours + OTHours;
-    console.log(
-      'Duong: CreateRequestScreen -> updatePrice -> officeHours',
-      officeHours,
-    );
-    console.log(
-      'Duong: CreateRequestScreen -> updatePrice -> OTHours',
-      OTHours,
-    );
-    const officeHoursPercentage = officeHours / 60;
-    const OTHoursPercentage = OTHours / 60;
-    const totalDurationPercentage = totalDuration / 60;
-
-    this.state.selectedChildren.forEach((child) => {
-      if (child.age < 0.6) {
-        if (isHolyday) {
-          totalPrice +=
-            this.state.pricings[3].baseAmount *
-            this.state.pricings[3].holiday *
-            totalDurationPercentage;
-        } else {
-          totalPrice +=
-            this.state.pricings[3].baseAmount *
-            this.state.pricings[3].overtime *
-            OTHoursPercentage;
-
-          totalPrice +=
-            this.state.pricings[3].baseAmount * officeHoursPercentage;
-        }
-      } else if (child.age < 1.8) {
-        if (isHolyday) {
-          totalPrice +=
-            this.state.pricings[2].baseAmount *
-            this.state.pricings[2].holiday *
-            totalDurationPercentage;
-        } else {
-          totalPrice +=
-            this.state.pricings[2].baseAmount *
-            this.state.pricings[2].overtime *
-            OTHoursPercentage;
-
-          totalPrice +=
-            this.state.pricings[2].baseAmount * officeHoursPercentage;
-        }
-      } else if (child.age < 6) {
-        if (isHolyday) {
-          totalPrice +=
-            this.state.pricings[1].baseAmount *
-            this.state.pricings[1].holiday *
-            totalDurationPercentage;
-        } else {
-          totalPrice +=
-            this.state.pricings[1].baseAmount *
-            this.state.pricings[1].overtime *
-            OTHoursPercentage;
-
-          totalPrice +=
-            this.state.pricings[1].baseAmount * officeHoursPercentage;
-        }
-      }
-
-      this.setState({ totalPrice: Math.round(totalPrice) });
-      console.log(
-        'PHUC: SearchSitter -> updatePrice -> totalPrice',
-        totalPrice,
-      );
-    });
+  onSelectedCertsChange = (selectedCerts) => {
+    this.setState({ selectedCerts });
   };
 
-  getOfficeHours = async () => {
-    let officeHours = 0;
-
-    const startTime = moment(this.state.startTime, 'HH:mm');
-    const endTime = moment(this.state.endTime, 'HH:mm');
-    const officeHStart = moment(this.state.officeHourStart, 'HH:mm');
-    const officeHEnd = moment(this.state.officeHourEnd, 'HH:mm');
-
-    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
-    // Thứ 7, CN
-    if (sittingDate.day() == 0 || sittingDate.day() == 6) {
-      return officeHours;
-    }
-
-    if (
-      startTime.isSameOrAfter(officeHStart) &&
-      endTime.isSameOrBefore(officeHEnd)
-    ) {
-      officeHours = endTime.diff(startTime, 'minutes');
-      return officeHours;
-    }
-
-    if (startTime.isBefore(officeHStart) && endTime.isAfter(officeHEnd)) {
-      officeHours = officeHEnd.diff(officeHStart, 'minutes');
-      return officeHours;
-    }
-
-    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHStart)) {
-      officeHours = 0;
-      return officeHours;
-    }
-
-    if (startTime.isAfter(officeHEnd) && endTime.isAfter(officeHEnd)) {
-      officeHours = 0;
-      return officeHours;
-    }
-
-    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHEnd)) {
-      officeHours = endTime.diff(officeHStart, 'minutes');
-      return officeHours;
-    }
-
-    if (startTime.isAfter(officeHStart) && endTime.isAfter(officeHEnd)) {
-      officeHours = officeHEnd.diff(startTime, 'minutes');
-      return officeHours;
-    }
+  calAge = (dateOfBirth) => {
+    const born = this.getYear(dateOfBirth);
+    const now = moment().year();
+    return now - born;
   };
 
-  getOTHours = async () => {
-    let OTHours = 0;
-
-    const startTime = moment(this.state.startTime, 'HH:mm');
-    const endTime = moment(this.state.endTime, 'HH:mm');
-    const officeHStart = moment(this.state.officeHourStart, 'HH:mm');
-    const officeHEnd = moment(this.state.officeHourEnd, 'HH:mm');
-
-    const sittingDate = moment(this.state.sittingDate, 'YYYY-MM-DD');
-    // Thứ 7, CN
-    if (sittingDate.day() == 0 || sittingDate.day() == 6) {
-      OTHours = endTime.diff(startTime, 'minutes');
-      return OTHours;
-    }
-
-    if (
-      startTime.isSameOrAfter(officeHStart) &&
-      endTime.isSameOrBefore(officeHEnd)
-    ) {
-      return OTHours;
-    }
-
-    if (startTime.isBefore(officeHStart) && endTime.isAfter(officeHEnd)) {
-      OTHours += officeHStart.diff(startTime, 'minutes');
-
-      OTHours += endTime.diff(officeHEnd, 'minutes');
-      return OTHours;
-    }
-
-    if (
-      (startTime.isBefore(officeHStart) && endTime.isBefore(officeHStart)) ||
-      (startTime.isAfter(officeHEnd) && endTime.isAfter(officeHEnd))
-    ) {
-      OTHours += endTime.diff(startTime, 'minutes');
-      return OTHours;
-    }
-
-    if (startTime.isBefore(officeHStart) && endTime.isBefore(officeHEnd)) {
-      OTHours += officeHStart.diff(startTime, 'minutes');
-      return OTHours;
-    }
-
-    if (startTime.isAfter(officeHStart) && endTime.isAfter(officeHEnd)) {
-      OTHours += endTime.diff(officeHEnd, 'minutes');
-      return OTHours;
-    }
-  };
-
-  isHolyday = (date) => {
-    let result = false;
-    const sittingDate = date.format('DD/MM');
-    this.state.holidays.forEach((element) => {
-      if (sittingDate == element.date) {
-        result = true;
-        return;
-      }
-    });
-
-    return result;
+  getYear = (dateOfBirth) => {
+    const arr = dateOfBirth.split('-');
+    return arr[0];
   };
 
   render() {
@@ -581,6 +247,8 @@ class SearchSitter extends Component {
       startTime,
       endTime,
       request,
+      selectedSkills,
+      selectedCerts,
     } = this.state;
 
     return (
@@ -628,7 +296,7 @@ class SearchSitter extends Component {
         >
           <View
             style={{
-              flex: 0.5,
+              flex: 0.8,
               backgroundColor: 'white',
               borderTopRightRadius: 20,
               borderTopLeftRadius: 20,
@@ -637,349 +305,235 @@ class SearchSitter extends Component {
           >
             <ScrollView>
               <View style={{ marginHorizontal: 10 }}>
-                <View style={styles.detailContainerParent}>
-                  <TextInput
-                    style={styles.searchParent}
-                    onChangeText={async (text) => {
-                      this.searchFilter(text);
-                    }}
-                    placeholder="Nhập tên người giữ trẻ cần tìm"
-                  />
-                </View>
-                {this.state.data && this.state.data.length != 0 && (
+                {this.state.listBabysitter &&
+                this.state.listBabysitter.length > 0 ? (
                   <FlatList
-                    data={this.state.data}
+                    data={this.state.listBabysitter}
                     renderItem={({ item }) => (
-                      <ItemSearchSitter
-                        changeInviteStatus={this.changeInviteStatus}
-                        setRequestId={this.setRequestId}
-                        requestId={this.state.requestId}
-                        request={request}
-                        item={item}
-                      />
+                      <View>
+                        <View key={item.user.id} style={{ marginTop: 20 }}>
+                          <View style={styles.ItemSearchSitterItem}>
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row', flexGrow: 2 }}
+                            >
+                              <Image
+                                source={{ uri: item.user.image }}
+                                style={styles.sitterImage}
+                              />
+                              <View>
+                                <View style={styles.upperText}>
+                                  <MuliText style={styles.ItemSearchSitterName}>
+                                    {item.user.nickname} -{' '}
+                                    {this.calAge(item.user.dateOfBirth)}
+                                    tuổi
+                                  </MuliText>
+                                  {item.user.gender == 'MALE' && (
+                                    <Ionicons
+                                      name="ios-male"
+                                      size={18}
+                                      style={{
+                                        marginBottom: -3,
+                                        marginLeft: 5,
+                                      }}
+                                      color={colors.blueAqua}
+                                    />
+                                  )}
+                                  {item.user.gender == 'FEMALE' && (
+                                    <Ionicons
+                                      name="ios-female"
+                                      size={18}
+                                      style={{
+                                        marginBottom: -3,
+                                        marginLeft: 5,
+                                      }}
+                                      color={colors.pinkLight}
+                                    />
+                                  )}
+                                </View>
+                                <View style={styles.lowerText}>
+                                  <Ionicons
+                                    name="ios-star"
+                                    size={19}
+                                    style={{ marginLeft: 5 }}
+                                    color={colors.lightGreen}
+                                  />
+
+                                  <MuliText
+                                    style={
+                                      item.totalFeedback > 10
+                                        ? styles.green
+                                        : styles.red
+                                    }
+                                  >
+                                    {item.averageRating.toFixed(0)} (
+                                    {item.totalFeedback})
+                                  </MuliText>
+                                </View>
+                              </View>
+                            </TouchableOpacity>
+                            <View />
+                            <View
+                              style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <TouchableOpacity>
+                                <View
+                                  style={{
+                                    backgroundColor: colors.lightGreen,
+                                    margin: 5,
+                                    padding: 5,
+                                    borderRadius: 10,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  <MuliText
+                                    style={{ fontSize: 20, color: '#ffffff' }}
+                                  >
+                                    {' '}
+                                    +{' '}
+                                  </MuliText>
+                                </View>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
                     )}
-                    keyExtractor={(item) => item.user.id.toString()}
                   />
+                ) : (
+                  <View>
+                    <MuliText>no one been found</MuliText>
+                  </View>
                 )}
               </View>
             </ScrollView>
           </View>
         </Modal>
         <View style={styles.containerInformationRequest}>
-          <MuliText style={styles.headerTitle}>Trông trẻ</MuliText>
+          <MuliText style={styles.headerTitle}>Kỹ năng & bằng cấp</MuliText>
           <View>
-            <View style={styles.inputDay}>
-              <Ionicons
-                name="ios-calendar"
-                size={20}
-                color={colors.lightGreen}
-                style={{
-                  marginTop: 10,
+            <View>
+              <MuliText style={styles.mediumTitle}>Kỹ Năng</MuliText>
+              <MultiSelect
+                hideTags
+                items={this.state.skills}
+                uniqueKey="id"
+                ref={(component) => {
+                  this.multiSelect = component;
                 }}
-              />
-              <DatePicker
-                style={styles.pickedDate}
-                date={sittingDate}
-                mode="date"
-                placeholder="Ngày"
-                format="YYYY-MM-DD"
-                minDate={moment().format('YYYY-MM-DD')}
-                maxDate="2019-12-30"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateInput: {
-                    borderWidth: 0,
-                  },
-                  placeholderText: {
-                    fontSize: 15,
-                    color: colors.lightGreen,
-                    marginRight: 75,
-                  },
-                  dateText: {
-                    fontSize: 15,
-                    color: colors.lightGreen,
-                  },
-                }}
-                onDateChange={async (date) => {
-                  await this.setState({ sittingDate: date });
-                  this.updatePrice();
-                }}
-                showIcon={false}
+                onSelectedItemsChange={this.onSelectedSkillsChange}
+                selectedItems={selectedSkills}
+                selectText="Vui lòng chọn"
+                searchInputPlaceholderText="Tìm kiếm ..."
+                onChangeInput={(text) => console.log(text)}
+                altFontFamily="muli"
+                tagRemoveIconColor="#CCC"
+                tagBorderColor="#CCC"
+                tagTextColor="#CCC"
+                selectedItemTextColor="#CCC"
+                selectedItemIconColor="#CCC"
+                itemTextColor="#000"
+                displayKey="vname"
+                searchInputStyle={{ color: '#CCC' }}
+                submitButtonColor={colors.darkGreenTitle}
+                submitButtonText="Chọn"
               />
             </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-timer"
-                size={20}
-                color={colors.gray}
+            {this.state.selectedSkills &&
+            this.state.selectedSkills.length > 0 ? (
+              <View
                 style={{
-                  marginTop: 10,
+                  flexDirection: 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
                 }}
-              />
-
-              <DatePicker
-                style={styles.pickedTime}
-                date={startTime}
-                mode="time"
-                placeholder="Giờ bắt đầu"
-                format="HH:mm"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                // androidMode="spinner"
-                customStyles={{
-                  dateInput: {
-                    borderWidth: 0,
-                  },
-                  placeholderText: {
-                    fontSize: 15,
-                    color: colors.gray,
-                    marginRight: 30,
-                  },
-                  dateText: {
-                    fontSize: 15,
-                    color: 'black',
-                  },
-                }}
-                is24Hour
-                onDateChange={async (time) => {
-                  await this.setState({ startTime: time });
-                  console.log(this.state.startTime);
-                  this.updatePrice();
-                }}
-                showIcon={false}
-              />
-            </View>
-
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-time"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginTop: 10,
-                }}
-              />
-              <DatePicker
-                style={styles.pickedTime}
-                // minDate={this.state.startTime}
-                date={endTime}
-                mode="time"
-                placeholder="Giờ kết thúc"
-                format="HH:mm"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                // androidMode="spinner"
-                customStyles={{
-                  dateInput: {
-                    borderWidth: 0,
-                  },
-                  placeholderText: {
-                    fontSize: 15,
-                    color: colors.gray,
-                    marginRight: 30,
-                  },
-                  dateText: {
-                    fontSize: 15,
-                    color: 'black',
-                  },
-                }}
-                is24Hour
-                onDateChange={async (time) => {
-                  await this.setState({ endTime: time });
-                  console.log(this.state.endTime);
-                  this.updatePrice();
-                }}
-                showIcon={false}
-                // minuteInterval={15}
-              />
-            </View>
-          </View>
-          <View style={styles.inputAddress}>
-            <Ionicons
-              name="ios-home"
-              size={20}
-              color={colors.gray}
-              style={{
-                marginBottom: 5,
-              }}
-            />
-            <MuliText style={styles.contentInformation}>
-              Địa chỉ: {this.state.sittingAddress}
-            </MuliText>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            {this.state.children != null ? (
-              <View style={styles.detailContainerChild}>
-                <MuliText style={styles.headerTitleChild}>
-                  Trẻ của bạn:
-                </MuliText>
-                <View style={styles.detailPictureContainer}>
-                  {this.state.children.map((item) => (
-                    <TouchableOpacity
-                      key={item.id}
-                      onPress={() => {
-                        this.toggleHidden(item);
-                      }}
-                    >
-                      <View
-                        style={{
-                          alignContent: 'space-between',
-                          flexDirection: 'row',
-                          marginLeft: 40,
-                        }}
-                      >
-                        <View>
-                          <Image
-                            source={{ uri: item.image }}
-                            style={{
-                              opacity:
-                                item.checked == null || item.checked == false
-                                  ? 0.1
-                                  : null,
-                              width: 60,
-                              height: 60,
-                              borderRadius: 120 / 2,
-                              overflow: 'hidden',
-                            }}
-                          />
-                          <View>
-                            <View style={{ alignItems: 'center' }}>
-                              <MuliText
-                                style={{
-                                  color:
-                                    item.checked == null ||
-                                    item.checked == false
-                                      ? colors.gray
-                                      : 'black',
-                                }}
-                              >
-                                {item.name}
-                              </MuliText>
-                              <View style={{ alignContent: 'center' }}>
-                                <MuliText
-                                  style={{
-                                    color:
-                                      item.checked == null ||
-                                      item.checked == false
-                                        ? colors.gray
-                                        : 'black',
-                                  }}
-                                >
-                                  {item.age} tuổi
-                                </MuliText>
-                                <CheckBox
-                                  onPress={() => {
-                                    this.toggleHidden(item);
-                                  }}
-                                  style={{
-                                    marginTop: 5,
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 20 / 2,
-                                    borderColor:
-                                      item.checked == null ||
-                                      item.checked == false
-                                        ? colors.gray
-                                        : 'black',
-                                    backgroundColor:
-                                      item.checked == null ||
-                                      item.checked == false
-                                        ? 'white'
-                                        : 'black',
-                                  }}
-                                  checked={
-                                    !(
-                                      item.checked == null ||
-                                      item.checked == false
-                                    )
-                                  }
-                                />
-                              </View>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+              >
+                {this.state.selectedSkills.map((item) => (
+                  <TouchableOpacity key={item}>
+                    <View style={styles.smallbutton}>
+                      <MuliText style={{ color: '#ffffff' }}>
+                        {
+                          this.state.skills.find((skill) => skill.id == item)
+                            .vname
+                        }
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
+                ))}
               </View>
             ) : (
               <View />
             )}
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-happy"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginBottom: 5,
-                }}
-              />
-              <MuliText style={styles.contentInformation}>
-                Số trẻ: {this.state.childrenNumber}{' '}
-              </MuliText>
-            </View>
-            <View style={styles.input}>
-              <Ionicons
-                name="ios-heart-empty"
-                size={20}
-                color={colors.gray}
-                style={{
-                  marginBottom: 5,
-                }}
-              />
-              <MuliText style={styles.contentInformation}>
-                Nhỏ tuổi nhất:{' '}
-                {this.state.minAgeOfChildren == 99
-                  ? 'N/A'
-                  : this.state.minAgeOfChildren}
-              </MuliText>
-            </View>
-          </View>
           <View>
-            <MuliText style={styles.headerTitle}>Thanh toán</MuliText>
-            <View style={styles.priceContainer}>
-              <MuliText style={styles.contentInformation}>
-                Tổng tiền thanh toán:
-              </MuliText>
-              <MuliText style={styles.totalPrice}>
-                {formater(this.state.totalPrice)} Đồng
-              </MuliText>
+            <View>
+              <MuliText style={styles.mediumTitle}>Bằng cấp</MuliText>
+              <MultiSelect
+                hideTags
+                items={this.state.certs}
+                uniqueKey="id"
+                ref={(component) => {
+                  this.multiSelect = component;
+                }}
+                onSelectedItemsChange={this.onSelectedCertsChange}
+                selectedItems={selectedCerts}
+                selectText="Vui lòng chọn"
+                searchInputPlaceholderText="Tìm kiếm ..."
+                onChangeInput={(text) => console.log(text)}
+                altFontFamily="muli"
+                tagRemoveIconColor="#CCC"
+                tagBorderColor="#CCC"
+                tagTextColor="#CCC"
+                selectedItemTextColor="#CCC"
+                selectedItemIconColor="#CCC"
+                itemTextColor="#000"
+                displayKey="vname"
+                searchInputStyle={{ color: '#CCC' }}
+                submitButtonColor={colors.darkGreenTitle}
+                submitButtonText="Chọn"
+              />
             </View>
-          </View>
-          {this.state.requestId == 0 ? (
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={() => {
-                  // this.toggleModalCreateRequest();
-                  this.beforeSearch();
-                  //   this.beforeRecommend();
+            {this.state.selectedCerts && this.state.selectedCerts.length > 0 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
                 }}
               >
-                <MuliText style={{ color: 'white', fontSize: 11 }}>
-                  Kế tiếp
-                </MuliText>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                marginHorizontal: 15,
-                marginTop: 30,
-                alignItems: 'center',
-              }}
+                {this.state.selectedCerts.map((item) => (
+                  <TouchableOpacity key={item}>
+                    <View style={styles.smallbutton}>
+                      <MuliText style={{ color: '#ffffff' }}>
+                        {
+                          this.state.certs.find((skill) => skill.id == item)
+                            .vname
+                        }
+                      </MuliText>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <View />
+            )}
+          </View>
+        </View>
+        <View style={{ marginTop: 30 }}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={this.searchSitters}
+              // onPress={this.getSkillList}
             >
-              <MuliText style={{ color: colors.gray, fontSize: 12 }}>
-                Bạn không thể thay đổi yêu cầu giữ trẻ khi đã mời bảo mẫu
+              <MuliText style={{ color: 'white', fontSize: 11 }}>
+                Tìm kiếm
               </MuliText>
-            </View>
-          )}
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     );
@@ -1007,8 +561,6 @@ const styles = StyleSheet.create({
   inputDay: {
     flex: 1,
     flexDirection: 'row',
-    borderWidth: 0,
-    borderBottomWidth: 2,
     marginHorizontal: 15,
     marginTop: 15,
     borderColor: colors.lightGreen,
@@ -1113,5 +665,59 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 10,
     marginBottom: 20,
+  },
+  smallbutton: {
+    flex: 1,
+    height: 30,
+    backgroundColor: colors.lightGreen,
+    margin: 8,
+    padding: 5,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#2E272B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 1,
+  },
+  mediumTitle: {
+    marginHorizontal: 10,
+    marginTop: 20,
+    marginBottom: 20,
+    fontSize: 15,
+    color: 'black',
+    fontWeight: '500',
+  },
+  inviteButton: {
+    marginTop: 14,
+  },
+  bsitterName: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: colors.darkGreenTitle,
+  },
+  sitterImage: {
+    width: 55,
+    height: 55,
+    borderRadius: 20,
+    resizeMode: 'contain',
+  },
+  bsitterContainer: {
+    marginVertical: 8,
+  },
+  bsitterItem: {
+    flexDirection: 'row',
+  },
+  upperText: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    marginLeft: 10,
+  },
+  lowerText: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  ItemSearchSitterItem: {
+    flexDirection: 'row',
   },
 });
