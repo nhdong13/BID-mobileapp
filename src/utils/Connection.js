@@ -1,7 +1,7 @@
 import { HOST_ENDPOINT, HOST_ENDPOINT_COMPANY } from 'react-native-dotenv';
 
-const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
-// const url = `http://${HOST_ENDPOINT_COMPANY}:5000/api/v1`;
+// const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
+const url = `http://${HOST_ENDPOINT_COMPANY}:5000/api/v1`;
 
 const apiUrl = {
   baseUrl: `${url}/`,

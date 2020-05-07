@@ -5,7 +5,7 @@ import { MuliText } from 'components/StyledText';
 import { withNavigation } from 'react-navigation';
 import colors from 'assets/Color';
 
-export class CircleItem extends Component {
+export class CircleSisterItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -27,7 +27,7 @@ export class CircleItem extends Component {
 
     return (
       <View>
-        {item.isParent ? (
+        {!item.isParent ? (
           <View
             key={item.id}
             style={{
@@ -66,4 +66,4 @@ export class CircleItem extends Component {
   }
 }
 
-export default withNavigation(CircleItem);
+export default withNavigation(CircleSisterItem);

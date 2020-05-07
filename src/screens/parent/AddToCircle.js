@@ -25,6 +25,7 @@ export default class AddToCircle extends Component {
       code: null,
       friend: null,
       userImage: '',
+      isParent: true,
     };
   }
 
@@ -70,7 +71,7 @@ export default class AddToCircle extends Component {
   }
 
   addToCircle() {
-    create(this.state.ownerId, this.state.friend.userId)
+    create(this.state.ownerId, this.state.friend.userId, this.state.isParent)
       .then((result) => {
         this.setState((prevState) => ({
           friend: Object.assign(prevState.friend, { isInvited: true }),

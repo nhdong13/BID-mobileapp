@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { MuliText } from 'components/StyledText';
 import DatePicker from 'react-native-datepicker';
-import { Ionicons } from '@expo/vector-icons/';
+import { Ionicons, AntDesign } from '@expo/vector-icons/';
 import Api from 'api/api_helper';
 import colors from 'assets/Color';
 import {
@@ -22,7 +22,8 @@ import {
 } from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast from 'react-native-root-toast';
+
 import AlertPro from 'react-native-alert-pro';
 import Modal from 'react-native-modal';
 import { getCircle } from 'api/circle.api';
@@ -36,6 +37,7 @@ import { getUser } from 'api/user.api';
 import { getCerts } from 'api/cert.api';
 import { getSkills } from 'api/skill.api';
 import MultiSelect from 'react-native-multiple-select';
+import { create } from 'api/circle.api';
 // const { width, height } = Dimensions.get('window');
 
 class SearchSitter extends Component {
@@ -80,6 +82,8 @@ class SearchSitter extends Component {
       selectedCerts: [],
       requiredSkills: [{ skillId: 1 }],
       requiredCerts: [{ certId: 1 }],
+      isParent: false,
+      circle: [],
     };
   }
 
@@ -87,10 +91,14 @@ class SearchSitter extends Component {
     await this.getUserData();
 
     getUser().then((parent) => {
+      // console.log('OWNED CIRCLES ------------------- ', parent.ownedCircles);
+      // console.log('JOINED CIRCLES ------------------- ', parent.joinedCircles);
       this.setState({
         loggedUser: parent,
+        userId: parent.id,
         sittingAddress: parent.address,
         children: parent.parent.children,
+        circle: parent.ownedCircles,
       });
     });
 
@@ -115,9 +123,7 @@ class SearchSitter extends Component {
           //   friendSitter: result.data.friendSitter,
         });
       })
-      .catch((error) => {
-        console.log('Duong: CircleScreens -> getCircle -> error', error);
-      });
+      .catch((error) => {});
   };
 
   close = () => {
@@ -139,9 +145,6 @@ class SearchSitter extends Component {
       certId: cert,
     }));
 
-    console.log('SKILLS -------------', requiredSkillsPicked);
-    console.log('CERTS -------------', requiredCertsPicked);
-
     const searchData = {
       name: '',
       skills:
@@ -153,21 +156,24 @@ class SearchSitter extends Component {
 
     await searchBabysitter(searchData).then(async (res) => {
       if (res.status == 200) {
-        console.log('COUNT --------------', res.data.count);
-        console.log('RESSSS ----------------- ', res.data.sitters);
-        await this.setState({ listBabysitter: res.data.sitters });
+        const data = res.data.sitters;
+
+        const ids = [this.state.userId];
+
+        const results = res.data.sitters.filter((id) => {
+          return id.user.joinedCircles.every((it) => {
+            return this.state.userId !== it.ownerId;
+          });
+        });
+
+        await this.setState({ listBabysitter: results });
       }
     });
 
-    this.toggleModalCreateRequest();
-  };
+    // console.log('CIRCLE --------------- ', this.state.listBabysitter);
+    //
 
-  changeInviteStatus = (receiverId) => {
-    this.setState((prevState) => ({
-      data: prevState.data.map((el) =>
-        el.userId == receiverId ? Object.assign(el, { isInvited: true }) : el,
-      ),
-    }));
+    this.toggleModalCreateRequest();
   };
 
   setRequestId = (requestId) => {
@@ -234,6 +240,49 @@ class SearchSitter extends Component {
   getYear = (dateOfBirth) => {
     const arr = dateOfBirth.split('-');
     return arr[0];
+  };
+
+  changeInviteStatus = (receiverId) => {
+    this.setState({ ['invitedUser_' + receiverId]: true });
+  };
+
+  addSitterToCircle = (userId) => {
+    this.changeInviteStatus(userId);
+    this.addToCircle(userId);
+  };
+
+  showToast = (message) => {
+    message
+      ? Toast.show(message, {
+          duration: Toast.durations.LONG,
+          position: 20,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          onShow: () => {
+            // calls on toast\`s appear animation start
+          },
+          onShown: () => {
+            // calls on toast\`s appear animation end.
+          },
+          onHide: () => {
+            // calls on toast\`s hide animation start.
+          },
+          onHidden: () => {
+            // calls on toast\`s hide animation end.
+          },
+        })
+      : console.log('no message');
+  };
+
+  addToCircle = async (sitterId) => {
+    this.showToast('Member successfully added to circle');
+    if (this.state.userId && sitterId) {
+      await create(this.state.userId, sitterId, this.state.isParent);
+    } else {
+      this.showToast('Add member to circle faild, Please try again');
+    }
   };
 
   render() {
@@ -324,8 +373,7 @@ class SearchSitter extends Component {
                                 <View style={styles.upperText}>
                                   <MuliText style={styles.ItemSearchSitterName}>
                                     {item.user.nickname} -{' '}
-                                    {this.calAge(item.user.dateOfBirth)}
-                                    tuổi
+                                    {this.calAge(item.user.dateOfBirth)} tuổi
                                   </MuliText>
                                   {item.user.gender == 'MALE' && (
                                     <Ionicons
@@ -378,25 +426,52 @@ class SearchSitter extends Component {
                                 alignItems: 'center',
                               }}
                             >
-                              <TouchableOpacity>
-                                <View
-                                  style={{
-                                    backgroundColor: colors.lightGreen,
-                                    margin: 5,
-                                    padding: 5,
-                                    borderRadius: 10,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                  }}
+                              {!this.state['invitedUser_' + item.user.id] && (
+                                <TouchableOpacity
+                                  onPress={() =>
+                                    this.addSitterToCircle(item.user.id)
+                                  }
                                 >
-                                  <MuliText
-                                    style={{ fontSize: 20, color: '#ffffff' }}
+                                  <View
+                                    style={{
+                                      margin: 5,
+                                      padding: 5,
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}
                                   >
-                                    {' '}
-                                    +{' '}
-                                  </MuliText>
-                                </View>
-                              </TouchableOpacity>
+                                    <AntDesign
+                                      name="pluscircle"
+                                      size={20}
+                                      color={colors.gray}
+                                      style={{
+                                        marginTop: 5,
+                                      }}
+                                    />
+                                  </View>
+                                </TouchableOpacity>
+                              )}
+                              {this.state['invitedUser_' + item.user.id] && (
+                                <TouchableOpacity disabled={true}>
+                                  <View
+                                    style={{
+                                      margin: 5,
+                                      padding: 5,
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}
+                                  >
+                                    <AntDesign
+                                      name="check"
+                                      size={20}
+                                      color={colors.lightGreen}
+                                      style={{
+                                        marginTop: 5,
+                                      }}
+                                    />
+                                  </View>
+                                </TouchableOpacity>
+                              )}
                             </View>
                           </View>
                         </View>
@@ -405,7 +480,23 @@ class SearchSitter extends Component {
                   />
                 ) : (
                   <View>
-                    <MuliText>no one been found</MuliText>
+                    <View
+                      style={{ padding: 10, margin: 20, alignItems: 'center' }}
+                    >
+                      <MuliText style={styles.headerTitle}>
+                        Không có người giữ trẻ nào phù hợp với yêu cầu, Vui lòng
+                        thử lại sau
+                      </MuliText>
+
+                      <AntDesign
+                        name="frown"
+                        size={40}
+                        color={colors.lightGreen}
+                        style={{
+                          marginTop: 45,
+                        }}
+                      />
+                    </View>
                   </View>
                 )}
               </View>

@@ -405,9 +405,7 @@ class ParentHomeScreen extends Component {
             <TouchableOpacity
               onPress={() => {
                 this.toggleModalCreateRequest();
-                navigation.navigate('SearchSitter', {
-                  selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
-                });
+                navigation.navigate('SearchSitter');
               }}
             >
               <View style={{ flexDirection: 'row' }}>

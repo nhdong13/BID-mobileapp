@@ -23,7 +23,7 @@ export async function getCircle(userId) {
   return response;
 }
 
-export async function create(ownerId, friendId) {
+export async function create(ownerId, friendId, isParent) {
   const { token } = await retrieveToken();
   let trimpedToken = '';
   if (token) trimpedToken = token.replace(/['"]+/g, '');
@@ -36,7 +36,11 @@ export async function create(ownerId, friendId) {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `Bearer ${trimpedToken}`,
     },
-    data: qs.stringify({ ownerId: ownerId, friendId: friendId }),
+    data: qs.stringify({
+      ownerId: ownerId,
+      friendId: friendId,
+      isParent: isParent,
+    }),
   };
 
   const response = await axios(options);

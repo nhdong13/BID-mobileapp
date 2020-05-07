@@ -25,7 +25,7 @@ import {
 } from 'api/sittingRequest.api';
 import { CheckBox } from 'native-base';
 import { formater } from 'utils/MoneyFormater';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast from 'react-native-root-toast';
 import AlertPro from 'react-native-alert-pro';
 import { getPricings } from 'api/pricing.api';
 import { getHolidays } from 'api/holiday.api';
@@ -205,6 +205,31 @@ class CreateRequestScreen extends Component {
     return descriptions;
   };
 
+  showToast = (message) => {
+    message
+      ? Toast.show(message, {
+          duration: Toast.durations.LONG,
+          position: 20,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          onShow: () => {
+            // calls on toast\`s appear animation start
+          },
+          onShown: () => {
+            // calls on toast\`s appear animation end.
+          },
+          onHide: () => {
+            // calls on toast\`s hide animation start.
+          },
+          onHidden: () => {
+            // calls on toast\`s hide animation end.
+          },
+        })
+      : console.log('no message');
+  };
+
   getSkillList = () => {
     const { skills, selectedSkills, selectedCerts } = this.state;
 
@@ -224,28 +249,34 @@ class CreateRequestScreen extends Component {
 
   beforeRecommend = () => {
     if (this.state.startTime == null || this.state.endTime == null) {
-      this.refs.toast.show(
-        'Vui lòng chọn thời gian trông trẻ',
-        // DURATION.LENGTH_LONG,
-      );
+      // this.refs.toast.show(
+      //   'Vui lòng chọn thời gian trông trẻ',
+      //   // DURATION.LENGTH_LONG,
+      // );
+
+      this.showToast('Vui lòng chọn thời gian trông trẻ');
       return;
     }
 
     const start = moment(this.state.startTime, 'HH:mm');
     const end = moment(this.state.endTime, 'HH:mm').subtract(1, 'hour');
     if (end.isSameOrBefore(start)) {
-      this.refs.toast.show(
+      // this.refs.toast.show(
+      //   'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
+      //   // DURATION.LENGTH_LONG,
+      // );
+      this.showToast(
         'Thời gian kết thúc phải cách thời gian bắt đầu ít nhất 1 tiếng',
-        // DURATION.LENGTH_LONG,
       );
       return;
     }
 
     if (this.state.childrenNumber == 0) {
-      this.refs.toast.show(
-        'Vui lòng chọn ít nhất một trẻ',
-        DURATION.LENGTH_LONG,
-      );
+      // this.refs.toast.show(
+      //   'Vui lòng chọn ít nhất một trẻ',
+      //   DURATION.LENGTH_LONG,
+      // );
+      this.showToast('Vui lòng chọn ít nhất một trẻ');
       return;
     }
 
@@ -293,15 +324,19 @@ class CreateRequestScreen extends Component {
       })
       .catch((error) => {
         if (error.response.status == 409) {
-          this.refs.toast.show(
+          // this.refs.toast.show(
+          //   'Không thể đặt yêu cầu cho ngày giờ ở quá khứ, vui lòng chọn lại.',
+          //   DURATION.LENGTH_LONG,
+          // );
+          this.showToast(
             'Không thể đặt yêu cầu cho ngày giờ ở quá khứ, vui lòng chọn lại.',
-            DURATION.LENGTH_LONG,
           );
         } else {
-          this.refs.toast.show(
-            'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
-            DURATION.LENGTH_LONG,
-          );
+          // this.refs.toast.show(
+          //   'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+          //   DURATION.LENGTH_LONG,
+          // );
+          this.showToast('Đã có lỗi xảy ra. Vui lòng thử lại sau.');
         }
       });
   };
@@ -688,7 +723,6 @@ class CreateRequestScreen extends Component {
 
     return (
       <ScrollView>
-        <Toast ref="toast" position="top" />
         <AlertPro
           ref={(ref) => {
             this.AlertPro = ref;

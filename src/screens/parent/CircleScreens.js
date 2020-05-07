@@ -14,6 +14,7 @@ import colors from 'assets/Color';
 import { getCircle } from 'api/circle.api';
 import { retrieveToken } from 'utils/handleToken';
 import CircleItem from 'screens/parent/CircleItem';
+import CircleSitterItem from 'screens/parent/CircleSitterItem';
 import CircleHiredSitter from 'screens/parent/CircleHiredSitter';
 import CircleFriendSitter from 'screens/parent/CircleFriendSitter';
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -28,7 +29,8 @@ class CircleScreens extends Component {
       hiredSitter: [],
       friendSitter: [],
       hidedCircle: true,
-      hidedHiredSitter: true,
+      hidedSitterCircle: true,
+      hidedHiredSitter: false,
       hidedFriendSitter: true,
       refreshing: false,
     };
@@ -56,8 +58,22 @@ class CircleScreens extends Component {
 
     getCircle(userId)
       .then((result) => {
+        const destructureCircle =
+          result.data.circle && result.data.circle.length > 0
+            ? result.data.circle.map((item) => {
+                const user = {
+                  isParent: item.isParent,
+                  id: item.friend.id,
+                  image: item.friend.image,
+                  nickname: item.friend.nickname,
+                };
+                return user;
+              })
+            : [];
+        const circle = this.getUnique(destructureCircle, 'id');
         this.setState({
-          circle: result.data.circle,
+          // circle: circle,
+          circle: circle,
           hiredSitter: result.data.hiredSitter,
           friendSitter: result.data.friendSitter,
         });
@@ -65,6 +81,20 @@ class CircleScreens extends Component {
       .catch((error) => {
         console.log('Duong: CircleScreens -> getCircle -> error', error);
       });
+  };
+
+  getUnique = (arr, comp) => {
+    const unique = arr
+      .map((e) => e[comp])
+
+      // store the keys of the unique objects
+      .map((e, i, final) => final.indexOf(e) === i && i)
+
+      // eliminate the dead keys & store unique objects
+      .filter((e) => arr[e])
+      .map((e) => arr[e]);
+
+    return unique;
   };
 
   _onRefresh = () => {
@@ -77,6 +107,14 @@ class CircleScreens extends Component {
       this.setState({ hidedCircle: false });
     } else {
       this.setState({ hidedCircle: true });
+    }
+  }
+
+  hidedSitterCircle() {
+    if (this.state.hidedSitterCircle) {
+      this.setState({ hidedSitterCircle: false });
+    } else {
+      this.setState({ hidedSitterCircle: true });
     }
   }
 
@@ -124,7 +162,7 @@ class CircleScreens extends Component {
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
-                Những phụ huynh mà tôi biết ({this.state.circle.length})
+                Phụ huynh trong vòng tròn tin tưởng ({this.state.circle.length})
               </MuliText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -153,7 +191,7 @@ class CircleScreens extends Component {
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
-                Những phụ huynh mà tôi biết ({this.state.circle.length})
+                Phụ huynh trong vòng tròn tin tưởng ({this.state.circle.length})
               </MuliText>
             </View>
             <TouchableOpacity
@@ -181,13 +219,85 @@ class CircleScreens extends Component {
                 horizontal={true}
                 data={this.state.circle}
                 renderItem={({ item }) => <CircleItem item={item} />}
-                keyExtractor={(item) => item.friend.user.id.toString()}
+                keyExtractor={(item) => item.id.toString()}
               />
             )}
             {/* End Item chi tiết */}
           </View>
         )}
         {/* End item */}
+
+        {this.state.circle.length > 0 ? (
+          <View style={styles.firstHeaderContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                this.hidedSitterCircle();
+              }}
+              style={{ flexDirection: 'row' }}
+            >
+              <Ionicons
+                name="ios-person"
+                size={24}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Người giữ trẻ trong vòng tròn tin tưởng (
+                {this.state.circle.length})
+              </MuliText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.circleItem}
+              onPress={() => this.props.navigation.navigate('SearchSitter')}
+            >
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>
+                Thêm
+              </MuliText>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.firstHeaderContainer}>
+            <View style={{ flexDirection: 'row' }}>
+              <Ionicons
+                name="ios-person"
+                size={24}
+                style={{ marginBottom: -4, marginLeft: 20, marginTop: 13 }}
+                color={colors.darkGreenTitle}
+              />
+              <MuliText style={styles.headerText}>
+                Người giữ trẻ trong vòng tròn tin tưởng (
+                {this.state.circle.length})
+              </MuliText>
+            </View>
+            <TouchableOpacity
+              style={styles.circleItem}
+              onPress={() =>
+                this.props.navigation.navigate('AddToCircle', {
+                  ownerId: this.state.userId,
+                })
+              }
+            >
+              <MuliText style={{ color: colors.done, fontSize: 11 }}>
+                Thêm
+              </MuliText>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {this.state.hidedSitterCircle && this.state.circle.length > 0 && (
+          <View style={styles.itemContainer}>
+            {/* Item chi tiết */}
+            {this.state.circle.length > 0 && (
+              <FlatList
+                horizontal={true}
+                data={this.state.circle}
+                renderItem={({ item }) => <CircleSitterItem item={item} />}
+                keyExtractor={(item) => item.id.toString()}
+              />
+            )}
+            {/* End Item chi tiết */}
+          </View>
+        )}
 
         {/* Header người giữ trẻ đã thuê */}
         {this.state.hiredSitter.length > 0 && (

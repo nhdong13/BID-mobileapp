@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { MuliText } from 'components/StyledText';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { recommend } from 'api/sittingRequest.api';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Bsitter from 'screens/Recommend/BsitterItem';
@@ -275,20 +275,59 @@ export default class RecommendScreen extends Component {
               {loading ? (
                 <ActivityIndicator size="large" />
               ) : (
-                <MuliText
-                  style={{
-                    marginTop: 50,
-                    color: colors.gray,
-                    fontSize: 25,
-                    marginHorizontal: 50,
-                  }}
-                >
-                  Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của bạn.
-                  Vui lòng thử lại sau một khoảng thời gian
-                </MuliText>
+                <View style={{ padding: 10, margin: 20, alignItems: 'center' }}>
+                  <MuliText
+                    style={{
+                      marginTop: 50,
+                      color: colors.gray,
+                      fontSize: 25,
+                      marginHorizontal: 50,
+                    }}
+                  >
+                    Không tìm thấy người giữ trẻ phù hợp với lịch giữ trẻ của
+                    bạn. Vui lòng thử lại sau một khoảng thời gian
+                  </MuliText>
+                  <AntDesign
+                    name="frown"
+                    size={40}
+                    color={colors.calendarHeader}
+                    style={{
+                      marginTop: 45,
+                    }}
+                  />
+
+                  <View style={{ marginTop: 20 }}>
+                    <TouchableOpacity
+                      onPress={() => this.props.navigation.navigate('Home')}
+                    >
+                      <MuliText
+                        style={{
+                          fontSize: 15,
+                          marginTop: 20,
+                          color: colors.ongoing,
+                        }}
+                      >
+                        Quay về trang chủ
+                      </MuliText>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               )}
             </View>
           )}
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Home')}
+          >
+            <MuliText
+              style={{
+                fontSize: 15,
+                marginTop: 20,
+                color: colors.ongoing,
+              }}
+            >
+              Quay về trang chủ
+            </MuliText>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
