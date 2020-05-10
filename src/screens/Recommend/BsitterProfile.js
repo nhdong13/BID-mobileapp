@@ -89,6 +89,7 @@ export default class BsitterProfile extends Component {
     if (sitterId != 0 && requestId != 0 && requestId) {
       const data = await getProfileByRequest(sitterId, requestId);
       console.log('testo --------------', data.user.sitterSkills);
+      console.log('testo --------------', data.user.sitterCerts);
       this.setState({
         sitter: data,
         user: data.user,
@@ -103,6 +104,7 @@ export default class BsitterProfile extends Component {
     if (sitterId != 0) {
       const data = await getProfile(sitterId);
       console.log('testo2 --------------', data.user.sitterSkills);
+      console.log('testo2 --------------', data.user.sitterCerts);
       this.setState({
         sitter: data,
         user: data.user,
@@ -370,7 +372,7 @@ export default class BsitterProfile extends Component {
                     ))}
                   {this.state.certs &&
                     this.state.certs.length > 0 &&
-                    this.state.certs.map((item, index) => (
+                    this.state.certs.map((item) => (
                       <TouchableOpacity key={item.certId}>
                         <View style={styles.smallbutton}>
                           <MuliText style={{ color: colors.lightGreen }}>

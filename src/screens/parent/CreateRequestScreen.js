@@ -123,10 +123,12 @@ class CreateRequestScreen extends Component {
   }
 
   onSelectedSkillsChange = (selectedSkills) => {
+    this.updatePrice();
     this.setState({ selectedSkills });
   };
 
   onSelectedCertsChange = (selectedCerts) => {
+    this.updatePrice();
     this.setState({ selectedCerts });
   };
 
@@ -361,9 +363,11 @@ class CreateRequestScreen extends Component {
     const requiredSkillsPicked = selectedSkills.map((skill) => ({
       skillId: skill,
     }));
+
     const requiredCertsPicked = selectedCerts.map((cert) => ({
       certId: cert,
     }));
+
     const childrenDescription = JSON.stringify(this.getChildrenDescriptions());
 
     const request = {
@@ -534,8 +538,50 @@ class CreateRequestScreen extends Component {
         }
       }
 
+      const { selectedCerts, selectedSkills } = this.state;
+
+      const skillArr = this.state.skills.filter((item) =>
+        selectedSkills.includes(item.id),
+      );
+
+      const certArr = this.state.certs.filter((item) =>
+        selectedCerts.includes(item.id),
+      );
+
+      const skillsPrice = this.skillPriceAdditional(
+        skillArr,
+        this.state.pricings[4].baseAmount,
+      );
+
+      totalPrice += skillsPrice;
+
+      const certsPrice = this.certPriceAdditional(
+        certArr,
+        this.state.pricings[5].baseAmount,
+      );
+
+      totalPrice += certsPrice;
+
       this.setState({ totalPrice: Math.round(totalPrice) });
     });
+  };
+
+  skillPriceAdditional = (arrSkills, baseValue) => {
+    let additionalPrice = 0;
+    if (arrSkills && arrSkills.length > 0) {
+      arrSkills.forEach((item) => (additionalPrice += baseValue * item.point));
+    }
+
+    return additionalPrice;
+  };
+
+  certPriceAdditional = (arrCerts, baseValue) => {
+    let additionalPrice = 0;
+    if (arrCerts && arrCerts.length > 0) {
+      arrCerts.forEach((item) => (additionalPrice += baseValue * item.point));
+    }
+
+    return additionalPrice;
   };
 
   getOfficeHours = async () => {
@@ -1110,7 +1156,7 @@ class CreateRequestScreen extends Component {
                 <View style={styles.detailPictureContainer}>
                   {this.state.children.map((item) => (
                     <TouchableOpacity
-                      key={item.id}
+                      key={item.id.toString()}
                       onPress={async () => {
                         await this.toggleHidden(item);
                       }}
@@ -1235,7 +1281,7 @@ class CreateRequestScreen extends Component {
           {this.state.children && this.state.children.length > 0 ? (
             <View>
               {this.state.children.map((child) => (
-                <View key={child.id}>
+                <View key={child.id.toString()}>
                   {child.checked ? (
                     <View>
                       <MuliText style={styles.headerTitle}>
@@ -1354,7 +1400,7 @@ class CreateRequestScreen extends Component {
                 }}
               >
                 {this.state.selectedSkills.map((item) => (
-                  <TouchableOpacity key={item}>
+                  <TouchableOpacity key={item.toString()}>
                     <View style={styles.smallbutton}>
                       <MuliText style={{ color: '#ffffff' }}>
                         {
