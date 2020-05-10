@@ -37,62 +37,6 @@ import { getSkills } from 'api/skill.api';
 import Modal from 'react-native-modal';
 import MultiSelect from 'react-native-multiple-select';
 
-const skills = [
-  {
-    id: '92iijs7yta',
-    name: 'cooking',
-    Point: 1,
-    active: true,
-  },
-  {
-    id: 'a0s0a8ssbsd',
-    name: 'bathing',
-    point: 1,
-    active: true,
-  },
-  {
-    id: '16hbajsabsd',
-    name: 'piano',
-    point: 1,
-    active: true,
-  },
-  {
-    id: 'nahs75a5sg',
-    name: 'storytelling',
-    point: 1,
-    active: true,
-  },
-];
-
-const certs = [
-  {
-    id: '667atsas',
-    name: 'medical',
-    point: 1,
-    active: true,
-  },
-  {
-    id: 'hsyasajs',
-    name: 'elementary',
-    point: 1,
-    active: true,
-  },
-  {
-    id: 'djsjudksjd',
-    name: 'junior',
-    point: 1,
-    active: true,
-  },
-  {
-    id: 'sdhyaysdj',
-    name: 'highschool',
-    point: 1,
-    active: true,
-  },
-];
-
-const items = skills.concat(certs);
-
 class CreateRequestScreen extends Component {
   constructor(props) {
     super(props);
@@ -138,6 +82,7 @@ class CreateRequestScreen extends Component {
       skills: [],
       certs: [],
       requiredSkills: [{ skillId: 1 }],
+      requiredCerts: [],
     };
     // console.log(this.props.navigation.getParam('selectedDate'));
   }
@@ -205,11 +150,33 @@ class CreateRequestScreen extends Component {
     return descriptions;
   };
 
+  checkDescription = () => {
+    let descriptions = [];
+    this.state.children.map((item) => {
+      this.state['description_' + item.name]
+        ? (descriptions = [
+            ...descriptions,
+            {
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              age: item.age,
+              descriptions: this.state['description_' + item.name],
+            },
+          ])
+        : [];
+    });
+
+    if (descriptions && descriptions.length > 0) return true;
+
+    return false;
+  };
+
   showToast = (message) => {
     message
       ? Toast.show(message, {
           duration: Toast.durations.LONG,
-          position: 20,
+          position: 60,
           shadow: true,
           animation: true,
           hideOnPress: true,
@@ -240,11 +207,6 @@ class CreateRequestScreen extends Component {
       certId: cert,
     }));
     const des = this.getChildrenDescriptions();
-
-    console.log('REQ_CERTS: ', requiredCerts);
-    console.log('REQ_SKILLS: ', requiredSkills);
-
-    console.log('DESCRIPTION: ', des);
   };
 
   beforeRecommend = () => {
@@ -277,6 +239,12 @@ class CreateRequestScreen extends Component {
       //   DURATION.LENGTH_LONG,
       // );
       this.showToast('Vui lòng chọn ít nhất một trẻ');
+      return;
+    }
+
+    if (!this.checkDescription()) {
+      this.showToast('Vui lòng thêm mô tả cho trẻ');
+
       return;
     }
 
@@ -323,7 +291,8 @@ class CreateRequestScreen extends Component {
         }
       })
       .catch((error) => {
-        if (error.response.status == 409) {
+        console.log('error', error);
+        if (error.response.status && error.response.status == 409) {
           // this.refs.toast.show(
           //   'Không thể đặt yêu cầu cho ngày giờ ở quá khứ, vui lòng chọn lại.',
           //   DURATION.LENGTH_LONG,
@@ -392,7 +361,7 @@ class CreateRequestScreen extends Component {
     const requiredSkillsPicked = selectedSkills.map((skill) => ({
       skillId: skill,
     }));
-    const requiredCerts = selectedCerts.map((cert) => ({
+    const requiredCertsPicked = selectedCerts.map((cert) => ({
       certId: cert,
     }));
     const childrenDescription = JSON.stringify(this.getChildrenDescriptions());
@@ -410,7 +379,7 @@ class CreateRequestScreen extends Component {
       totalPrice,
       requiredSkills:
         requiredSkillsPicked.length > 0 ? requiredSkillsPicked : requiredSkills,
-      requiredCerts: requiredCerts.length > 0 ? requiredCerts : [],
+      requiredCerts: requiredCertsPicked.length > 0 ? requiredCertsPicked : [],
       childrenDescription,
     };
 
@@ -1343,8 +1312,11 @@ class CreateRequestScreen extends Component {
           ) : (
             <View />
           )}
-          <View>
+          <View style={{ marginHorizontal: 10 }}>
             <MuliText style={styles.headerTitle}>Kỹ năng & Bằng cấp</MuliText>
+            <MuliText style={{ marginVertical: 10 }}>
+              Giữ trẻ là mục mặc định trong kỹ năng và bằng cấp.
+            </MuliText>
             <View>
               <MuliText style={styles.mediumTitle}>Kỹ Năng</MuliText>
               <MultiSelect

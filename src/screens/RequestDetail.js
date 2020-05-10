@@ -62,6 +62,8 @@ export class RequestDetail extends Component {
       showConfirm: true,
       refreshing: false,
       childrenDescription: null,
+      skills: [],
+      certs: [],
     };
     this.callDetail = this.callDetail.bind(this);
   }
@@ -71,6 +73,7 @@ export class RequestDetail extends Component {
 
     const { sittingRequestsID: requestId } = this.state;
     // rewrite api get request data
+    console.log('SITTING REQUEST  ---------------- ', requestId);
     await getRequestDetail(requestId).then(async (res) => {
       const {
         sittingDate: date,
@@ -86,7 +89,12 @@ export class RequestDetail extends Component {
         childrenDescription,
         totalPrice: price,
         createdUser: createUserId,
+        requiredCerts: certs,
+        requiredSkills: skills,
       } = res;
+
+      console.log('SKILLS ------------- ', skills);
+      console.log('CERTS ------------- ', certs);
 
       await this.setState({
         date,
@@ -102,6 +110,8 @@ export class RequestDetail extends Component {
         price,
         createUserId,
         childrenDescription: JSON.parse(childrenDescription),
+        skills,
+        certs,
       });
     });
 
@@ -591,6 +601,43 @@ export class RequestDetail extends Component {
             </TouchableOpacity>
             {this.state.isModalVisible && (
               <View>
+                <View style={styles.detailContainer}>
+                  <MuliText style={styles.headerTitle}>
+                    Yêu cầu về kỹ năng và bằng cấp
+                  </MuliText>
+                  <View style={{ marginVertical: 10 }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        flex: 1,
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      {this.state.skills &&
+                        this.state.skills.length > 0 &&
+                        this.state.skills.map((item, index) => (
+                          <TouchableOpacity key={item.skillId}>
+                            <View style={styles.smallbutton}>
+                              <MuliText style={{ color: colors.lightGreen }}>
+                                {item.skill.vname}
+                              </MuliText>
+                            </View>
+                          </TouchableOpacity>
+                        ))}
+                      {this.state.certs &&
+                        this.state.certs.length > 0 &&
+                        this.state.certs.map((item, index) => (
+                          <TouchableOpacity key={item.certId}>
+                            <View style={styles.smallbutton}>
+                              <MuliText style={{ color: colors.lightGreen }}>
+                                {item.cert.vname}
+                              </MuliText>
+                            </View>
+                          </TouchableOpacity>
+                        ))}
+                    </View>
+                  </View>
+                </View>
                 <View style={styles.detailContainer}>
                   <MuliText style={styles.headerTitle}>
                     Mô tả công việc
@@ -1226,5 +1273,20 @@ const styles = StyleSheet.create({
   },
   textOption: {
     marginHorizontal: 5,
+  },
+  smallbutton: {
+    height: 35,
+    backgroundColor: 'white',
+    margin: 5,
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#2E272B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 1,
+    borderWidth: 2,
+    borderColor: colors.lightGreen,
   },
 });

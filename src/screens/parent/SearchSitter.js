@@ -634,7 +634,7 @@ class SearchSitter extends Component {
 export default SearchSitter;
 
 SearchSitter.navigationOptions = {
-  title: 'Tạo yêu cầu trong vòng tròn tin tưởng',
+  title: 'Tìm kiếm người giữ trẻ',
 };
 
 const styles = StyleSheet.create({

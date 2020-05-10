@@ -59,6 +59,8 @@ export default class InvitationDetail extends Component {
       sun: false,
       isCancel: false,
       childrenDescription: [],
+      skills: [],
+      certs: [],
     };
   }
 
@@ -73,7 +75,11 @@ export default class InvitationDetail extends Component {
   getData = async () => {
     await Api.get('invitations/' + this.state.invitationID.toString()).then(
       async (resp) => {
-        // console.log('PHUC: InvitationDetail -> getData -> resp', resp);
+        console.log('INVITATION ------------------- ', this.state.invitationID);
+        console.log(
+          'PHUC: InvitationDetail -> getData -> resp',
+          resp.sittingRequest.requiredSkills,
+        );
         if (resp.sittingRequest.repeatedRequestId) {
           this.setState(
             {
@@ -94,6 +100,8 @@ export default class InvitationDetail extends Component {
               childrenDescription: JSON.parse(
                 resp.sittingRequest.childrenDescription,
               ),
+              skills: resp.sittingRequest.requiredSkills,
+              certs: resp.sittingRequest.requiredCerts,
             },
             () => this.getRepeatedRequest(),
           );
@@ -115,6 +123,8 @@ export default class InvitationDetail extends Component {
             childrenDescription: JSON.parse(
               resp.sittingRequest.childrenDescription,
             ),
+            skills: resp.sittingRequest.requiredSkills,
+            certs: resp.sittingRequest.requiredCerts,
           });
         }
       },
@@ -444,6 +454,39 @@ export default class InvitationDetail extends Component {
                 </View>
               </ScrollView>
               <View>
+                <View style={styles.detailContainer}>
+                  <MuliText style={styles.headerTitle}>
+                    Yêu cầu về kỹ năng và bằng cấp
+                  </MuliText>
+                  <View style={{ marginVertical: 10 }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        flex: 1,
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      {this.state.skills.map((item, index) => (
+                        <TouchableOpacity key={item.skillId}>
+                          <View style={styles.smallbutton}>
+                            <MuliText style={{ color: colors.lightGreen }}>
+                              {item.skill.vname}
+                            </MuliText>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                      {this.state.certs.map((item, index) => (
+                        <TouchableOpacity key={item.certId}>
+                          <View style={styles.smallbutton}>
+                            <MuliText style={{ color: colors.lightGreen }}>
+                              {item.cert.vname}
+                            </MuliText>
+                          </View>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+                </View>
                 <View style={styles.detailContainer}>
                   <MuliText style={styles.headerTitle}>
                     Mô tả công việc
@@ -891,5 +934,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 5,
     fontSize: 12,
+  },
+  smallbutton: {
+    height: 35,
+    backgroundColor: 'white',
+    margin: 5,
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#2E272B',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 1,
+    borderWidth: 2,
+    borderColor: colors.lightGreen,
   },
 });
