@@ -269,6 +269,21 @@ export default class RecommendScreen extends Component {
                   )}
                 </View>
               )}
+              <View style={{ padding: 10, margin: 20, alignItems: 'center' }}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Home')}
+                >
+                  <MuliText
+                    style={{
+                      fontSize: 15,
+                      marginTop: 20,
+                      color: colors.ongoing,
+                    }}
+                  >
+                    Quay về trang chủ
+                  </MuliText>
+                </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <View>
@@ -315,19 +330,6 @@ export default class RecommendScreen extends Component {
               )}
             </View>
           )}
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Home')}
-          >
-            <MuliText
-              style={{
-                fontSize: 15,
-                marginTop: 20,
-                color: colors.ongoing,
-              }}
-            >
-              Quay về trang chủ
-            </MuliText>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     );

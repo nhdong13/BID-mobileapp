@@ -93,8 +93,8 @@ export default class BsitterProfile extends Component {
         sitter: data,
         user: data.user,
         sitterImage: data.user.image,
-        certs: data.user.sitterSkills,
-        skills: data.user.sitterCerts,
+        skills: data.user.sitterSkills,
+        certs: data.user.sitterCerts,
       });
 
       return data;
