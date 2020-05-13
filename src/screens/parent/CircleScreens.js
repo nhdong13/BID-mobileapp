@@ -162,7 +162,7 @@ class CircleScreens extends Component {
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
-                Phụ huynh trong vòng tròn tin tưởng ({this.state.circle.length})
+                Phụ huynh trong vòng tròn tin tưởng
               </MuliText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -191,7 +191,7 @@ class CircleScreens extends Component {
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
-                Phụ huynh trong vòng tròn tin tưởng ({this.state.circle.length})
+                Phụ huynh trong vòng tròn tin tưởng
               </MuliText>
             </View>
             <TouchableOpacity
@@ -242,8 +242,7 @@ class CircleScreens extends Component {
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
-                Người giữ trẻ trong vòng tròn tin tưởng (
-                {this.state.circle.length})
+                Người giữ trẻ trong vòng tròn tin tưởng
               </MuliText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -265,8 +264,7 @@ class CircleScreens extends Component {
                 color={colors.darkGreenTitle}
               />
               <MuliText style={styles.headerText}>
-                Người giữ trẻ trong vòng tròn tin tưởng (
-                {this.state.circle.length})
+                Người giữ trẻ trong vòng tròn tin tưởng
               </MuliText>
             </View>
             <TouchableOpacity

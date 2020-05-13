@@ -1,8 +1,13 @@
-import { HOST_ENDPOINT, HOST_ENDPOINT_COMPANY } from 'react-native-dotenv';
+import {
+  HOST_ENDPOINT,
+  HOST_ENDPOINT_COMPANY,
+  HOST_TEMP,
+} from 'react-native-dotenv';
 
-const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
+// const url = `http://${HOST_ENDPOINT}:5000/api/v1`;
 // const url = `http://${HOST_ENDPOINT_COMPANY}:5000/api/v1`;
 // const url = `http://api.babysitinde.live/api/v1`;
+const url = `http://192.168.100.77:5000/api/v1`;
 
 const apiUrl = {
   baseUrl: `${url}/`,

@@ -51,9 +51,15 @@ export default class RecommendScreen extends Component {
         minAgeOfChildren,
         status,
         totalPrice,
+        childrenDescription,
+        repeatedSkills,
+        repeatedCerts,
       } = request;
 
       const { repeatedDays } = repeatedData;
+
+      console.log('SKILL ------------', repeatedSkills);
+      console.log('CHILD --------------', childrenDescription);
 
       const data = {
         startDate: sittingDate,
@@ -62,6 +68,9 @@ export default class RecommendScreen extends Component {
         sittingAddress,
         repeatedDays,
         createdUser,
+        skills: repeatedSkills,
+        certs: repeatedCerts,
+        childrenDescription,
       };
 
       // console.log('PHUC: Bsitter -> sendInvitation -> data', data);

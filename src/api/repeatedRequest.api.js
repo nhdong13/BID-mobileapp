@@ -11,6 +11,9 @@ export async function createRepeatedRequest(repeatedRequest) {
     sittingAddress,
     repeatedDays,
     createdUser,
+    skills,
+    certs,
+    childrenDescription,
   } = repeatedRequest;
 
   const data = {
@@ -21,6 +24,9 @@ export async function createRepeatedRequest(repeatedRequest) {
     repeatedDays,
     status: 'ACTIVE',
     createdUser,
+    childrenDescription,
+    skills,
+    certs,
   };
   const { token } = await retrieveToken();
   let trimpedToken = '';

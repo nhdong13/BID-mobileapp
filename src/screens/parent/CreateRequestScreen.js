@@ -370,6 +370,14 @@ class CreateRequestScreen extends Component {
 
     const childrenDescription = JSON.stringify(this.getChildrenDescriptions());
 
+    const skillArr = this.state.skills.filter((item) =>
+      selectedSkills.includes(item.id),
+    );
+
+    const certArr = this.state.certs.filter((item) =>
+      selectedCerts.includes(item.id),
+    );
+
     const request = {
       requestId: requestId != 0 ? requestId : 0,
       createdUser,
@@ -385,6 +393,8 @@ class CreateRequestScreen extends Component {
         requiredSkillsPicked.length > 0 ? requiredSkillsPicked : requiredSkills,
       requiredCerts: requiredCertsPicked.length > 0 ? requiredCertsPicked : [],
       childrenDescription,
+      repeatedSkills: JSON.stringify(skillArr),
+      repeatedCerts: JSON.stringify(certArr),
     };
 
     if (isRepeated) {
